@@ -3,4 +3,18 @@
     <string name="enter_url">Enter URL</string>
     <string name="http_example_com">http://example.com</string>
     <string name="main_button_go">Open Url</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="pref_category_general">General</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_home_assistant_url">Home Assistant Url</string>
+    <string name="title_transparent_background">Transparent Background</string>
+    <string name="title_blur_background">Blur Background</string>
+
+    <string name="default_home_assistant_url">http://localhost:8123</string>
+
+    <string name="key_home_assistant_url">key_home_assistant_url</string>
+    <string name="key_transparent_background">key_transparent_background</string>
+    <string name="key_blur_background">key_blur_background</string>
 </resources>

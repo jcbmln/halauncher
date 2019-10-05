@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_category_general">
+        <EditTextPreference
+            android:defaultValue="@string/title_home_assistant_url"
+            android:key="@string/key_home_assistant_url"
+            android:summary="@string/default_home_assistant_url"
+            android:title="@string/title_home_assistant_url" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/key_transparent_background"
+            android:title="@string/title_transparent_background" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/key_blur_background"
+            android:title="@string/title_blur_background" />
+    </PreferenceCategory>
+</PreferenceScreen>
