@@ -4,44 +4,30 @@ import android.os.Bundle
 import androidx.preference.*
 
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.utilities.UserSettings
+import xyz.mcmxciv.halauncher.utilities.UserPreferences
 
 class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_main)
 
-        bindPreferenceChangeListener(findPreference<EditTextPreference>(getString(R.string.key_home_assistant_url)))
-        bindPreferenceChangeListener(findPreference<EditTextPreference>(getString(R.string.key_transparent_background)))
-        bindPreferenceChangeListener(findPreference<EditTextPreference>(getString(R.string.key_blur_background)))
+        bindPreferenceChangeListener(findPreference<EditTextPreference>(UserPreferences.HOME_ASSISTANT_KEY))
     }
 
     private fun bindPreferenceChangeListener(preference: Preference?) {
-        preference?.onPreferenceChangeListener = PreferenceChangeListener
-    }
+        preference?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { pf, newValue ->
+                val stringValue = newValue.toString()
 
-    companion object PreferenceChangeListener : Preference.OnPreferenceChangeListener {
-        private const val homeAssistantUrlKey = "key_home_assistant_url"
-        private const val transparentBackgroundKey = "key_transparent_background"
-        private const val blurBackgroundKey = "key_blur_background"
-
-        override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
-            val stringValue = newValue.toString()
-
-            if (preference is ListPreference) {
-                val index = preference.findIndexOfValue(stringValue)
-                preference.summary = if (index >= 0) preference.entries[index] else null
-            }
-            else if (preference is EditTextPreference) {
-                if (preference.key == homeAssistantUrlKey) {
-                    preference.summary = stringValue
-                    UserSettings.url = stringValue
+                if (pf is EditTextPreference) {
+                    pf.apply {
+                        summary = stringValue
+                        text = stringValue
+                    }
+                } else {
+                    pf?.summary = stringValue
                 }
-            }
-            else {
-                preference?.summary = stringValue
-            }
 
-            return true
-        }
+                true
+            }
     }
 }

@@ -6,7 +6,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.utilities.UserSettings
+import xyz.mcmxciv.halauncher.utilities.UserPreferences
 
 class SetupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,7 +17,7 @@ class SetupActivity : AppCompatActivity() {
         setupButtonEnter.setOnClickListener {
             val setupEditUrl = findViewById<TextView>(R.id.setup_edit_url)
             val url = setupEditUrl.text.toString()
-            UserSettings.url = url
+            UserPreferences.url = url
 
             returnToMainActivity(url)
         }

@@ -5,9 +5,8 @@
     <string name="main_button_go">Open Url</string>
     <string name="title_activity_settings">Settings</string>
 
-    <string name="pref_category_general">General</string>
+    <string name="pref_category_home_assistant">Home Assistant</string>
 
-    <string name="action_settings">Settings</string>
     <string name="title_home_assistant_url">Home Assistant Url</string>
     <string name="title_transparent_background">Transparent Background</string>
     <string name="title_blur_background">Blur Background</string>

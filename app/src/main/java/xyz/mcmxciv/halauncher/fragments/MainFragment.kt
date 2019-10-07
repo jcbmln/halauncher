@@ -3,6 +3,7 @@ package xyz.mcmxciv.halauncher.fragments
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,10 +14,11 @@ import androidx.core.app.ActivityCompat
 
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.activities.SetupActivity
-import xyz.mcmxciv.halauncher.utilities.UserSettings
+import xyz.mcmxciv.halauncher.utilities.UserPreferences
 import xyz.mcmxciv.halauncher.views.HomeAssistantWebView
 
-class MainFragment : Fragment() {
+class MainFragment
+internal constructor(drawable: Drawable?): ViewPagerFragment(drawable) {
     private val setupActivityCode: Int = 1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -26,9 +28,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (isReadStoragePermissionGranted()) {
-            loadPage(UserSettings.url)
-        }
+        loadPage(UserPreferences.url)
     }
 
     private fun loadPage(url: String?) {
@@ -51,35 +51,12 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun isReadStoragePermissionGranted(): Boolean {
-        if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
-            return false
-        }
-
-        return true
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == setupActivityCode) {
             val url = data?.getStringExtra("url")
             openUrl(url)
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            1 -> {
-                UserSettings.canGetWallpaper = (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                loadPage(UserSettings.url)
-            }
         }
     }
 

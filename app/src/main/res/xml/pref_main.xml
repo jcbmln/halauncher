@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/pref_category_general">
+    <PreferenceCategory android:title="@string/pref_category_home_assistant">
         <EditTextPreference
             android:defaultValue="@string/title_home_assistant_url"
             android:key="@string/key_home_assistant_url"

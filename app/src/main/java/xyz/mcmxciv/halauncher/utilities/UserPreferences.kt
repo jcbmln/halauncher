@@ -2,40 +2,38 @@ package xyz.mcmxciv.halauncher.utilities
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 
-object UserSettings {
-    private const val userSettingsKey = "UserSettings"
-    private const val urlKey: String = "key_home_assistant_url"
-    private const val backgroundTransparencyKey = "key_transparent_background"
-    private const val blurBackgroundKey = "key_blur_background"
-    private const val canSetWallpaperKey = "key_can_set_wallpaper"
+object UserPreferences {
+    const val HOME_ASSISTANT_KEY = "key_home_assistant_url"
+    private const val TRANSPARENT_BACKGROUND_KEY = "key_transparent_background"
+    private const val BLUR_BACKGROUND_KEY = "key_blur_background"
+    private const val CAN_SET_WALLPAPER_KEY = "key_can_set_wallpaper"
 
     private var sharedPreferences: SharedPreferences? = null
 
     var url: String?
-        get() = sharedPreferences?.getString(urlKey, null)
+        get() = sharedPreferences?.getString(HOME_ASSISTANT_KEY, null)
         set(value) {
-            putString(urlKey, value)
+            putString(HOME_ASSISTANT_KEY, value)
         }
 
     var transparentBackground: Boolean
-        get() = sharedPreferences?.getBoolean(backgroundTransparencyKey, false) ?: false
+        get() = sharedPreferences?.getBoolean(TRANSPARENT_BACKGROUND_KEY, false) ?: false
         set(value) {
-            putBoolean(backgroundTransparencyKey, value)
+            putBoolean(TRANSPARENT_BACKGROUND_KEY, value)
         }
 
     var blurBackground: Boolean
-        get() = sharedPreferences?.getBoolean(blurBackgroundKey, false) ?: false
+        get() = sharedPreferences?.getBoolean(BLUR_BACKGROUND_KEY, false) ?: false
         set(value) {
-            putBoolean(blurBackgroundKey, value)
+            putBoolean(BLUR_BACKGROUND_KEY, value)
         }
 
     var canGetWallpaper: Boolean
-        get() = sharedPreferences?.getBoolean(canSetWallpaperKey, false) ?: false
+        get() = sharedPreferences?.getBoolean(CAN_SET_WALLPAPER_KEY, false) ?: false
         set(value) {
-            putBoolean(canSetWallpaperKey, value)
+            putBoolean(CAN_SET_WALLPAPER_KEY, value)
         }
 
     fun init(context: Context) {
