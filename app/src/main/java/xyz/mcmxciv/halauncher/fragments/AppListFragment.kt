@@ -15,6 +15,7 @@ import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.activities.SettingsActivity
 import xyz.mcmxciv.halauncher.utilities.AppList
 import xyz.mcmxciv.halauncher.utilities.AppListAdapter
+import xyz.mcmxciv.halauncher.utilities.InvariantDeviceProfile
 
 class AppListFragment
 internal constructor(drawable: Drawable?): ViewPagerFragment(drawable) {
@@ -29,10 +30,11 @@ internal constructor(drawable: Drawable?): ViewPagerFragment(drawable) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val appList = AppList.getAppList(view.context)
+        val invariantDeviceProfile = InvariantDeviceProfile(view.context)
+        val appList = AppList.getAppList(view.context, invariantDeviceProfile)
 
-        viewManager = GridLayoutManager(context, 5)
-        viewAdapter = AppListAdapter(appList)
+        viewManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
+        viewAdapter = AppListAdapter(appList, invariantDeviceProfile)
 
         recyclerView = view.findViewById<RecyclerView>(R.id.app_list_recycler_view).apply {
             setHasFixedSize(true)

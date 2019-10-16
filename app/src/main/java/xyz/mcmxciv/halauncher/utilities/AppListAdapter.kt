@@ -13,7 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import org.w3c.dom.Text
 import xyz.mcmxciv.halauncher.R
 
-class AppListAdapter(private val appList: ArrayList<AppList.AppInfo>) :
+class AppListAdapter(private val appList: ArrayList<AppList.AppInfo>,
+                     private val invariantDeviceProfile: InvariantDeviceProfile) :
         RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
 
     class AppListViewHolder(val view: View) : RecyclerView.ViewHolder(view)
@@ -31,6 +32,7 @@ class AppListAdapter(private val appList: ArrayList<AppList.AppInfo>) :
 
         val imageView = holder.view.findViewById(R.id.app_item_image_view) as ImageView
         imageView.setImageDrawable(appInfo.icon)
+        imageView.layoutParams.height = invariantDeviceProfile.iconBitmapSize
     }
 
     override fun getItemCount() = appList.size

@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xyz.mcmxciv.halauncher.views.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
     android:orientation="vertical"
     android:padding="5dp">
 
     <ImageView
         android:id="@+id/app_item_image_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="bottom|center_horizontal|center_vertical"
         android:layout_weight="1"
         android:contentDescription="@android:string/untitled"
-        android:scaleType="centerInside"
-        app:srcCompat="@android:color/transparent" />
+        android:scaleType="centerInside" />
 
     <TextView
         android:id="@+id/app_item_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"
+        android:padding="7dp"
         android:singleLine="true"
         android:text="@android:string/untitled"
         android:textAlignment="center"
         android:textColor="@android:color/primary_text_dark" />
-</xyz.mcmxciv.halauncher.views.SquareLayout>
+</LinearLayout>
