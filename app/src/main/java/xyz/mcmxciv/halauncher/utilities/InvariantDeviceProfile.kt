@@ -84,9 +84,13 @@ class InvariantDeviceProfile {
         minWidthDps = dpiFromPx(min(smallestSize.x, smallestSize.y), dm)
         minHeightDps = dpiFromPx(min(largestSize.x, largestSize.y), dm)
 
-        val closestProfiles = findClosestDeviceProfiles(
-            minWidthDps, minHeightDps, getPredefinedDeviceProfiles(context)
-        )
+        val closestProfiles = getPredefinedDeviceProfiles(context)
+        closestProfiles.sortWith(Comparator { a, b ->
+            dist(minWidthDps, minHeightDps, a.minWidthDps, a.minHeightDps).compareTo(
+                dist(minWidthDps, minHeightDps, b.minWidthDps, b.minHeightDps)
+            )
+        })
+
         numColumns = closestProfiles[0].numColumns
 
         val interpolatedDeviceProfileOut =
@@ -184,19 +188,13 @@ class InvariantDeviceProfile {
         // Sort the profiles by their closeness to the dimensions
         points.sortWith(Comparator { a, b ->
             dist(width, height, a.minWidthDps, a.minHeightDps).compareTo(
-                dist(
-                    width,
-                    height,
-                    b.minWidthDps,
-                    b.minHeightDps
-                )
+                dist(width, height, b.minWidthDps, b.minHeightDps)
             )
         })
 
         return points
     }
 
-    // Package private visibility for testing.
     private fun invDistWeightedInterpolate(
         width: Float, height: Float,
         points: ArrayList<InvariantDeviceProfile>

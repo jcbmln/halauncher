@@ -1,5 +1,7 @@
 package xyz.mcmxciv.halauncher.utilities
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.ScaleDrawable
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -27,6 +29,10 @@ class AppListAdapter(private val appList: ArrayList<AppList.AppInfo>,
     override fun onBindViewHolder(holder: AppListViewHolder, position: Int) {
         val appInfo = appList[position]
 
+        holder.view.setOnClickListener {
+            launchApp(holder.view.context, appInfo.packageName)
+        }
+
         val textView = holder.view.findViewById(R.id.app_item_text_view) as TextView
         textView.text = appInfo.displayName
 
@@ -36,4 +42,10 @@ class AppListAdapter(private val appList: ArrayList<AppList.AppInfo>,
     }
 
     override fun getItemCount() = appList.size
+
+    private fun launchApp(context: Context, packageName: String) {
+        val launcherIntent = context.packageManager.getLaunchIntentForPackage(packageName)
+        launcherIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(launcherIntent)
+    }
 }
