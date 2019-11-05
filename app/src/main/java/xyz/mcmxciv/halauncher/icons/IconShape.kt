@@ -21,21 +21,12 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.FloatArrayEvaluator
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.AnimatorUpdateListener
-import android.annotation.TargetApi
-import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Rect
-import android.graphics.Region
-import android.graphics.Region.Op
-import android.graphics.drawable.AdaptiveIconDrawable
-import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.util.SparseArray
 import android.util.TypedValue
-import android.util.Xml
 import android.view.View
 import android.view.ViewOutlineProvider
 
@@ -48,22 +39,15 @@ import android.view.ViewOutlineProvider
 //import com.android.launcher3.util.Themes
 //import com.android.launcher3.views.ClipPathView
 
-import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParserException
-import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.anim.RoundedRectRevealOutlineProvider
 import xyz.mcmxciv.halauncher.icons.IconNormalizer.Companion.ICON_VISIBLE_AREA_FACTOR
-import xyz.mcmxciv.halauncher.utils.GraphicsUtils
-import xyz.mcmxciv.halauncher.utils.Utilities
 import xyz.mcmxciv.halauncher.views.ClipPathView
-
-import java.io.IOException
-import java.util.ArrayList
 
 /**
  * Abstract representation of the shape of an icon shape
  */
 abstract class IconShape {
+    abstract val shapeType: ShapeType
     private var attrs: SparseArray<TypedValue>? = null
 
     open fun enableShapeDetection(): Boolean {
@@ -162,7 +146,9 @@ abstract class IconShape {
         }
     }
 
-    private class Circle : SimpleRectShape() {
+    private class Circle(private val radius1: Float) : SimpleRectShape() {
+        override val shapeType: ShapeType = ShapeType.Circle
+
         override fun drawShape(
             canvas: Canvas,
             offsetX: Float,
@@ -170,11 +156,11 @@ abstract class IconShape {
             radius: Float,
             paint: Paint
         ) {
-            canvas.drawCircle(radius + offsetX, radius + offsetY, radius, paint)
+            canvas.drawCircle(radius1 + offsetX, radius1 + offsetY, radius1, paint)
         }
 
         override fun addToPath(path: Path, offsetX: Float, offsetY: Float, radius: Float) {
-            path.addCircle(radius + offsetX, radius + offsetY, radius, Path.Direction.CW)
+            path.addCircle(radius1 + offsetX, radius1 + offsetY, radius1, Path.Direction.CW)
         }
 
         override fun getStartRadius(startRect: Rect): Float {
@@ -192,6 +178,7 @@ abstract class IconShape {
          */
         private val mRadiusRatio: Float
     ) : SimpleRectShape() {
+        override val shapeType: ShapeType = ShapeType.RoundedSquare
 
         override fun drawShape(
             canvas: Canvas,
@@ -227,6 +214,7 @@ abstract class IconShape {
          */
         private val mRadiusRatio: Float
     ) : PathShape() {
+        override val shapeType: ShapeType = ShapeType.TearDrop
         private val mTempRadii = FloatArray(8)
 
         override fun addToPath(path: Path, offsetX: Float, offsetY: Float, radius: Float) {
@@ -293,19 +281,20 @@ abstract class IconShape {
         /**
          * Radio of radius to circle radius, based on the shape options defined in the config.
          */
-        private val radiusRatio: Float
+        private val radius1: Float
     ) : PathShape() {
+        override val shapeType: ShapeType = ShapeType.Squircle
 
         override fun addToPath(path: Path, offsetX: Float, offsetY: Float, radius: Float) {
-            val cx = radius + offsetX
-            val cy = radius + offsetY
-            val control = radius - radius * radiusRatio
+            val cx = radius1 + offsetX
+            val cy = radius1 + offsetY
+            val control = radius1 - radius1 * RADIUS_RATIO
 
-            path.moveTo(cx, cy - radius)
-            addLeftCurve(cx, cy, radius, control, path)
-            addRightCurve(cx, cy, radius, control, path)
-            addLeftCurve(cx, cy, -radius, -control, path)
-            addRightCurve(cx, cy, -radius, -control, path)
+            path.moveTo(cx, cy - radius1)
+            addLeftCurve(cx, cy, radius1, control, path)
+            addRightCurve(cx, cy, radius1, control, path)
+            addLeftCurve(cx, cy, -radius1, -control, path)
+            addRightCurve(cx, cy, -radius1, -control, path)
             path.close()
         }
 
@@ -333,7 +322,7 @@ abstract class IconShape {
             val startCX = startRect.exactCenterX()
             val startCY = startRect.exactCenterY()
             val startR = startRect.width() / 2f
-            val startControl = startR - startR * radiusRatio
+            val startControl = startR - startR * RADIUS_RATIO
             val startHShift = 0f
             val startVShift = 0f
 
@@ -373,127 +362,141 @@ abstract class IconShape {
         }
     }
 
+    enum class ShapeType {
+        Circle,
+        RoundedSquare,
+        TearDrop,
+        Squircle
+    }
+
     companion object {
-        var shape: IconShape = Circle()
-            private set
+        private var shape: IconShape? = null
         private var sShapePath: Path? = null
         var normalizationScale = ICON_VISIBLE_AREA_FACTOR
             private set
 
-        const val DEFAULT_PATH_SIZE = 100
+        private const val DEFAULT_PATH_SIZE = 100
+        private const val RADIUS_RATIO = 0.15f
 
         val shapePath: Path
             get() {
                 if (sShapePath == null) {
                     val p = Path()
-                    shape.addToPath(p, 0f, 0f, DEFAULT_PATH_SIZE * 0.5f)
+                    shape?.addToPath(p, 0f, 0f, DEFAULT_PATH_SIZE * 0.5f)
                     sShapePath = p
                 }
                 return sShapePath as Path
             }
 
-        /**
-         * Initializes the shape which is closest to the [AdaptiveIconDrawable]
-         */
-        fun init(context: Context) {
-            if (!Utilities.ATLEAST_OREO) {
-                return
-            }
-            pickBestShape(context)
-        }
-
-        private fun getShapeDefinition(type: String, radius: Float): IconShape {
-            return when (type) {
-                "Circle" -> Circle()
-                "RoundedSquare" -> RoundedSquare(radius)
-                "TearDrop" -> TearDrop(radius)
-                "Squircle" -> Squircle(radius)
-                else -> throw IllegalArgumentException("Invalid shape type: $type")
+        fun setShape(type: ShapeType, radius: Float) {
+            shape = when (type) {
+                ShapeType.Circle -> Circle(radius)
+                ShapeType.RoundedSquare -> RoundedSquare(radius)
+                ShapeType.TearDrop -> TearDrop(radius)
+                ShapeType.Squircle -> Squircle(radius)
             }
         }
 
-        private fun getAllShapes(context: Context): List<IconShape> {
-            val result = ArrayList<IconShape>()
-            try {
-                context.resources.getXml(R.xml.folder_shapes).use { parser ->
-
-                    // Find the root tag
-                    var type: Int = parser.next()
-                    @Suppress("ControlFlowWithEmptyBody")
-                    while (type != XmlPullParser.END_TAG
-                        && type != XmlPullParser.END_DOCUMENT
-                        && "shapes" != parser.name
-                    );
-
-                    val depth = parser.depth
-                    val radiusAttr = intArrayOf(R.attr.folderIconRadius)
-                    val keysToIgnore = IntArray(0)
-
-                    type = parser.next()
-                    while ((parser.next() != XmlPullParser.END_TAG || parser.depth > depth) &&
-                        type != XmlPullParser.END_DOCUMENT
-                    ) {
-
-                        if (type == XmlPullParser.START_TAG) {
-                            val attrs = Xml.asAttributeSet(parser)
-                            val a = context.obtainStyledAttributes(attrs, radiusAttr)
-                            val shape = getShapeDefinition(parser.name, a.getFloat(0, 1f))
-                            a.recycle()
-
-                            shape.attrs = Utilities.createValueMap(context, attrs, keysToIgnore)
-                            result.add(shape)
-                        }
-                    }
-                }
-            } catch (e: IOException) {
-                throw RuntimeException(e)
-            } catch (e: XmlPullParserException) {
-                throw RuntimeException(e)
-            }
-
-            return result
+//        /**
+//         * Initializes the shape which is closest to the [AdaptiveIconDrawable]
+//         */
+//        fun init(context: Context) {
+//            if (!Utilities.ATLEAST_OREO) {
+//                return
+//            }
+//            pickBestShape(context)
+//        }
+//
+//        private fun getShapeDefinition(type: ShapeType, radius: Float): IconShape {
+//            return when (type) {
+//                ShapeType.Circle -> Circle(radius)
+//                ShapeType.RoundedSquare -> RoundedSquare(radius)
+//                ShapeType.TearDrop -> TearDrop(radius)
+//                ShapeType.Squircle -> Squircle(radius)
+//            }
         }
 
-        @TargetApi(Build.VERSION_CODES.O)
-        protected fun pickBestShape(context: Context) {
-            // Pick any large size
-            val size = 200
+//        private fun getAllShapes(context: Context): List<IconShape> {
+//            val result = ArrayList<IconShape>()
+//            try {
+//                context.resources.getXml(R.xml.folder_shapes).use { parser ->
+//
+//                    // Find the root tag
+//                    var type: Int = parser.next()
+//                    @Suppress("ControlFlowWithEmptyBody")
+//                    while (type != XmlPullParser.END_TAG
+//                        && type != XmlPullParser.END_DOCUMENT
+//                        && "shapes" != parser.name
+//                    );
+//
+//                    val depth = parser.depth
+//                    val radiusAttr = intArrayOf(R.attr.folderIconRadius)
+//                    val keysToIgnore = IntArray(0)
+//
+//                    type = parser.next()
+//                    while ((parser.next() != XmlPullParser.END_TAG || parser.depth > depth) &&
+//                        type != XmlPullParser.END_DOCUMENT
+//                    ) {
+//
+//                        if (type == XmlPullParser.START_TAG) {
+//                            val attrs = Xml.asAttributeSet(parser)
+//                            val a = context.obtainStyledAttributes(attrs, radiusAttr)
+//                            val shape = getShapeDefinition(parser.name, a.getFloat(0, 1f))
+//                            a.recycle()
+//
+//                            shape.attrs = Utilities.createValueMap(context, attrs, keysToIgnore)
+//                            result.add(shape)
+//                        }
+//                    }
+//                }
+//            } catch (e: IOException) {
+//                throw RuntimeException(e)
+//            } catch (e: XmlPullParserException) {
+//                throw RuntimeException(e)
+//            }
+//
+//            return result
+//        }
 
-            val full = Region(0, 0, size, size)
-            val iconR = Region()
-            val drawable = AdaptiveIconDrawable(
-                ColorDrawable(Color.BLACK), ColorDrawable(Color.BLACK)
-            )
-            drawable.setBounds(0, 0, size, size)
-            iconR.setPath(drawable.iconMask, full)
-
-            val shapePath = Path()
-            val shapeR = Region()
-
-            // Find the shape with minimum area of divergent region.
-            var minArea = Integer.MAX_VALUE
-            var closestShape: IconShape? = null
-            for (shape in getAllShapes(context)) {
-                shapePath.reset()
-                shape.addToPath(shapePath, 0f, 0f, size / 2f)
-                shapeR.setPath(shapePath, full)
-                shapeR.op(iconR, Op.XOR)
-
-                val area = GraphicsUtils.getArea(shapeR)
-                if (area < minArea) {
-                    minArea = area
-                    closestShape = shape
-                }
-            }
-
-            if (closestShape != null) {
-                shape = closestShape
-            }
-
-            // Initialize shape properties
-            drawable.setBounds(0, 0, DEFAULT_PATH_SIZE, DEFAULT_PATH_SIZE)
-            sShapePath = Path(drawable.iconMask)
-            normalizationScale = IconNormalizer.normalizeAdaptiveIcon(drawable, size, null)
-        }
-    }
+//        @TargetApi(Build.VERSION_CODES.O)
+//        protected fun pickBestShape(context: Context) {
+//            // Pick any large size
+//            val size = 200
+//
+//            val full = Region(0, 0, size, size)
+//            val iconR = Region()
+//            val drawable = AdaptiveIconDrawable(
+//                ColorDrawable(Color.BLACK), ColorDrawable(Color.BLACK)
+//            )
+//            drawable.setBounds(0, 0, size, size)
+//            iconR.setPath(drawable.iconMask, full)
+//
+//            val shapePath = Path()
+//            val shapeR = Region()
+//
+//            // Find the shape with minimum area of divergent region.
+//            var minArea = Integer.MAX_VALUE
+//            var closestShape: IconShape? = null
+//            for (shape in getAllShapes(context)) {
+//                shapePath.reset()
+//                shape.addToPath(shapePath, 0f, 0f, size / 2f)
+//                shapeR.setPath(shapePath, full)
+//                shapeR.op(iconR, Op.XOR)
+//
+//                val area = GraphicsUtils.getArea(shapeR)
+//                if (area < minArea) {
+//                    minArea = area
+//                    closestShape = shape
+//                }
+//            }
+//
+//            if (closestShape != null) {
+//                shape = closestShape
+//            }
+//
+//            // Initialize shape properties
+//            drawable.setBounds(0, 0, DEFAULT_PATH_SIZE, DEFAULT_PATH_SIZE)
+//            sShapePath = Path(drawable.iconMask)
+//            normalizationScale = IconNormalizer.normalizeAdaptiveIcon(drawable, size, null)
+//        }
 }

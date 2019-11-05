@@ -16,7 +16,6 @@
 
 package xyz.mcmxciv.halauncher
 
-import android.appwidget.AppWidgetHostView
 import android.content.*
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -38,7 +37,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 
-class InvariantDeviceProfile {
+class InvariantDeviceProfile private constructor(context: Context?) {
     var numColumns: Int = 0
     var iconSize: Float = 0.toFloat()
     var iconShapePath: String = ""
@@ -56,7 +55,7 @@ class InvariantDeviceProfile {
     private var configMonitor: ConfigMonitor? = null
     private var overlayMonitor: OverlayMonitor? = null
 
-    private constructor(p: InvariantDeviceProfile) {
+    private constructor(p: InvariantDeviceProfile) : this(null) {
         numColumns = p.numColumns
         iconSize = p.iconSize
         iconShapePath = p.iconShapePath
@@ -65,19 +64,21 @@ class InvariantDeviceProfile {
         overlayMonitor = p.overlayMonitor
     }
 
-    private constructor(context: Context) {
-        initGrid(context, Utilities.getPrefs(context).getString(KEY_IDP_GRID_NAME, null))
-        configMonitor = ConfigMonitor(context, ::onConfigChanged)
-        overlayMonitor = OverlayMonitor(context)
+    init {
+        if (context != null) {
+            initGrid(context, Utilities.getPrefs(context).getString(KEY_IDP_GRID_NAME, null))
+            configMonitor = ConfigMonitor(context, ::onConfigChanged)
+            overlayMonitor = OverlayMonitor(context)
+        }
     }
 
-    /**
-     * This constructor should NOT have any monitors by design.
-     */
-    constructor(context: Context, gridName: String) {
-        val newName = initGrid(context, gridName)
-        require(newName != null && newName == gridName) { "Unknown grid name" }
-    }
+//    /**
+//     * This constructor should NOT have any monitors by design.
+//     */
+//    constructor(context: Context, gridName: String) {
+//        val newName = initGrid(context, gridName)
+//        require(newName != null && newName == gridName) { "Unknown grid name" }
+//    }
 
     private fun initGrid(context: Context, gridName: String?): String? {
         val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -179,9 +180,9 @@ class InvariantDeviceProfile {
         ) {
             changeFlags = changeFlags or CHANGE_FLAG_ICON_PARAMS
         }
-        if (iconShapePath != oldProfile.iconShapePath) {
-            IconShape.init(context)
-        }
+//        if (iconShapePath != oldProfile.iconShapePath) {
+//            IconShape.init(context)
+//        }
 
         apply(context, changeFlags)
     }
@@ -255,7 +256,7 @@ class InvariantDeviceProfile {
         }
 
         companion object {
-            const val TAG_NAME = "GridOption"
+            const val TAG_NAME = "grid-option"
         }
     }
 
@@ -332,6 +333,14 @@ class InvariantDeviceProfile {
 
     companion object {
         private const val TAG = "InvariantDeviceProfile"
+
+        @Volatile private var instance: InvariantDeviceProfile? = null
+        fun getInstance(context: Context): InvariantDeviceProfile {
+            return instance ?: synchronized(this) {
+                instance ?: InvariantDeviceProfile(context).also { instance = it }
+            }
+        }
+
         private const val KEY_IDP_GRID_NAME = "idp_grid_name"
 
         private const val ICON_SIZE_DEFINED_IN_APP_DP = 48f
@@ -394,6 +403,8 @@ class InvariantDeviceProfile {
                                         )
                                     )
                                 }
+
+                                type = parser.next()
                             }
                         }
 

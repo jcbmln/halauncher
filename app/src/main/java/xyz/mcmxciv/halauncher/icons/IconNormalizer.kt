@@ -22,6 +22,7 @@ import android.graphics.*
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
+import androidx.core.graphics.toRect
 import xyz.mcmxciv.halauncher.utils.GraphicsUtils
 import java.nio.ByteBuffer
 import kotlin.experimental.and
@@ -294,8 +295,7 @@ class IconNormalizer(context: Context,
         fun normalizeAdaptiveIcon(drawable: Drawable, size: Int, outBounds: RectF?): Float {
             val tempBounds = Rect(drawable.bounds)
             drawable.bounds = Rect(0, 0, size, size)
-
-            val path = (drawable as AdaptiveIconDrawable).iconMask
+            val path = IconShape.shapePath //(drawable as AdaptiveIconDrawable).iconMask
             val region = Region()
             region.setPath(path, Region(0, 0, size, size))
 
@@ -333,38 +333,39 @@ class IconNormalizer(context: Context,
             var i = topY + 1
 
             while (i <= bottomY) {
-                if (xCoordinates[i] <= -1) continue
+                if (xCoordinates[i] > -1) {
+                    var start = topY
 
-                var start = topY
+                    if (lastAngle != Float.MAX_VALUE) {
+                        var currentAngle = (xCoordinates[i] - xCoordinates[last]) / (i - last)
+                        start = last
 
-                if (lastAngle != Float.MAX_VALUE) {
-                    var currentAngle = (xCoordinates[i] - xCoordinates[last]) / (i - last)
-                    start = last
+                        // If this position creates a concave angle, keep moving up until we find a
+                        // position which creates a convex angle.
+                        if ((currentAngle - lastAngle) * direction < 0) {
+                            while (start > topY) {
+                                start--
+                                currentAngle = (xCoordinates[i] - xCoordinates[start]) / (i - start)
 
-                    // If this position creates a concave angle, keep moving up until we find a
-                    // position which creates a convex angle.
-                    if ((currentAngle - lastAngle) * direction < 0) {
-                        while (start > topY) {
-                            start--
-                            currentAngle = (xCoordinates[i] - xCoordinates[start]) / (i - start)
-
-                            if ((currentAngle - angles[start]) * direction >= 0) {
-                                break
+                                if ((currentAngle - angles[start]) * direction >= 0) {
+                                    break
+                                }
                             }
                         }
                     }
+
+                    // Reset from last check
+                    lastAngle = (xCoordinates[i] - xCoordinates[start]) / (i - start)
+
+                    // Update all the points from start.
+                    for (j in start until i) {
+                        angles[j] = lastAngle
+                        xCoordinates[j] = xCoordinates[start] + lastAngle * (j - start)
+                    }
+
+                    last = i
                 }
 
-                // Reset from last check
-                lastAngle = (xCoordinates[i] - xCoordinates[start]) / (i - start)
-
-                // Update all the points from start.
-                for (j in start until i) {
-                    angles[j] = lastAngle
-                    xCoordinates[j] = xCoordinates[start] + lastAngle * (j - start)
-                }
-
-                last = i
                 i++
             }
         }

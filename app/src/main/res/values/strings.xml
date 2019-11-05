@@ -22,11 +22,7 @@
     <skip />
 
     <!-- Application name -->
-    <string name="app_name">Launcher3</string>
-    <!-- Default folder name -->
-    <string name="folder_name"></string>
-    <!-- Work folder name -->
-    <string name="work_folder_name">Work</string>
+    <string name="app_name">HALauncher</string>
     <!-- Displayed when user selects a shortcut for an app that was uninstalled [CHAR_LIMIT=none]-->
     <string name="activity_not_found">App isn\'t installed.</string>
     <!-- Displayed when user selects a shortcut for an app that is current not available [CHAR_LIMIT=none]-->
@@ -138,7 +134,7 @@
     <!-- Text to inform the user that they can't uninstall a system application -->
     <string name="uninstall_system_app_text">This is a system app and can\'t be uninstalled.</string>
 
-    <!-- Default folder title -->
+    <!-- Default folder packageName -->
     <string name="folder_hint_text">Unnamed Folder</string>
 
     <!-- Accessibility -->
@@ -232,7 +228,7 @@
     <!-- Title for a bottom sheet that shows widgets for a particular app -->
     <string name="widgets_bottom_sheet_title"><xliff:g id="name" example="Messenger">%1$s</xliff:g> widgets</string>
 
-    <!-- Accessibility title for the popup containing a list of widgets. [CHAR_LIMIT=50] -->
+    <!-- Accessibility packageName for the popup containing a list of widgets. [CHAR_LIMIT=50] -->
     <string name="widgets_list">Widgets list</string>
     <!-- Text announced by accessibility when the popup containing the list of widgets is closed. [CHAR_LIMIT=100] -->
     <string name="widgets_list_closed">Widgets list closed</string>

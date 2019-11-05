@@ -28,6 +28,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.UserHandle
+import androidx.core.graphics.drawable.toBitmap
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.icons.ShadowGenerator.Companion.BLUR_FACTOR
 import kotlin.math.ceil
@@ -48,11 +49,11 @@ class IconFactory(private val context: Context,
     private var wrapperBackgroundColor = DEFAULT_WRAPPER_BACKGROUND
 
     private var _normalizer: IconNormalizer? = null
-    val normalizer: IconNormalizer
+    private val normalizer: IconNormalizer
         get() = _normalizer ?: IconNormalizer(context, iconBitmapSize, shapeDetection)
 
     private var _shadowGenerator: ShadowGenerator? = null
-    val shadowGenerator: ShadowGenerator
+    private val shadowGenerator: ShadowGenerator
         get() = _shadowGenerator ?: ShadowGenerator(iconBitmapSize)
 
     init {
@@ -141,7 +142,7 @@ class IconFactory(private val context: Context,
         return bitmap
     }
 
-    fun createDefaultIcon(user: UserHandle): BitmapInfo {
+    fun createDefaultIcon(user: UserHandle): Drawable {
         return createBadgedIconBitmap(
             getFullResDefaultActivityIcon(fillResIconDpi),
             user, Build.VERSION.SDK_INT
@@ -151,24 +152,24 @@ class IconFactory(private val context: Context,
     fun createBadgedIconBitmap(
         icon: Drawable, user: UserHandle,
         iconAppTargetSdk: Int
-    ): BitmapInfo {
+    ): Drawable {
         return createBadgedIconBitmap(icon, user, iconAppTargetSdk, false)
     }
 
     fun createBadgedIconBitmap(
         icon: Drawable, user: UserHandle,
         iconAppTargetSdk: Int, isInstantApp: Boolean
-    ): BitmapInfo {
+    ): Drawable {
         return createBadgedIconBitmap(icon, user, iconAppTargetSdk, isInstantApp, null)
     }
 
     fun createBadgedIconBitmap(
         icon: Drawable, user: UserHandle,
         iconAppTargetSdk: Int, isInstantApp: Boolean, scale: FloatArray?
-    ): BitmapInfo {
+    ): Drawable {
         val shrinkNonAdaptiveIcons =
             atleastPie || atleastOreo && iconAppTargetSdk >= Build.VERSION_CODES.O
-        return createBadgedIconBitmap(icon, user, shrinkNonAdaptiveIcons, isInstantApp, scale)
+        return createBadgedIconBitmap(icon, shrinkNonAdaptiveIcons, scale)
     }
 
     /**
@@ -184,43 +185,62 @@ class IconFactory(private val context: Context,
      */
     @TargetApi(Build.VERSION_CODES.O)
     fun createBadgedIconBitmap(
-        icon: Drawable, user: UserHandle?,
-        shrinkNonAdaptiveIcons: Boolean, isInstantApp: Boolean, scale: FloatArray?
-    ): BitmapInfo {
+        icon: Drawable, shrinkNonAdaptiveIcons: Boolean, scale: FloatArray?
+    ): Drawable {
         val iconScale = scale ?: FloatArray(1)
-        var normalizedIcon = normalizeAndWrapToAdaptiveIcon(
-            icon, shrinkNonAdaptiveIcons, null, iconScale
-        )
-        var bitmap = createIconBitmap(icon, iconScale[0])
+//        val normalizedIcon = normalizeAndWrapToAdaptiveIcon(
+//            icon, shrinkNonAdaptiveIcons, iconScale
+//        )
+//        val bitmap = createIconBitmap(normalizedIcon, iconScale[0])
+//
+//        if (atleastOreo && icon is AdaptiveIconDrawable) {
+//            canvas.setBitmap(bitmap)
+//            shadowGenerator.recreateIcon(Bitmap.createBitmap(bitmap), canvas)
+//            canvas.setBitmap(null)
+//        }
 
-        if (atleastOreo && icon is AdaptiveIconDrawable) {
-            canvas.setBitmap(bitmap)
-            shadowGenerator.recreateIcon(Bitmap.createBitmap(bitmap), canvas)
-            canvas.setBitmap(null)
-        }
-
-        if (isInstantApp) {
-            badgeWithDrawable(bitmap, context.getDrawable(R.drawable.ic_instant_app_badge))
-        }
-        if (user != null) {
-            val drawable = FixedSizeBitmapDrawable(bitmap)
-            val badged = packageManager.getUserBadgedIcon(drawable, user)
-            bitmap = if (badged is BitmapDrawable) {
-                badged.bitmap
-            } else {
-                createIconBitmap(badged, 1f)
-            }
-        }
-        return BitmapInfo.fromBitmap(bitmap, if (colorExtractorDisabled) null else colorExtractor)
+//        if (user != null) {
+//            val drawable = FixedSizeBitmapDrawable(bitmap)
+//            val badged = packageManager.getUserBadgedIcon(drawable, user)
+//            bitmap = if (badged is BitmapDrawable) {
+//                badged.bitmap
+//            } else {
+//                createIconBitmap(badged, 1f)
+//            }
+//        }
+        return normalizeAndWrapToAdaptiveIcon(icon, shrinkNonAdaptiveIcons, iconScale)
     }
+
+//    @TargetApi(Build.VERSION_CODES.O)
+//    fun createAdaptiveIcon(drawable: Drawable): Drawable {
+//        return if (drawable is AdaptiveIconDrawable) {
+//            val bitmap = Bitmap.createBitmap(
+//                drawable.background.intrinsicWidth,
+//                drawable.background.intrinsicHeight,
+//                Bitmap.Config.ARGB_8888
+//            )
+//
+//            val canvas = Canvas(bitmap)
+//            canvas.drawBitmap(drawable.background.toBitmap(), 0f, 0f, null)
+//
+//
+//            drawable.draw(canvas)
+//            drawable
+//        } else {
+//            val wrapper = context.getDrawable(R.drawable.adaptive_icon_drawable_wrapper)!!
+//                .mutate() as AdaptiveIconDrawable
+//            val fsd = wrapper.foreground as FixedScaleDrawable
+//            fsd.drawable = drawable
+//            wrapper
+//        }
+//    }
 
     @TargetApi(Build.VERSION_CODES.O)
     private fun normalizeAndWrapToAdaptiveIcon(
-        icon: Drawable,
-        shrinkNonAdaptiveIcons: Boolean, outIconBounds: RectF?, outScale: FloatArray
-    ): Drawable? {
+        icon: Drawable, shrinkNonAdaptiveIcons: Boolean, outScale: FloatArray
+    ): Drawable {
         var normalizedIcon = icon
-        var scale: Float
+        var scale: Float = 1f
 
         if (shrinkNonAdaptiveIcons && atleastOreo) {
             if (wrapperIcon == null) {
@@ -230,44 +250,44 @@ class IconFactory(private val context: Context,
             val dr = wrapperIcon as AdaptiveIconDrawable
             dr.setBounds(0, 0, 1, 1)
             val outShape = BooleanArray(1)
-            scale = normalizer.getScale(icon, outIconBounds, dr.iconMask, outShape)
+            //scale = normalizer.getScale(icon, null, dr.iconMask, outShape)
             if (icon !is AdaptiveIconDrawable && !outShape[0]) {
                 val fsd = dr.foreground as FixedScaleDrawable
                 fsd.drawable = icon
                 fsd.setScale(scale)
                 normalizedIcon = dr
-                scale = normalizer.getScale(icon, outIconBounds, null, null)
+                //scale = normalizer.getScale(icon, null, null, null)
 
                 (dr.background as ColorDrawable).color = wrapperBackgroundColor
             }
         } else {
-            scale = normalizer.getScale(icon, outIconBounds, null, null)
+            //scale = normalizer.getScale(icon, null, null, null)
         }
 
         outScale[0] = scale
-        return icon
+        return normalizedIcon
     }
 
-    /**
-     * Adds the {@param badge} on top of {@param target} using the badge dimensions.
-     */
-    fun badgeWithDrawable(target: Bitmap, badge: Drawable?) {
-        canvas.setBitmap(target)
-        badgeWithDrawable(canvas, badge!!)
-        canvas.setBitmap(null)
-    }
-
-    /**
-     * Adds the {@param badge} on top of {@param target} using the badge dimensions.
-     */
-    fun badgeWithDrawable(target: Canvas, badge: Drawable) {
-        val badgeSize = context.resources.getDimensionPixelSize(R.dimen.profile_badge_size)
-        badge.setBounds(
-            iconBitmapSize - badgeSize, iconBitmapSize - badgeSize,
-            iconBitmapSize, iconBitmapSize
-        )
-        badge.draw(target)
-    }
+//    /**
+//     * Adds the {@param badge} on top of {@param target} using the badge dimensions.
+//     */
+//    fun badgeWithDrawable(target: Bitmap, badge: Drawable?) {
+//        canvas.setBitmap(target)
+//        badgeWithDrawable(canvas, badge!!)
+//        canvas.setBitmap(null)
+//    }
+//
+//    /**
+//     * Adds the {@param badge} on top of {@param target} using the badge dimensions.
+//     */
+//    fun badgeWithDrawable(target: Canvas, badge: Drawable) {
+//        val badgeSize = context.resources.getDimensionPixelSize(R.dimen.profile_badge_size)
+//        badge.setBounds(
+//            iconBitmapSize - badgeSize, iconBitmapSize - badgeSize,
+//            iconBitmapSize, iconBitmapSize
+//        )
+//        badge.draw(target)
+//    }
 
     private fun clear() {
         wrapperBackgroundColor = DEFAULT_WRAPPER_BACKGROUND
@@ -293,18 +313,18 @@ class IconFactory(private val context: Context,
         }
     }
 
-    /**
-     * An extension of [BitmapDrawable] which returns the bitmap pixel size as intrinsic size.
-     * This allows the badging to be done based on the action bitmap size rather than
-     * the scaled bitmap size.
-     */
-    private class FixedSizeBitmapDrawable(bitmap: Bitmap) : BitmapDrawable(null, bitmap) {
-        override fun getIntrinsicHeight(): Int {
-            return bitmap.width
-        }
-
-        override fun getIntrinsicWidth(): Int {
-            return bitmap.width
-        }
-    }
+//    /**
+//     * An extension of [BitmapDrawable] which returns the bitmap pixel size as intrinsic size.
+//     * This allows the badging to be done based on the action bitmap size rather than
+//     * the scaled bitmap size.
+//     */
+//    private class FixedSizeBitmapDrawable(bitmap: Bitmap) : BitmapDrawable(null, bitmap) {
+//        override fun getIntrinsicHeight(): Int {
+//            return bitmap.width
+//        }
+//
+//        override fun getIntrinsicWidth(): Int {
+//            return bitmap.width
+//        }
+//    }
 }

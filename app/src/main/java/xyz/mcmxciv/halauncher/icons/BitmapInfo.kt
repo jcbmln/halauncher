@@ -19,7 +19,6 @@ package xyz.mcmxciv.halauncher.icons
 import android.graphics.Bitmap
 
 open class BitmapInfo {
-    val lowResIcon: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ALPHA_8)
     lateinit var icon: Bitmap
     var color = 0
 
@@ -31,6 +30,8 @@ open class BitmapInfo {
     fun isLowRes(): Boolean = lowResIcon == icon
 
     companion object {
+        val lowResIcon: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ALPHA_8)
+
         fun fromBitmap(bitmap: Bitmap): BitmapInfo = fromBitmap(bitmap, null)
 
         fun fromBitmap(bitmap: Bitmap, dominantColorExtractor: ColorExtractor?): BitmapInfo {

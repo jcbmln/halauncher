@@ -650,7 +650,7 @@ object Utilities {
 //        flattenDrawable: Boolean, outObj: Array<Any>
 //    ): Drawable? {
 //        val appState = LauncherAppState.getInstance(launcher)
-//        if (info.itemType === LauncherSettings.Favorites.ITEM_TYPE_APPLICATION) {
+//        if (info.itemType === AppSettings.Favorites.ITEM_TYPE_APPLICATION) {
 //            val activityInfo = LauncherAppsCompat.getInstance(launcher)
 //                .resolveActivity(info.getIntent(), info.user)
 //            outObj[0] = activityInfo
@@ -659,7 +659,7 @@ object Utilities {
 //                    .getFullResIcon(activityInfo, flattenDrawable)
 //            else
 //                null
-//        } else if (info.itemType === LauncherSettings.Favorites.ITEM_TYPE_DEEP_SHORTCUT) {
+//        } else if (info.itemType === AppSettings.Favorites.ITEM_TYPE_DEEP_SHORTCUT) {
 //            if (info is PendingAddShortcutInfo) {
 //                val activityInfo = (info as PendingAddShortcutInfo).activityInfo
 //                outObj[0] = activityInfo
@@ -679,7 +679,7 @@ object Utilities {
 //                    appState.getInvariantDeviceProfile().fillResIconDpi
 //                )
 //            }
-//        } else if (info.itemType === LauncherSettings.Favorites.ITEM_TYPE_FOLDER) {
+//        } else if (info.itemType === AppSettings.Favorites.ITEM_TYPE_FOLDER) {
 //            val icon = FolderAdaptiveIcon.createFolderAdaptiveIcon(
 //                launcher, info.id, Point(width, height)
 //            )
@@ -701,7 +701,7 @@ object Utilities {
 //    fun getBadge(launcher: Launcher, info: ItemInfo, obj: Any): Drawable {
 //        val appState = LauncherAppState.getInstance(launcher)
 //        val iconSize = appState.getInvariantDeviceProfile().iconBitmapSize
-//        if (info.itemType === LauncherSettings.Favorites.ITEM_TYPE_DEEP_SHORTCUT) {
+//        if (info.itemType === AppSettings.Favorites.ITEM_TYPE_DEEP_SHORTCUT) {
 //            val iconBadged =
 //                info is ItemInfoWithIcon && (info as ItemInfoWithIcon).runtimeStatusFlags and FLAG_ICON_BADGED > 0
 //            if (info.id === ItemInfo.NO_ID && !iconBadged || obj !is ShortcutInfo) {
@@ -717,7 +717,7 @@ object Utilities {
 //                FastBitmapDrawable(badge),
 //                insetFraction, insetFraction, 0, 0
 //            )
-//        } else return if (info.itemType === LauncherSettings.Favorites.ITEM_TYPE_FOLDER) {
+//        } else return if (info.itemType === AppSettings.Favorites.ITEM_TYPE_FOLDER) {
 //            (obj as FolderAdaptiveIcon).getBadge()
 //        } else {
 //            launcher.getPackageManager()
