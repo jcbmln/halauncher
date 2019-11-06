@@ -21,10 +21,7 @@
         launcher:name="3_by_3"
         launcher:numRows="3"
         launcher:numColumns="3"
-        launcher:numFolderRows="2"
-        launcher:numFolderColumns="3"
-        launcher:numHotseatIcons="3"
-        launcher:defaultLayoutId="@xml/default_workspace_3x3" >
+        launcher:numFavoritesIcons="3" >
 
         <display-option
             launcher:name="Super Short Stubby"
@@ -48,10 +45,7 @@
         launcher:name="4_by_4"
         launcher:numRows="4"
         launcher:numColumns="4"
-        launcher:numFolderRows="3"
-        launcher:numFolderColumns="4"
-        launcher:numHotseatIcons="4"
-        launcher:defaultLayoutId="@xml/default_workspace_4x4" >
+        launcher:numFavoritesIcons="4" >
 
         <display-option
             launcher:name="Short Stubby"
@@ -99,10 +93,7 @@
         launcher:name="5_by_5"
         launcher:numRows="5"
         launcher:numColumns="5"
-        launcher:numFolderRows="4"
-        launcher:numFolderColumns="4"
-        launcher:numHotseatIcons="5"
-        launcher:defaultLayoutId="@xml/default_workspace_5x5" >
+        launcher:numFavoritesIcons="5" >
 
         <display-option
             launcher:name="Large Phone"

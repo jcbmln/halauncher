@@ -26,8 +26,6 @@ import android.util.*
 import android.view.WindowManager
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
-import xyz.mcmxciv.halauncher.icons.IconShape
-import xyz.mcmxciv.halauncher.utils.ConfigMonitor
 
 import java.util.ArrayList
 import xyz.mcmxciv.halauncher.utils.Utilities
@@ -52,7 +50,6 @@ class InvariantDeviceProfile private constructor(context: Context?) {
 //    var defaultWallpaperSize: Point
 
     private val changeListeners = ArrayList<OnIDPChangeListener>()
-    private var configMonitor: ConfigMonitor? = null
     private var overlayMonitor: OverlayMonitor? = null
 
     private constructor(p: InvariantDeviceProfile) : this(null) {
@@ -67,18 +64,9 @@ class InvariantDeviceProfile private constructor(context: Context?) {
     init {
         if (context != null) {
             initGrid(context, Utilities.getPrefs(context).getString(KEY_IDP_GRID_NAME, null))
-            configMonitor = ConfigMonitor(context, ::onConfigChanged)
             overlayMonitor = OverlayMonitor(context)
         }
     }
-
-//    /**
-//     * This constructor should NOT have any monitors by design.
-//     */
-//    constructor(context: Context, gridName: String) {
-//        val newName = initGrid(context, gridName)
-//        require(newName != null && newName == gridName) { "Unknown grid name" }
-//    }
 
     private fun initGrid(context: Context, gridName: String?): String? {
         val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -180,9 +168,6 @@ class InvariantDeviceProfile private constructor(context: Context?) {
         ) {
             changeFlags = changeFlags or CHANGE_FLAG_ICON_PARAMS
         }
-//        if (iconShapePath != oldProfile.iconShapePath) {
-//            IconShape.init(context)
-//        }
 
         apply(context, changeFlags)
     }
@@ -239,18 +224,12 @@ class InvariantDeviceProfile private constructor(context: Context?) {
         val name: String
         val numColumns: Int
 
-        private val defaultLayoutId: Int
-
         init {
             val a = context.obtainStyledAttributes(
                 attrs, R.styleable.GridDisplayOption
             )
             name = a.getString(R.styleable.GridDisplayOption_name) ?: ""
             numColumns = a.getInt(R.styleable.GridDisplayOption_numColumns, 0)
-
-            defaultLayoutId = a.getResourceId(
-                R.styleable.GridDisplayOption_defaultLayoutId, 0
-            )
 
             a.recycle()
         }
