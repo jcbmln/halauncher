@@ -4,20 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.AppListAdapter
 import xyz.mcmxciv.halauncher.InvariantDeviceProfile
-import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.ActivityHomeBinding
 import xyz.mcmxciv.halauncher.icons.IconFactory
-import xyz.mcmxciv.halauncher.icons.IconShape
 import xyz.mcmxciv.halauncher.models.AppInfo
 import xyz.mcmxciv.halauncher.utils.UserPreferences
-import xyz.mcmxciv.halauncher.views.HomeAssistantWebView
-import kotlin.math.roundToInt
 
 class HomeActivity : AppCompatActivity() {
     private val setupActivityCode: Int = 1
