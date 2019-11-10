@@ -22,6 +22,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.util.SparseArray
 import android.util.TypedValue
+import java.lang.Exception
 
 /**
  * Abstract representation of the shape of an icon shape
@@ -156,7 +157,18 @@ abstract class IconShape {
         Circle,
         RoundedSquare,
         TearDrop,
-        Squircle
+        Squircle;
+
+        companion object {
+            fun toShapeType(enum: String): ShapeType {
+                return try {
+                    valueOf(enum)
+                }
+                catch (ex: Exception) {
+                    Squircle
+                }
+            }
+        }
     }
 
     companion object {

@@ -20,6 +20,8 @@ import android.content.*
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
+import android.graphics.drawable.AdaptiveIconDrawable
+import android.os.Build
 import android.os.PatternMatcher
 import android.text.TextUtils
 import android.util.*
@@ -43,6 +45,7 @@ class InvariantDeviceProfile private constructor(context: Context?) {
     var iconBitmapSize: Int = 0
     var fillResIconDpi: Int = 0
     var iconTextSize: Float = 0.toFloat()
+    var iconForegroundSize: Int = 0
 
     lateinit var landscapeProfile: DeviceProfile
     lateinit var portraitProfile: DeviceProfile
@@ -103,6 +106,10 @@ class InvariantDeviceProfile private constructor(context: Context?) {
         iconShapePath = getIconShapePath(context)
         landscapeIconSize = interpolatedDisplayOption.landscapeIconSize
         iconBitmapSize = Utilities.pxFromDp(iconSize, dm)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            iconForegroundSize = (iconBitmapSize / (1 + 2 *
+                    AdaptiveIconDrawable.getExtraInsetFraction())).toInt()
+        }
         iconTextSize = interpolatedDisplayOption.iconTextSize
         fillResIconDpi = getLauncherIconDensity(iconBitmapSize)
 
@@ -302,7 +309,7 @@ class InvariantDeviceProfile private constructor(context: Context?) {
         private val actionOverlayChanged = "android.intent.action.OVERLAY_CHANGED"
 
         init {
-            context.registerReceiver(this, getPackageFilter("android", actionOverlayChanged))
+            context.registerReceiver(this, "android".getPackageFilter(actionOverlayChanged))
         }
 
         override fun onReceive(context: Context, intent: Intent) {
@@ -455,43 +462,14 @@ class InvariantDeviceProfile private constructor(context: Context?) {
         /**
          * Creates an intent filter to listen for actions with a specific package in the data field.
          */
-        private fun getPackageFilter(pkg: String, vararg actions: String): IntentFilter {
+        private fun String.getPackageFilter(vararg actions: String): IntentFilter {
             val packageFilter = IntentFilter()
             for (action in actions) {
                 packageFilter.addAction(action)
             }
             packageFilter.addDataScheme("package")
-            packageFilter.addDataSchemeSpecificPart(pkg, PatternMatcher.PATTERN_LITERAL)
+            packageFilter.addDataSchemeSpecificPart(this, PatternMatcher.PATTERN_LITERAL)
             return packageFilter
-        }
-
-        /**
-         * As a ratio of screen height, the total distance we want the parallax effect to span
-         * horizontally
-         */
-        private fun wallpaperTravelToScreenWidthRatio(width: Int, height: Int): Float {
-            val aspectRatio = width / height.toFloat()
-
-            // At an aspect ratio of 16/10, the wallpaper parallax effect should span 1.5 * screen width
-            // At an aspect ratio of 10/16, the wallpaper parallax effect should span 1.2 * screen width
-            // We will use these two data points to extrapolate how much the wallpaper parallax effect
-            // to span (ie travel) at any aspect ratio:
-
-            val aspectRatioLandscape = 16 / 10f
-            val aspectRatioPortrait = 10 / 16f
-            val wallpaperWidthToScreenRatioLandscape = 1.5f
-            val wallpaperWidthToScreenRatioPortrait = 1.2f
-
-            // To find out the desired width at different aspect ratios, we use the following two
-            // formulas, where the coefficient on x is the aspect ratio (width/height):
-            //   (16/10)x + y = 1.5
-            //   (10/16)x + y = 1.2
-            // We solve for x and y and end up with a final formula:
-            val x =
-                (wallpaperWidthToScreenRatioLandscape - wallpaperWidthToScreenRatioPortrait) /
-                (aspectRatioLandscape - aspectRatioPortrait)
-            val y = wallpaperWidthToScreenRatioPortrait - x * aspectRatioPortrait
-            return x * aspectRatio + y
         }
     }
 }

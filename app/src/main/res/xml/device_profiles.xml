@@ -99,7 +99,7 @@
             launcher:name="Large Phone"
             launcher:minWidthDps="406"
             launcher:minHeightDps="694"
-            launcher:iconImageSize="56"
+            launcher:iconImageSize="72"
             launcher:iconTextSize="14.4"
             launcher:canBeDefault="true" />
 

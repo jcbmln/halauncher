@@ -65,7 +65,7 @@ class IconNormalizer(context: Context, iconBitmapSize: Int) {
      */
     @Synchronized
     fun getScale(d: Drawable): Float {
-        if (IconFactory.atleastOreo && d is AdaptiveIconDrawable) {
+        if (d is AdaptiveIconDrawable) {
             adaptiveIconScale = normalizeAdaptiveIcon(d, maxSize, adaptiveIconBounds)
             return adaptiveIconScale
         }

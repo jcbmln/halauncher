@@ -16,17 +16,27 @@
 
 package xyz.mcmxciv.halauncher.utils
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Paint
 import android.util.*
 import kotlin.math.ceil
 import kotlin.math.roundToInt
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import androidx.core.graphics.drawable.toBitmap
+
 
 /**
  * Various utilities shared amongst the Launcher's classes.
  */
 object Utilities {
+    private const val BITMAP_SCALE = 0.4f
+
     /**
      * Calculates the height of a given string at a specific text size.
      */
@@ -63,5 +73,40 @@ object Utilities {
         return context.getSharedPreferences(
             AppFiles.DEVICE_PREFERENCES_KEY, Context.MODE_PRIVATE
         )
+    }
+
+    fun drawableToScaledBitmap(drawable: Drawable): Bitmap {
+        val image = drawable.toBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
+        val width = (image.width * BITMAP_SCALE).roundToInt()
+        val height = (image.height * BITMAP_SCALE).roundToInt()
+
+        return Bitmap.createScaledBitmap(image, width, height, false)
+    }
+
+    fun isDark(drawable: Drawable): Boolean {
+        val bitmap = drawableToScaledBitmap(drawable)
+        var dark = false
+
+        val darkThreshold = bitmap.width.toFloat() * bitmap.height.toFloat() * 0.45f
+        var darkPixels = 0
+
+        val pixels = IntArray(bitmap.width * bitmap.height)
+        bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+
+        for (pixel in pixels) {
+            val r = Color.red(pixel)
+            val g = Color.green(pixel)
+            val b = Color.blue(pixel)
+            val luminance = 0.299 * r + 0.0 + 0.587 * g + 0.0 + 0.114 * b + 0.0
+            if (luminance < 150) {
+                darkPixels++
+            }
+        }
+
+        if (darkPixels >= darkThreshold) {
+            dark = true
+        }
+
+        return dark
     }
 }

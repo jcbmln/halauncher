@@ -16,15 +16,19 @@
 */
 -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
-
+<resources>
     <!-- Attributes used for launcher theme -->
     <attr name="popupColorPrimary" format="color" />
     <attr name="popupColorSecondary" format="color" />
     <attr name="popupColorTertiary" format="color" />
     <attr name="isMainColorDark" format="boolean" />
-    <attr name="widgetsTheme" format="reference" />
     <attr name="loadingIconColor" format="color" />
+    <attr name="adaptiveIconViewStyle" format="reference" />
+
+    <declare-styleable name="AdaptiveIconView">
+        <attr name="shadowColor" format="color" />
+        <attr name="shadowDy" format="dimension" />
+    </declare-styleable>
 
     <declare-styleable name="GridDisplayOption">
         <attr name="name" format="string" />
