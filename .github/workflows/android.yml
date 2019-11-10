@@ -13,6 +13,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    - name: Decrypt signing key
+      run: openssl aes-256-cbc -d -pass pass:'$SECRET_PASSWORD' -salt -pbkdf2 -in secret.enc -out releasekey.jks
     - name: Make Gradle runnable
       run: chmod +x ./gradlew
     - name: Build with Gradle
