@@ -1,39 +1,20 @@
 package xyz.mcmxciv.halauncher.views
 
 import android.annotation.SuppressLint
-import android.app.WallpaperManager
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.os.AsyncTask
-import android.renderscript.Allocation
-import android.renderscript.Element
-import android.renderscript.RenderScript
-import android.renderscript.ScriptIntrinsicBlur
 import android.util.AttributeSet
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toDrawable
-import xyz.mcmxciv.halauncher.utilities.UserPreferences
-import java.lang.ref.WeakReference
-import kotlin.math.roundToInt
+import xyz.mcmxciv.halauncher.utils.UserPreferences
 
-class HomeAssistantWebView : WebView {
+class HomeAssistantWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs) {
     private val hassWebTitle = "Home Assistant"
 
-    constructor(context: Context) : super(context) {
+    init {
         initializeWebView()
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initializeWebView()
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        initializeWebView()
+        clipToOutline = true
     }
 
     fun loadHomeAssistant(url: String) {

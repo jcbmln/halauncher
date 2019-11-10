@@ -1,0 +1,30 @@
+<xyz.mcmxciv.halauncher.views.SlideRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_parent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.HomeActivity">
+
+    <include
+        android:id="@+id/home_app_bar"
+        layout="@layout/app_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:layout_margin="10dp" />
+
+    <FrameLayout
+        android:id="@+id/home_slidable_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_background"
+        android:elevation="2.5dp">
+
+        <xyz.mcmxciv.halauncher.views.HomeAssistantWebView
+            android:id="@+id/home_web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_background" />
+    </FrameLayout>
+</xyz.mcmxciv.halauncher.views.SlideRevealLayout>

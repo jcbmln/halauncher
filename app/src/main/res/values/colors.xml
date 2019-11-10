@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <!-- Named colors -->
+    <color name="offWhite">#f3f5f7</color>
+    <color name="lightGray">#e0e0e0</color>
+    <color name="transparentWhite">#00ffffff</color>
+
+    <color name="colorBackground">@android:color/white</color>
+    <color name="colorBackgroundTransparent">@color/transparentWhite</color>
+    <color name="colorWindowBackground">@color/offWhite</color>
+    <color name="colorForeground">#333333</color>
+    <color name="colorAccent">#00bcd4</color>
+    <color name="colorAccentTransparent">#1500bcd4</color>
+
+    <!-- View Colors -->
     <color name="legacy_icon_background">#FFFFFF</color>
+    <color name="edit_text_background">@color/offWhite</color>
+    <color name="edit_text_background_focused">@color/lightGray</color>
+    <color name="edit_text_border">@color/lightGray</color>
+    <color name="button_text_color">@color/colorAccent</color>
+
+    <color name="icon_background">#41BDF5</color>
 </resources>

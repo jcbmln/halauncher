@@ -1,6 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">HALauncher</string>
-    <string name="enter_url">Enter URL</string>
     <string name="http_example_com">http://example.com</string>
     <string name="main_button_go">Open Url</string>
     <string name="title_activity_settings">Settings</string>
@@ -16,4 +16,6 @@
     <string name="key_home_assistant_url">key_home_assistant_url</string>
     <string name="key_transparent_background">key_transparent_background</string>
     <string name="key_blur_background">key_blur_background</string>
+    <string name="drag_handle">drag handle</string>
+    <string name="settings_button">settings button</string>
 </resources>
