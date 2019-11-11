@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package xyz.mcmxciv.halauncher
+package xyz.mcmxciv.halauncher.models
 
 import android.content.*
 import android.content.res.Configuration
@@ -28,6 +28,7 @@ import android.util.*
 import android.view.WindowManager
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
+import xyz.mcmxciv.halauncher.R
 
 import java.util.ArrayList
 import xyz.mcmxciv.halauncher.utils.Utilities
@@ -81,18 +82,36 @@ class InvariantDeviceProfile private constructor(context: Context?) {
         val largestSize = Point()
         display.getCurrentSizeRange(smallestSize, largestSize)
 
-        val allOptions = getPredefinedDeviceProfiles(context, gridName)
+        val allOptions =
+            getPredefinedDeviceProfiles(
+                context,
+                gridName
+            )
         // This guarantees that width < height
         val minWidthDps = Utilities.dpiFromPx(min(smallestSize.x, smallestSize.y), dm)
         val minHeightDps = Utilities.dpiFromPx(min(largestSize.x, largestSize.y), dm)
         // Sort the profiles based on the closeness to the device size
         allOptions.sortWith(Comparator { a, b ->
-            dist(minWidthDps, minHeightDps, a.minWidthDps, a.minHeightDps).compareTo(
-                dist(minWidthDps, minHeightDps, b.minWidthDps, b.minHeightDps)
+            dist(
+                minWidthDps,
+                minHeightDps,
+                a.minWidthDps,
+                a.minHeightDps
+            ).compareTo(
+                dist(
+                    minWidthDps,
+                    minHeightDps,
+                    b.minWidthDps,
+                    b.minHeightDps
+                )
             )
         })
         val interpolatedDisplayOption =
-            invDistWeightedInterpolate(minWidthDps, minHeightDps, allOptions)
+            invDistWeightedInterpolate(
+                minWidthDps,
+                minHeightDps,
+                allOptions
+            )
 
         val closestProfile = allOptions[0].grid
         numColumns = closestProfile?.numColumns ?: numColumns
@@ -103,7 +122,8 @@ class InvariantDeviceProfile private constructor(context: Context?) {
         }
 
         iconSize = interpolatedDisplayOption.iconSize
-        iconShapePath = getIconShapePath(context)
+        iconShapePath =
+            getIconShapePath(context)
         landscapeIconSize = interpolatedDisplayOption.landscapeIconSize
         iconBitmapSize = Utilities.pxFromDp(iconSize, dm)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -153,12 +173,27 @@ class InvariantDeviceProfile private constructor(context: Context?) {
         val savedIconMaskPath = Utilities.getDevicePrefs(context).getString(KEY_ICON_PATH_REF, "")
         // Good place to check if grid size changed in themepicker when launcher was dead.
         if (savedIconMaskPath?.isEmpty() == true) {
-            Utilities.getDevicePrefs(context).edit().putString(KEY_ICON_PATH_REF, getIconShapePath(context))
+            Utilities.getDevicePrefs(context).edit().putString(
+                KEY_ICON_PATH_REF,
+                getIconShapePath(
+                    context
+                )
+            )
                 .apply()
-        } else if (savedIconMaskPath != getIconShapePath(context)) {
-            Utilities.getDevicePrefs(context).edit().putString(KEY_ICON_PATH_REF, getIconShapePath(context))
+        } else if (savedIconMaskPath != getIconShapePath(
+                context
+            )
+        ) {
+            Utilities.getDevicePrefs(context).edit().putString(
+                KEY_ICON_PATH_REF,
+                getIconShapePath(
+                    context
+                )
+            )
                 .apply()
-            apply(context, CHANGE_FLAG_ICON_PARAMS)
+            apply(context,
+                CHANGE_FLAG_ICON_PARAMS
+            )
         }
     }
 
@@ -323,7 +358,8 @@ class InvariantDeviceProfile private constructor(context: Context?) {
         @Volatile private var instance: InvariantDeviceProfile? = null
         fun getInstance(context: Context): InvariantDeviceProfile {
             return instance ?: synchronized(this) {
-                instance ?: InvariantDeviceProfile(context).also { instance = it }
+                instance
+                    ?: InvariantDeviceProfile(context).also { instance = it }
             }
         }
 
@@ -373,7 +409,11 @@ class InvariantDeviceProfile private constructor(context: Context?) {
                     ) {
                         if (type == XmlPullParser.START_TAG && GridOption.TAG_NAME == parser.name) {
 
-                            val gridOption = GridOption(context, Xml.asAttributeSet(parser))
+                            val gridOption =
+                                GridOption(
+                                    context,
+                                    Xml.asAttributeSet(parser)
+                                )
                             val displayDepth = parser.depth
 
                             type = parser.next()
@@ -436,7 +476,12 @@ class InvariantDeviceProfile private constructor(context: Context?) {
             var weights = 0f
 
             var p = points[0]
-            if (dist(width, height, p.minWidthDps, p.minHeightDps) == 0f) {
+            if (dist(
+                    width,
+                    height,
+                    p.minWidthDps,
+                    p.minHeightDps
+                ) == 0f) {
                 return p
             }
 
@@ -444,7 +489,13 @@ class InvariantDeviceProfile private constructor(context: Context?) {
             var i = 0
             while (i < points.size && i < K_NEAREST_NEIGHBOR) {
                 p = points[i]
-                val w = weight(width, height, p.minWidthDps, p.minHeightDps, WEIGHT_POWER)
+                val w = weight(
+                    width,
+                    height,
+                    p.minWidthDps,
+                    p.minHeightDps,
+                    WEIGHT_POWER
+                )
                 weights += w
                 out.add(DisplayOption().add(p).multiply(w))
                 ++i
@@ -453,7 +504,8 @@ class InvariantDeviceProfile private constructor(context: Context?) {
         }
 
         private fun weight(x0: Float, y0: Float, x1: Float, y1: Float, pow: Float): Float {
-            val d = dist(x0, y0, x1, y1)
+            val d =
+                dist(x0, y0, x1, y1)
             return if (d.compareTo(0f) == 0) {
                 Float.POSITIVE_INFINITY
             } else (WEIGHT_EFFICIENT / d.toDouble().pow(pow.toDouble())).toFloat()

@@ -1,6 +1,5 @@
 package xyz.mcmxciv.halauncher.models
 
-import android.graphics.drawable.Drawable
 import androidx.room.*
 
 @Entity(tableName = "favorites")

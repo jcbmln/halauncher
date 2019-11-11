@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package xyz.mcmxciv.halauncher
+package xyz.mcmxciv.halauncher.models
 
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
-import android.graphics.PointF
 import android.graphics.Rect
 import android.util.DisplayMetrics
 import android.view.Surface
 import android.view.WindowManager
+import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.utils.Utilities
 
 //import com.android.launcher3.CellLayout.ContainerType
@@ -173,7 +173,7 @@ class DeviceProfile(
         desiredWorkspaceLeftRightMarginPx = if (isVerticalBarLayout) 0 else edgeMarginPx
 
         val cellLayoutPaddingLeftRightMultiplier = if (!isVerticalBarLayout && isTablet)
-                PORTRAIT_TABLET_LEFT_RIGHT_PADDING_MULTIPLIER
+            PORTRAIT_TABLET_LEFT_RIGHT_PADDING_MULTIPLIER
             else
                 1
         val cellLayoutPadding = res.getDimensionPixelSize(R.dimen.dynamic_grid_cell_layout_padding)

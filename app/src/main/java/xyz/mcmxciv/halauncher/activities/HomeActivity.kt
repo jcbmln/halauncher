@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.AppListAdapter
-import xyz.mcmxciv.halauncher.InvariantDeviceProfile
+import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.databinding.ActivityHomeBinding
 import xyz.mcmxciv.halauncher.icons.IconFactory
 import xyz.mcmxciv.halauncher.models.AppInfo
@@ -31,7 +31,7 @@ class HomeActivity : AppCompatActivity() {
             loadWebView()
         }
 
-        if (UserPreferences.canGetWallpaper) {
+        if (SetupActivity.isReadStoragePermissionGranted(this)) {
             SetupActivity.setWallpaper(this, window)
         }
 
