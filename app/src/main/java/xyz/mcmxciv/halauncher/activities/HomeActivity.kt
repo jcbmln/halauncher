@@ -16,24 +16,18 @@ import xyz.mcmxciv.halauncher.utils.UserPreferences
 class HomeActivity : AppCompatActivity() {
     private val setupActivityCode: Int = 1
     private lateinit var binding: ActivityHomeBinding
+    private lateinit var prefs: UserPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
+        prefs = UserPreferences.getInstance(this)
         setContentView(binding.root)
-        UserPreferences.init(this)
+        loadWebView()
 
-        if (UserPreferences.isFirstRun) {
-            val intent = Intent(this, SetupActivity::class.java)
-            startActivityForResult(intent, setupActivityCode)
-        }
-        else {
-            loadWebView()
-        }
-
-        if (SetupActivity.isReadStoragePermissionGranted(this)) {
-            SetupActivity.setWallpaper(this, window)
-        }
+//        if (SetupActivity.isReadStoragePermissionGranted(this)) {
+//            SetupActivity.setWallpaper(this, window)
+//        }
 
         val idp = InvariantDeviceProfile.getInstance(this)
         val appList = getAppList(this, idp)
@@ -48,17 +42,6 @@ class HomeActivity : AppCompatActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) hideSystemUI()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            setupActivityCode -> {
-                UserPreferences.isFirstRun = false
-                loadWebView()
-            }
-        }
     }
 
     private fun getAppList(context: Context, idp: InvariantDeviceProfile):
@@ -85,7 +68,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun loadWebView() {
-        binding.homeWebView.loadHomeAssistant(UserPreferences.url)
+        binding.homeWebView.loadHomeAssistant(prefs.url)
     }
 
     private fun hideSystemUI() {

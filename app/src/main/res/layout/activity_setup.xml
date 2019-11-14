@@ -9,7 +9,7 @@
     tools:context=".activities.SetupActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/setup_main_view"
+        android:id="@+id/setup_manual_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_background"
@@ -82,14 +82,55 @@
             tools:text="@string/main_button_go" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/service_list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/rounded_background"
-        android:elevation="2.5dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/setup_discovery_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/setup_discovery_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:shadowColor="@color/colorForeground"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2.5"
+            android:text="@string/setup_descovery_label"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="#ffffff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/service_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_background"
+            android:elevation="2.5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/setup_discovery_label" />
+
+        <Button
+            android:id="@+id/setup_mode_switch"
+            style="@style/Widget.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="@string/setup_mode_switch"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/service_list" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

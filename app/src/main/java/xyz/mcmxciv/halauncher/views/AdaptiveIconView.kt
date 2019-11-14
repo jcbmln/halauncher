@@ -62,6 +62,7 @@ class AdaptiveIconView(
     private lateinit var text: String
 
     init {
+        val prefs = UserPreferences.getInstance(context)
         iconSize = (layerSize / (1 + 2 * AdaptiveIconDrawable.getExtraInsetFraction())).toInt()
         layerCenter = iconSize / 2f
         offset = (layerSize - iconSize) / 2
@@ -72,11 +73,11 @@ class AdaptiveIconView(
         foregroundPaint.shader = BitmapShader(foreground, CLAMP, CLAMP)
 
         textPaint.textSize = Utilities.pxFromSp(12f, context.resources.displayMetrics).toFloat()
-        textPaint.color = if (UserPreferences.transparentBackground)
+        textPaint.color = if (prefs.transparentBackground)
             context.getColor(R.color.colorBackground)
             else context.getColor(R.color.colorForeground)
 
-        IconShape.setShape(UserPreferences.iconShapeType, layerCenter)
+        IconShape.setShape(prefs.iconShapeType, layerCenter)
     }
 
     fun setIcon(icon: AdaptiveIconDrawable) {

@@ -22,13 +22,13 @@ class ServiceListAdapter(
     override fun onBindViewHolder(holder: ServiceListViewHolder, position: Int) {
         val serviceInfo = serviceList[position]
         val name = serviceInfo.serviceName
-        val host = "${serviceInfo.host.hostAddress}:${serviceInfo.port}"
+        //val host = "${serviceInfo.host.hostAddress}:${serviceInfo.port}"
 
         val serviceName = holder.view.findViewById<TextView>(R.id.service_name)
         serviceName.text = name
 
-        val serviceHost = holder.view.findViewById<TextView>(R.id.service_host)
-        serviceHost.text = host
+//        val serviceHost = holder.view.findViewById<TextView>(R.id.service_host)
+//        serviceHost.text = host
     }
 
     override fun getItemCount(): Int = serviceList.count()

@@ -11,6 +11,7 @@ import xyz.mcmxciv.halauncher.utils.UserPreferences
 
 class HomeAssistantWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs) {
     private val hassWebTitle = "Home Assistant"
+    private val prefs = UserPreferences.getInstance(context)
 
     init {
         initializeWebView()
@@ -20,7 +21,7 @@ class HomeAssistantWebView(context: Context, attrs: AttributeSet) : WebView(cont
     fun loadHomeAssistant(url: String) {
         loadUrl(url)
 
-        if (UserPreferences.transparentBackground) {
+        if (prefs.transparentBackground) {
             setBackgroundColor(Color.argb(1, 255, 255, 255))
         }
     }

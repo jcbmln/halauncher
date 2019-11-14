@@ -5,14 +5,13 @@ import android.net.nsd.NsdServiceInfo
 import android.util.Log
 
 class HomeAssistantDiscoveryListener(
-    callback: HomeAssistantResolveListener.Callback,
+    private val callback: HomeAssistantResolveListener.Callback,
     private val nsdManager: NsdManager
 ) : NsdManager.DiscoveryListener {
-    private val resolveListener = HomeAssistantResolveListener(callback)
-
     override fun onServiceFound(serviceInfo: NsdServiceInfo) {
         if (serviceInfo.serviceType == SERVICE_TYPE) {
-            nsdManager.resolveService(serviceInfo, resolveListener)
+            callback.addService(serviceInfo)
+            //nsdManager.resolveService(serviceInfo, HomeAssistantResolveListener(callback))
         }
     }
 

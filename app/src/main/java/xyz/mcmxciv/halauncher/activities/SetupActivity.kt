@@ -38,15 +38,13 @@ import kotlin.collections.ArrayList
 class SetupActivity : AppCompatActivity(), HomeAssistantResolveListener.Callback {
     private lateinit var binding: ActivitySetupBinding
     private lateinit var adapter: ServiceListAdapter
+    private lateinit var prefs: UserPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySetupBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        if (isReadStoragePermissionGranted(this)) {
-            setWallpaper(this, window)
-        }
+        prefs = UserPreferences.getInstance(this)
 
         binding.setupButtonEnter.setOnClickListener {
             val text = binding.setupUrlInput.text.toString()
@@ -54,15 +52,15 @@ class SetupActivity : AppCompatActivity(), HomeAssistantResolveListener.Callback
             if (text.toLowerCase(Locale.ROOT).startsWith("https://") ||
                 text.toLowerCase(Locale.ROOT).startsWith("http://"))
             {
-                UserPreferences.url = text
-                UserPreferences.isFirstRun = false
+                prefs.url = text
+                prefs.setupDone = true
                 finish()
             }
             else {
                 val toast = Toast.makeText(
                     this, "You must enter a valid URL.", Toast.LENGTH_LONG
                 )
-                toast.setPosition(binding.setupMainView, window, 0, 5)
+                toast.setPosition(binding.setupManualContainer, window, 0, 5)
                 toast.show()
             }
         }
@@ -88,12 +86,10 @@ class SetupActivity : AppCompatActivity(), HomeAssistantResolveListener.Callback
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             1 -> {
-                UserPreferences.canGetWallpaper = (grantResults.isNotEmpty()
+                prefs.canGetWallpaper = (grantResults.isNotEmpty()
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             }
         }
-
-        setWallpaper(this, window)
     }
 
     override fun addService(serviceInfo: NsdServiceInfo) {
@@ -107,29 +103,14 @@ class SetupActivity : AppCompatActivity(), HomeAssistantResolveListener.Callback
         private const val TAG = "SetupActivity"
         const val SERVICE_TYPE = "_home-assistant._tcp"
 
-        fun isReadStoragePermissionGranted(activity: Activity): Boolean {
-            val permissionStatus = ActivityCompat.checkSelfPermission(
-                activity, Manifest.permission.READ_EXTERNAL_STORAGE
-            )
 
-            if (permissionStatus != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                    activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1
-                )
-                return false
-            }
 
-            UserPreferences.canGetWallpaper = true
-            return true
-        }
-
-        fun setWallpaper(context: Context, window: Window) {
-            if (UserPreferences.canGetWallpaper) {
-                val wm = WallpaperManager.getInstance(context)
-                val wallpaper = BlurBuilder.blur(context, wm.drawable)
-                window.setBackgroundDrawable(wallpaper)
-                UserPreferences.transparentBackground = Utilities.isDark(wallpaper)
-            }
-        }
+//        fun setWallpaper(context: Context, window: Window) {
+//            if (prefs.canGetWallpaper) {
+//                val wm = WallpaperManager.getInstance(context)
+//                val wallpaper = BlurBuilder.blur(context, wm.drawable)
+//                window.setBackgroundDrawable(wallpaper)
+//            }
+//        }
     }
 }

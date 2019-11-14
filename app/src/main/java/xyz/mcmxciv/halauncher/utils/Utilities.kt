@@ -16,9 +16,11 @@
 
 package xyz.mcmxciv.halauncher.utils
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Paint
 import android.util.*
 import kotlin.math.ceil
@@ -28,6 +30,7 @@ import android.opengl.ETC1.getWidth
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.toBitmap
 
 
@@ -36,6 +39,21 @@ import androidx.core.graphics.drawable.toBitmap
  */
 object Utilities {
     private const val BITMAP_SCALE = 0.4f
+
+    fun isReadStoragePermissionGranted(activity: Activity): Boolean {
+        val permissionStatus = ActivityCompat.checkSelfPermission(
+            activity, Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+
+        if (permissionStatus != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1
+            )
+            return false
+        }
+
+        return true
+    }
 
     /**
      * Calculates the height of a given string at a specific text size.
