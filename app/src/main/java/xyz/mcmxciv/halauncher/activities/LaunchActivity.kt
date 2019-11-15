@@ -1,12 +1,12 @@
 package xyz.mcmxciv.halauncher.activities
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import xyz.mcmxciv.halauncher.utils.UserPreferences
 
-class LaunchActivity : AppCompatActivity() {
-
+class LaunchActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

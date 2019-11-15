@@ -25,7 +25,7 @@
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/colorWindowBackground</item>
         <item name="android:textColor">@color/colorForeground</item>
-        <item name="android:colorControlHighlight">@color/colorAccentTransparent</item>
+        <item name="android:colorControlHighlight">@color/colorAccent</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowEnterTransition">@android:transition/slide_bottom</item>
@@ -49,6 +49,9 @@
         <item name="android:windowShowWallpaper">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+    <style name="AppTheme.NoActionBar.Onboard">
+        <item name="android:windowBackground">@color/colorAccent</item>
+    </style>
 
     <style name="Widget" parent="android:Widget" />
     <style name="Widget.EditText" parent="android:Widget.EditText">
@@ -64,8 +67,14 @@
         <item name="android:layout_marginEnd">20dp</item>
     </style>
     <style name="Widget.Button">
-        <item name="android:background">@drawable/button</item>
-        <item name="android:textColor">@color/button_text_color</item>
-        <item name="android:stateListAnimator">@null</item>
+        <item name="android:stateListAnimator">@animator/elevation_animator</item>
+    </style>
+    <style name="Widget.Button.Primary">
+        <item name="android:background">@drawable/button_primary</item>
+        <item name="android:textColor">@color/colorBackground</item>
+    </style>
+    <style name="Widget.Button.Secondary">
+        <item name="android:background">@drawable/button_secondary</item>
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 </resources>

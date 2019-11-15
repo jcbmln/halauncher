@@ -19,7 +19,9 @@
     <string name="drag_handle">drag handle</string>
     <string name="settings_button">settings button</string>
 
-    <string name="setup_descovery_label">Select Your Home Assistant Instance</string>
+    <string name="setup_descovery_text">Searching for Home Assistant</string>
+    <string name="setup_selection_text">Home Assistant found!</string>
+    <string name="setup_logo_description">HALauncher Logo</string>
     <string name="setup_mode_switch">Manual Mode</string>
     <string name="default_service_name">Service</string>
     <string name="default_service_host">http:\/\/localhost:8123</string>

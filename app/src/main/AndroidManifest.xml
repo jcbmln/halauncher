@@ -29,7 +29,7 @@
             android:name=".activities.SetupActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar.Onboard"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.HomeActivity"

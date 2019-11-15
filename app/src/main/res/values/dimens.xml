@@ -124,7 +124,7 @@
     <dimen name="drop_target_text_size">14sp</dimen>
     <dimen name="drop_target_shadow_elevation">2dp</dimen>
 
-    <!-- the distance an icon must be dragged before button drop targets accept it -->
+    <!-- the distance an icon must be dragged before button_secondary drop targets accept it -->
     <dimen name="drag_distanceThreshold">30dp</dimen>
 
     <!-- Elevation for the drag view. It should be larger than elevation of all other drag sources

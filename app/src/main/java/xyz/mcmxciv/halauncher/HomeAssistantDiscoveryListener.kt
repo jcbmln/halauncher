@@ -5,13 +5,12 @@ import android.net.nsd.NsdServiceInfo
 import android.util.Log
 
 class HomeAssistantDiscoveryListener(
-    private val callback: HomeAssistantResolveListener.Callback,
+    private val callback: Callback,
     private val nsdManager: NsdManager
 ) : NsdManager.DiscoveryListener {
     override fun onServiceFound(serviceInfo: NsdServiceInfo) {
         if (serviceInfo.serviceType == SERVICE_TYPE) {
             callback.addService(serviceInfo)
-            //nsdManager.resolveService(serviceInfo, HomeAssistantResolveListener(callback))
         }
     }
 
@@ -35,6 +34,10 @@ class HomeAssistantDiscoveryListener(
 
     override fun onServiceLost(serviceInfo: NsdServiceInfo) {
         Log.e(TAG, "Service lost: $serviceInfo")
+    }
+
+    interface Callback {
+        fun addService(serviceInfo: NsdServiceInfo)
     }
 
     companion object {
