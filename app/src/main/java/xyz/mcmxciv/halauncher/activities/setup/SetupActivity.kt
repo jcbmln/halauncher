@@ -48,8 +48,4 @@ class SetupActivity : AppCompatActivity(), DiscoveryServiceSelectedListener
         startActivity(intent)
         finish()
     }
-
-    companion object {
-        private const val TAG = "SetupActivity"
-    }
 }

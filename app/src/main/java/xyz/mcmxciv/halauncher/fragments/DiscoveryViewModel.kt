@@ -12,4 +12,8 @@ class DiscoveryViewModel : ViewModel() {
     val selectedService: MutableLiveData<NsdServiceInfo> by lazy {
         MutableLiveData<NsdServiceInfo>()
     }
+
+    val resolvedUrl: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
 }

@@ -18,11 +18,9 @@ import xyz.mcmxciv.halauncher.ServiceListAdapter
 import xyz.mcmxciv.halauncher.interfaces.DiscoveryServiceSelectedListener
 import xyz.mcmxciv.halauncher.databinding.DiscoveryFragmentBinding
 
-class DiscoveryFragment(private val listener: DiscoveryServiceSelectedListener) : Fragment(),
-    HomeAssistantResolveListener.OnServiceResolvedListener {
+class DiscoveryFragment(private val listener: DiscoveryServiceSelectedListener) : Fragment() {
     private lateinit var viewModel: DiscoveryViewModel
     private lateinit var binding: DiscoveryFragmentBinding
-    private lateinit var nsdManager: NsdManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,31 +33,29 @@ class DiscoveryFragment(private val listener: DiscoveryServiceSelectedListener) 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(DiscoveryViewModel::class.java)
-        nsdManager = context?.let { getSystemService(it, NsdManager::class.java) } as NsdManager
+
 
         binding.setupServiceList.layoutManager = LinearLayoutManager(context)
         val adapter = ServiceListAdapter(viewModel)
         binding.setupServiceList.adapter = adapter
 
-        val discoveryListener = HomeAssistantDiscoveryListener(nsdManager, viewModel)
+        val nsdManager = context?.let { getSystemService(it, NsdManager::class.java) } as NsdManager
         nsdManager.discoverServices(
             HomeAssistantDiscoveryListener.SERVICE_TYPE,
-            NsdManager.PROTOCOL_DNS_SD, discoveryListener
+            NsdManager.PROTOCOL_DNS_SD,
+            HomeAssistantDiscoveryListener(nsdManager, viewModel)
         )
 
-        viewModel.services.observe(this, Observer<MutableList<NsdServiceInfo>> {
+        viewModel.services.observe(this, Observer {
             updateViewVisibility(it.isEmpty())
             adapter.setData(it)
         })
-        viewModel.selectedService.observe(this, Observer<NsdServiceInfo> {
-            val resolveListener = HomeAssistantResolveListener(this@DiscoveryFragment)
-            nsdManager.resolveService(it, resolveListener)
+        viewModel.selectedService.observe(this, Observer {
+            nsdManager.resolveService(it, HomeAssistantResolveListener(viewModel))
         })
-    }
-
-    override fun onServiceResolved(serviceInfo: NsdServiceInfo) {
-        val url = "http://${serviceInfo.host.hostAddress}:${serviceInfo.port}"
-        listener.onServiceSelected(url)
+        viewModel.resolvedUrl.observe(this, Observer {
+            listener.onServiceSelected(it)
+        })
     }
 
     private fun updateViewVisibility(serviceListIsEmpty: Boolean) {
@@ -69,9 +65,5 @@ class DiscoveryFragment(private val listener: DiscoveryServiceSelectedListener) 
         binding.setupSelectionLayout.visibility =
             if (serviceListIsEmpty) View.GONE
             else View.VISIBLE
-    }
-
-    companion object {
-        private const val TAG = "DiscoveryFragment"
     }
 }

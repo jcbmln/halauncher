@@ -3,9 +3,10 @@ package xyz.mcmxciv.halauncher
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.util.Log
+import xyz.mcmxciv.halauncher.fragments.DiscoveryViewModel
 
 class HomeAssistantResolveListener(
-    private val listener: OnServiceResolvedListener
+    private val viewModel: DiscoveryViewModel
 ) : NsdManager.ResolveListener {
     override fun onResolveFailed(serviceInfo: NsdServiceInfo, errorCode: Int) {
         Log.e(TAG, "Resolve failed: $errorCode")
@@ -13,11 +14,8 @@ class HomeAssistantResolveListener(
 
     override fun onServiceResolved(serviceInfo: NsdServiceInfo) {
         Log.i(TAG, "Resolve Succeeded. $serviceInfo")
-        listener.onServiceResolved(serviceInfo)
-    }
-
-    interface OnServiceResolvedListener {
-        fun onServiceResolved(serviceInfo: NsdServiceInfo)
+        val url = "http://${serviceInfo.host.hostAddress}:${serviceInfo.port}"
+        viewModel.resolvedUrl.postValue(url)
     }
 
     companion object {
