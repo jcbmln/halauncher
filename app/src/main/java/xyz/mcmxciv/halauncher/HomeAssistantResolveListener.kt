@@ -4,18 +4,20 @@ import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.util.Log
 
-class HomeAssistantResolveListener(private val callback: Callback) : NsdManager.ResolveListener {
+class HomeAssistantResolveListener(
+    private val listener: OnServiceResolvedListener
+) : NsdManager.ResolveListener {
     override fun onResolveFailed(serviceInfo: NsdServiceInfo, errorCode: Int) {
         Log.e(TAG, "Resolve failed: $errorCode")
     }
 
     override fun onServiceResolved(serviceInfo: NsdServiceInfo) {
         Log.i(TAG, "Resolve Succeeded. $serviceInfo")
-        callback.openService(serviceInfo)
+        listener.onServiceResolved(serviceInfo)
     }
 
-    interface Callback {
-        fun openService(serviceInfo: NsdServiceInfo)
+    interface OnServiceResolvedListener {
+        fun onServiceResolved(serviceInfo: NsdServiceInfo)
     }
 
     companion object {

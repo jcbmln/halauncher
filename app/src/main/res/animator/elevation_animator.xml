@@ -8,14 +8,6 @@
                 android:valueType="floatType" />
         </set>
     </item>
-    <item android:state_focused="true">
-        <set>
-            <objectAnimator android:propertyName="translationZ"
-                android:duration="@android:integer/config_shortAnimTime"
-                android:valueTo="2.5dp"
-                android:valueType="floatType" />
-        </set>
-    </item>
     <item>
         <set>
             <objectAnimator android:propertyName="translationZ"

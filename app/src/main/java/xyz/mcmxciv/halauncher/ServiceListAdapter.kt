@@ -7,12 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
+import xyz.mcmxciv.halauncher.fragments.DiscoveryViewModel
 
 class ServiceListAdapter(
-    private val serviceList: MutableList<NsdServiceInfo>,
-    private val nsdManager: NsdManager,
-    private val callback: HomeAssistantResolveListener.Callback
+    private val viewModel: DiscoveryViewModel
 ) : RecyclerView.Adapter<ServiceListAdapter.ServiceListViewHolder>() {
+
+    private var serviceList: MutableList<NsdServiceInfo> = ArrayList()
 
     class ServiceListViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
@@ -25,23 +26,18 @@ class ServiceListAdapter(
     override fun onBindViewHolder(holder: ServiceListViewHolder, position: Int) {
         val serviceInfo = serviceList[position]
         val name = serviceInfo.serviceName
-        //val host = "${serviceInfo.host.hostAddress}:${serviceInfo.port}"
 
         val serviceButton = holder.view.findViewById<Button>(R.id.service_button)
         serviceButton.text = name
         serviceButton.setOnClickListener {
-            val resolveListener = HomeAssistantResolveListener(callback)
-            nsdManager.resolveService(serviceInfo, resolveListener)
+            viewModel.selectedService.value = serviceInfo
         }
-
-//        val serviceHost = holder.view.findViewById<TextView>(R.id.service_host)
-//        serviceHost.text = host
     }
 
     override fun getItemCount(): Int = serviceList.count()
 
-    fun addServiceItem(serviceInfo: NsdServiceInfo) {
-        serviceList.add(serviceInfo)
+    fun setData(services: MutableList<NsdServiceInfo>) {
+        serviceList = services
         notifyDataSetChanged()
     }
 }

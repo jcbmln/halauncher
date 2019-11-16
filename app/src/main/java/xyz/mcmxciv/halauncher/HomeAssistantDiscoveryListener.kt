@@ -3,14 +3,20 @@ package xyz.mcmxciv.halauncher
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.util.Log
+import xyz.mcmxciv.halauncher.fragments.DiscoveryViewModel
+import kotlin.collections.ArrayList
 
 class HomeAssistantDiscoveryListener(
-    private val callback: Callback,
-    private val nsdManager: NsdManager
+    private val nsdManager: NsdManager,
+    private val viewModel: DiscoveryViewModel
 ) : NsdManager.DiscoveryListener {
+
     override fun onServiceFound(serviceInfo: NsdServiceInfo) {
         if (serviceInfo.serviceType == SERVICE_TYPE) {
-            callback.addService(serviceInfo)
+            Log.i(TAG, "Service found: ${serviceInfo.serviceName}")
+            val serviceList = viewModel.services.value ?: ArrayList()
+            serviceList.add(serviceInfo)
+            viewModel.services.postValue(serviceList)
         }
     }
 
@@ -34,10 +40,6 @@ class HomeAssistantDiscoveryListener(
 
     override fun onServiceLost(serviceInfo: NsdServiceInfo) {
         Log.e(TAG, "Service lost: $serviceInfo")
-    }
-
-    interface Callback {
-        fun addService(serviceInfo: NsdServiceInfo)
     }
 
     companion object {

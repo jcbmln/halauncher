@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.SetupActivity"
+            android:name=".activities.setup.SetupActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/AppTheme.NoActionBar.Onboard"

@@ -2,8 +2,8 @@ package xyz.mcmxciv.halauncher.activities
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import xyz.mcmxciv.halauncher.activities.setup.SetupActivity
 import xyz.mcmxciv.halauncher.utils.UserPreferences
 
 class LaunchActivity : Activity() {
