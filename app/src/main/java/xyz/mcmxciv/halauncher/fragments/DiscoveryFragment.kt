@@ -43,7 +43,7 @@ class DiscoveryFragment(private val listener: DiscoveryServiceSelectedListener) 
         nsdManager.discoverServices(
             HomeAssistantDiscoveryListener.SERVICE_TYPE,
             NsdManager.PROTOCOL_DNS_SD,
-            HomeAssistantDiscoveryListener(nsdManager, viewModel)
+            HomeAssistantDiscoveryListener(nsdManager, this)
         )
 
         viewModel.services.observe(this, Observer {
@@ -51,7 +51,7 @@ class DiscoveryFragment(private val listener: DiscoveryServiceSelectedListener) 
             adapter.setData(it)
         })
         viewModel.selectedService.observe(this, Observer {
-            nsdManager.resolveService(it, HomeAssistantResolveListener(viewModel))
+            nsdManager.resolveService(it, HomeAssistantResolveListener(this))
         })
         viewModel.resolvedUrl.observe(this, Observer {
             listener.onServiceSelected(it)

@@ -3,11 +3,13 @@ package xyz.mcmxciv.halauncher
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.util.Log
+import androidx.lifecycle.ViewModelProviders
+import xyz.mcmxciv.halauncher.fragments.DiscoveryFragment
 import xyz.mcmxciv.halauncher.fragments.DiscoveryViewModel
 
-class HomeAssistantResolveListener(
-    private val viewModel: DiscoveryViewModel
-) : NsdManager.ResolveListener {
+class HomeAssistantResolveListener(fragment: DiscoveryFragment) : NsdManager.ResolveListener {
+    private val viewModel = ViewModelProviders.of(fragment).get(DiscoveryViewModel::class.java)
+
     override fun onResolveFailed(serviceInfo: NsdServiceInfo, errorCode: Int) {
         Log.e(TAG, "Resolve failed: $errorCode")
     }
