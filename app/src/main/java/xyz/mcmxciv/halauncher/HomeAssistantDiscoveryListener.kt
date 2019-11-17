@@ -3,6 +3,7 @@ package xyz.mcmxciv.halauncher
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import xyz.mcmxciv.halauncher.fragments.DiscoveryFragment
 import xyz.mcmxciv.halauncher.fragments.DiscoveryViewModel
@@ -10,7 +11,7 @@ import kotlin.collections.ArrayList
 
 class HomeAssistantDiscoveryListener(
     private val nsdManager: NsdManager,
-    fragment: DiscoveryFragment
+    fragment: Fragment
 ) : NsdManager.DiscoveryListener {
 
     private val viewModel = ViewModelProviders.of(fragment).get(DiscoveryViewModel::class.java)

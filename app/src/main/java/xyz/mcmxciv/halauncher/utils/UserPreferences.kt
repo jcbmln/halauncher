@@ -59,22 +59,12 @@ class UserPreferences(context: Context) {
         editor?.apply()
     }
 
-    companion object {
+    companion object : ContextInstance<UserPreferences>(::UserPreferences) {
         private const val HOME_ASSISTANT_KEY = "home_assistant_url"
         private const val TRANSPARENT_BACKGROUND_KEY = "transparent_background"
         private const val BLUR_BACKGROUND_KEY = "blur_background"
         private const val CAN_SET_WALLPAPER_KEY = "can_set_wallpaper"
         private const val FIRST_RUN_KEY = "first_run"
         private const val ICON_SHAPE_TYPE_KEY = "icon_shape_type"
-
-        private var userPreferences: UserPreferences? = null
-
-        fun getInstance(context: Context): UserPreferences {
-            return userPreferences ?: synchronized(this) {
-                userPreferences ?: UserPreferences(context).also {
-                    userPreferences = it
-                }
-            }
-        }
     }
 }

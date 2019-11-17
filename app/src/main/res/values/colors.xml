@@ -9,8 +9,8 @@
     <color name="colorBackgroundTransparent">@color/transparentWhite</color>
     <color name="colorWindowBackground">@color/offWhite</color>
     <color name="colorForeground">#333333</color>
-<!--    <color name="colorAccent">#00bcd4</color>-->
     <color name="colorAccent">#1D2951</color>
+    <color name="colorAccentLighter">#505C84</color>
     <color name="colorAccentTransparent">#1500bcd4</color>
 
     <!-- View Colors -->

@@ -29,6 +29,7 @@ import android.view.WindowManager
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.utils.ContextInstance
 
 import java.util.ArrayList
 import xyz.mcmxciv.halauncher.utils.Utilities
@@ -54,7 +55,7 @@ class InvariantDeviceProfile private constructor(context: Context?) {
 //    var defaultWallpaperSize: Point
 
     private val changeListeners = ArrayList<OnIDPChangeListener>()
-    private var overlayMonitor: OverlayMonitor? = null
+    //private var overlayMonitor: OverlayMonitor? = null
 
     private constructor(p: InvariantDeviceProfile) : this(null) {
         numColumns = p.numColumns
@@ -62,13 +63,13 @@ class InvariantDeviceProfile private constructor(context: Context?) {
         iconShapePath = p.iconShapePath
         landscapeIconSize = p.landscapeIconSize
         iconTextSize = p.iconTextSize
-        overlayMonitor = p.overlayMonitor
+        //overlayMonitor = p.overlayMonitor
     }
 
     init {
         if (context != null) {
             initGrid(context, Utilities.getPrefs(context).getString(KEY_IDP_GRID_NAME, null))
-            overlayMonitor = OverlayMonitor(context)
+            //overlayMonitor = OverlayMonitor(context)
         }
     }
 
@@ -352,16 +353,8 @@ class InvariantDeviceProfile private constructor(context: Context?) {
         }
     }
 
-    companion object {
+    companion object : ContextInstance<InvariantDeviceProfile>(::InvariantDeviceProfile) {
         private const val TAG = "InvariantDeviceProfile"
-
-        @Volatile private var instance: InvariantDeviceProfile? = null
-        fun getInstance(context: Context): InvariantDeviceProfile {
-            return instance ?: synchronized(this) {
-                instance
-                    ?: InvariantDeviceProfile(context).also { instance = it }
-            }
-        }
 
         private const val KEY_IDP_GRID_NAME = "idp_grid_name"
 

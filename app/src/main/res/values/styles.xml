@@ -25,15 +25,13 @@
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/colorWindowBackground</item>
         <item name="android:textColor">@color/colorForeground</item>
-        <item name="android:colorControlHighlight">@color/colorAccent</item>
+        <item name="android:colorControlHighlight">@color/colorAccentLighter</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowEnterTransition">@android:transition/slide_bottom</item>
         <item name="android:windowExitTransition">@android:transition/slide_top</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@color/transparentWhite</item>
-<!--        <item name="android:windowLightStatusBar">true</item>-->
-<!--        <item name="android:windowLightNavigationBar">true</item>-->
     </style>
     <style name="AppTheme.NoActionBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
@@ -54,18 +52,21 @@
     </style>
 
     <style name="Widget" parent="android:Widget" />
+
     <style name="Widget.EditText" parent="android:Widget.EditText">
         <item name="android:background">@drawable/edit_text_background</item>
         <item name="android:layout_marginStart">10dp</item>
         <item name="android:layout_marginEnd">10dp</item>
         <item name="android:stateListAnimator">@animator/elevation_animator</item>
     </style>
+
     <style name="Widget.TextView">
         <item name="android:textAlignment">textStart</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginStart">20dp</item>
         <item name="android:layout_marginEnd">20dp</item>
     </style>
+
     <style name="Widget.Button">
         <item name="android:stateListAnimator">@animator/elevation_animator</item>
     </style>
@@ -75,6 +76,19 @@
     </style>
     <style name="Widget.Button.Secondary">
         <item name="android:background">@drawable/button_secondary</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="Widget.Button.Transparent">
+        <item name="android:background">@drawable/button_transparent</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+    <style name="Widget.Button.Transparent.Primary">
+
+        <item name="android:textColor">@color/colorBackground</item>
+    </style>
+    <style name="Widget.Button.Transparent.Secondary">
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 </resources>
