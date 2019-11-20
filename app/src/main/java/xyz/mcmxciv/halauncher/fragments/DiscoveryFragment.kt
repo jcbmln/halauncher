@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.AppModel
 import xyz.mcmxciv.halauncher.HomeAssistantDiscoveryListener
@@ -42,6 +43,9 @@ class DiscoveryFragment : Fragment() {
         binding.setupServiceList.layoutManager = LinearLayoutManager(context)
         val adapter = ServiceListAdapter(viewModel)
         binding.setupServiceList.adapter = adapter
+        binding.setupServiceList.addItemDecoration(DividerItemDecoration(
+            binding.setupServiceList.context, DividerItemDecoration.VERTICAL
+        ))
 
         nsdManager.discoverServices(
             HomeAssistantDiscoveryListener.SERVICE_TYPE,

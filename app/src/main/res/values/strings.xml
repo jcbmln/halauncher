@@ -20,7 +20,7 @@
     <string name="settings_button">settings button</string>
 
     <string name="setup_descovery_text">Searching for Home Assistant</string>
-    <string name="setup_selection_text">Home Assistant found!</string>
+    <string name="setup_selection_text">Choose your Home Assistant</string>
     <string name="setup_logo_description">HALauncher Logo</string>
     <string name="setup_mode_manual">Manual Mode</string>
     <string name="setup_mode_discovery">Discovery Mode</string>

@@ -31,20 +31,12 @@ class SetupActivity : AppCompatActivity(), DiscoveryFragment.ServiceSelectedList
 
         viewModel.setupMode.observe(this, Observer {
             val fragmentTransaction = supportFragmentManager.beginTransaction()
-
-            when (it) {
-                AppModel.SetupMode.MANUAL -> {
-                    fragmentTransaction.replace(
-                        binding.setupFragmentContainer.id, ManualSetupFragment()
-                    )
-                }
-                else -> {
-                    fragmentTransaction.replace(
-                        binding.setupFragmentContainer.id, DiscoveryFragment()
-                    )
-                }
+            val fragment = when (it) {
+                AppModel.SetupMode.MANUAL -> ManualSetupFragment()
+                else -> DiscoveryFragment()
             }
 
+            fragmentTransaction.replace(binding.setupFragmentContainer.id, fragment)
             fragmentTransaction.commit()
         })
 
@@ -59,10 +51,6 @@ class SetupActivity : AppCompatActivity(), DiscoveryFragment.ServiceSelectedList
                     binding.setupModeButton.text = getString(R.string.setup_mode_manual)
                 }
             }
-        }
-
-        if (viewModel.setupMode.value == null) {
-            viewModel.setupMode.value = AppModel.SetupMode.DISCOVERY
         }
     }
 
