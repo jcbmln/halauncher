@@ -1,6 +1,5 @@
 package xyz.mcmxciv.halauncher.fragments
 
-import android.net.nsd.NsdManager
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,19 +10,16 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.AppModel
-import xyz.mcmxciv.halauncher.HomeAssistantDiscoveryListener
-import xyz.mcmxciv.halauncher.HomeAssistantResolveListener
 
 import xyz.mcmxciv.halauncher.ServiceListAdapter
 import xyz.mcmxciv.halauncher.databinding.DiscoveryFragmentBinding
+import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
 
 class DiscoveryFragment : Fragment() {
     private lateinit var viewModel: DiscoveryViewModel
     private lateinit var binding: DiscoveryFragmentBinding
     private lateinit var listener: ServiceSelectedListener
     private lateinit var appModel: AppModel
-    private lateinit var nsdManager: NsdManager
-    private lateinit var discoveryListener: HomeAssistantDiscoveryListener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +33,7 @@ class DiscoveryFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(DiscoveryViewModel::class.java)
         appModel = AppModel.getInstance(context!!)
-        nsdManager = appModel.nsdManager
-        discoveryListener = HomeAssistantDiscoveryListener(nsdManager, this)
+        viewModel.start(appModel.nsdManager)
 
         binding.setupServiceList.layoutManager = LinearLayoutManager(context)
         val adapter = ServiceListAdapter(viewModel)
@@ -47,27 +42,19 @@ class DiscoveryFragment : Fragment() {
             binding.setupServiceList.context, DividerItemDecoration.VERTICAL
         ))
 
-        nsdManager.discoverServices(
-            HomeAssistantDiscoveryListener.SERVICE_TYPE,
-            NsdManager.PROTOCOL_DNS_SD,
-            discoveryListener
-        )
+        viewModel.startDiscovery()
 
         viewModel.services.observe(this, Observer {
             updateViewVisibility(it.isEmpty())
             adapter.setData(it)
         })
         viewModel.selectedService.observe(this, Observer {
-            nsdManager.resolveService(it, HomeAssistantResolveListener(this))
+            viewModel.stopDiscovery()
+            viewModel.resolveService()
         })
         viewModel.resolvedUrl.observe(this, Observer {
             listener.onServiceSelected(it)
         })
-    }
-
-    override fun onPause() {
-        super.onPause()
-        nsdManager.stopServiceDiscovery(discoveryListener)
     }
 
     fun setServiceSelectedListener(callback: ServiceSelectedListener) {
@@ -81,9 +68,5 @@ class DiscoveryFragment : Fragment() {
         binding.setupSelectionLayout.visibility =
             if (serviceListIsEmpty) View.GONE
             else View.VISIBLE
-    }
-
-    interface ServiceSelectedListener {
-        fun onServiceSelected(serviceUrl: String)
     }
 }
