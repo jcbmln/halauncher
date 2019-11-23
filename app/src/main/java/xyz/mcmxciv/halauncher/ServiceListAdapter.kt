@@ -14,13 +14,13 @@ class ServiceListAdapter(
     private lateinit var binding: ServiceListItemBinding
     private var serviceList: MutableList<NsdServiceInfo> = ArrayList()
 
-    class ServiceListViewHolder(val binding: ServiceListItemBinding) : RecyclerView.ViewHolder(binding.root)
+    class ServiceListViewHolder(val binding: ServiceListItemBinding)
+        : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceListViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         binding = ServiceListItemBinding.inflate(layoutInflater, parent, false)
-//        val view = LayoutInflater.from(parent.context)
-//            .inflate(R.layout.service_list_item, parent, false)
+
         return ServiceListViewHolder(binding)
     }
 
@@ -28,7 +28,6 @@ class ServiceListAdapter(
         val serviceInfo = serviceList[position]
         val name = serviceInfo.serviceName
 
-        //val serviceButton = holder.view.findViewById<Button>(R.id.service_button)
         val serviceText = holder.binding.serviceText
         serviceText.text = name
         serviceText.setOnClickListener {

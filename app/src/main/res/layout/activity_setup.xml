@@ -21,7 +21,7 @@
 
     <Button
         android:id="@+id/setup_mode_button"
-        style="@style/Widget.Button.Transparent.Primary"
+        style="@style/Widget.Button.Transparent.Secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"

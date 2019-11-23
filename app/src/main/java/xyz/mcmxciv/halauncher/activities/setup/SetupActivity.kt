@@ -13,9 +13,10 @@ import xyz.mcmxciv.halauncher.activities.HomeActivity
 import xyz.mcmxciv.halauncher.fragments.DiscoveryFragment
 import xyz.mcmxciv.halauncher.databinding.ActivitySetupBinding
 import xyz.mcmxciv.halauncher.fragments.ManualSetupFragment
+import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
 import xyz.mcmxciv.halauncher.utils.UserPreferences
 
-class SetupActivity : AppCompatActivity(), DiscoveryFragment.ServiceSelectedListener {
+class SetupActivity : AppCompatActivity(), ServiceSelectedListener {
     private lateinit var binding: ActivitySetupBinding
     private lateinit var prefs: UserPreferences
     private lateinit var viewModel: SetupViewModel
@@ -44,11 +45,11 @@ class SetupActivity : AppCompatActivity(), DiscoveryFragment.ServiceSelectedList
             when (viewModel.setupMode.value) {
                 AppModel.SetupMode.MANUAL -> {
                     viewModel.setupMode.value = AppModel.SetupMode.DISCOVERY
-                    binding.setupModeButton.text = getString(R.string.setup_mode_discovery)
+                    binding.setupModeButton.text = getString(R.string.setup_mode_manual)
                 }
                 else -> {
                     viewModel.setupMode.value = AppModel.SetupMode.MANUAL
-                    binding.setupModeButton.text = getString(R.string.setup_mode_manual)
+                    binding.setupModeButton.text = getString(R.string.setup_mode_discovery)
                 }
             }
         }
@@ -58,6 +59,10 @@ class SetupActivity : AppCompatActivity(), DiscoveryFragment.ServiceSelectedList
         super.onAttachFragment(fragment)
 
         if (fragment is DiscoveryFragment) {
+            fragment.setServiceSelectedListener(this)
+        }
+
+        if (fragment is ManualSetupFragment) {
             fragment.setServiceSelectedListener(this)
         }
     }

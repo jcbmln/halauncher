@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".LauncherApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/my_backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -26,7 +27,6 @@
         <activity
             android:name=".activities.setup.SetupActivity"
             android:configChanges="keyboardHidden|screenSize"
-            android:theme="@style/AppTheme.NoActionBar.Onboard"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.HomeActivity"

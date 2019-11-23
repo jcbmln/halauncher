@@ -34,12 +34,14 @@ import xyz.mcmxciv.halauncher.utils.ContextInstance
 import java.util.ArrayList
 import xyz.mcmxciv.halauncher.utils.Utilities
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 
-class InvariantDeviceProfile private constructor(context: Context?) {
+class InvariantDeviceProfile constructor(context: Context?) {
     var numColumns: Int = 0
     var iconSize: Float = 0.toFloat()
     var iconShapePath: String = ""
@@ -127,10 +129,8 @@ class InvariantDeviceProfile private constructor(context: Context?) {
             getIconShapePath(context)
         landscapeIconSize = interpolatedDisplayOption.landscapeIconSize
         iconBitmapSize = Utilities.pxFromDp(iconSize, dm)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            iconForegroundSize = (iconBitmapSize / (1 + 2 *
-                    AdaptiveIconDrawable.getExtraInsetFraction())).toInt()
-        }
+        iconForegroundSize = (iconBitmapSize / (1 + 2 *
+                AdaptiveIconDrawable.getExtraInsetFraction())).toInt()
         iconTextSize = interpolatedDisplayOption.iconTextSize
         fillResIconDpi = getLauncherIconDensity(iconBitmapSize)
 
@@ -163,11 +163,6 @@ class InvariantDeviceProfile private constructor(context: Context?) {
 
     fun removeOnChangeListener(listener: OnIDPChangeListener) {
         changeListeners.remove(listener)
-    }
-
-    private fun killProcess(context: Context) {
-        Log.e("ConfigMonitor", "restarting launcher")
-        android.os.Process.killProcess(android.os.Process.myPid())
     }
 
     fun verifyConfigChangedInBackground(context: Context) {

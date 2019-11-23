@@ -1,12 +1,16 @@
 package xyz.mcmxciv.halauncher
 
-import android.graphics.*
+import android.graphics.Paint
 import android.graphics.drawable.AdaptiveIconDrawable
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.*
+import xyz.mcmxciv.halauncher.icons.IconFactory
 import xyz.mcmxciv.halauncher.models.AppInfo
+import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.views.AdaptiveIconView
 
 class AppListAdapter(private val appList: List<AppInfo>) :
@@ -24,7 +28,6 @@ class AppListAdapter(private val appList: List<AppInfo>) :
         val appInfo = appList[position]
         val appImage = holder.view.findViewById<AdaptiveIconView>(R.id.app_image)
         holder.view.setLayerType(View.LAYER_TYPE_SOFTWARE, Paint())
-
         appImage.setIcon(appInfo.icon as AdaptiveIconDrawable)
         appImage.setText(appInfo.displayName)
     }

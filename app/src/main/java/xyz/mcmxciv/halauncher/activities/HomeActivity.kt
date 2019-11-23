@@ -1,39 +1,37 @@
 package xyz.mcmxciv.halauncher.activities
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.AppListAdapter
+import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.databinding.ActivityHomeBinding
-import xyz.mcmxciv.halauncher.icons.IconFactory
-import xyz.mcmxciv.halauncher.models.AppInfo
 import xyz.mcmxciv.halauncher.utils.UserPreferences
 
 class HomeActivity : AppCompatActivity() {
-    private val setupActivityCode: Int = 1
     private lateinit var binding: ActivityHomeBinding
     private lateinit var prefs: UserPreferences
+    private lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         prefs = UserPreferences.getInstance(this)
+        viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         setContentView(binding.root)
         loadWebView()
 
-//        if (SetupActivity.isReadStoragePermissionGranted(this)) {
-//            SetupActivity.setWallpaper(this, window)
-//        }
-
-        val idp = InvariantDeviceProfile.getInstance(this)
-        val appList = getAppList(this, idp)
+        //viewModel.getAppList(this, idp)
 
         binding.homeAppBar.appList.layoutManager = LinearLayoutManager(this)
-        binding.homeAppBar.appList.adapter = AppListAdapter(appList)
+
+        viewModel.appList.observe(this, Observer {
+            binding.homeAppBar.appList.adapter = AppListAdapter(it)
+        })
 
         binding.homeParentLayout.slidableView = binding.homeSlidableView
         binding.homeParentLayout.revealableView = binding.homeAppBar.appList
@@ -42,29 +40,6 @@ class HomeActivity : AppCompatActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) hideSystemUI()
-    }
-
-    private fun getAppList(context: Context, idp: InvariantDeviceProfile):
-            ArrayList<AppInfo> {
-        val factory = IconFactory(context, idp.iconBitmapSize)
-        val appList = ArrayList<AppInfo>()
-        val pm = context.packageManager
-        val launcherIntent = Intent().apply { addCategory(Intent.CATEGORY_LAUNCHER) }
-        pm.getInstalledApplications(0).forEach { appInfo ->
-            launcherIntent.`package` = appInfo.packageName
-            // only show launch-able apps
-            if (pm.queryIntentActivities(launcherIntent, 0).size > 0) {
-                val unbadgedIcon = appInfo.loadUnbadgedIcon(pm)
-                appList.add(AppInfo().apply {
-                    packageName = appInfo.packageName
-                    displayName = pm.getApplicationLabel(appInfo).toString()
-                    icon = factory.createIcon(unbadgedIcon)
-                })
-            }
-        }
-
-        appList.sortBy { item -> item.displayName }
-        return appList
     }
 
     private fun loadWebView() {

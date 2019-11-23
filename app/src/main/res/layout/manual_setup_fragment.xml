@@ -6,38 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ManualSetupFragment">
 
-    <TextView
-        android:id="@+id/setup_manual_label"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:labelFor="@id/setup_host_text"
-        android:text="@string/title_home_assistant_url"
-        app:layout_constraintStart_toStartOf="@+id/setup_host_text"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/setup_host_text"
-        style="@style/Widget.EditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:autofillHints="@string/default_home_assistant_url"
-        android:ems="10"
-        android:inputType="textUri"
-        android:singleLine="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setup_manual_label" />
-
-    <Button
-        android:id="@+id/setup_manual_button"
-        style="@style/Widget.Button.Primary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/main_button_go"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_background"
+        android:elevation="2.5dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setup_host_text" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/setup_manual_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:labelFor="@id/setup_host_text"
+            android:padding="10dp"
+            android:text="@string/title_home_assistant_url"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <EditText
+            android:id="@+id/setup_host_text"
+            style="@style/Widget.EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:autofillHints="@string/default_home_assistant_url"
+            android:ems="10"
+            android:inputType="textUri"
+            android:padding="10dp"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/setup_manual_button"
+            style="@style/Widget.Button.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:text="@string/main_button_go" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
