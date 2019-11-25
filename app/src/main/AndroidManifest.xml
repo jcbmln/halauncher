@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar.Fullscreen"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.authentication.AuthenticationActivity"></activity>
+        <activity android:name=".activities.integration.IntegrationActivity"></activity>
+        <activity android:name=".activities.authentication.AuthenticationActivity" />
         <activity
             android:name=".activities.LaunchActivity"
             android:theme="@android:style/Theme.NoDisplay">

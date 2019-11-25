@@ -4,22 +4,28 @@ import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.utils.AppPreferences
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import xyz.mcmxciv.halauncher.AuthenticationApi
+import xyz.mcmxciv.halauncher.models.Session
 import xyz.mcmxciv.halauncher.utils.ApiFactory
+import java.time.Instant
 
 class AuthenticationRepository {
     private val api: AuthenticationApi = ApiFactory.getAuthenticationApi(prefs.url)
 
     suspend fun setAuthToken(code: String) {
         api.getToken(GRANT_TYPE_CODE, code, CLIENT_ID).let {
-            prefs.accessToken = it.accessToken
-            prefs.expiresIn = it.expiresIn
-            prefs.refreshToken = it.refreshToken
-            prefs.tokenType = it.tokenType
+            Session(
+                it.accessToken,
+                Instant.now().epochSecond + it.expiresIn,
+                it.refreshToken!!,
+                it.tokenType
+            ).save()
         }
     }
 
+
+
     companion object {
-        const val CLIENT_ID = "https://jcbmln.github.io/HALauncher"
+        const val CLIENT_ID = "https://jcbmln.github.io/halauncher"
         const val RESPONSE_TYPE = "code"
         const val GRANT_TYPE_CODE = "authorization_code"
         const val GRANT_TYPE_REFRESH = "refresh_token"

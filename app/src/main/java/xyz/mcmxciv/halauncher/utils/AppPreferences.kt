@@ -2,7 +2,6 @@ package xyz.mcmxciv.halauncher.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.RectF
 import androidx.preference.PreferenceManager
 import xyz.mcmxciv.halauncher.icons.IconShape
 
@@ -48,9 +47,9 @@ class AppPreferences(context: Context) {
         get() = getString(ACCESS_TOKEN_KEY)
         set(value) = putString(ACCESS_TOKEN_KEY, value)
 
-    var expiresIn: Int
-        get() = getInt(EXPIRATION_KEY)
-        set(value) = putInt(EXPIRATION_KEY, value)
+    var expirationTimestamp: Long
+        get() = getLong(EXPIRATION_KEY)
+        set(value) = putLong(EXPIRATION_KEY, value)
 
     var refreshToken: String?
         get() = getString(REFRESH_TOKEN_KEY)
@@ -78,12 +77,12 @@ class AppPreferences(context: Context) {
         editor?.apply()
     }
 
-    private fun getInt(key: String): Int =
-        sharedPreferences.getInt(key, -1)
+    private fun getLong(key: String): Long =
+        sharedPreferences.getLong(key, -1)
 
-    private fun putInt(key: String, value: Int) {
+    private fun putLong(key: String, value: Long) {
         val editor = sharedPreferences.edit()
-        editor?.putInt(key, value)
+        editor?.putLong(key, value)
         editor?.apply()
     }
 

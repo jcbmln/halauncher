@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import xyz.mcmxciv.halauncher.databinding.ActivityAuthenticationBinding
@@ -32,5 +34,13 @@ class AuthenticationActivity : AppCompatActivity() {
         }
 
         binding.authenticationWebView.loadUrl(AuthenticationRepository.authenticationUrl)
+
+        viewModel.authenticationError.observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+        })
+
+        viewModel.authenticationSuccess.observe(this, Observer {
+
+        })
     }
 }
