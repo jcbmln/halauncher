@@ -9,16 +9,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import xyz.mcmxciv.halauncher.AppModel
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.activities.HomeActivity
+import xyz.mcmxciv.halauncher.activities.authentication.AuthenticationActivity
+import xyz.mcmxciv.halauncher.activities.home.HomeActivity
 import xyz.mcmxciv.halauncher.fragments.DiscoveryFragment
 import xyz.mcmxciv.halauncher.databinding.ActivitySetupBinding
 import xyz.mcmxciv.halauncher.fragments.ManualSetupFragment
 import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
-import xyz.mcmxciv.halauncher.utils.UserPreferences
+import xyz.mcmxciv.halauncher.utils.AppPreferences
 
 class SetupActivity : AppCompatActivity(), ServiceSelectedListener {
     private lateinit var binding: ActivitySetupBinding
-    private lateinit var prefs: UserPreferences
+    private lateinit var prefs: AppPreferences
     private lateinit var viewModel: SetupViewModel
     private lateinit var appModel: AppModel
 
@@ -67,25 +68,11 @@ class SetupActivity : AppCompatActivity(), ServiceSelectedListener {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            1 -> {
-                prefs.canGetWallpaper = (grantResults.isNotEmpty()
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            }
-        }
-    }
-
     override fun onServiceSelected(serviceUrl: String) {
         prefs.url = serviceUrl
         prefs.setupDone = true
 
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, AuthenticationActivity::class.java)
         startActivity(intent)
         finish()
     }

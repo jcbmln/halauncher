@@ -7,11 +7,11 @@ import android.util.AttributeSet
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import xyz.mcmxciv.halauncher.utils.UserPreferences
+import xyz.mcmxciv.halauncher.utils.AppPreferences
 
 class HomeAssistantWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs) {
     private val hassWebTitle = "Home Assistant"
-    private val prefs = UserPreferences.getInstance(context)
+    private val prefs = AppPreferences.getInstance(context)
 
     init {
         initializeWebView()

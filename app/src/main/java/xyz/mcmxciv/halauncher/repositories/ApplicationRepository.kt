@@ -1,8 +1,9 @@
-package xyz.mcmxciv.halauncher
+package xyz.mcmxciv.halauncher.repositories
 
 import android.content.Intent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.icons.IconFactory
 import xyz.mcmxciv.halauncher.models.AppInfo
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile

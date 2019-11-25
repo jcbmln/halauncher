@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.activities
+package xyz.mcmxciv.halauncher.activities.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,20 +7,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.AppListAdapter
-import xyz.mcmxciv.halauncher.LauncherApplication
-import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.databinding.ActivityHomeBinding
-import xyz.mcmxciv.halauncher.utils.UserPreferences
+import xyz.mcmxciv.halauncher.utils.AppPreferences
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
-    private lateinit var prefs: UserPreferences
+    private lateinit var prefs: AppPreferences
     private lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
-        prefs = UserPreferences.getInstance(this)
+        prefs = AppPreferences.getInstance(this)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         setContentView(binding.root)
         loadWebView()

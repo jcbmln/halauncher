@@ -29,7 +29,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.icons.IconShape
-import xyz.mcmxciv.halauncher.utils.UserPreferences
+import xyz.mcmxciv.halauncher.utils.AppPreferences
 import xyz.mcmxciv.halauncher.utils.Utilities
 import kotlin.math.roundToInt
 
@@ -62,7 +62,7 @@ class AdaptiveIconView(
     private lateinit var text: String
 
     init {
-        val prefs = UserPreferences.getInstance(context)
+        val prefs = AppPreferences.getInstance(context)
         iconSize = (layerSize / (1 + 2 * AdaptiveIconDrawable.getExtraInsetFraction())).toInt()
         layerCenter = iconSize / 2f
         offset = (layerSize - iconSize) / 2

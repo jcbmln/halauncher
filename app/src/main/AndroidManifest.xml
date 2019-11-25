@@ -15,7 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar.Fullscreen"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.LaunchActivity"
+        <activity android:name=".activities.authentication.AuthenticationActivity"></activity>
+        <activity
+            android:name=".activities.LaunchActivity"
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -29,7 +31,8 @@
             android:configChanges="keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activities.HomeActivity"
+            android:name=".activities.home.HomeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
+
 </manifest>
