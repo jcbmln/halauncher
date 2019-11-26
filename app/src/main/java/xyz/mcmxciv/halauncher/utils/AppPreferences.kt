@@ -59,6 +59,22 @@ class AppPreferences(context: Context) {
         get() = getString(TOKEN_TYPE_KEY)
         set(value) = putString(TOKEN_TYPE_KEY, value)
 
+    var cloudhookUrl: String?
+        get() = getString(CLOUDHOOK_URL_KEY)
+        set(value) = putString(CLOUDHOOK_URL_KEY, value)
+
+    var remoteUiUrl: String?
+        get() = getString(REMOTE_UI_URL_KEY)
+        set(value) = putString(REMOTE_UI_URL_KEY, value)
+
+    var secret: String?
+        get() = getString(SECRET_KEY)
+        set(value) = putString(SECRET_KEY, value)
+
+    var webhookId: String?
+        get() = getString(WEBHOOK_ID_KEY)
+        set(value) = putString(WEBHOOK_ID_KEY, value)
+
     private fun getString(key: String): String? =
         sharedPreferences.getString(key, null)
 
@@ -98,5 +114,9 @@ class AppPreferences(context: Context) {
         private const val EXPIRATION_KEY = "expires_in"
         private const val REFRESH_TOKEN_KEY = "refresh_token"
         private const val TOKEN_TYPE_KEY = "token_type"
+        private const val CLOUDHOOK_URL_KEY = "cloudhook_url"
+        private const val REMOTE_UI_URL_KEY = "remote_ui_url"
+        private const val SECRET_KEY = "secret"
+        private const val WEBHOOK_ID_KEY = "webhook_id"
     }
 }

@@ -1,22 +1,24 @@
 package xyz.mcmxciv.halauncher.activities.authentication
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import xyz.mcmxciv.halauncher.activities.integration.IntegrationActivity
 import xyz.mcmxciv.halauncher.databinding.ActivityAuthenticationBinding
 import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
+import xyz.mcmxciv.halauncher.utils.AppPreferences
 
 class AuthenticationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAuthenticationBinding
     private lateinit var viewModel: AuthenticationViewModel
 
-    @SuppressLint("SetJavaScriptEnabled")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAuthenticationBinding.inflate(layoutInflater)
@@ -24,11 +26,12 @@ class AuthenticationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.authenticationWebView.apply {
+            @SuppressLint("SetJavaScriptEnabled")
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
-                    return viewModel.shouldRedirect(url)
+                    return viewModel.authenticate(url)
                 }
             }
         }
@@ -40,7 +43,12 @@ class AuthenticationActivity : AppCompatActivity() {
         })
 
         viewModel.authenticationSuccess.observe(this, Observer {
+            AppPreferences.getInstance(this).isAuthenticated = it
 
+            if (it) {
+                startActivity(Intent(this, IntegrationActivity::class.java))
+                finish()
+            }
         })
     }
 }

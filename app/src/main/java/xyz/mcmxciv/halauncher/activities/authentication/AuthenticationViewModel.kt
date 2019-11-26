@@ -15,9 +15,7 @@ class AuthenticationViewModel : ViewModel() {
     }
 
     val authenticationSuccess: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>().also {
-            it.value = false
-        }
+        MutableLiveData<Boolean>()
     }
 
     private val authenticationExceptionHandler = CoroutineExceptionHandler { _, exception ->
@@ -26,7 +24,7 @@ class AuthenticationViewModel : ViewModel() {
         authenticationSuccess.value = false
     }
 
-    fun shouldRedirect(url: String): Boolean {
+    fun authenticate(url: String): Boolean {
         val code = Uri.parse(url).getQueryParameter(AuthenticationRepository.RESPONSE_TYPE)
         return if (url.contains(AuthenticationRepository.REDIRECT_URI) && !code.isNullOrBlank()) {
             viewModelScope.launch(authenticationExceptionHandler) {

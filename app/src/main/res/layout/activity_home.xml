@@ -10,21 +10,18 @@
         layout="@layout/app_bar"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:layout_margin="10dp" />
+        android:layout_gravity="end" />
 
     <FrameLayout
         android:id="@+id/home_slidable_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
         android:background="@drawable/rounded_background"
         android:elevation="2.5dp">
 
-        <xyz.mcmxciv.halauncher.views.HomeAssistantWebView
+        <WebView
             android:id="@+id/home_web_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/rounded_background" />
+            android:layout_height="match_parent" />
     </FrameLayout>
 </xyz.mcmxciv.halauncher.views.SlideRevealLayout>

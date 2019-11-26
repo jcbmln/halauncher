@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher
+package xyz.mcmxciv.halauncher.interfaces
 
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
