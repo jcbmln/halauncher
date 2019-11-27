@@ -28,7 +28,7 @@ class AuthenticationViewModel : ViewModel() {
         val code = Uri.parse(url).getQueryParameter(AuthenticationRepository.RESPONSE_TYPE)
         return if (url.contains(AuthenticationRepository.REDIRECT_URI) && !code.isNullOrBlank()) {
             viewModelScope.launch(authenticationExceptionHandler) {
-                AuthenticationRepository().setAuthToken(code)
+                AuthenticationRepository().setSession(code)
                 authenticationSuccess.value = true
             }
 

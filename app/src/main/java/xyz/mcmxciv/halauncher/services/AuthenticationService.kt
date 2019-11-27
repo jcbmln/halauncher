@@ -1,11 +1,11 @@
-package xyz.mcmxciv.halauncher.interfaces
+package xyz.mcmxciv.halauncher.services
 
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 import xyz.mcmxciv.halauncher.models.AuthToken
 
-interface AuthenticationApi {
+interface AuthenticationService {
     @FormUrlEncoded
     @POST("auth/token")
     suspend fun getToken(

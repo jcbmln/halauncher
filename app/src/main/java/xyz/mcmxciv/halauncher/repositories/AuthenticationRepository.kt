@@ -3,30 +3,30 @@ package xyz.mcmxciv.halauncher.repositories
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.utils.AppPreferences
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import xyz.mcmxciv.halauncher.interfaces.AuthenticationApi
+import xyz.mcmxciv.halauncher.services.AuthenticationService
 import xyz.mcmxciv.halauncher.models.Session
-import xyz.mcmxciv.halauncher.utils.ApiFactory
+import xyz.mcmxciv.halauncher.services.ServiceFactory
 import java.lang.Exception
 
 class AuthenticationRepository {
-    private val api = ApiFactory.createApi(prefs.url, AuthenticationApi::class.java)
+    private val service = ServiceFactory.createService(prefs.url, AuthenticationService::class.java)
 
-    suspend fun setAuthToken(code: String) {
-        api.getToken(GRANT_TYPE_CODE, code, CLIENT_ID).let {
+    suspend fun setSession(code: String) {
+        service.getToken(GRANT_TYPE_CODE, code, CLIENT_ID).let {
             Session.create(it)
         }
     }
 
-    suspend fun bearerToken(): String {
-        val accessToken = validateSession().accessToken
-        return "Bearer $accessToken"
+    suspend fun clearSession() {
+        val session = Session.get() ?: throw Exception()
+        service.revokeToken(session.refreshToken, REVOKE_ACTION)
     }
 
     suspend fun validateSession(): Session {
         val session = Session.get() ?: throw Exception()
 
         if (session.isExpired) {
-            return api.refreshToken(
+            return service.refreshToken(
                 GRANT_TYPE_REFRESH,
                 session.refreshToken,
                 CLIENT_ID
@@ -36,6 +36,11 @@ class AuthenticationRepository {
         }
 
         return session
+    }
+
+    suspend fun bearerToken(): String {
+        val accessToken = validateSession().accessToken
+        return "Bearer $accessToken"
     }
 
     companion object {

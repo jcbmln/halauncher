@@ -27,6 +27,10 @@ class HomeViewModel : ViewModel() {
         MutableLiveData<Pair<String, String>>()
     }
 
+    val externalAuthRevokeCallback: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
     private val appListExceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, exception.message.toString())
     }
@@ -44,6 +48,12 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun revokeExternalAuth(callback: String) {
+        viewModelScope.launch {
+            AuthenticationRepository().clearSession()
+            externalAuthRevokeCallback.value = callback
+        }
+    }
 
     fun buildUrl(baseUrl: String): String {
         return baseUrl.toUri()

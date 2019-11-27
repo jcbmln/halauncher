@@ -3,13 +3,13 @@ package xyz.mcmxciv.halauncher.activities.home
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.webkit.JavascriptInterface
 import android.webkit.WebViewClient
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.json.JSONArray
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.AppListAdapter
 import xyz.mcmxciv.halauncher.databinding.ActivityHomeBinding
@@ -40,6 +40,11 @@ class HomeActivity : AppCompatActivity() {
             )
         })
 
+        viewModel.externalAuthRevokeCallback.observe(this, Observer {
+            binding.homeWebView.evaluateJavascript("$it(true);", null)
+            prefs.isAuthenticated = false
+        })
+
         viewModel.appList.observe(this, Observer {
             binding.homeAppBar.appList.adapter = AppListAdapter(it)
         })
@@ -59,8 +64,13 @@ class HomeActivity : AppCompatActivity() {
 
             addJavascriptInterface(object : Any() {
                 @JavascriptInterface
-                fun getExternalAuth(callback: String) {
-                    viewModel.getExternalAuth(JSONObject(callback).get("callback") as String)
+                fun getExternalAuth(result: String) {
+                    viewModel.getExternalAuth(JSONObject(result).get("callback") as String)
+                }
+
+                @JavascriptInterface
+                fun revokeExternalAuth(result: String) {
+                    viewModel.revokeExternalAuth(JSONObject(result).get("callback") as String)
                 }
 
 //                @JavascriptInterface
