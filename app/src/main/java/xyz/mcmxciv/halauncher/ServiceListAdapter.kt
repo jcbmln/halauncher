@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.databinding.ServiceListItemBinding
-import xyz.mcmxciv.halauncher.fragments.DiscoveryViewModel
+import xyz.mcmxciv.halauncher.activities.setup.discovery.DiscoveryViewModel
 
 class ServiceListAdapter(
     private val viewModel: DiscoveryViewModel

@@ -1,8 +1,8 @@
 package xyz.mcmxciv.halauncher.activities.setup
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -11,13 +11,15 @@ import xyz.mcmxciv.halauncher.AppModel
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.activities.authentication.AuthenticationActivity
 import xyz.mcmxciv.halauncher.activities.home.HomeActivity
-import xyz.mcmxciv.halauncher.fragments.DiscoveryFragment
+import xyz.mcmxciv.halauncher.activities.setup.discovery.DiscoveryFragment
+import xyz.mcmxciv.halauncher.activities.setup.integration.IntegrationFragment
 import xyz.mcmxciv.halauncher.databinding.ActivitySetupBinding
-import xyz.mcmxciv.halauncher.fragments.ManualSetupFragment
+import xyz.mcmxciv.halauncher.activities.setup.manual.ManualSetupFragment
+import xyz.mcmxciv.halauncher.interfaces.IntegrationListener
 import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
 import xyz.mcmxciv.halauncher.utils.AppPreferences
 
-class SetupActivity : AppCompatActivity(), ServiceSelectedListener {
+class SetupActivity : AppCompatActivity(), ServiceSelectedListener, IntegrationListener {
     private lateinit var binding: ActivitySetupBinding
     private lateinit var prefs: AppPreferences
     private lateinit var viewModel: SetupViewModel
@@ -59,12 +61,9 @@ class SetupActivity : AppCompatActivity(), ServiceSelectedListener {
     override fun onAttachFragment(fragment: Fragment) {
         super.onAttachFragment(fragment)
 
-        if (fragment is DiscoveryFragment) {
-            fragment.setServiceSelectedListener(this)
-        }
-
-        if (fragment is ManualSetupFragment) {
-            fragment.setServiceSelectedListener(this)
+        when (fragment) {
+            is SetupFragment -> fragment.serviceSelectedListener = this
+            is IntegrationFragment -> fragment.integrationListener = this
         }
     }
 
@@ -75,5 +74,14 @@ class SetupActivity : AppCompatActivity(), ServiceSelectedListener {
         val intent = Intent(this, AuthenticationActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    override fun onIntegrationComplete() {
+        startActivity(Intent(this, HomeActivity::class.java))
+        finish()
+    }
+
+    override fun onIntegrationFailed(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }

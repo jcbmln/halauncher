@@ -1,18 +1,18 @@
-package xyz.mcmxciv.halauncher.fragments
+package xyz.mcmxciv.halauncher.activities.setup.manual
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import xyz.mcmxciv.halauncher.activities.setup.SetupFragment
 
-import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.ManualSetupFragmentBinding
 import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
 
-class ManualSetupFragment : Fragment() {
+class ManualSetupFragment : SetupFragment() {
     private lateinit var binding: ManualSetupFragmentBinding
-    private lateinit var listener: ServiceSelectedListener
+    //lateinit var serviceSelectedListener: ServiceSelectedListener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,12 +29,8 @@ class ManualSetupFragment : Fragment() {
             val text = binding.setupHostText.text.toString()
 
             if (!text.isBlank()) {
-                listener.onServiceSelected(text)
+                serviceSelectedListener.onServiceSelected(text)
             }
         }
-    }
-
-    fun setServiceSelectedListener(callback: ServiceSelectedListener) {
-        listener = callback
     }
 }

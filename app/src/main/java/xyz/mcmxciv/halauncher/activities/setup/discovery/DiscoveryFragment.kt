@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.fragments
+package xyz.mcmxciv.halauncher.activities.setup.discovery
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -12,13 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.AppModel
 
 import xyz.mcmxciv.halauncher.ServiceListAdapter
+import xyz.mcmxciv.halauncher.activities.setup.SetupFragment
 import xyz.mcmxciv.halauncher.databinding.DiscoveryFragmentBinding
 import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
 
-class DiscoveryFragment : Fragment() {
+class DiscoveryFragment : SetupFragment() {
     private lateinit var viewModel: DiscoveryViewModel
     private lateinit var binding: DiscoveryFragmentBinding
-    private lateinit var listener: ServiceSelectedListener
+    //lateinit var serviceSelectedListener: ServiceSelectedListener
     private lateinit var appModel: AppModel
 
     override fun onCreateView(
@@ -53,13 +54,13 @@ class DiscoveryFragment : Fragment() {
             viewModel.resolveService()
         })
         viewModel.resolvedUrl.observe(this, Observer {
-            listener.onServiceSelected(it)
+            serviceSelectedListener.onServiceSelected(it)
         })
     }
 
-    fun setServiceSelectedListener(callback: ServiceSelectedListener) {
-        listener = callback
-    }
+//    fun setServiceSelectedListener(callback: ServiceSelectedListener) {
+//        serviceSelectedListener = callback
+//    }
 
     private fun updateViewVisibility(serviceListIsEmpty: Boolean) {
         binding.setupLoadingLayout.visibility =
