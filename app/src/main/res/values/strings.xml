@@ -26,4 +26,9 @@
     <string name="setup_mode_discovery">Discovery Mode</string>
     <string name="default_service_name">Service</string>
     <string name="default_service_host">http:\/\/localhost:8123</string>
+
+    <string name="integration_status_loading">Attempting to register device.</string>
+    <string name="integration_status_failed">Could not register device.</string>
+    <string name="integration_skip">Skip</string>
+    <string name="integration_retry">Retry</string>
 </resources>

@@ -15,7 +15,7 @@
 
     <!-- View Colors -->
     <color name="legacy_icon_background">#FFFFFF</color>
-    <color name="edit_text_background">@color/offWhite</color>
+    <color name="edit_text_background">@color/colorBackground</color>
     <color name="edit_text_background_focused">@color/lightGray</color>
     <color name="edit_text_border">@color/lightGray</color>
     <color name="button_text_color">@color/colorAccent</color>

@@ -36,7 +36,7 @@ class IntegrationFragment : Fragment() {
                 IntegrationViewModel.IntegrationState.SUCCESS ->
                     integrationListener.onIntegrationComplete()
                 IntegrationViewModel.IntegrationState.FAILED ->
-                    showRetryView()
+                    showButtons()
                 else -> throw Exception("Unexpected integration state.")
             }
         })
@@ -44,10 +44,26 @@ class IntegrationFragment : Fragment() {
         viewModel.integrationError.observe(this, Observer {
             integrationListener.onIntegrationFailed(it)
         })
+
+        binding.integrationRetryButton.setOnClickListener {
+            viewModel.registerDevice()
+            hideButtons()
+        }
+
+        binding.integrationSkipButton.setOnClickListener {
+            integrationListener.onIntegrationComplete()
+        }
     }
 
-    private fun showRetryView() {
-
+    private fun showButtons() {
+        binding.integrationRetryButton.visibility = View.VISIBLE
+        binding.integrationSkipButton.visibility = View.VISIBLE
+        binding.integrationProgressBar.visibility = View.INVISIBLE
     }
 
+    private fun hideButtons() {
+        binding.integrationRetryButton.visibility = View.INVISIBLE
+        binding.integrationSkipButton.visibility = View.INVISIBLE
+        binding.integrationProgressBar.visibility = View.VISIBLE
+    }
 }

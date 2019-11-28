@@ -15,11 +15,13 @@ import xyz.mcmxciv.halauncher.activities.setup.discovery.DiscoveryFragment
 import xyz.mcmxciv.halauncher.activities.setup.integration.IntegrationFragment
 import xyz.mcmxciv.halauncher.databinding.ActivitySetupBinding
 import xyz.mcmxciv.halauncher.activities.setup.manual.ManualSetupFragment
+import xyz.mcmxciv.halauncher.fragments.AuthenticationFragment
 import xyz.mcmxciv.halauncher.interfaces.IntegrationListener
 import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
+import xyz.mcmxciv.halauncher.interfaces.SetupListener
 import xyz.mcmxciv.halauncher.utils.AppPreferences
 
-class SetupActivity : AppCompatActivity(), ServiceSelectedListener, IntegrationListener {
+class SetupActivity : AppCompatActivity(), SetupListener {
     private lateinit var binding: ActivitySetupBinding
     private lateinit var prefs: AppPreferences
     private lateinit var viewModel: SetupViewModel
@@ -67,21 +69,32 @@ class SetupActivity : AppCompatActivity(), ServiceSelectedListener, IntegrationL
         }
     }
 
+    override fun onDiscoveryModeSelected() {
+        supportFragmentManager.beginTransaction()
+            .replace(binding.setupFragmentContainer.id, DiscoveryFragment())
+            .commit()
+    }
+
+    override fun onManualModeSelected() {
+        supportFragmentManager.beginTransaction()
+            .replace(binding.setupFragmentContainer.id, ManualSetupFragment())
+            .commit()
+    }
+
     override fun onServiceSelected(serviceUrl: String) {
         prefs.url = serviceUrl
         prefs.setupDone = true
 
-        val intent = Intent(this, AuthenticationActivity::class.java)
-        startActivity(intent)
-        finish()
+        supportFragmentManager.beginTransaction()
+            .replace(binding.setupFragmentContainer.id, AuthenticationFragment())
     }
-
-    override fun onIntegrationComplete() {
-        startActivity(Intent(this, HomeActivity::class.java))
-        finish()
-    }
-
-    override fun onIntegrationFailed(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
+//
+//    override fun onIntegrationComplete() {
+//        startActivity(Intent(this, HomeActivity::class.java))
+//        finish()
+//    }
+//
+//    override fun onIntegrationFailed(message: String) {
+//        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+//    }
 }
