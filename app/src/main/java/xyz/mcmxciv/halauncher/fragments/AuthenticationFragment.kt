@@ -1,21 +1,18 @@
 package xyz.mcmxciv.halauncher.fragments
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
-
-import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.activities.integration.IntegrationActivity
+import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.databinding.AuthenticationFragmentBinding
 import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.utils.AppPreferences
@@ -45,15 +42,16 @@ class AuthenticationFragment : Fragment() {
                     return viewModel.authenticate(url)
                 }
             }
+            loadUrl(AuthenticationRepository.authenticationUrl)
         }
 
-        binding.authenticationWebView.loadUrl(AuthenticationRepository.authenticationUrl)
+        viewModel.authenticationError.observe(this, Observer {
+            Toast.makeText(LauncherApplication.getAppContext(), it, Toast.LENGTH_LONG).show()
+        })
 
-//        viewModel.authenticationError.observe(this, Observer {
-//            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-//        })
-//
         viewModel.authenticationSuccess.observe(this, Observer {
+            AppPreferences.getInstance(LauncherApplication.getAppContext()).isAuthenticated = it
+
             if (it) {
                 val action = AuthenticationFragmentDirections
                     .actionAuthenticationFragmentToIntegrationFragment()

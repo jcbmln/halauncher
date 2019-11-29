@@ -1,27 +1,17 @@
-<xyz.mcmxciv.halauncher.views.SlideRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/home_parent_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.home.HomeActivity">
 
-    <include
-        android:id="@+id/home_app_bar"
-        layout="@layout/app_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end" />
-
-    <FrameLayout
-        android:id="@+id/home_slidable_view"
+    <WebView
+        android:id="@+id/home_web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/rounded_background"
-        android:elevation="2.5dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <WebView
-            android:id="@+id/home_web_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
-</xyz.mcmxciv.halauncher.views.SlideRevealLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

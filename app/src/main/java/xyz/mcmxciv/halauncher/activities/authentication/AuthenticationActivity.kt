@@ -9,7 +9,6 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import xyz.mcmxciv.halauncher.activities.integration.IntegrationActivity
 import xyz.mcmxciv.halauncher.databinding.ActivityAuthenticationBinding
 import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.utils.AppPreferences
@@ -42,13 +41,13 @@ class AuthenticationActivity : AppCompatActivity() {
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         })
 
-        viewModel.authenticationSuccess.observe(this, Observer {
-            AppPreferences.getInstance(this).isAuthenticated = it
-
-            if (it) {
-                startActivity(Intent(this, IntegrationActivity::class.java))
-                finish()
-            }
-        })
+//        viewModel.authenticationSuccess.observe(this, Observer {
+//            AppPreferences.getInstance(this).isAuthenticated = it
+//
+//            if (it) {
+//                startActivity(Intent(this, IntegrationActivity::class.java))
+//                finish()
+//            }
+//        })
     }
 }

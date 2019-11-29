@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import xyz.mcmxciv.halauncher.icons.IconShape
+import java.lang.Exception
 
 class AppPreferences(context: Context) {
     private val sharedPreferences: SharedPreferences =

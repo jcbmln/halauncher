@@ -1,5 +1,6 @@
 package xyz.mcmxciv.halauncher.repositories
 
+import org.json.JSONObject
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.services.IntegrationService
 import xyz.mcmxciv.halauncher.models.Device

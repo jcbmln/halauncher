@@ -12,6 +12,7 @@ import androidx.navigation.findNavController
 import xyz.mcmxciv.halauncher.LauncherApplication
 
 import xyz.mcmxciv.halauncher.databinding.IntegrationFragmentBinding
+import xyz.mcmxciv.halauncher.utils.AppPreferences
 import java.lang.Exception
 
 class IntegrationFragment : Fragment() {
@@ -55,6 +56,7 @@ class IntegrationFragment : Fragment() {
     }
 
     private fun finishIntegration() {
+        AppPreferences.getInstance(LauncherApplication.getAppContext()).setupDone = true
         val action = IntegrationFragmentDirections.actionIntegrationFragmentToHomeActivity()
         binding.root.findNavController().navigate(action)
     }

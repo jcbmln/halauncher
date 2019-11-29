@@ -1,15 +1,13 @@
 package xyz.mcmxciv.halauncher.activities.home
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.webkit.JavascriptInterface
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.json.JSONArray
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.AppListAdapter
 import xyz.mcmxciv.halauncher.databinding.ActivityHomeBinding
@@ -28,10 +26,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         initializeWebView()
 
-        binding.homeAppBar.appList.layoutManager = LinearLayoutManager(this)
-
-        binding.homeParentLayout.slidableView = binding.homeSlidableView
-        binding.homeParentLayout.revealableView = binding.homeAppBar.appList
+//        binding.homeAppBar.appList.layoutManager = LinearLayoutManager(this)
 
         viewModel.externalAuthCallback.observe(this, Observer {
             binding.homeWebView.evaluateJavascript(
@@ -45,9 +40,9 @@ class HomeActivity : AppCompatActivity() {
             prefs.isAuthenticated = false
         })
 
-        viewModel.appList.observe(this, Observer {
-            binding.homeAppBar.appList.adapter = AppListAdapter(it)
-        })
+//        viewModel.appList.observe(this, Observer {
+//            binding.homeAppBar.appList.adapter = AppListAdapter(it)
+//        })
     }
 
     private fun initializeWebView() {
@@ -100,7 +95,7 @@ class HomeActivity : AppCompatActivity() {
         binding.homeWebView.loadUrl(viewModel.buildUrl(prefs.url))
     }
 
-    companion object {
-        private const val TAG = "HomeActivity"
-    }
+//    companion object {
+//        private const val TAG = "HomeActivity"
+//    }
 }

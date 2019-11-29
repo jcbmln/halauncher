@@ -20,14 +20,9 @@ class IntegrationViewModel : ViewModel() {
         MutableLiveData<String>()
     }
 
-//    val integrationSuccess: MutableLiveData<Boolean> by lazy {
-//        MutableLiveData<Boolean>()
-//    }
-
     private val integrationExceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, exception.message.toString())
         integrationState.value = IntegrationState.FAILED
-//        integrationSuccess.value = false
         integrationError.value = "Unable to register device."
     }
 
@@ -48,7 +43,6 @@ class IntegrationViewModel : ViewModel() {
         viewModelScope.launch(integrationExceptionHandler) {
             IntegrationRepository().registerDevice(device)
             integrationState.value = IntegrationState.SUCCESS
-//            integrationSuccess.value = true
         }
     }
 
