@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/setup_nav_graph"
+    app:startDestination="@id/discoveryFragment">
+
+    <fragment
+        android:id="@+id/discoveryFragment"
+        android:name="xyz.mcmxciv.halauncher.activities.setup.discovery.DiscoveryFragment"
+        android:label="discovery_fragment"
+        tools:layout="@layout/discovery_fragment" >
+        <action
+            android:id="@+id/action_discoveryFragment_to_manualSetupFragment"
+            app:destination="@id/manualSetupFragment" />
+        <action
+            android:id="@+id/action_discoveryFragment_to_authenticationFragment"
+            app:destination="@id/authenticationFragment"
+            app:popUpTo="@navigation/setup_nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/manualSetupFragment"
+        android:name="xyz.mcmxciv.halauncher.activities.setup.manual.ManualSetupFragment"
+        android:label="manual_setup_fragment"
+        tools:layout="@layout/manual_setup_fragment" >
+        <action
+            android:id="@+id/action_manualSetupFragment_to_discoveryFragment"
+            app:destination="@id/discoveryFragment" />
+        <action
+            android:id="@+id/action_manualSetupFragment_to_authenticationFragment"
+            app:destination="@id/authenticationFragment"
+            app:popUpTo="@id/setup_nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/authenticationFragment"
+        android:name="xyz.mcmxciv.halauncher.fragments.AuthenticationFragment"
+        android:label="authentication_fragment"
+        tools:layout="@layout/authentication_fragment" >
+        <action
+            android:id="@+id/action_authenticationFragment_to_integrationFragment"
+            app:destination="@id/integrationFragment"
+            app:popUpTo="@id/setup_nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/integrationFragment"
+        android:name="xyz.mcmxciv.halauncher.activities.setup.integration.IntegrationFragment"
+        android:label="integration_fragment"
+        tools:layout="@layout/integration_fragment" >
+        <action
+            android:id="@+id/action_integrationFragment_to_homeActivity"
+            app:destination="@id/homeActivity"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <activity
+        android:id="@+id/homeActivity"
+        android:name="xyz.mcmxciv.halauncher.activities.home.HomeActivity"
+        android:label="activity_home"
+        tools:layout="@layout/activity_home" />
+</navigation>

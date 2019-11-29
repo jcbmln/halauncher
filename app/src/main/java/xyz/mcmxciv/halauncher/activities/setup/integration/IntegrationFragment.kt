@@ -6,16 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
+import xyz.mcmxciv.halauncher.LauncherApplication
 
 import xyz.mcmxciv.halauncher.databinding.IntegrationFragmentBinding
-import xyz.mcmxciv.halauncher.interfaces.IntegrationListener
 import java.lang.Exception
 
 class IntegrationFragment : Fragment() {
     private lateinit var binding: IntegrationFragmentBinding
     private lateinit var viewModel: IntegrationViewModel
-    lateinit var integrationListener: IntegrationListener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,16 +34,14 @@ class IntegrationFragment : Fragment() {
 
         viewModel.integrationState.observe(this, Observer {
             when (it) {
-                IntegrationViewModel.IntegrationState.SUCCESS ->
-                    integrationListener.onIntegrationComplete()
-                IntegrationViewModel.IntegrationState.FAILED ->
-                    showButtons()
+                IntegrationViewModel.IntegrationState.SUCCESS -> finishIntegration()
+                IntegrationViewModel.IntegrationState.FAILED -> showButtons()
                 else -> throw Exception("Unexpected integration state.")
             }
         })
 
         viewModel.integrationError.observe(this, Observer {
-            integrationListener.onIntegrationFailed(it)
+            Toast.makeText(LauncherApplication.getAppContext(), it, Toast.LENGTH_LONG).show()
         })
 
         binding.integrationRetryButton.setOnClickListener {
@@ -51,8 +50,13 @@ class IntegrationFragment : Fragment() {
         }
 
         binding.integrationSkipButton.setOnClickListener {
-            integrationListener.onIntegrationComplete()
+            finishIntegration()
         }
+    }
+
+    private fun finishIntegration() {
+        val action = IntegrationFragmentDirections.actionIntegrationFragmentToHomeActivity()
+        binding.root.findNavController().navigate(action)
     }
 
     private fun showButtons() {

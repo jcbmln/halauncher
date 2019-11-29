@@ -7,19 +7,11 @@
         <item name="android:windowEnterTransition">@android:transition/slide_bottom</item>
         <item name="android:windowExitTransition">@android:transition/slide_bottom</item>
     </style>
-    <style name="AppTheme.Fullscreen">
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
     <style name="AppTheme.Transparent">
         <item name="android:windowShowWallpaper">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentNavigation">true</item>
-    </style>
-    <style name="AppTheme.Fullscreen.Transparent">
-        <item name="android:windowShowWallpaper">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -33,22 +25,11 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@color/transparentWhite</item>
     </style>
-    <style name="AppTheme.NoActionBar.Fullscreen">
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
     <style name="AppTheme.NoActionBar.Transparent">
         <item name="android:windowShowWallpaper">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
-    </style>
-    <style name="AppTheme.NoActionBar.Fullscreen.Transparent">
-        <item name="android:windowShowWallpaper">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-    <style name="AppTheme.NoActionBar.Onboard">
-        <item name="android:windowBackground">@color/colorAccentLighter</item>
     </style>
 
     <style name="Widget" parent="android:Widget" />

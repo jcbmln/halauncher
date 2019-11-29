@@ -12,6 +12,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.activities.integration.IntegrationActivity
@@ -52,14 +53,13 @@ class AuthenticationFragment : Fragment() {
 //            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
 //        })
 //
-//        viewModel.authenticationSuccess.observe(this, Observer {
-//            AppPreferences.getInstance(this).isAuthenticated = it
-//
-//            if (it) {
-//                startActivity(Intent(this, IntegrationActivity::class.java))
-//                finish()
-//            }
-//        })
+        viewModel.authenticationSuccess.observe(this, Observer {
+            if (it) {
+                val action = AuthenticationFragmentDirections
+                    .actionAuthenticationFragmentToIntegrationFragment()
+                binding.root.findNavController().navigate(action)
+            }
+        })
     }
 
 }

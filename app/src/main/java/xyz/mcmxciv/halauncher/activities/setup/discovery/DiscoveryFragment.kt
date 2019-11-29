@@ -7,16 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.AppModel
 
 import xyz.mcmxciv.halauncher.ServiceListAdapter
-import xyz.mcmxciv.halauncher.activities.setup.SetupFragment
 import xyz.mcmxciv.halauncher.databinding.DiscoveryFragmentBinding
-import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
 
-class DiscoveryFragment : SetupFragment() {
+class DiscoveryFragment : Fragment() {
     private lateinit var viewModel: DiscoveryViewModel
     private lateinit var binding: DiscoveryFragmentBinding
     //lateinit var serviceSelectedListener: ServiceSelectedListener
@@ -36,11 +35,11 @@ class DiscoveryFragment : SetupFragment() {
         appModel = AppModel.getInstance(context!!)
         viewModel.start(appModel.nsdManager)
 
-        binding.setupServiceList.layoutManager = LinearLayoutManager(context)
-        val adapter = ServiceListAdapter(viewModel)
-        binding.setupServiceList.adapter = adapter
-        binding.setupServiceList.addItemDecoration(DividerItemDecoration(
-            binding.setupServiceList.context, DividerItemDecoration.VERTICAL
+        binding.serviceList.layoutManager = LinearLayoutManager(context)
+        val adapter = ServiceListAdapter(activity!!)
+        binding.serviceList.adapter = adapter
+        binding.serviceList.addItemDecoration(DividerItemDecoration(
+            binding.serviceList.context, DividerItemDecoration.VERTICAL
         ))
 
         viewModel.startDiscovery()
@@ -54,8 +53,16 @@ class DiscoveryFragment : SetupFragment() {
             viewModel.resolveService()
         })
         viewModel.resolvedUrl.observe(this, Observer {
-            serviceSelectedListener.onServiceSelected(it)
+            val action =
+                DiscoveryFragmentDirections.actionDiscoveryFragmentToAuthenticationFragment()
+            binding.root.findNavController().navigate(action)
+            //serviceSelectedListener.onServiceSelected(it)
         })
+
+        binding.manualModeButton.setOnClickListener {
+            val action = DiscoveryFragmentDirections.actionDiscoveryFragmentToManualSetupFragment()
+            it.findNavController().navigate(action)
+        }
     }
 
 //    fun setServiceSelectedListener(callback: ServiceSelectedListener) {
@@ -63,10 +70,10 @@ class DiscoveryFragment : SetupFragment() {
 //    }
 
     private fun updateViewVisibility(serviceListIsEmpty: Boolean) {
-        binding.setupLoadingLayout.visibility =
+        binding.serviceListProgress.visibility =
             if (serviceListIsEmpty) View.VISIBLE
             else View.GONE
-        binding.setupSelectionLayout.visibility =
+        binding.serviceList.visibility =
             if (serviceListIsEmpty) View.GONE
             else View.VISIBLE
     }

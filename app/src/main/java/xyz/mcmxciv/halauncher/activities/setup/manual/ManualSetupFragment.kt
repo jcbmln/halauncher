@@ -5,12 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import xyz.mcmxciv.halauncher.activities.setup.SetupFragment
+import androidx.navigation.findNavController
+import xyz.mcmxciv.halauncher.LauncherApplication
 
 import xyz.mcmxciv.halauncher.databinding.ManualSetupFragmentBinding
-import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
+import xyz.mcmxciv.halauncher.utils.AppPreferences
 
-class ManualSetupFragment : SetupFragment() {
+class ManualSetupFragment : Fragment() {
     private lateinit var binding: ManualSetupFragmentBinding
     //lateinit var serviceSelectedListener: ServiceSelectedListener
 
@@ -25,11 +26,23 @@ class ManualSetupFragment : SetupFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        binding.discoveryModeButton.setOnClickListener {
+            val action =
+                ManualSetupFragmentDirections.actionManualSetupFragmentToDiscoveryFragment()
+            it.findNavController().navigate(action)
+        }
+
         binding.setupManualButton.setOnClickListener {
             val text = binding.setupHostText.text.toString()
 
             if (!text.isBlank()) {
-                serviceSelectedListener.onServiceSelected(text)
+                val prefs = AppPreferences.getInstance(LauncherApplication.getAppContext())
+                prefs.url = text
+
+                val action = ManualSetupFragmentDirections
+                    .actionManualSetupFragmentToAuthenticationFragment()
+                it.findNavController().navigate(action)
+                //serviceSelectedListener.onServiceSelected(text)
             }
         }
     }
