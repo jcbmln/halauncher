@@ -31,6 +31,17 @@ class HomeViewModel : ViewModel() {
         MutableLiveData<String>()
     }
 
+    val sessionValidated: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
+    fun validateSession() {
+        viewModelScope.launch {
+            val session = AuthenticationRepository().validateSession()
+            sessionValidated.value = session != null
+        }
+    }
+
     private val appListExceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, exception.message.toString())
     }
@@ -41,8 +52,8 @@ class HomeViewModel : ViewModel() {
             externalAuthCallback.value = Pair(
                 callback,
                 JSONObject(mapOf(
-                    "access_token" to session.accessToken,
-                    "expires_in" to session.expiresIn
+                    "access_token" to session?.accessToken,
+                    "expires_in" to session?.expiresIn
                 )).toString()
             )
         }

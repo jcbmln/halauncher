@@ -16,9 +16,7 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity android:name=".activities.authentication.AuthenticationActivity" />
-        <activity
-            android:name=".activities.LaunchActivity"
-            android:theme="@android:style/Theme.NoDisplay">
+        <activity android:name=".activities.launch.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />

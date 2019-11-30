@@ -1,6 +1,7 @@
 package xyz.mcmxciv.halauncher.activities.home
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.webkit.JavascriptInterface
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.AppListAdapter
+import xyz.mcmxciv.halauncher.activities.authentication.AuthenticationActivity
 import xyz.mcmxciv.halauncher.databinding.ActivityHomeBinding
 import xyz.mcmxciv.halauncher.utils.AppPreferences
 import java.io.BufferedReader
@@ -28,21 +30,32 @@ class HomeActivity : AppCompatActivity() {
         prefs = AppPreferences.getInstance(this)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         setContentView(binding.root)
-        initializeWebView()
+
+        viewModel.validateSession()
+        viewModel.sessionValidated.observe(this, Observer { valid ->
+            if (valid) {
+                initializeWebView()
+
+                viewModel.externalAuthCallback.observe(this, Observer {
+                    binding.homeWebView.evaluateJavascript(
+                        "${it.first}(true, ${it.second});",
+                        null
+                    )
+                })
+
+                viewModel.externalAuthRevokeCallback.observe(this, Observer {
+                    binding.homeWebView.evaluateJavascript("$it(true);", null)
+                    prefs.isAuthenticated = false
+                })
+            }
+            else {
+                startActivity(Intent(this, AuthenticationActivity::class.java))
+            }
+        })
+
+
 
 //        binding.homeAppBar.appList.layoutManager = LinearLayoutManager(this)
-
-        viewModel.externalAuthCallback.observe(this, Observer {
-            binding.homeWebView.evaluateJavascript(
-                "${it.first}(true, ${it.second});",
-                null
-            )
-        })
-
-        viewModel.externalAuthRevokeCallback.observe(this, Observer {
-            binding.homeWebView.evaluateJavascript("$it(true);", null)
-            prefs.isAuthenticated = false
-        })
 
 //        viewModel.appList.observe(this, Observer {
 //            binding.homeAppBar.appList.adapter = AppListAdapter(it)

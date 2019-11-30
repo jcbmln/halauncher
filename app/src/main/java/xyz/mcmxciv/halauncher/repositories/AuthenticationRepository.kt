@@ -22,10 +22,10 @@ class AuthenticationRepository {
         service.revokeToken(session.refreshToken, REVOKE_ACTION)
     }
 
-    suspend fun validateSession(): Session {
-        val session = Session.get() ?: throw Exception()
+    suspend fun validateSession(): Session? {
+        val session = Session.get()
 
-        if (session.isExpired) {
+        if (session != null && session.isExpired) {
             return service.refreshToken(
                 GRANT_TYPE_REFRESH,
                 session.refreshToken,
@@ -39,7 +39,7 @@ class AuthenticationRepository {
     }
 
     suspend fun bearerToken(): String {
-        val accessToken = validateSession().accessToken
+        val accessToken = validateSession()?.accessToken
         return "Bearer $accessToken"
     }
 

@@ -1,5 +1,7 @@
 package xyz.mcmxciv.halauncher.interfaces
 
+import android.net.nsd.NsdServiceInfo
+
 interface ServiceSelectedListener {
-    fun onServiceSelected(serviceUrl: String)
+    fun onServiceSelected(serviceInfo: NsdServiceInfo)
 }

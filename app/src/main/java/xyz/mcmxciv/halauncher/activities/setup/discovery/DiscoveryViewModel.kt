@@ -12,10 +12,6 @@ class DiscoveryViewModel : ViewModel() {
         MutableLiveData<MutableList<NsdServiceInfo>>()
     }
 
-    val selectedService: MutableLiveData<NsdServiceInfo> by lazy {
-        MutableLiveData<NsdServiceInfo>()
-    }
-
     val resolvedUrl: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
@@ -37,7 +33,7 @@ class DiscoveryViewModel : ViewModel() {
         }
     }
 
-    fun resolveService() {
+    fun resolveService(serviceInfo: NsdServiceInfo) {
         val resolveListener = object : NsdManager.ResolveListener {
             override fun onResolveFailed(serviceInfo: NsdServiceInfo, errorCode: Int) {
                 Log.e(TAG, "Resolve failed: $errorCode")
@@ -50,7 +46,7 @@ class DiscoveryViewModel : ViewModel() {
             }
         }
 
-        nsdManager.resolveService(selectedService.value, resolveListener)
+        nsdManager.resolveService(serviceInfo, resolveListener)
     }
 
     private lateinit var nsdManager: NsdManager

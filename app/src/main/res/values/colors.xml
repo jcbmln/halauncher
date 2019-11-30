@@ -9,9 +9,13 @@
     <color name="colorBackgroundTransparent">@color/transparentWhite</color>
     <color name="colorWindowBackground">@color/offWhite</color>
     <color name="colorForeground">#333333</color>
-    <color name="colorAccent">#1D2951</color>
-    <color name="colorAccentLighter">#505C84</color>
-    <color name="colorAccentTransparent">#1500bcd4</color>
+<!--    <color name="colorAccent">#1D2951</color>-->
+<!--    <color name="colorAccentLighter">#505C84</color>-->
+<!--    <color name="colorAccentTransparent">#1500bcd4</color>-->
+
+    <color name="colorAccent">#03a9f4</color>
+    <color name="colorAccentLighter">#7dd5fd</color>
+    <color name="colorAccentTransparent">#1503a9f4</color>
 
     <!-- View Colors -->
     <color name="legacy_icon_background">#FFFFFF</color>

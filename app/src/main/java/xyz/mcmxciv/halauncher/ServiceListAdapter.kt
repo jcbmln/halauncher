@@ -1,23 +1,17 @@
 package xyz.mcmxciv.halauncher
 
-import android.content.Context
 import android.net.nsd.NsdServiceInfo
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.databinding.ServiceListItemBinding
-import xyz.mcmxciv.halauncher.activities.setup.discovery.DiscoveryViewModel
+import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
 
 class ServiceListAdapter(
-    context: Context
+    private val listener: ServiceSelectedListener
 ) : RecyclerView.Adapter<ServiceListAdapter.ServiceListViewHolder>() {
 
     private lateinit var binding: ServiceListItemBinding
-    private val viewModel =
-        ViewModelProviders.of(context as FragmentActivity).get(DiscoveryViewModel::class.java)
     private var serviceList: MutableList<NsdServiceInfo> = ArrayList()
 
     class ServiceListViewHolder(val binding: ServiceListItemBinding)
@@ -37,7 +31,7 @@ class ServiceListAdapter(
         val serviceText = holder.binding.serviceText
         serviceText.text = name
         serviceText.setOnClickListener {
-            viewModel.selectedService.value = serviceInfo
+            listener.onServiceSelected(serviceInfo)
         }
     }
 

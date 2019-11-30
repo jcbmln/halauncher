@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <item name="android:windowBackground">@color/colorWindowBackground</item>
-        <item name="android:statusBarColor">#03a9f4</item>
+        <item name="android:statusBarColor">@color/colorAccent</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
@@ -25,7 +25,7 @@
         <item name="android:windowEnterTransition">@android:transition/slide_bottom</item>
         <item name="android:windowExitTransition">@android:transition/slide_top</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">#03a9f4</item>
+        <item name="android:statusBarColor">@color/colorAccent</item>
     </style>
     <style name="AppTheme.NoActionBar.Transparent">
         <item name="android:windowShowWallpaper">true</item>

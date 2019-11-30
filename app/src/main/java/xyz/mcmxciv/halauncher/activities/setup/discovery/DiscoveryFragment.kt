@@ -1,5 +1,6 @@
 package xyz.mcmxciv.halauncher.activities.setup.discovery
 
+import android.net.nsd.NsdServiceInfo
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,14 +12,16 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.AppModel
+import xyz.mcmxciv.halauncher.LauncherApplication
 
 import xyz.mcmxciv.halauncher.ServiceListAdapter
 import xyz.mcmxciv.halauncher.databinding.DiscoveryFragmentBinding
+import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
+import xyz.mcmxciv.halauncher.utils.AppPreferences
 
-class DiscoveryFragment : Fragment() {
+class DiscoveryFragment : Fragment(), ServiceSelectedListener {
     private lateinit var viewModel: DiscoveryViewModel
     private lateinit var binding: DiscoveryFragmentBinding
-    //lateinit var serviceSelectedListener: ServiceSelectedListener
     private lateinit var appModel: AppModel
 
     override fun onCreateView(
@@ -36,7 +39,7 @@ class DiscoveryFragment : Fragment() {
         viewModel.start(appModel.nsdManager)
 
         binding.serviceList.layoutManager = LinearLayoutManager(context)
-        val adapter = ServiceListAdapter(activity!!)
+        val adapter = ServiceListAdapter(this)
         binding.serviceList.adapter = adapter
         binding.serviceList.addItemDecoration(DividerItemDecoration(
             binding.serviceList.context, DividerItemDecoration.VERTICAL
@@ -48,15 +51,13 @@ class DiscoveryFragment : Fragment() {
             updateViewVisibility(it.isEmpty())
             adapter.setData(it)
         })
-        viewModel.selectedService.observe(this, Observer {
-            viewModel.stopDiscovery()
-            viewModel.resolveService()
-        })
         viewModel.resolvedUrl.observe(this, Observer {
+            val prefs = AppPreferences.getInstance(LauncherApplication.getAppContext())
+            prefs.url = it
+
             val action =
                 DiscoveryFragmentDirections.actionDiscoveryFragmentToAuthenticationFragment()
             binding.root.findNavController().navigate(action)
-            //serviceSelectedListener.onServiceSelected(it)
         })
 
         binding.manualModeButton.setOnClickListener {
@@ -65,9 +66,10 @@ class DiscoveryFragment : Fragment() {
         }
     }
 
-//    fun setServiceSelectedListener(callback: ServiceSelectedListener) {
-//        serviceSelectedListener = callback
-//    }
+    override fun onServiceSelected(serviceInfo: NsdServiceInfo) {
+        viewModel.stopDiscovery()
+        viewModel.resolveService(serviceInfo)
+    }
 
     private fun updateViewVisibility(serviceListIsEmpty: Boolean) {
         binding.serviceListProgress.visibility =
