@@ -52,7 +52,8 @@
         <action
             android:id="@+id/action_integrationFragment_to_homeActivity"
             app:destination="@id/homeActivity"
-            app:popUpToInclusive="true" />
+            app:launchSingleTop="true"
+            app:popUpTo="@id/homeActivity" />
     </fragment>
     <activity
         android:id="@+id/homeActivity"

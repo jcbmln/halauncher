@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.integration.IntegrationActivity" />
         <activity android:name=".activities.authentication.AuthenticationActivity" />
         <activity
             android:name=".activities.LaunchActivity"
@@ -35,5 +34,4 @@
             android:name=".activities.home.HomeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
-
 </manifest>

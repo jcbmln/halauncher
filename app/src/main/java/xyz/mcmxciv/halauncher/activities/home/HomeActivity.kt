@@ -2,7 +2,9 @@ package xyz.mcmxciv.halauncher.activities.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.webkit.JavascriptInterface
+import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -12,6 +14,8 @@ import org.json.JSONObject
 import xyz.mcmxciv.halauncher.AppListAdapter
 import xyz.mcmxciv.halauncher.databinding.ActivityHomeBinding
 import xyz.mcmxciv.halauncher.utils.AppPreferences
+import java.io.BufferedReader
+import java.lang.Exception
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
@@ -46,11 +50,18 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initializeWebView() {
+        WebView.setWebContentsDebuggingEnabled(true)
         binding.homeWebView.apply {
             @SuppressLint("SetJavaScriptEnabled")
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
-            webViewClient = WebViewClient()
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    injectJs()
+                    super.onPageFinished(view, url)
+
+                }
+            }
 
             addJavascriptInterface(object : Any() {
                 @JavascriptInterface
@@ -61,6 +72,12 @@ class HomeActivity : AppCompatActivity() {
                 @JavascriptInterface
                 fun revokeExternalAuth(result: String) {
                     viewModel.revokeExternalAuth(JSONObject(result).get("callback") as String)
+                }
+
+                @JavascriptInterface
+                fun themesUpdated(result: String) {
+                    val name = JSONObject(result).get("name") as String
+                    Log.d(TAG, name)
                 }
 
 //                @JavascriptInterface
@@ -95,7 +112,19 @@ class HomeActivity : AppCompatActivity() {
         binding.homeWebView.loadUrl(viewModel.buildUrl(prefs.url))
     }
 
-//    companion object {
-//        private const val TAG = "HomeActivity"
-//    }
+    private fun injectJs() {
+        try {
+            val input = assets.open("websocketBridge.js")
+            input.bufferedReader().use(BufferedReader::readText)
+        }
+        catch (ex: Exception) {
+            null
+        }?.let {
+            binding.homeWebView.loadUrl("javascript:(function() { $it })()")
+        }
+    }
+
+    companion object {
+        private const val TAG = "HomeActivity"
+    }
 }
