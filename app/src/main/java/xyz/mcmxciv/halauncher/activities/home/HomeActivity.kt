@@ -8,8 +8,10 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.AppListAdapter
@@ -53,13 +55,11 @@ class HomeActivity : AppCompatActivity() {
             }
         })
 
+        binding.appList.layoutManager = GridLayoutManager(this, 5)
 
-
-//        binding.homeAppBar.appList.layoutManager = LinearLayoutManager(this)
-
-//        viewModel.appList.observe(this, Observer {
-//            binding.homeAppBar.appList.adapter = AppListAdapter(it)
-//        })
+        viewModel.appList.observe(this, Observer {
+            binding.appList.adapter = AppListAdapter(it)
+        })
     }
 
     private fun initializeWebView() {

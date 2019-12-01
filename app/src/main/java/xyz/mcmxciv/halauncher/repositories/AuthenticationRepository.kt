@@ -44,7 +44,7 @@ class AuthenticationRepository {
     }
 
     companion object {
-        const val CLIENT_ID = "https://halauncher.mcmxciv.xyz"
+        const val CLIENT_ID = "https://halauncher.app"
         const val RESPONSE_TYPE = "code"
         const val GRANT_TYPE_CODE = "authorization_code"
         const val GRANT_TYPE_REFRESH = "refresh_token"
