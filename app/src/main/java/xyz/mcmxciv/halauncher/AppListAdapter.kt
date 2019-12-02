@@ -30,6 +30,12 @@ class AppListAdapter(private val appList: List<AppInfo>) :
         holder.view.setLayerType(View.LAYER_TYPE_SOFTWARE, Paint())
         appImage.setIcon(appInfo.icon as AdaptiveIconDrawable)
         appImage.setText(appInfo.displayName)
+
+        appImage.setOnClickListener {
+            val context = LauncherApplication.getAppContext()
+            val pm = context.packageManager
+            context.startActivity(pm.getLaunchIntentForPackage(appInfo.packageName))
+        }
     }
 
     override fun getItemCount() = appList.size

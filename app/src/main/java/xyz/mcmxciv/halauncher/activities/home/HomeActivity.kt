@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -60,6 +61,13 @@ class HomeActivity : AppCompatActivity() {
         viewModel.appList.observe(this, Observer {
             binding.appList.adapter = AppListAdapter(it)
         })
+
+        binding.allAppsButton.setOnClickListener {
+            when (binding.appList.visibility) {
+                View.VISIBLE -> binding.appList.visibility = View.INVISIBLE
+                View.INVISIBLE -> binding.appList.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun initializeWebView() {
