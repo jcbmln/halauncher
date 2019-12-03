@@ -2,9 +2,9 @@ name: Android CI
 
 on:
   push:
-    paths:
-      - '!_docs/**'
-      - '!docs/**'
+    paths-ignore:
+      - '_docs/**'
+      - 'docs/**'
     branches: 
       - master
 
