@@ -51,7 +51,7 @@ jobs:
   release:
     name: Create Release
     needs: build
-    if: env.IS_DEVELOPMENT == false && env.IS_BETA == false
+    if: ${IS_DEVELOPMENT} == false && ${IS_BETA} == false
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact
@@ -85,7 +85,7 @@ jobs:
   pre-release:
     name: Create Pre-Release
     needs: build
-    if: env.IS_DEVELOPMENT == false && env.IS_BETA == true
+    if: ${IS_DEVELOPMENT} == false && ${IS_BETA} == true
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact
