@@ -10,10 +10,6 @@ on:
       - "_docs/**"
       - "docs/**"
 
-env:
-  IS_DEVELOPMENT: ${{ contains(github.ref, 'development') }}
-  IS_BETA: ${{ endsWith(github.ref, '-beta') }}
-
 jobs:
   build:
     name: Build Apk
@@ -51,7 +47,7 @@ jobs:
   release:
     name: Create Release
     needs: build
-    if: ${IS_DEVELOPMENT} == false && ${IS_BETA} == false
+    if: ! contains(github.ref, 'development') && ! endsWith(github.ref, '-beta')
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact
@@ -85,7 +81,7 @@ jobs:
   pre-release:
     name: Create Pre-Release
     needs: build
-    if: ${IS_DEVELOPMENT} == false && ${IS_BETA} == true
+    if: ! contains(github.ref, 'development') && endsWith(github.ref, '-beta')
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact
