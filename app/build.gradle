@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
+def gitTag = 'git describe --tags --abbrev=0'.execute([], project.rootDir).text
+def gitCommitCount = Integer.parseInt('git rev-list --count HEAD'
+        .execute([], project.rootDir).text.trim())
+
 android {
     viewBinding {
         enabled = true
@@ -16,8 +20,8 @@ android {
         applicationId "xyz.mcmxciv.halauncher"
         minSdkVersion 27
         targetSdkVersion 29
-        versionCode 1
-        versionName "0.0.1"
+        versionCode gitCommitCount
+        versionName gitTag
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
