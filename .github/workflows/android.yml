@@ -66,10 +66,10 @@ jobs:
           release_name: HALauncher ${{ github.ref }}
           body: ""
           draft: false
-          prerelease: false
+          prerelease: ${{ contains(github.ref, '-beta') }}
 
       - name: Upload Apk
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -77,26 +77,3 @@ jobs:
           asset_path: ./app-release.apk
           asset_name: HALauncher.apk
           asset_content_type: application/vnd.android.package-archive
-
-  pre-release:
-    name: Create Pre-Release
-    needs: build
-    if: (!contains(github.ref, 'development')) && (endsWith(github.ref, '-beta'))
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v1
-        with:
-          name: apk
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: HALauncher ${{ github.ref }}
-          body: ""
-          draft: false
-          prerelease: true
