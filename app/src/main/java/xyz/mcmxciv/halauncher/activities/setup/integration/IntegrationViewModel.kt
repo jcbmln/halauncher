@@ -8,10 +8,16 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import xyz.mcmxciv.halauncher.BuildConfig
-import xyz.mcmxciv.halauncher.models.Device
+import xyz.mcmxciv.halauncher.models.DeviceRegistration
+import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.repositories.IntegrationRepository
+import xyz.mcmxciv.halauncher.utils.BaseViewModel
+import javax.inject.Inject
 
-class IntegrationViewModel : ViewModel() {
+class IntegrationViewModel : BaseViewModel() {
+    @Inject lateinit var authenticationRepository: AuthenticationRepository
+    @Inject lateinit var integrationRepository: IntegrationRepository
+
     val integrationState: MutableLiveData<IntegrationState> by lazy {
         MutableLiveData<IntegrationState>()
     }
@@ -27,7 +33,7 @@ class IntegrationViewModel : ViewModel() {
     }
 
     fun registerDevice() {
-        val device = Device(
+        val deviceRegistration = DeviceRegistration(
             BuildConfig.APPLICATION_ID,
             "HALauncher",
             BuildConfig.VERSION_NAME,
@@ -41,7 +47,8 @@ class IntegrationViewModel : ViewModel() {
         )
 
         viewModelScope.launch(integrationExceptionHandler) {
-            IntegrationRepository().registerDevice(device)
+            val bearerToken = authenticationRepository.bearerToken()
+            integrationRepository.registerDevice(bearerToken, deviceRegistration)
             integrationState.value = IntegrationState.SUCCESS
         }
     }

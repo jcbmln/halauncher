@@ -1,25 +1,28 @@
 package xyz.mcmxciv.halauncher.repositories
 
-import org.json.JSONObject
+import dagger.Reusable
 import xyz.mcmxciv.halauncher.LauncherApplication
-import xyz.mcmxciv.halauncher.services.IntegrationService
-import xyz.mcmxciv.halauncher.models.Device
-import xyz.mcmxciv.halauncher.services.ServiceFactory
+import xyz.mcmxciv.halauncher.api.IntegrationApi
+import xyz.mcmxciv.halauncher.dao.DeviceIntegrationDao
+import xyz.mcmxciv.halauncher.models.DeviceIntegration
+import xyz.mcmxciv.halauncher.models.DeviceRegistration
 import xyz.mcmxciv.halauncher.utils.AppPreferences
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class IntegrationRepository {
-    private val service = ServiceFactory.createService(prefs.url, IntegrationService::class.java)
-
-    suspend fun registerDevice(device: Device) {
-        service.registerDevice(AuthenticationRepository().bearerToken(), device).let {
-            prefs.cloudhookUrl = it.cloudhookUrl
-            prefs.remoteUiUrl = it.remoteUiUrl
-            prefs.secret = it.secret
-            prefs.webhookId = it.webhookId
+@Reusable
+class IntegrationRepository @Inject constructor(
+    private val api: IntegrationApi,
+    private val deviceIntegrationDao: DeviceIntegrationDao
+) {
+    suspend fun registerDevice(bearerToken: String, device: DeviceRegistration) {
+        api.registerDevice(bearerToken, device).let { integration ->
+            deviceIntegrationDao.insertDevice(DeviceIntegration(
+                integration.webhookId,
+                integration.cloudhookUrl,
+                integration.remoteUiUrl,
+                integration.secret
+            ))
         }
-    }
-
-    companion object {
-        private val prefs = AppPreferences.getInstance(LauncherApplication.getAppContext())
     }
 }

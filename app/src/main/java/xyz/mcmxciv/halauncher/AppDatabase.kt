@@ -1,27 +1,14 @@
 package xyz.mcmxciv.halauncher
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
-import xyz.mcmxciv.halauncher.models.Favorites
-import xyz.mcmxciv.halauncher.models.FavoritesDao
+import xyz.mcmxciv.halauncher.dao.DeviceIntegrationDao
+import xyz.mcmxciv.halauncher.dao.SessionDao
+import xyz.mcmxciv.halauncher.models.DeviceIntegration
+import xyz.mcmxciv.halauncher.models.Session
 
-@Database(entities = [Favorites::class], version = 1)
+@Database(entities = [Session::class, DeviceIntegration::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun appBarItemDao(): FavoritesDao
-    
-    companion object {
-        @Volatile private var instance: AppDatabase? = null
-
-        fun getInstance(context: Context): AppDatabase {
-            return instance ?: synchronized(this) {
-                instance ?: Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "app_database"
-                ).build().also { instance = it }
-            }
-        }
-    }
+    abstract fun sessionDao(): SessionDao
+    abstract fun deviceIntegrationDao(): DeviceIntegrationDao
 }

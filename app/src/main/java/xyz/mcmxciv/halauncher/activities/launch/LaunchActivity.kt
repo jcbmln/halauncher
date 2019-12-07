@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import xyz.mcmxciv.halauncher.activities.authentication.AuthenticationActivity
 import xyz.mcmxciv.halauncher.activities.home.HomeActivity
 import xyz.mcmxciv.halauncher.activities.setup.SetupActivity
 import xyz.mcmxciv.halauncher.utils.AppPreferences
@@ -23,10 +22,6 @@ class LaunchActivity : AppCompatActivity() {
             viewModel.sessionValidated.observe(this, Observer {
                 if (it) {
                     val intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
-                }
-                else {
-                    val intent = Intent(this, AuthenticationActivity::class.java)
                     startActivity(intent)
                 }
 

@@ -45,7 +45,7 @@ class AuthenticationFragment : Fragment() {
             loadUrl(AuthenticationRepository.authenticationUrl)
         }
 
-        viewModel.authenticationError.observe(this, Observer {
+        viewModel.authenticationErrorMessage.observe(this, Observer {
             Toast.makeText(LauncherApplication.getAppContext(), it, Toast.LENGTH_LONG).show()
         })
 

@@ -3,24 +3,23 @@ package xyz.mcmxciv.halauncher.fragments
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
+import xyz.mcmxciv.halauncher.utils.BaseViewModel
+import javax.inject.Inject
 
-class AuthenticationViewModel : ViewModel() {
-    val authenticationError: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
-    }
+class AuthenticationViewModel : BaseViewModel() {
+    @Inject
+    lateinit var authenticationRepository: AuthenticationRepository
 
-    val authenticationSuccess: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    val authenticationErrorMessage: MutableLiveData<String> = MutableLiveData()
+    val authenticationSuccess: MutableLiveData<Boolean> = MutableLiveData()
 
     private val authenticationExceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, exception.message.toString())
-        authenticationError.value = "Authentication failed."
+        authenticationErrorMessage.value = "Authentication failed."
         authenticationSuccess.value = false
     }
 
@@ -28,15 +27,16 @@ class AuthenticationViewModel : ViewModel() {
         val code = Uri.parse(url).getQueryParameter(AuthenticationRepository.RESPONSE_TYPE)
         return if (url.contains(AuthenticationRepository.REDIRECT_URI) && !code.isNullOrBlank()) {
             viewModelScope.launch(authenticationExceptionHandler) {
-                AuthenticationRepository().setSession(code)
+                val token = authenticationRepository.getToken(code)
+                authenticationRepository.saveSession(token)
+
+                //AuthenticationRepository().setSession(code)
                 authenticationSuccess.value = true
             }
 
             true
         }
-        else {
-            false
-        }
+        else false
     }
 
     companion object {

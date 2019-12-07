@@ -9,14 +9,11 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.AppListAdapter
-import xyz.mcmxciv.halauncher.activities.authentication.AuthenticationActivity
 import xyz.mcmxciv.halauncher.databinding.ActivityHomeBinding
 import xyz.mcmxciv.halauncher.utils.AppPreferences
 import java.io.BufferedReader
@@ -50,9 +47,6 @@ class HomeActivity : AppCompatActivity() {
                     binding.homeWebView.evaluateJavascript("$it(true);", null)
                     prefs.isAuthenticated = false
                 })
-            }
-            else {
-                startActivity(Intent(this, AuthenticationActivity::class.java))
             }
         })
 

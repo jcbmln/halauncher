@@ -12,8 +12,13 @@ import xyz.mcmxciv.halauncher.repositories.ApplicationRepository
 import xyz.mcmxciv.halauncher.models.AppInfo
 import xyz.mcmxciv.halauncher.models.Session
 import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
+import xyz.mcmxciv.halauncher.utils.BaseViewModel
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel : BaseViewModel() {
+    @Inject
+    lateinit var authenticationRepository: AuthenticationRepository
+
     val appList: MutableLiveData<List<AppInfo>> by lazy {
         MutableLiveData<List<AppInfo>>().also {
             viewModelScope.launch(appListExceptionHandler) {
@@ -37,7 +42,7 @@ class HomeViewModel : ViewModel() {
 
     fun validateSession() {
         viewModelScope.launch {
-            val session = AuthenticationRepository().validateSession()
+            val session = authenticationRepository.validateSession()
             sessionValidated.value = session != null
         }
     }
@@ -48,12 +53,12 @@ class HomeViewModel : ViewModel() {
 
     fun getExternalAuth(callback: String) {
         viewModelScope.launch {
-            val session = AuthenticationRepository().validateSession()
+            val session = authenticationRepository.validateSession()
             externalAuthCallback.value = Pair(
                 callback,
                 JSONObject(mapOf(
                     "access_token" to session?.accessToken,
-                    "expires_in" to session?.expiresIn
+                    "expires_in" to session?.expiresIn()
                 )).toString()
             )
         }
@@ -61,7 +66,7 @@ class HomeViewModel : ViewModel() {
 
     fun revokeExternalAuth(callback: String) {
         viewModelScope.launch {
-            AuthenticationRepository().clearSession()
+            //AuthenticationRepository().clearSession()
             externalAuthRevokeCallback.value = callback
         }
     }

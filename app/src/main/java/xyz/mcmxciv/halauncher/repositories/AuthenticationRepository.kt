@@ -1,38 +1,54 @@
 package xyz.mcmxciv.halauncher.repositories
 
+import dagger.Reusable
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.utils.AppPreferences
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import xyz.mcmxciv.halauncher.services.AuthenticationService
+import xyz.mcmxciv.halauncher.dao.SessionDao
+import xyz.mcmxciv.halauncher.models.Token
+import xyz.mcmxciv.halauncher.api.AuthenticationApi
 import xyz.mcmxciv.halauncher.models.Session
-import xyz.mcmxciv.halauncher.services.ServiceFactory
-import java.lang.Exception
+import java.time.Instant
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuthenticationRepository {
-    private val service = ServiceFactory.createService(prefs.url, AuthenticationService::class.java)
+@Reusable
+class AuthenticationRepository @Inject constructor(
+    private val api: AuthenticationApi,
+    private val sessionDao: SessionDao
+) {
+    suspend fun getToken(code: String): Token =
+        api.getToken(GRANT_TYPE_CODE, code, CLIENT_ID)
 
-    suspend fun setSession(code: String) {
-        service.getToken(GRANT_TYPE_CODE, code, CLIENT_ID).let {
-            Session.create(it)
-        }
+    suspend fun refreshToken(refreshToken: String) =
+        api.refreshToken(GRANT_TYPE_REFRESH, refreshToken, CLIENT_ID)
+
+    suspend fun revokeToken(refreshToken: String) = api.revokeToken(refreshToken, REVOKE_ACTION)
+
+    suspend fun saveSession(token: Token) {
+        sessionDao.insertSession(Session(
+            token.refreshToken!!,
+            token.accessToken,
+            token.expiresIn + Instant.now().epochSecond,
+            token.tokenType
+        ))
     }
 
-    suspend fun clearSession() {
-        val session = Session.get() ?: throw Exception()
-        service.revokeToken(session.refreshToken, REVOKE_ACTION)
+    suspend fun updateSession(token: Token) {
+        sessionDao.updateSession(Session(
+            token.refreshToken!!,
+            token.accessToken,
+            token.expiresIn + Instant.now().epochSecond,
+            token.tokenType
+        ))
     }
 
     suspend fun validateSession(): Session? {
-        val session = Session.get()
+        val session = sessionDao.getSession()
 
-        if (session != null && session.isExpired) {
-            return service.refreshToken(
-                GRANT_TYPE_REFRESH,
-                session.refreshToken,
-                CLIENT_ID
-            ).let {
-                Session.create(it)
-            }
+        if (session != null && session.isExpired()) {
+            val token = refreshToken(session.refreshToken)
+            updateSession(token)
         }
 
         return session
