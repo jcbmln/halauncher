@@ -9,6 +9,8 @@ on:
     paths-ignore:
       - "_docs/**"
       - "docs/**"
+      - "README.md"
+      - "LICENSE"
 
 jobs:
   build:
