@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation_graph"
+    app:startDestination="@id/homeFragment">
+
+    <navigation
+        android:id="@+id/authentication_navigation_graph"
+        app:startDestination="@id/authenticationFragment" >
+        <fragment
+            android:id="@+id/authenticationFragment"
+            android:name="xyz.mcmxciv.halauncher.fragments.authentication.AuthenticationFragment"
+            android:label="authentication_fragment"
+            tools:layout="@layout/authentication_fragment">
+            <action
+                android:id="@+id/action_authenticationFragment_to_integrationFragment"
+                app:destination="@id/integrationFragment"
+                app:popUpTo="@id/integrationFragment" />
+        </fragment>
+        <action
+            android:id="@+id/action_global_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/main_navigation_graph"
+            app:popUpToInclusive="true" />
+        <fragment
+            android:id="@+id/integrationFragment"
+            android:name="xyz.mcmxciv.halauncher.fragments.integration.IntegrationFragment"
+            android:label="integration_fragment"
+            tools:layout="@layout/integration_fragment" />
+    </navigation>
+    <navigation
+        android:id="@+id/setup_navigation_graph"
+        app:startDestination="@id/discoveryFragment" >
+        <fragment
+            android:id="@+id/discoveryFragment"
+            android:name="xyz.mcmxciv.halauncher.fragments.setup.discovery.DiscoveryFragment"
+            android:label="discovery_fragment"
+            tools:layout="@layout/discovery_fragment">
+            <action
+                android:id="@+id/action_discoveryFragment_to_manualSetupFragment"
+                app:destination="@id/manualSetupFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/manualSetupFragment"
+            android:name="xyz.mcmxciv.halauncher.fragments.setup.manual.ManualSetupFragment"
+            android:label="manual_setup_fragment"
+            tools:layout="@layout/manual_setup_fragment">
+            <action
+                android:id="@+id/action_manualSetupFragment_to_discoveryFragment"
+                app:destination="@id/discoveryFragment" />
+        </fragment>
+        <action
+            android:id="@+id/action_global_homeFragment4"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/main_navigation_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_global_authentication_navigation_graph"
+            app:destination="@id/authentication_navigation_graph"
+            app:popUpTo="@id/main_navigation_graph"
+            app:popUpToInclusive="true" />
+    </navigation>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="xyz.mcmxciv.halauncher.fragments.home.HomeFragment"
+        android:label="home_fragment"
+        tools:layout="@layout/home_fragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_authentication_navigation_graph"
+            app:destination="@id/authentication_navigation_graph"
+            app:popUpTo="@id/main_navigation_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_homeFragment_to_setup_navigation_graph"
+            app:destination="@id/setup_navigation_graph"
+            app:popUpTo="@id/main_navigation_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

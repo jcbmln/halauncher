@@ -38,9 +38,10 @@
 
     <style name="Widget.EditText" parent="android:Widget.EditText">
         <item name="android:background">@drawable/edit_text_background</item>
+        <item name="android:layout_height">48dp</item>
         <item name="android:layout_marginStart">10dp</item>
         <item name="android:layout_marginEnd">10dp</item>
-        <item name="android:stateListAnimator">@animator/elevation_animator</item>
+        <item name="android:stateListAnimator">@animator/focus_animator</item>
     </style>
 
     <style name="Widget.TextView">

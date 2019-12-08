@@ -2,9 +2,11 @@ package xyz.mcmxciv.halauncher.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.squareup.moshi.Moshi
 import xyz.mcmxciv.halauncher.icons.IconShape
-import java.lang.Exception
+import xyz.mcmxciv.halauncher.models.Token
 
 class AppPreferences(context: Context) {
     private val sharedPreferences: SharedPreferences =
@@ -44,63 +46,81 @@ class AppPreferences(context: Context) {
         }
         set(value) = putString(ICON_SHAPE_TYPE_KEY, value.name)
 
-    var accessToken: String?
-        get() = getString(ACCESS_TOKEN_KEY)
-        set(value) = putString(ACCESS_TOKEN_KEY, value)
+    var token: Token?
+        get() {
+            val json = getString(AUTHENTICATION_TOKEN_KEY)
+            return if (json != null) {
+                val moshi = Moshi.Builder().build()
+                val adapter = moshi.adapter(Token::class.java)
+                adapter.fromJson(json)
+            }
+            else null
+        }
+        set(value) {
+            val adapter = Moshi.Builder().build().adapter(Token::class.java)
+            putString(AUTHENTICATION_TOKEN_KEY, adapter.toJson(value))
+        }
 
-    var expirationTimestamp: Long
-        get() = getLong(EXPIRATION_KEY)
-        set(value) = putLong(EXPIRATION_KEY, value)
-
-    var refreshToken: String?
-        get() = getString(REFRESH_TOKEN_KEY)
-        set(value) = putString(REFRESH_TOKEN_KEY, value)
-
-    var tokenType: String?
-        get() = getString(TOKEN_TYPE_KEY)
-        set(value) = putString(TOKEN_TYPE_KEY, value)
-
-    var cloudhookUrl: String?
-        get() = getString(CLOUDHOOK_URL_KEY)
-        set(value) = putString(CLOUDHOOK_URL_KEY, value)
-
-    var remoteUiUrl: String?
-        get() = getString(REMOTE_UI_URL_KEY)
-        set(value) = putString(REMOTE_UI_URL_KEY, value)
-
-    var secret: String?
-        get() = getString(SECRET_KEY)
-        set(value) = putString(SECRET_KEY, value)
-
-    var webhookId: String?
-        get() = getString(WEBHOOK_ID_KEY)
-        set(value) = putString(WEBHOOK_ID_KEY, value)
+//    var accessToken: String?
+//        get() = getString(ACCESS_TOKEN_KEY)
+//        set(value) = putString(ACCESS_TOKEN_KEY, value)
+//
+//    var expirationTimestamp: Long
+//        get() = getLong(EXPIRATION_KEY)
+//        set(value) = putLong(EXPIRATION_KEY, value)
+//
+//    var refreshToken: String?
+//        get() = getString(REFRESH_TOKEN_KEY)
+//        set(value) = putString(REFRESH_TOKEN_KEY, value)
+//
+//    var tokenType: String?
+//        get() = getString(TOKEN_TYPE_KEY)
+//        set(value) = putString(TOKEN_TYPE_KEY, value)
+//
+//    var cloudhookUrl: String?
+//        get() = getString(CLOUDHOOK_URL_KEY)
+//        set(value) = putString(CLOUDHOOK_URL_KEY, value)
+//
+//    var remoteUiUrl: String?
+//        get() = getString(REMOTE_UI_URL_KEY)
+//        set(value) = putString(REMOTE_UI_URL_KEY, value)
+//
+//    var secret: String?
+//        get() = getString(SECRET_KEY)
+//        set(value) = putString(SECRET_KEY, value)
+//
+//    var webhookId: String?
+//        get() = getString(WEBHOOK_ID_KEY)
+//        set(value) = putString(WEBHOOK_ID_KEY, value)
 
     private fun getString(key: String): String? =
         sharedPreferences.getString(key, null)
 
     private fun putString(key: String, value: String?) {
-        val editor = sharedPreferences.edit()
-        editor?.putString(key, value)
-        editor?.apply()
+        sharedPreferences.edit { putString(key, value) }
+//        val editor = sharedPreferences.edit()
+//        editor?.putString(key, value)
+//        editor?.apply()
     }
 
     private fun getBoolean(key: String): Boolean =
         sharedPreferences.getBoolean(key, false)
 
     private fun putBoolean(key: String, value: Boolean) {
-        val editor = sharedPreferences.edit()
-        editor?.putBoolean(key, value)
-        editor?.apply()
+        sharedPreferences.edit { putBoolean(key, value) }
+//        val editor = sharedPreferences.edit()
+//        editor?.putBoolean(key, value)
+//        editor?.apply()
     }
 
     private fun getLong(key: String): Long =
         sharedPreferences.getLong(key, -1)
 
     private fun putLong(key: String, value: Long) {
-        val editor = sharedPreferences.edit()
-        editor?.putLong(key, value)
-        editor?.apply()
+        sharedPreferences.edit { putLong(key, value) }
+//        val editor = sharedPreferences.edit()
+//        editor?.putLong(key, value)
+//        editor?.apply()
     }
 
     companion object : ContextInstance<AppPreferences>(::AppPreferences) {
@@ -111,13 +131,14 @@ class AppPreferences(context: Context) {
         private const val FIRST_RUN_KEY = "first_run"
         private const val ICON_SHAPE_TYPE_KEY = "icon_shape_type"
         private const val AUTHENTICATED_KEY = "authenticated"
-        private const val ACCESS_TOKEN_KEY = "access_token"
-        private const val EXPIRATION_KEY = "expires_in"
-        private const val REFRESH_TOKEN_KEY = "refresh_token"
-        private const val TOKEN_TYPE_KEY = "token_type"
-        private const val CLOUDHOOK_URL_KEY = "cloudhook_url"
-        private const val REMOTE_UI_URL_KEY = "remote_ui_url"
-        private const val SECRET_KEY = "secret"
-        private const val WEBHOOK_ID_KEY = "webhook_id"
+        private const val AUTHENTICATION_TOKEN_KEY = "authentication_token"
+//        private const val ACCESS_TOKEN_KEY = "access_token"
+//        private const val EXPIRATION_KEY = "expires_in"
+//        private const val REFRESH_TOKEN_KEY = "refresh_token"
+//        private const val TOKEN_TYPE_KEY = "token_type"
+//        private const val CLOUDHOOK_URL_KEY = "cloudhook_url"
+//        private const val REMOTE_UI_URL_KEY = "remote_ui_url"
+//        private const val SECRET_KEY = "secret"
+//        private const val WEBHOOK_ID_KEY = "webhook_id"
     }
 }

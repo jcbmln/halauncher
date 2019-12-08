@@ -15,8 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.authentication.AuthenticationActivity" />
-        <activity android:name=".activities.launch.LaunchActivity">
+        <activity
+            android:name=".activities.HomeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
@@ -25,12 +26,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.setup.SetupActivity"
-            android:configChanges="keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".activities.home.HomeActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 </manifest>

@@ -20,42 +20,48 @@ class AuthenticationRepository @Inject constructor(
     suspend fun getToken(code: String): Token =
         api.getToken(GRANT_TYPE_CODE, code, CLIENT_ID)
 
-    suspend fun refreshToken(refreshToken: String) =
+    private suspend fun refreshToken(refreshToken: String): Token =
         api.refreshToken(GRANT_TYPE_REFRESH, refreshToken, CLIENT_ID)
 
     suspend fun revokeToken(refreshToken: String) = api.revokeToken(refreshToken, REVOKE_ACTION)
 
-    suspend fun saveSession(token: Token) {
-        sessionDao.insertSession(Session(
-            token.refreshToken!!,
-            token.accessToken,
-            token.expiresIn + Instant.now().epochSecond,
-            token.tokenType
-        ))
+    suspend fun validateToken(token: Token): Token {
+        return if (token.isExpired())
+            refreshToken(token.refreshToken!!)
+        else token
     }
 
-    suspend fun updateSession(token: Token) {
-        sessionDao.updateSession(Session(
-            token.refreshToken!!,
-            token.accessToken,
-            token.expiresIn + Instant.now().epochSecond,
-            token.tokenType
-        ))
-    }
+//    suspend fun saveSession(token: Token) {
+//        sessionDao.insertSession(Session(
+//            token.refreshToken!!,
+//            token.accessToken,
+//            token.expiresIn + Instant.now().epochSecond,
+//            token.tokenType
+//        ))
+//    }
 
-    suspend fun validateSession(): Session? {
-        val session = sessionDao.getSession()
+//    suspend fun updateSession(token: Token) {
+//        sessionDao.updateSession(Session(
+//            token.refreshToken!!,
+//            token.accessToken,
+//            token.expiresIn + Instant.now().epochSecond,
+//            token.tokenType
+//        ))
+//    }
 
-        if (session != null && session.isExpired()) {
-            val token = refreshToken(session.refreshToken)
-            updateSession(token)
-        }
-
-        return session
-    }
-
-    suspend fun bearerToken(): String {
-        val accessToken = validateSession()?.accessToken
+//    suspend fun validateSession(): Session? {
+//        val session = sessionDao.getSession()
+//
+//        if (session != null && session.isExpired()) {
+//            val token = refreshToken(session.refreshToken)
+//            updateSession(token)
+//        }
+//
+//        return session
+//    }
+//
+    suspend fun bearerToken(token: Token): String {
+        val accessToken = validateToken(token).accessToken
         return "Bearer $accessToken"
     }
 

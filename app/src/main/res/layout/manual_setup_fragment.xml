@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.setup.manual.ManualSetupFragment">
+    tools:context=".fragments.setup.manual.ManualSetupFragment">
 
     <TextView
         android:id="@+id/setup_manual_label"
@@ -25,11 +25,10 @@
         android:id="@+id/setup_host_text"
         style="@style/Widget.EditText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
         android:autofillHints="@string/default_home_assistant_url"
-        android:ems="10"
+        android:ems="15"
         android:inputType="textUri"
         android:padding="10dp"
         android:singleLine="true"
