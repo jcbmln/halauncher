@@ -21,17 +21,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.graphics.Paint
-import android.util.*
-import kotlin.math.ceil
-import kotlin.math.roundToInt
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.toBitmap
+import kotlin.math.ceil
+import kotlin.math.roundToInt
 
 
 /**

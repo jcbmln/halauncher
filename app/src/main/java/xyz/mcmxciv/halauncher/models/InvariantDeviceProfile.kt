@@ -16,30 +16,40 @@
 
 package xyz.mcmxciv.halauncher.models
 
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
 import android.graphics.drawable.AdaptiveIconDrawable
-import android.os.Build
 import android.os.PatternMatcher
 import android.text.TextUtils
-import android.util.*
+import android.util.AttributeSet
+import android.util.DisplayMetrics
+import android.util.Log
+import android.util.Xml
 import android.view.WindowManager
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.utils.ContextInstance
-
-import java.util.ArrayList
 import xyz.mcmxciv.halauncher.utils.Utilities
 import java.io.IOException
-import javax.inject.Inject
-import javax.inject.Singleton
+import java.util.ArrayList
+import kotlin.Boolean
+import kotlin.Comparator
+import kotlin.Float
+import kotlin.Int
+import kotlin.RuntimeException
+import kotlin.String
+import kotlin.intArrayOf
 import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
+import kotlin.use
 
 class InvariantDeviceProfile constructor(context: Context?) {
     var numColumns: Int = 0

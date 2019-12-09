@@ -3,8 +3,8 @@ package xyz.mcmxciv.halauncher
 import android.content.Context
 import android.net.nsd.NsdManager
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
-import xyz.mcmxciv.halauncher.utils.ContextInstance
 import xyz.mcmxciv.halauncher.utils.AppPreferences
+import xyz.mcmxciv.halauncher.utils.ContextInstance
 
 class AppModel(context: Context) {
     val idp = InvariantDeviceProfile.getInstance(context)

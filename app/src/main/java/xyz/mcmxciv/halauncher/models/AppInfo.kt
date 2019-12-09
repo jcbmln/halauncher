@@ -1,6 +1,5 @@
 package xyz.mcmxciv.halauncher.models
 
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 
 class AppInfo {

@@ -8,16 +8,16 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.databinding.AuthenticationFragmentBinding
+import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.utils.AppPreferences
+import xyz.mcmxciv.halauncher.utils.BaseFragment
 
-class AuthenticationFragment : Fragment() {
+class AuthenticationFragment : BaseFragment() {
     private lateinit var binding: AuthenticationFragmentBinding
     private lateinit var viewModel: AuthenticationViewModel
 
@@ -31,7 +31,7 @@ class AuthenticationFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AuthenticationViewModel::class.java)
+        viewModel = createViewModel { component.authenticationViewModel() }
 
         binding.authenticationWebView.apply {
             @SuppressLint("SetJavaScriptEnabled")

@@ -2,15 +2,11 @@ package xyz.mcmxciv.halauncher
 
 import android.graphics.Paint
 import android.graphics.drawable.AdaptiveIconDrawable
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.*
-import xyz.mcmxciv.halauncher.icons.IconFactory
 import xyz.mcmxciv.halauncher.models.AppInfo
-import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.views.AdaptiveIconView
 
 class AppListAdapter(private val appList: List<AppInfo>) :

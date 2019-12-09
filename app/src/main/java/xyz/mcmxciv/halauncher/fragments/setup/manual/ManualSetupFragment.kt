@@ -1,13 +1,12 @@
 package xyz.mcmxciv.halauncher.fragments.setup.manual
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import xyz.mcmxciv.halauncher.LauncherApplication
-
 import xyz.mcmxciv.halauncher.databinding.ManualSetupFragmentBinding
 import xyz.mcmxciv.halauncher.utils.AppPreferences
 

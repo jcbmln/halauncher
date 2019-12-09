@@ -3,18 +3,18 @@ package xyz.mcmxciv.halauncher.fragments.authentication
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.utils.AppPreferences
-import xyz.mcmxciv.halauncher.utils.BaseViewModel
 import javax.inject.Inject
 
-class AuthenticationViewModel : BaseViewModel() {
-    @Inject
-    lateinit var authenticationRepository: AuthenticationRepository
+class AuthenticationViewModel @Inject constructor(
+    private val authenticationRepository: AuthenticationRepository
+) : ViewModel() {
     private val prefs = AppPreferences.getInstance(LauncherApplication.getAppContext())
 
     val authenticationErrorMessage: MutableLiveData<String> = MutableLiveData()
@@ -31,8 +31,6 @@ class AuthenticationViewModel : BaseViewModel() {
         return if (url.contains(AuthenticationRepository.REDIRECT_URI) && !code.isNullOrBlank()) {
             viewModelScope.launch(authenticationExceptionHandler) {
                 prefs.token = authenticationRepository.getToken(code)
-                //authenticationRepository.saveSession(token)
-
                 authenticationSuccess.value = true
             }
 

@@ -18,16 +18,12 @@ package xyz.mcmxciv.halauncher.icons
 
 import android.annotation.TargetApi
 import android.content.Context
-import android.graphics.*
+import android.graphics.Color
+import android.graphics.drawable.AdaptiveIconDrawable
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Build
-import android.graphics.Paint.DITHER_FLAG
-import android.graphics.Paint.FILTER_BITMAP_FLAG
-import android.graphics.drawable.*
-import android.util.TypedValue
-import androidx.annotation.RequiresApi
-import androidx.core.graphics.drawable.toBitmap
 import xyz.mcmxciv.halauncher.R
-import kotlin.math.roundToInt
 
 class IconFactory(private val context: Context,
                   private val iconBitmapSize: Int

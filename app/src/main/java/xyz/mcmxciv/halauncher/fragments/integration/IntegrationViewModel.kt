@@ -3,6 +3,7 @@ package xyz.mcmxciv.halauncher.fragments.integration
 import android.os.Build
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -12,12 +13,12 @@ import xyz.mcmxciv.halauncher.models.DeviceRegistration
 import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.repositories.IntegrationRepository
 import xyz.mcmxciv.halauncher.utils.AppPreferences
-import xyz.mcmxciv.halauncher.utils.BaseViewModel
 import javax.inject.Inject
 
-class IntegrationViewModel : BaseViewModel() {
-    @Inject lateinit var authenticationRepository: AuthenticationRepository
-    @Inject lateinit var integrationRepository: IntegrationRepository
+class IntegrationViewModel @Inject constructor(
+    private val authenticationRepository: AuthenticationRepository,
+    private val integrationRepository: IntegrationRepository
+) : ViewModel() {
     private val prefs = AppPreferences.getInstance(LauncherApplication.getAppContext())
 
     val integrationState: MutableLiveData<IntegrationState> = MutableLiveData()

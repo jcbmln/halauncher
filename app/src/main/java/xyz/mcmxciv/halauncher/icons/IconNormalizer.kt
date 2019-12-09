@@ -25,7 +25,9 @@ import android.os.Build
 import xyz.mcmxciv.halauncher.utils.GraphicsUtils
 import java.nio.ByteBuffer
 import kotlin.experimental.and
-import kotlin.math.*
+import kotlin.math.PI
+import kotlin.math.max
+import kotlin.math.sqrt
 
 class IconNormalizer(context: Context, iconBitmapSize: Int) {
     private val maxSize: Int = iconBitmapSize * 2

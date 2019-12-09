@@ -5,9 +5,9 @@ import android.net.nsd.NsdServiceInfo
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import java.lang.Exception
+import javax.inject.Inject
 
-class DiscoveryViewModel : ViewModel() {
+class DiscoveryViewModel @Inject constructor() : ViewModel() {
     val services: MutableLiveData<MutableList<NsdServiceInfo>> = MutableLiveData()
     val resolvedUrl: MutableLiveData<String> = MutableLiveData()
 

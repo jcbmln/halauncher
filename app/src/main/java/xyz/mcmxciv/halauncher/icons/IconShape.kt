@@ -16,13 +16,11 @@
 
 package xyz.mcmxciv.halauncher.icons
 
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.SparseArray
 import android.util.TypedValue
-import java.lang.Exception
 
 /**
  * Abstract representation of the shape of an icon shape

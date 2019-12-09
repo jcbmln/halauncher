@@ -3,21 +3,21 @@ package xyz.mcmxciv.halauncher.fragments.home
 import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.LauncherApplication
-import xyz.mcmxciv.halauncher.repositories.ApplicationRepository
 import xyz.mcmxciv.halauncher.models.AppInfo
+import xyz.mcmxciv.halauncher.repositories.ApplicationRepository
 import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.utils.AppPreferences
-import xyz.mcmxciv.halauncher.utils.BaseViewModel
 import javax.inject.Inject
 
-class HomeViewModel : BaseViewModel() {
-    @Inject
-    lateinit var authenticationRepository: AuthenticationRepository
+class HomeViewModel @Inject constructor(
+    private val authenticationRepository: AuthenticationRepository
+) : ViewModel() {
 
     private val prefs = AppPreferences.getInstance(LauncherApplication.getAppContext())
 

@@ -3,25 +3,25 @@ package xyz.mcmxciv.halauncher.fragments.home
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.*
+import android.webkit.JavascriptInterface
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.AppListAdapter
 import xyz.mcmxciv.halauncher.LauncherApplication
-
 import xyz.mcmxciv.halauncher.databinding.HomeFragmentBinding
+import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.utils.AppPreferences
+import xyz.mcmxciv.halauncher.utils.BaseFragment
 import java.io.BufferedReader
-import java.lang.Exception
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
     private lateinit var binding: HomeFragmentBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var prefs: AppPreferences
@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         if (prefs.setupDone) {
-            viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+            viewModel = createViewModel { component.homeViewModel() }
             viewModel.validateSession()
             viewModel.sessionValidated.observe(this, Observer { valid ->
                 if (valid) {
