@@ -18,8 +18,6 @@ package xyz.mcmxciv.halauncher.utils
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -80,17 +78,17 @@ object Utilities {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, size, metrics).roundToInt()
     }
 
-    fun getPrefs(context: Context): SharedPreferences {
-        return context.getSharedPreferences(
-            AppFiles.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE
-        )
-    }
-
-    fun getDevicePrefs(context: Context): SharedPreferences {
-        return context.getSharedPreferences(
-            AppFiles.DEVICE_PREFERENCES_KEY, Context.MODE_PRIVATE
-        )
-    }
+//    fun getPrefs(context: Context): SharedPreferences {
+//        return context.getSharedPreferences(
+//            AppFiles.SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE
+//        )
+//    }
+//
+//    fun getDevicePrefs(context: Context): SharedPreferences {
+//        return context.getSharedPreferences(
+//            AppFiles.DEVICE_PREFERENCES_KEY, Context.MODE_PRIVATE
+//        )
+//    }
 
     fun drawableToScaledBitmap(drawable: Drawable): Bitmap {
         val image = drawable.toBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)

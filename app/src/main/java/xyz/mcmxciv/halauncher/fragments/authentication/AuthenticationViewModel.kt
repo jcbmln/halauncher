@@ -7,16 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
-import xyz.mcmxciv.halauncher.LauncherApplication
-import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
-import xyz.mcmxciv.halauncher.utils.AppPreferences
+import xyz.mcmxciv.halauncher.repositories.HomeAssistantRepository
+import xyz.mcmxciv.halauncher.utils.AppSettings
 import javax.inject.Inject
 
 class AuthenticationViewModel @Inject constructor(
-    private val authenticationRepository: AuthenticationRepository
+    private val homeAssistantRepository: HomeAssistantRepository,
+    private val appSettings: AppSettings
 ) : ViewModel() {
-    private val prefs = AppPreferences.getInstance(LauncherApplication.getAppContext())
-
     val authenticationErrorMessage: MutableLiveData<String> = MutableLiveData()
     val authenticationSuccess: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -27,16 +25,24 @@ class AuthenticationViewModel @Inject constructor(
     }
 
     fun authenticate(url: String): Boolean {
-        val code = Uri.parse(url).getQueryParameter(AuthenticationRepository.RESPONSE_TYPE)
-        return if (url.contains(AuthenticationRepository.REDIRECT_URI) && !code.isNullOrBlank()) {
+        val code = Uri.parse(url).getQueryParameter(HomeAssistantRepository.RESPONSE_TYPE)
+        return if (url.contains(HomeAssistantRepository.REDIRECT_URI) && !code.isNullOrBlank()) {
             viewModelScope.launch(authenticationExceptionHandler) {
-                prefs.token = authenticationRepository.getToken(code)
+                appSettings.token = homeAssistantRepository.getToken(code)
                 authenticationSuccess.value = true
             }
 
             true
         }
         else false
+    }
+
+    fun getAuthenticationUrl(): String {
+        return homeAssistantRepository.getAuthenticationUrl(appSettings.url)
+    }
+
+    fun isSetupDone(): Boolean {
+        return appSettings.setupDone
     }
 
     companion object {

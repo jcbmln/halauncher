@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.databinding.ManualSetupFragmentBinding
-import xyz.mcmxciv.halauncher.utils.AppPreferences
+import xyz.mcmxciv.halauncher.extensions.createViewModel
+import xyz.mcmxciv.halauncher.utils.BaseFragment
 
-class ManualSetupFragment : Fragment() {
+class ManualSetupFragment : BaseFragment() {
     private lateinit var binding: ManualSetupFragmentBinding
-    //lateinit var serviceSelectedListener: ServiceSelectedListener
+    private lateinit var viewModel: ManualSetupViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,6 +23,7 @@ class ManualSetupFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        viewModel = createViewModel { component.manualSetupViewModel() }
 
         binding.discoveryModeButton.setOnClickListener { view ->
             val action =
@@ -35,8 +35,7 @@ class ManualSetupFragment : Fragment() {
             val text = binding.setupHostText.text.toString()
 
             if (!text.isBlank()) {
-                val prefs = AppPreferences.getInstance(LauncherApplication.getAppContext())
-                prefs.url = text
+                viewModel.setUrl(text)
 
                 val action = ManualSetupFragmentDirections
                     .actionGlobalAuthenticationNavigationGraph()

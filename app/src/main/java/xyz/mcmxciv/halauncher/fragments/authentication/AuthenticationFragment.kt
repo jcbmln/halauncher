@@ -10,11 +10,8 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.databinding.AuthenticationFragmentBinding
 import xyz.mcmxciv.halauncher.extensions.createViewModel
-import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
-import xyz.mcmxciv.halauncher.utils.AppPreferences
 import xyz.mcmxciv.halauncher.utils.BaseFragment
 
 class AuthenticationFragment : BaseFragment() {
@@ -42,18 +39,15 @@ class AuthenticationFragment : BaseFragment() {
                     return viewModel.authenticate(url)
                 }
             }
-            loadUrl(AuthenticationRepository.authenticationUrl)
+            loadUrl(viewModel.getAuthenticationUrl())
         }
 
         viewModel.authenticationErrorMessage.observe(this, Observer {
-            Toast.makeText(LauncherApplication.getAppContext(), it, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
 
         viewModel.authenticationSuccess.observe(this, Observer { authenticated ->
-            val prefs = AppPreferences.getInstance(LauncherApplication.getAppContext())
-            prefs.isAuthenticated = authenticated
-
-            if (authenticated && prefs.setupDone) {
+            if (authenticated && viewModel.isSetupDone()) {
                 val action =
                     AuthenticationFragmentDirections.actionGlobalHomeFragment()
                 binding.root.findNavController().navigate(action)

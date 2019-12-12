@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.databinding.IntegrationFragmentBinding
 import xyz.mcmxciv.halauncher.extensions.createViewModel
-import xyz.mcmxciv.halauncher.utils.AppPreferences
 import xyz.mcmxciv.halauncher.utils.BaseFragment
 
 class IntegrationFragment : BaseFragment() {
@@ -39,7 +37,7 @@ class IntegrationFragment : BaseFragment() {
         })
 
         viewModel.integrationError.observe(this, Observer {
-            Toast.makeText(LauncherApplication.getAppContext(), it, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
 
         binding.integrationRetryButton.setOnClickListener {
@@ -53,7 +51,7 @@ class IntegrationFragment : BaseFragment() {
     }
 
     private fun finishIntegration() {
-        AppPreferences.getInstance(LauncherApplication.getAppContext()).setupDone = true
+        viewModel.finishSetup()
         val action = IntegrationFragmentDirections.actionGlobalHomeFragment()
         binding.root.findNavController().navigate(action)
     }

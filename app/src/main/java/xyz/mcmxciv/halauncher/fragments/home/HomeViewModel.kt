@@ -8,19 +8,19 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.models.AppInfo
+import xyz.mcmxciv.halauncher.models.Token
 import xyz.mcmxciv.halauncher.repositories.ApplicationRepository
-import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
-import xyz.mcmxciv.halauncher.utils.AppPreferences
+import xyz.mcmxciv.halauncher.repositories.HomeAssistantRepository
+import xyz.mcmxciv.halauncher.utils.AppSettings
+import xyz.mcmxciv.halauncher.utils.AuthorizationException
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
-    private val authenticationRepository: AuthenticationRepository
+    private val homeAssistantRepository: HomeAssistantRepository,
+    private val applicationRepository: ApplicationRepository,
+    private val appSettings: AppSettings
 ) : ViewModel() {
-
-    private val prefs = AppPreferences.getInstance(LauncherApplication.getAppContext())
-
     private val appListExceptionHandler = CoroutineExceptionHandler { _, exception ->
         Log.e(TAG, exception.message.toString())
     }
@@ -28,20 +28,21 @@ class HomeViewModel @Inject constructor(
     val appList: MutableLiveData<List<AppInfo>> by lazy {
         MutableLiveData<List<AppInfo>>().also {
             viewModelScope.launch(appListExceptionHandler) {
-                val apps = ApplicationRepository().getAppList()
+                val apps = applicationRepository.getAppList()
                 appList.value = apps
             }
         }
     }
 
-    val externalAuthCallback: MutableLiveData<Pair<String, String>> = MutableLiveData()
-    val externalAuthRevokeCallback: MutableLiveData<String> = MutableLiveData()
-    val sessionValidated: MutableLiveData<Boolean> = MutableLiveData()
+    val externalAuthCallback = MutableLiveData<Pair<String, String>>()
+    val externalAuthRevokeCallback = MutableLiveData<String>()
+    val sessionValidated = MutableLiveData<Boolean>()
 
     fun validateSession() {
+        val token = appSettings.token!!
         viewModelScope.launch {
-            sessionValidated.value = if (prefs.token != null) {
-                prefs.token = authenticationRepository.validateToken(prefs.token!!)
+            sessionValidated.value = if (token.accessToken.isNotEmpty()) {
+                appSettings.token = homeAssistantRepository.validateToken(token)
                 true
             }
             else false
@@ -49,33 +50,39 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getExternalAuth(callback: String) {
+        var token: Token = appSettings.token ?: throw AuthorizationException()
         viewModelScope.launch {
-            prefs.token = authenticationRepository.validateToken(prefs.token!!)
+            token = homeAssistantRepository.validateToken(token).also { appSettings.token = it }
             externalAuthCallback.value = Pair(
                 callback,
                 JSONObject(mapOf(
-                    "access_token" to prefs.token?.accessToken,
-                    "expires_in" to prefs.token?.expiresIn
+                    "access_token" to token.accessToken,
+                    "expires_in" to token.expiresIn
                 )).toString()
             )
+            appSettings.token = token
         }
     }
 
     fun revokeExternalAuth(callback: String) {
         viewModelScope.launch {
-            authenticationRepository.revokeToken(prefs.token?.refreshToken!!)
-            prefs.token = null
+            homeAssistantRepository.revokeToken(appSettings.token)
+            appSettings.token = null
             externalAuthRevokeCallback.value = callback
         }
     }
 
-    fun buildUrl(baseUrl: String): String {
+    fun buildUrl(): String {
+        val baseUrl = appSettings.url
+
         return baseUrl.toUri()
             .buildUpon()
             .appendQueryParameter("external_auth", "1")
             .build()
             .toString()
     }
+
+    fun isSetupDone(): Boolean = appSettings.setupDone
 
     companion object {
         private const val TAG = "HomeViewModel"

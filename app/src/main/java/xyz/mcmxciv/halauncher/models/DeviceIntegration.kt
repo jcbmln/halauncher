@@ -1,13 +1,12 @@
 package xyz.mcmxciv.halauncher.models
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-@Entity(tableName = "device_integrations")
+@JsonClass(generateAdapter = true)
 data class DeviceIntegration(
-    @PrimaryKey @ColumnInfo(name = "webhook_id") val webhookId: String,
-    @ColumnInfo(name = "cloudhook_url") val cloudhookUrl: String?,
-    @ColumnInfo(name = "remote_ui_url") val remoteUiUrl: String?,
-    @ColumnInfo(name = "secret") val secret: String?
+    @Json(name = "webhook_id") val webhookId: String,
+    @Json(name = "cloudhook_url") val cloudhookUrl: String?,
+    @Json(name = "remote_ui_url") val remoteUiUrl: String?,
+    @Json(name = "secret") val secret: String?
 )

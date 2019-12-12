@@ -28,7 +28,7 @@ class AppListAdapter(private val appList: List<AppInfo>) :
         appImage.setText(appInfo.displayName)
 
         appImage.setOnClickListener {
-            val context = LauncherApplication.getAppContext()
+            val context = LauncherApplication.instance.applicationContext
             val pm = context.packageManager
             context.startActivity(pm.getLaunchIntentForPackage(appInfo.packageName))
         }

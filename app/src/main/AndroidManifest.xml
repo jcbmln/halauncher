@@ -17,13 +17,19 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".activities.HomeActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:resumeWhilePausing="true"
+            android:clearTaskOnLaunch="true"
+            android:stateNotNeeded="true"
+            android:enabled="true"
+            android:excludeFromRecents="true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER_APP" />
             </intent-filter>
         </activity>
     </application>

@@ -9,19 +9,15 @@ import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import xyz.mcmxciv.halauncher.AppModel
-import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.ServiceListAdapter
 import xyz.mcmxciv.halauncher.databinding.DiscoveryFragmentBinding
 import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
-import xyz.mcmxciv.halauncher.utils.AppPreferences
 import xyz.mcmxciv.halauncher.utils.BaseFragment
 
 class DiscoveryFragment : BaseFragment(), ServiceSelectedListener {
     private lateinit var viewModel: DiscoveryViewModel
     private lateinit var binding: DiscoveryFragmentBinding
-    private lateinit var appModel: AppModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +30,6 @@ class DiscoveryFragment : BaseFragment(), ServiceSelectedListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = createViewModel { component.discoveryViewModel() }
-        appModel = AppModel.getInstance(context!!)
-        viewModel.start(appModel.nsdManager)
 
         binding.serviceList.layoutManager = LinearLayoutManager(context)
         val adapter = ServiceListAdapter(this)
@@ -46,13 +40,12 @@ class DiscoveryFragment : BaseFragment(), ServiceSelectedListener {
 
         viewModel.startDiscovery()
 
-        viewModel.services.observe(this, Observer {
+        viewModel.services.observe(viewLifecycleOwner, Observer {
             updateViewVisibility(it.isEmpty())
             adapter.setData(it)
         })
-        viewModel.resolvedUrl.observe(this, Observer {
-            val prefs = AppPreferences.getInstance(LauncherApplication.getAppContext())
-            prefs.url = it
+        viewModel.resolvedUrl.observe(viewLifecycleOwner, Observer {
+            viewModel.setUrl(it)
 
             val action =
                 DiscoveryFragmentDirections.actionGlobalAuthenticationNavigationGraph()
@@ -60,9 +53,15 @@ class DiscoveryFragment : BaseFragment(), ServiceSelectedListener {
         })
 
         binding.manualModeButton.setOnClickListener {
+            viewModel.clearServices()
             val action = DiscoveryFragmentDirections.actionDiscoveryFragmentToManualSetupFragment()
             it.findNavController().navigate(action)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopDiscovery()
     }
 
     override fun onServiceSelected(serviceInfo: NsdServiceInfo) {

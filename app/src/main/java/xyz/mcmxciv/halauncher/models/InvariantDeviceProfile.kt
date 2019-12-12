@@ -20,7 +20,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
 import android.graphics.drawable.AdaptiveIconDrawable
@@ -38,18 +37,11 @@ import xyz.mcmxciv.halauncher.utils.ContextInstance
 import xyz.mcmxciv.halauncher.utils.Utilities
 import java.io.IOException
 import java.util.ArrayList
-import kotlin.Boolean
 import kotlin.Comparator
-import kotlin.Float
-import kotlin.Int
-import kotlin.RuntimeException
-import kotlin.String
-import kotlin.intArrayOf
 import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
-import kotlin.use
 
 class InvariantDeviceProfile constructor(context: Context?) {
     var numColumns: Int = 0
@@ -80,7 +72,7 @@ class InvariantDeviceProfile constructor(context: Context?) {
 
     init {
         if (context != null) {
-            initGrid(context, Utilities.getPrefs(context).getString(KEY_IDP_GRID_NAME, null))
+            initGrid(context, null)
             //overlayMonitor = OverlayMonitor(context)
         }
     }
@@ -129,10 +121,10 @@ class InvariantDeviceProfile constructor(context: Context?) {
         val closestProfile = allOptions[0].grid
         numColumns = closestProfile?.numColumns ?: numColumns
 
-        if (closestProfile?.name != gridName) {
-            Utilities.getPrefs(context).edit()
-                .putString(KEY_IDP_GRID_NAME, closestProfile?.name).apply()
-        }
+//        if (closestProfile?.name != gridName) {
+//            Utilities.getPrefs(context).edit()
+//                .putString(KEY_IDP_GRID_NAME, closestProfile?.name).apply()
+//        }
 
         iconSize = interpolatedDisplayOption.iconSize
         iconShapePath =
@@ -167,41 +159,41 @@ class InvariantDeviceProfile constructor(context: Context?) {
         return closestProfile?.name
     }
 
-    fun addOnChangeListener(listener: OnIDPChangeListener) {
-        changeListeners.add(listener)
-    }
-
-    fun removeOnChangeListener(listener: OnIDPChangeListener) {
-        changeListeners.remove(listener)
-    }
-
-    fun verifyConfigChangedInBackground(context: Context) {
-        val savedIconMaskPath = Utilities.getDevicePrefs(context).getString(KEY_ICON_PATH_REF, "")
-        // Good place to check if grid size changed in themepicker when launcher was dead.
-        if (savedIconMaskPath?.isEmpty() == true) {
-            Utilities.getDevicePrefs(context).edit().putString(
-                KEY_ICON_PATH_REF,
-                getIconShapePath(
-                    context
-                )
-            )
-                .apply()
-        } else if (savedIconMaskPath != getIconShapePath(
-                context
-            )
-        ) {
-            Utilities.getDevicePrefs(context).edit().putString(
-                KEY_ICON_PATH_REF,
-                getIconShapePath(
-                    context
-                )
-            )
-                .apply()
-            apply(context,
-                CHANGE_FLAG_ICON_PARAMS
-            )
-        }
-    }
+//    fun addOnChangeListener(listener: OnIDPChangeListener) {
+//        changeListeners.add(listener)
+//    }
+//
+//    fun removeOnChangeListener(listener: OnIDPChangeListener) {
+//        changeListeners.remove(listener)
+//    }
+//
+//    fun verifyConfigChangedInBackground(context: Context) {
+//        val savedIconMaskPath = Utilities.getDevicePrefs(context).getString(KEY_ICON_PATH_REF, "")
+//        // Good place to check if grid size changed in themepicker when launcher was dead.
+//        if (savedIconMaskPath?.isEmpty() == true) {
+//            Utilities.getDevicePrefs(context).edit().putString(
+//                KEY_ICON_PATH_REF,
+//                getIconShapePath(
+//                    context
+//                )
+//            )
+//                .apply()
+//        } else if (savedIconMaskPath != getIconShapePath(
+//                context
+//            )
+//        ) {
+//            Utilities.getDevicePrefs(context).edit().putString(
+//                KEY_ICON_PATH_REF,
+//                getIconShapePath(
+//                    context
+//                )
+//            )
+//                .apply()
+//            apply(context,
+//                CHANGE_FLAG_ICON_PARAMS
+//            )
+//        }
+//    }
 
     private fun onConfigChanged(context: Context) {
         // Config changes, what shall we do?
@@ -217,10 +209,10 @@ class InvariantDeviceProfile constructor(context: Context?) {
             changeFlags = changeFlags or CHANGE_FLAG_ICON_PARAMS
         }
 
-        apply(context, changeFlags)
+        apply(changeFlags)
     }
 
-    private fun apply(context: Context, changeFlags: Int) {
+    private fun apply(changeFlags: Int) {
         // Create a new config monitor
 //        configMonitor!!.unregister()
 //        configMonitor = ConfigMonitor(context, ???({ this.onConfigChanged(it) }))
@@ -254,14 +246,14 @@ class InvariantDeviceProfile constructor(context: Context?) {
         return density
     }
 
-    fun getDeviceProfile(context: Context): DeviceProfile {
-        return if (
-            context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        )
-            landscapeProfile
-        else
-            portraitProfile
-    }
+//    fun getDeviceProfile(context: Context): DeviceProfile {
+//        return if (
+//            context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+//        )
+//            landscapeProfile
+//        else
+//            portraitProfile
+//    }
 
     interface OnIDPChangeListener {
         fun onIdpChanged(changeFlags: Int, profile: InvariantDeviceProfile)
@@ -361,14 +353,14 @@ class InvariantDeviceProfile constructor(context: Context?) {
     companion object : ContextInstance<InvariantDeviceProfile>(::InvariantDeviceProfile) {
         private const val TAG = "InvariantDeviceProfile"
 
-        private const val KEY_IDP_GRID_NAME = "idp_grid_name"
+//        private const val KEY_IDP_GRID_NAME = "idp_grid_name"
 
         private const val ICON_SIZE_DEFINED_IN_APP_DP = 48f
 
         //const val CHANGE_FLAG_GRID = 1 shl 0
         const val CHANGE_FLAG_ICON_PARAMS = 1 shl 1
 
-        const val KEY_ICON_PATH_REF = "pref_icon_shape_path"
+//        const val KEY_ICON_PATH_REF = "pref_icon_shape_path"
 
         // Constants that affects the interpolation curve between statically defined device profile
         // buckets.

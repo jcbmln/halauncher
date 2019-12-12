@@ -8,19 +8,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import xyz.mcmxciv.halauncher.BuildConfig
-import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.models.DeviceRegistration
-import xyz.mcmxciv.halauncher.repositories.AuthenticationRepository
-import xyz.mcmxciv.halauncher.repositories.IntegrationRepository
-import xyz.mcmxciv.halauncher.utils.AppPreferences
+import xyz.mcmxciv.halauncher.repositories.HomeAssistantRepository
+import xyz.mcmxciv.halauncher.utils.AppSettings
 import javax.inject.Inject
 
 class IntegrationViewModel @Inject constructor(
-    private val authenticationRepository: AuthenticationRepository,
-    private val integrationRepository: IntegrationRepository
+    private val homeAssistantRepository: HomeAssistantRepository,
+    private val appSettings: AppSettings
 ) : ViewModel() {
-    private val prefs = AppPreferences.getInstance(LauncherApplication.getAppContext())
-
     val integrationState: MutableLiveData<IntegrationState> = MutableLiveData()
     val integrationError: MutableLiveData<String> = MutableLiveData()
 
@@ -45,10 +41,14 @@ class IntegrationViewModel @Inject constructor(
         )
 
         viewModelScope.launch(integrationExceptionHandler) {
-            val bearerToken = authenticationRepository.bearerToken(prefs.token!!)
-            integrationRepository.registerDevice(bearerToken, deviceRegistration)
+            val bearerToken = homeAssistantRepository.bearerToken(appSettings.token!!)
+            homeAssistantRepository.registerDevice(bearerToken, deviceRegistration)
             integrationState.value = IntegrationState.SUCCESS
         }
+    }
+
+    fun finishSetup() {
+        appSettings.setupDone = true
     }
 
     enum class IntegrationState {

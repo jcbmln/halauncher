@@ -5,26 +5,34 @@ import android.net.nsd.NsdServiceInfo
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import xyz.mcmxciv.halauncher.utils.AppSettings
 import javax.inject.Inject
 
-class DiscoveryViewModel @Inject constructor() : ViewModel() {
-    val services: MutableLiveData<MutableList<NsdServiceInfo>> = MutableLiveData()
-    val resolvedUrl: MutableLiveData<String> = MutableLiveData()
+class DiscoveryViewModel @Inject constructor(
+    private val nsdManager: NsdManager,
+    private val appSettings: AppSettings
+) : ViewModel() {
+    val services = MutableLiveData<MutableList<NsdServiceInfo>>()
+    val resolvedUrl = MutableLiveData<String>()
 
-    fun start(manager: NsdManager) {
-        nsdManager = manager
-    }
+    private var discoveryStarted: Boolean = false
 
     fun startDiscovery() {
-        nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener)
+        if (!discoveryStarted) {
+            nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener)
+            discoveryStarted = true
+        }
     }
 
     fun stopDiscovery() {
-        try {
-            nsdManager.stopServiceDiscovery(discoveryListener)
-        }
-        catch (ex: Exception) {
-            Log.e(TAG, ex.message ?: "An unexpected error occurred.")
+        if (discoveryStarted) {
+            try {
+                nsdManager.stopServiceDiscovery(discoveryListener)
+                discoveryStarted = false
+            }
+            catch (ex: Exception) {
+                Log.e(TAG, ex.message ?: "An unexpected error occurred.")
+            }
         }
     }
 
@@ -44,7 +52,14 @@ class DiscoveryViewModel @Inject constructor() : ViewModel() {
         nsdManager.resolveService(serviceInfo, resolveListener)
     }
 
-    private lateinit var nsdManager: NsdManager
+    fun clearServices() {
+        services.value = ArrayList()
+    }
+
+
+    fun setUrl(url: String) {
+        appSettings.url = url
+    }
 
     private val discoveryListener = object : NsdManager.DiscoveryListener {
         override fun onServiceFound(serviceInfo: NsdServiceInfo) {
@@ -75,6 +90,7 @@ class DiscoveryViewModel @Inject constructor() : ViewModel() {
         }
 
         override fun onServiceLost(serviceInfo: NsdServiceInfo) {
+            services.value?.remove(serviceInfo)
             Log.e(TAG, "Service lost: $serviceInfo")
         }
     }

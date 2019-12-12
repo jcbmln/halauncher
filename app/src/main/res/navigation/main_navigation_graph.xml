@@ -21,8 +21,8 @@
         <action
             android:id="@+id/action_global_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/main_navigation_graph"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false" />
         <fragment
             android:id="@+id/integrationFragment"
             android:name="xyz.mcmxciv.halauncher.fragments.integration.IntegrationFragment"
@@ -53,13 +53,13 @@
         <action
             android:id="@+id/action_global_homeFragment4"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/main_navigation_graph"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_global_authentication_navigation_graph"
             app:destination="@id/authentication_navigation_graph"
-            app:popUpTo="@id/main_navigation_graph"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/setup_navigation_graph"
+            app:popUpToInclusive="false" />
     </navigation>
     <fragment
         android:id="@+id/homeFragment"
@@ -69,12 +69,10 @@
         <action
             android:id="@+id/action_homeFragment_to_authentication_navigation_graph"
             app:destination="@id/authentication_navigation_graph"
-            app:popUpTo="@id/main_navigation_graph"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_homeFragment_to_setup_navigation_graph"
             app:destination="@id/setup_navigation_graph"
-            app:popUpTo="@id/main_navigation_graph"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

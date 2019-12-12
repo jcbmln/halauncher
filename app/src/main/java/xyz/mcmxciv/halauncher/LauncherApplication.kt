@@ -1,17 +1,29 @@
 package xyz.mcmxciv.halauncher
 
 import android.app.Application
-import android.content.Context
+import xyz.mcmxciv.halauncher.di.components.AppComponent
+import xyz.mcmxciv.halauncher.di.components.DaggerAppComponent
+import xyz.mcmxciv.halauncher.di.modules.AppModule
+import xyz.mcmxciv.halauncher.utils.AppSettings
+import javax.inject.Inject
 
 class LauncherApplication : Application() {
+    lateinit var component: AppComponent
+
+    @Inject
+    lateinit var appSettings: AppSettings
+
     override fun onCreate() {
         super.onCreate()
-        appContext = applicationContext
+        component = DaggerAppComponent.builder()
+            .appModule(AppModule(applicationContext))
+            .build()
+        component.inject(this)
+
+        instance = this
     }
 
     companion object {
-        private lateinit var appContext: Context
-
-        fun getAppContext(): Context = appContext
+        lateinit var instance: LauncherApplication
     }
 }

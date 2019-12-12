@@ -1,14 +1,17 @@
 package xyz.mcmxciv.halauncher.repositories
 
+import android.content.Context
 import android.content.Intent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.icons.IconFactory
 import xyz.mcmxciv.halauncher.models.AppInfo
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
+import javax.inject.Inject
 
-class ApplicationRepository {
+class ApplicationRepository @Inject constructor(
+    private val context: Context
+) {
     suspend fun getAppList() : List<AppInfo> {
         val appList = getInstalledApplications()
         appList.sortBy { item -> item.displayName }
@@ -19,7 +22,6 @@ class ApplicationRepository {
     private suspend fun getInstalledApplications(): ArrayList<AppInfo> {
         return withContext(Dispatchers.Default) {
             val appList = ArrayList<AppInfo>()
-            val context = LauncherApplication.getAppContext()
             val pm = context.packageManager
             val launcherIntent = Intent().apply { addCategory(Intent.CATEGORY_LAUNCHER) }
             val idp = InvariantDeviceProfile.getInstance(context)

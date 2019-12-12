@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,19 +19,13 @@ import xyz.mcmxciv.halauncher.AppListAdapter
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.databinding.HomeFragmentBinding
 import xyz.mcmxciv.halauncher.extensions.createViewModel
-import xyz.mcmxciv.halauncher.utils.AppPreferences
+import xyz.mcmxciv.halauncher.utils.AuthorizationException
 import xyz.mcmxciv.halauncher.utils.BaseFragment
 import java.io.BufferedReader
 
 class HomeFragment : BaseFragment() {
     private lateinit var binding: HomeFragmentBinding
     private lateinit var viewModel: HomeViewModel
-    private lateinit var prefs: AppPreferences
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        prefs = AppPreferences(LauncherApplication.getAppContext())
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,9 +37,15 @@ class HomeFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        viewModel = createViewModel { component.homeViewModel() }
 
-        if (prefs.setupDone) {
-            viewModel = createViewModel { component.homeViewModel() }
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            this.isEnabled = true
+            if (binding.appList.visibility == View.VISIBLE)
+                binding.appList.visibility = View.INVISIBLE
+        }
+
+        if (viewModel.isSetupDone()) {
             viewModel.validateSession()
             viewModel.sessionValidated.observe(this, Observer { valid ->
                 if (valid) {
@@ -58,15 +60,11 @@ class HomeFragment : BaseFragment() {
 
                     viewModel.externalAuthRevokeCallback.observe(this, Observer {
                         binding.homeWebView.evaluateJavascript("$it(true);", null)
-                        val action = HomeFragmentDirections
-                            .actionHomeFragmentToAuthenticationNavigationGraph()
-                        findNavController().navigate(action)
+                        navigateToAuthenticationGraph()
                     })
                 }
                 else {
-                    val action = HomeFragmentDirections
-                        .actionHomeFragmentToAuthenticationNavigationGraph()
-                    findNavController().navigate(action)
+                    navigateToAuthenticationGraph()
                 }
             })
 
@@ -84,9 +82,18 @@ class HomeFragment : BaseFragment() {
             }
         }
         else {
-            val action = HomeFragmentDirections.actionHomeFragmentToSetupNavigationGraph()
-            findNavController().navigate(action)
+            navigateToSetupGraph()
         }
+    }
+
+    private fun navigateToSetupGraph() {
+        val action = HomeFragmentDirections.actionHomeFragmentToSetupNavigationGraph()
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToAuthenticationGraph() {
+        val action = HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
+        findNavController().navigate(action)
     }
 
     private fun initializeWebView() {
@@ -106,7 +113,15 @@ class HomeFragment : BaseFragment() {
             addJavascriptInterface(object : Any() {
                 @JavascriptInterface
                 fun getExternalAuth(result: String) {
-                    viewModel.getExternalAuth(JSONObject(result).get("callback") as String)
+                    try {
+                        viewModel.getExternalAuth(JSONObject(result).get("callback") as String)
+                    }
+                    catch (exception: AuthorizationException) {
+                        Toast.makeText(
+                            context, "Failed to authenticate user.", Toast.LENGTH_LONG
+                        ).show()
+                        navigateToAuthenticationGraph()
+                    }
                 }
 
                 @JavascriptInterface
@@ -149,13 +164,12 @@ class HomeFragment : BaseFragment() {
             }, "externalApp")
         }
 
-        binding.homeWebView.loadUrl(viewModel.buildUrl(prefs.url))
+        binding.homeWebView.loadUrl(viewModel.buildUrl())
     }
 
     private fun injectJs() {
         try {
-            val input = LauncherApplication.getAppContext()
-                .assets.open("websocketBridge.js")
+            val input = LauncherApplication.instance.assets.open("websocketBridge.js")
             input.bufferedReader().use(BufferedReader::readText)
         }
         catch (ex: Exception) {

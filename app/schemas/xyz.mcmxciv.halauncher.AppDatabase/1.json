@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "28337e86e21bf388e51e0af113b1cf6b",
+    "identityHash": "07460f1fdb1bc63fecd3a1d407fe31dc",
     "entities": [
       {
         "tableName": "sessions",
@@ -41,50 +41,12 @@
         },
         "indices": [],
         "foreignKeys": []
-      },
-      {
-        "tableName": "device_integrations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`webhook_id` TEXT NOT NULL, `cloudhook_url` TEXT, `remote_ui_url` TEXT, `secret` TEXT, PRIMARY KEY(`webhook_id`))",
-        "fields": [
-          {
-            "fieldPath": "webhookId",
-            "columnName": "webhook_id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "cloudhookUrl",
-            "columnName": "cloudhook_url",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "remoteUiUrl",
-            "columnName": "remote_ui_url",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "secret",
-            "columnName": "secret",
-            "affinity": "TEXT",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "webhook_id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '28337e86e21bf388e51e0af113b1cf6b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '07460f1fdb1bc63fecd3a1d407fe31dc')"
     ]
   }
 }
