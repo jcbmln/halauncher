@@ -73,6 +73,17 @@
         <action
             android:id="@+id/action_homeFragment_to_setup_navigation_graph"
             app:destination="@id/setup_navigation_graph"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsActivity"
+            app:destination="@id/settingsActivity" />
     </fragment>
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="xyz.mcmxciv.halauncher.activities.settings.SettingsActivity"
+        android:label="SettingsActivity" />
 </navigation>

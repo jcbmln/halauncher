@@ -1,6 +1,7 @@
 package xyz.mcmxciv.halauncher.di.components
 
 import dagger.Subcomponent
+import xyz.mcmxciv.halauncher.activities.settings.SettingsViewModel
 import xyz.mcmxciv.halauncher.di.modules.ApiModule
 import xyz.mcmxciv.halauncher.di.modules.DiscoveryModule
 import xyz.mcmxciv.halauncher.di.scopes.FragmentScope
@@ -18,6 +19,7 @@ interface FragmentComponent {
     fun integrationViewModel(): IntegrationViewModel
     fun discoveryViewModel(): DiscoveryViewModel
     fun manualSetupViewModel(): ManualSetupViewModel
+    fun settingsViewModel(): SettingsViewModel
 
     @Subcomponent.Builder
     interface Builder {

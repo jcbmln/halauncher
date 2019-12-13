@@ -5,8 +5,6 @@
     <string name="main_button_go">Open Url</string>
     <string name="title_activity_settings">Settings</string>
 
-    <string name="pref_category_home_assistant">Home Assistant</string>
-
     <string name="title_home_assistant_url">Home Assistant Url</string>
     <string name="title_transparent_background">Transparent Background</string>
     <string name="title_blur_background">Blur Background</string>
@@ -31,4 +29,23 @@
     <string name="integration_status_failed">Could not register device.</string>
     <string name="integration_skip">Skip</string>
     <string name="integration_retry">Retry</string>
+
+    <!-- Preference Sections -->
+    <string name="preference_general">General</string>
+    <string name="preference_general_summary">Edit connections and integrations</string>
+    <string name="preference_display">UI</string>
+    <string name="preference_display_summary">Change themes and display settings</string>
+    <string name="preference_about">About HALauncher</string>
+    <string name="preference_about_summary">Check for updates and view licenses and policies</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

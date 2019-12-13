@@ -1,0 +1,22 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        app:fragment="xyz.mcmxciv.halauncher.activities.settings.fragments.GeneralPreferencesFragment"
+        app:icon="@drawable/ic_general"
+        app:key="messages_header"
+        app:title="@string/preference_general"
+        app:summary="@string/preference_general_summary"  />
+
+    <Preference
+        app:fragment="xyz.mcmxciv.halauncher.activities.settings.fragments.DisplayPreferencesFragment"
+        app:icon="@drawable/ic_display"
+        app:key="sync_header"
+        app:title="@string/preference_display"
+        app:summary="@string/preference_display_summary" />
+
+    <Preference
+        app:fragment="xyz.mcmxciv.halauncher.activities.settings.fragments.AboutPreferencesFragment"
+        app:icon="@drawable/ic_about"
+        app:key="sync_header"
+        app:title="@string/preference_about"
+        app:summary="@string/preference_about_summary"  />
+</PreferenceScreen>

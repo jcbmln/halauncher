@@ -86,16 +86,6 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun navigateToSetupGraph() {
-        val action = HomeFragmentDirections.actionHomeFragmentToSetupNavigationGraph()
-        findNavController().navigate(action)
-    }
-
-    private fun navigateToAuthenticationGraph() {
-        val action = HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
-        findNavController().navigate(action)
-    }
-
     private fun initializeWebView() {
         WebView.setWebContentsDebuggingEnabled(true)
         binding.homeWebView.apply {
@@ -135,32 +125,32 @@ class HomeFragment : BaseFragment() {
                     Log.d(TAG, name)
                 }
 
-//                @JavascriptInterface
-//                fun externalBus(message: String) {
-//                    Log.d(TAG, "External bus $message")
-//                    binding.homeWebView.post {
-//                        when {
-//                            JSONObject(message).get("type") == "config/get" -> {
-//                                val script = "externalBus(" +
-//                                        "${JSONObject(
-//                                            mapOf(
-//                                                "id" to JSONObject(message).get("id"),
-//                                                "type" to "result",
-//                                                "success" to true,
-//                                                "result" to JSONObject(mapOf("hasSettingsScreen" to true))
-//                                            )
-//                                        )}" +
-//                                        ");"
-//                                Log.d(TAG, script)
-//                                binding.homeWebView.evaluateJavascript(script) {
-//                                    Log.d(TAG, "Callback $it")
-//                                }
-//                            }
-////                            JSONObject(message).get("type") == "config_screen/show" ->
-////                                startActivity(SettingsActivity.newInstance(this@WebViewActivity))
-//                        }
-//                    }
-//                }
+                @JavascriptInterface
+                fun externalBus(message: String) {
+                    Log.d(TAG, "External bus $message")
+                    binding.homeWebView.post {
+                        when {
+                            JSONObject(message).get("type") == "config/get" -> {
+                                val script = "externalBus(" +
+                                        "${JSONObject(
+                                            mapOf(
+                                                "id" to JSONObject(message).get("id"),
+                                                "type" to "result",
+                                                "success" to true,
+                                                "result" to JSONObject(mapOf("hasSettingsScreen" to true))
+                                            )
+                                        )}" +
+                                        ");"
+                                Log.d(TAG, script)
+                                binding.homeWebView.evaluateJavascript(script) {
+                                    Log.d(TAG, "Callback $it")
+                                }
+                            }
+                            JSONObject(message).get("type") == "config_screen/show" ->
+                                navigateToSettingsActivity()
+                        }
+                    }
+                }
             }, "externalApp")
         }
 
@@ -177,6 +167,21 @@ class HomeFragment : BaseFragment() {
         }?.let {
             binding.homeWebView.loadUrl("javascript:(function() { $it })()")
         }
+    }
+
+    private fun navigateToSetupGraph() {
+        val action = HomeFragmentDirections.actionHomeFragmentToSetupNavigationGraph()
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToAuthenticationGraph() {
+        val action = HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToSettingsActivity() {
+        val action = HomeFragmentDirections.actionHomeFragmentToSettingsActivity()
+        findNavController().navigate(action)
     }
 
     companion object {

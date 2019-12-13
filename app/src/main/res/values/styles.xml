@@ -8,6 +8,8 @@
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowEnterTransition">@android:transition/slide_bottom</item>
         <item name="android:windowExitTransition">@android:transition/slide_bottom</item>
+        <item name="android:actionBarStyle">@style/AppActionBar</item>
+        <item name="preferenceTheme">@style/AppPreferenceThemeOverlay</item>
     </style>
     <style name="AppTheme.Transparent">
         <item name="android:windowShowWallpaper">true</item>
@@ -32,6 +34,15 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
+    </style>
+
+    <style name="AppPreferenceThemeOverlay" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="actionBarTheme">@style/AppActionBar</item>
+        <item name="actionBarStyle">@style/AppActionBar</item>
+    </style>
+
+    <style name="AppActionBar" parent="android:Widget.Material.ActionBar">
+        <item name="background">@color/colorAccent</item>
     </style>
 
     <style name="Widget" parent="android:Widget" />

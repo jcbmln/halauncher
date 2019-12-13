@@ -16,21 +16,27 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.settings.SettingsActivity"
+            android:theme="@style/AppTheme"
+            android:label="@string/title_activity_settings" />
+        <activity
             android:name=".activities.HomeActivity"
+            android:clearTaskOnLaunch="true"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:enabled="true"
+            android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:resumeWhilePausing="true"
-            android:clearTaskOnLaunch="true"
-            android:stateNotNeeded="true"
-            android:enabled="true"
-            android:excludeFromRecents="true">
+            android:stateNotNeeded="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.LAUNCHER_APP" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>
