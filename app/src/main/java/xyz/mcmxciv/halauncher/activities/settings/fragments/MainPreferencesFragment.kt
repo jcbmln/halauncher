@@ -1,6 +1,9 @@
 package xyz.mcmxciv.halauncher.activities.settings.fragments
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.activities.settings.SettingsViewModel
 import xyz.mcmxciv.halauncher.extensions.createViewModel

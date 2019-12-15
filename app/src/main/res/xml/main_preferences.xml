@@ -15,7 +15,7 @@
 
     <Preference
         app:fragment="xyz.mcmxciv.halauncher.activities.settings.fragments.AboutPreferencesFragment"
-        app:icon="@drawable/ic_about"
+        app:icon="@drawable/ic_info"
         app:key="sync_header"
         app:title="@string/preference_about"
         app:summary="@string/preference_about_summary"  />

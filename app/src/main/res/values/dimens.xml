@@ -236,4 +236,6 @@
 
 <!-- Theming related -->
     <dimen name="default_corner_radius">5dp</dimen>
+    <dimen name="appbar_elevation">5dp</dimen>
+
 </resources>

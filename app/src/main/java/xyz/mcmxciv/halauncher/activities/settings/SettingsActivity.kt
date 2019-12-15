@@ -6,13 +6,17 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.activities.settings.fragments.MainPreferencesFragment
+import xyz.mcmxciv.halauncher.databinding.SettingsActivityBinding
 
 class SettingsActivity : AppCompatActivity(),
     PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+    private lateinit var binding: SettingsActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings_activity)
+        binding = SettingsActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
@@ -26,6 +30,7 @@ class SettingsActivity : AppCompatActivity(),
                 setTitle(R.string.title_activity_settings)
             }
         }
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 

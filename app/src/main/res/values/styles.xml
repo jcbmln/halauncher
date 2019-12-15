@@ -1,15 +1,18 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <item name="android:windowBackground">@color/colorWindowBackground</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/colorBackground</item>
         <item name="android:statusBarColor">@color/colorAccent</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowActivityTransitions">true</item>
-        <item name="android:windowAllowEnterTransitionOverlap">true</item>
-        <item name="android:windowEnterTransition">@android:transition/slide_bottom</item>
-        <item name="android:windowExitTransition">@android:transition/slide_bottom</item>
-        <item name="android:actionBarStyle">@style/AppActionBar</item>
-        <item name="preferenceTheme">@style/AppPreferenceThemeOverlay</item>
+        <item name="android:colorPrimary">@color/colorAccent</item>
+        <item name="android:colorPrimaryDark">@color/colorAccent</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorForeground</item>
+        <item name="android:colorControlHighlight">@color/colorAccent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorForeground</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
     <style name="AppTheme.Transparent">
         <item name="android:windowShowWallpaper">true</item>
@@ -17,32 +20,20 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
-
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@color/colorWindowBackground</item>
-        <item name="android:textColor">@color/colorForeground</item>
-        <item name="android:colorControlHighlight">@color/colorAccent</item>
-        <item name="android:windowActivityTransitions">true</item>
-        <item name="android:windowAllowEnterTransitionOverlap">true</item>
-        <item name="android:windowEnterTransition">@android:transition/slide_bottom</item>
-        <item name="android:windowExitTransition">@android:transition/slide_top</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@color/colorAccent</item>
-    </style>
-    <style name="AppTheme.NoActionBar.Transparent">
-        <item name="android:windowShowWallpaper">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowTranslucentStatus">false</item>
-        <item name="android:windowTranslucentNavigation">false</item>
+    <style name="AppTheme.Settings">
+        <item name="android:statusBarColor">@color/colorBackground</item>
+        <item name="colorPrimary">@color/colorBackground</item>
+        <item name="preferenceTheme">@style/AppPreferenceThemeOverlay</item>
+        <item name="android:actionBarTheme">@style/AppActionBar</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="AppPreferenceThemeOverlay" parent="PreferenceThemeOverlay.v14.Material">
-        <item name="actionBarTheme">@style/AppActionBar</item>
-        <item name="actionBarStyle">@style/AppActionBar</item>
+        <item name="android:overScrollMode">ifContentScrolls</item>
     </style>
 
     <style name="AppActionBar" parent="android:Widget.Material.ActionBar">
-        <item name="background">@color/colorAccent</item>
+        <item name="android:elevation">0dp</item>
     </style>
 
     <style name="Widget" parent="android:Widget" />

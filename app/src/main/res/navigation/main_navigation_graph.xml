@@ -79,11 +79,20 @@
             app:popExitAnim="@android:anim/slide_out_right"
             app:popUpToInclusive="false" />
         <action
-            android:id="@+id/action_homeFragment_to_settingsActivity"
-            app:destination="@id/settingsActivity" />
+            android:id="@+id/action_homeFragment_to_settings_navigation_graph"
+            app:destination="@id/settings_navigation_graph" />
     </fragment>
-    <activity
-        android:id="@+id/settingsActivity"
-        android:name="xyz.mcmxciv.halauncher.activities.settings.SettingsActivity"
-        android:label="SettingsActivity" />
+    <navigation
+        android:id="@+id/settings_navigation_graph"
+        app:startDestination="@id/settingsActivity" >
+        <activity
+            android:id="@+id/settingsActivity"
+            android:name="xyz.mcmxciv.halauncher.activities.settings.SettingsActivity"
+            android:label="SettingsActivity" />
+        <action
+            android:id="@+id/action_global_homeFragment2"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false" />
+    </navigation>
 </navigation>

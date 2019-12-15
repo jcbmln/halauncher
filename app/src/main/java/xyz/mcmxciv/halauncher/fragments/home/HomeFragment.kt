@@ -180,7 +180,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun navigateToSettingsActivity() {
-        val action = HomeFragmentDirections.actionHomeFragmentToSettingsActivity()
+        val action = HomeFragmentDirections.actionHomeFragmentToSettingsNavigationGraph()
         findNavController().navigate(action)
     }
 
