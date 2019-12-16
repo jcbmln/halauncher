@@ -15,21 +15,9 @@ data class Token(
     val refreshToken: String?,
     @Json(name = "token_type")
     val tokenType: String
-) {
+) : BaseModel() {
     @Json(name = "expiration_timestamp")
     var expirationTimestamp: Long = expiresIn + Instant.now().epochSecond
 
     fun isExpired(): Boolean = expirationTimestamp < Instant.now().epochSecond
-
-    companion object {
-        fun fromJson(json: String): Token? {
-            val adapter = Moshi.Builder().build().adapter(Token::class.java)
-            return adapter.fromJson(json)
-        }
-
-        fun toJson(token: Token): String {
-            val adapter = Moshi.Builder().build().adapter(Token::class.java)
-            return adapter.toJson(token)
-        }
-    }
 }

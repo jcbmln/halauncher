@@ -31,7 +31,7 @@ class IntegrationViewModel @Inject constructor(
             BuildConfig.APPLICATION_ID,
             "HALauncher",
             BuildConfig.VERSION_NAME,
-            Build.DEVICE,
+            appSettings.deviceName,
             Build.MANUFACTURER,
             Build.MODEL,
             "Android",

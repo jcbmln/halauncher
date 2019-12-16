@@ -5,6 +5,5 @@ import xyz.mcmxciv.halauncher.utils.AppSettings
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
-    private val appSettings: AppSettings
-) : ViewModel() {
-}
+    val appSettings: AppSettings
+) : ViewModel()

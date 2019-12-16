@@ -38,6 +38,10 @@
     <string name="preference_about">About HALauncher</string>
     <string name="preference_about_summary">Check for updates and view licenses and policies</string>
 
+    <!-- General Preferences -->
+    <string name="local_url_title">Home Assistant Url</string>
+    <string name="device_name_title">Device Name</string>
+
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>

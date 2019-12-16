@@ -1,16 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditTextPreference
+        app:key="local_url"
+        app:title="@string/local_url_title"
+        app:useSimpleSummaryProvider="true" />
 
     <EditTextPreference
-        app:key="signature"
-        app:title="@string/signature_title"
+        app:key="device_name"
+        app:title="@string/device_name_title"
         app:useSimpleSummaryProvider="true" />
-
-    <ListPreference
-        app:defaultValue="reply"
-        app:entries="@array/reply_entries"
-        app:entryValues="@array/reply_values"
-        app:key="reply"
-        app:title="@string/reply_title"
-        app:useSimpleSummaryProvider="true" />
-
 </PreferenceScreen>
