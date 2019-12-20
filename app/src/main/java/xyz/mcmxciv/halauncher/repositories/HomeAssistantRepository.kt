@@ -7,7 +7,9 @@ import xyz.mcmxciv.halauncher.models.DeviceRegistration
 import xyz.mcmxciv.halauncher.models.Token
 import javax.inject.Inject
 
-class HomeAssistantRepository @Inject constructor(private val api: HomeAssistantApi) {
+class HomeAssistantRepository @Inject constructor(
+    private val api: HomeAssistantApi
+) {
     suspend fun getToken(code: String): Token =
         api.getToken(GRANT_TYPE_CODE, code, CLIENT_ID)
 

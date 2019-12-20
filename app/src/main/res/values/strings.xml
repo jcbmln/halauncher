@@ -31,16 +31,19 @@
     <string name="integration_retry">Retry</string>
 
     <!-- Preference Sections -->
-    <string name="preference_general">General</string>
-    <string name="preference_general_summary">Edit connections and integrations</string>
-    <string name="preference_display">UI</string>
+    <string name="preference_connection">Connection</string>
+    <string name="preference_connection_summary">Edit connection urls and revoke access</string>
+    <string name="preference_integration">Device Integration</string>
+    <string name="preference_integration_summary">Change how Home Assistant sees this device</string>
+    <string name="preference_display">Display</string>
     <string name="preference_display_summary">Change themes and display settings</string>
     <string name="preference_about">About HALauncher</string>
     <string name="preference_about_summary">Check for updates and view licenses and policies</string>
 
-    <!-- General Preferences -->
-    <string name="local_url_title">Home Assistant Url</string>
-    <string name="device_name_title">Device Name</string>
+    <!-- Connection Preferences -->
+    <string name="internal_url_title">Home Assistant Url</string>
+    <string name="external_url_title">Home Assistant Url</string>
+    <string name="revoke_token_title">Revoke Token</string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
@@ -52,4 +55,6 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="action_preference_image">action preference image</string>
 </resources>

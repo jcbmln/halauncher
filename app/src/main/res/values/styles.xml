@@ -23,13 +23,13 @@
     <style name="AppTheme.Settings">
         <item name="android:statusBarColor">@color/colorBackground</item>
         <item name="colorPrimary">@color/colorBackground</item>
-        <item name="preferenceTheme">@style/AppPreferenceThemeOverlay</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:actionBarTheme">@style/AppActionBar</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="AppPreferenceThemeOverlay" parent="PreferenceThemeOverlay.v14.Material">
-        <item name="android:overScrollMode">ifContentScrolls</item>
+    <style name="ActionPreference" parent="Preference.Material">
+        <item name="android:textColor">@color/red</item>
     </style>
 
     <style name="AppActionBar" parent="android:Widget.Material.ActionBar">

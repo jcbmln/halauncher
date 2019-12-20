@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditTextPreference
+        app:key="internal_url"
+        app:title="@string/internal_url_title" />
+
+    <EditTextPreference
+        app:key="external_url"
+        app:title="@string/external_url_title" />
+
+    <xyz.mcmxciv.halauncher.views.ActionPreference
+        app:actionTextColor="@color/red"
+        app:key="revoke_token"
+        app:title="@string/revoke_token_title" />
+</PreferenceScreen>

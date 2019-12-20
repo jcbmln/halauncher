@@ -13,7 +13,7 @@ class DisplayPreferencesFragment : BasePreferenceFragment(), Preference.OnPrefer
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         viewModel = createViewModel { component.settingsViewModel() }
-        setPreferencesFromResource(R.xml.general_preferences, rootKey)
+        setPreferencesFromResource(R.xml.connection_preferences, rootKey)
     }
 
     override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {

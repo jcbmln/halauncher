@@ -12,6 +12,6 @@ class AboutPreferencesFragment : BasePreferenceFragment() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         viewModel = createViewModel { component.settingsViewModel() }
-        setPreferencesFromResource(R.xml.general_preferences, rootKey)
+        setPreferencesFromResource(R.xml.connection_preferences, rootKey)
     }
 }

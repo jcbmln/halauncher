@@ -9,12 +9,12 @@ import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.utils.BasePreferenceFragment
 
 @Suppress("unused")
-class GeneralPreferencesFragment : BasePreferenceFragment(), Preference.OnPreferenceChangeListener {
+class IntegrationPreferencesFragment : BasePreferenceFragment(), Preference.OnPreferenceChangeListener {
     private lateinit var viewModel: SettingsViewModel
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         viewModel = createViewModel { component.settingsViewModel() }
-        setPreferencesFromResource(R.xml.general_preferences, rootKey)
+        setPreferencesFromResource(R.xml.integration_preferences, rootKey)
 
         val localUrlPreference = findPreference<EditTextPreference>("local_url")
         localUrlPreference?.summary = viewModel.appSettings.url

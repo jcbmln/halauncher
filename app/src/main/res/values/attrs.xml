@@ -24,6 +24,7 @@
     <attr name="isMainColorDark" format="boolean" />
     <attr name="loadingIconColor" format="color" />
     <attr name="adaptiveIconViewStyle" format="reference" />
+    <attr name="actionPreferenceTextColor" format="color" />
 
     <declare-styleable name="AdaptiveIconView">
         <attr name="shadowColor" format="color" />
@@ -48,5 +49,9 @@
         <attr name="iconTextSize" format="float" />
         <!-- If true, this display option is used to determine the default grid -->
         <attr name="canBeDefault" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="ActionPreference">
+        <attr name="actionTextColor" format="color" />
     </declare-styleable>
 </resources>

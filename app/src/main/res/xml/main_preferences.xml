@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
-        app:fragment="xyz.mcmxciv.halauncher.activities.settings.fragments.GeneralPreferencesFragment"
-        app:icon="@drawable/ic_general"
-        app:key="messages_header"
-        app:title="@string/preference_general"
-        app:summary="@string/preference_general_summary"  />
+        app:fragment="xyz.mcmxciv.halauncher.activities.settings.fragments.ConnectionPreferencesFragment"
+        app:icon="@drawable/ic_connection"
+        app:key="connection_header"
+        app:title="@string/preference_connection"
+        app:summary="@string/preference_connection_summary"  />
+
+    <Preference
+        app:fragment="xyz.mcmxciv.halauncher.activities.settings.fragments.ConnectionPreferencesFragment"
+        app:icon="@drawable/ic_devices"
+        app:key="connection_header"
+        app:title="@string/preference_integration"
+        app:summary="@string/preference_integration_summary"  />
 
     <Preference
         app:fragment="xyz.mcmxciv.halauncher.activities.settings.fragments.DisplayPreferencesFragment"
