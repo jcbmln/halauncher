@@ -21,8 +21,8 @@ class ConnectionPreferencesFragment : BasePreferenceFragment(), Preference.OnPre
         val internalUrlPreference = findPreference<EditTextPreference>(INTERNAL_URL_KEY)
         internalUrlPreference?.summary = viewModel.appSettings.url
 
-        val externalUrlPrefernce = findPreference<EditTextPreference>(EXTERNAL_URL_KEY)
-        externalUrlPrefernce?.summary = viewModel.appSettings.url
+        val externalUrlPreference = findPreference<EditTextPreference>(EXTERNAL_URL_KEY)
+        externalUrlPreference?.summary = viewModel.appSettings.url
 
 //        val revokeTokenPreference = findPreference<Preference>(REVOKE_TOKEN_KEY)
 //        revokeTokenPreference?.layoutResource = R.layout.action_preference
@@ -37,6 +37,12 @@ class ConnectionPreferencesFragment : BasePreferenceFragment(), Preference.OnPre
             EXTERNAL_URL_KEY -> {
                 viewModel.appSettings.url = newValue.toString()
                 preference.summary = newValue.toString()
+            }
+            REVOKE_TOKEN_KEY -> {
+                val revokeToken = newValue as Boolean
+                if (revokeToken) {
+                    viewModel.revokeToken()
+                }
             }
         }
 

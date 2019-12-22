@@ -24,7 +24,6 @@
     <attr name="isMainColorDark" format="boolean" />
     <attr name="loadingIconColor" format="color" />
     <attr name="adaptiveIconViewStyle" format="reference" />
-    <attr name="actionPreferenceTextColor" format="color" />
 
     <declare-styleable name="AdaptiveIconView">
         <attr name="shadowColor" format="color" />
@@ -53,5 +52,6 @@
 
     <declare-styleable name="ActionPreference">
         <attr name="actionTextColor" format="color" />
+        <attr name="confirmationMessage" format="string" />
     </declare-styleable>
 </resources>

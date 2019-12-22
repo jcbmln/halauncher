@@ -44,10 +44,11 @@
     <string name="internal_url_title">Home Assistant Url</string>
     <string name="external_url_title">Home Assistant Url</string>
     <string name="revoke_token_title">Revoke Token</string>
+    <string name="revoke_token_confirmation_message">Are you sure you want to revoke this access token?</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <!-- About Preferences -->
+    <string name="check_updates_title">Check for updates</string>
+    <string name="privacy_policy_title">Privacy Policy</string>
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
@@ -57,4 +58,5 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
     <string name="action_preference_image">action preference image</string>
+    <string name="default_confirmation_message">Are you sure you want to perform this action?</string>
 </resources>

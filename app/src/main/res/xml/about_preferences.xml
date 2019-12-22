@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        app:key="check_updates"
+        app:title="@string/check_updates_title" />
 
+    <Preference
+        app:fragment="xyz.mcmxciv.halauncher.activities.settings.fragments.WebviewPreferenceFragment"
+        app:key="privacy_policy"
+        app:title="@string/privacy_policy_title" />
 </PreferenceScreen>

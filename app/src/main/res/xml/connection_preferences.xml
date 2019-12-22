@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <EditTextPreference
         app:key="internal_url"
         app:title="@string/internal_url_title" />
@@ -11,6 +10,8 @@
 
     <xyz.mcmxciv.halauncher.views.ActionPreference
         app:actionTextColor="@color/red"
+        app:confirmationMessage="@string/revoke_token_confirmation_message"
         app:key="revoke_token"
-        app:title="@string/revoke_token_title" />
+        app:title="@string/revoke_token_title"
+        style="@style/ActionPreference.DialogPreference" />
 </PreferenceScreen>

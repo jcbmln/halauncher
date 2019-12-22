@@ -29,7 +29,12 @@
     </style>
 
     <style name="ActionPreference" parent="Preference.Material">
-        <item name="android:textColor">@color/red</item>
+        <item name="android:layout">@layout/action_preference</item>
+    </style>
+
+    <style name="ActionPreference.DialogPreference">
+        <item name="positiveButtonText">@android:string/ok</item>
+        <item name="negativeButtonText">@android:string/cancel</item>
     </style>
 
     <style name="AppActionBar" parent="android:Widget.Material.ActionBar">
