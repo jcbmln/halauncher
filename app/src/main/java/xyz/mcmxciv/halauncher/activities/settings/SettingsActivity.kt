@@ -1,9 +1,13 @@
 package xyz.mcmxciv.halauncher.activities.settings
 
+import android.app.Instrumentation
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.play.core.install.model.ActivityResult
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.activities.settings.fragments.MainPreferencesFragment
 import xyz.mcmxciv.halauncher.databinding.SettingsActivityBinding
@@ -69,7 +73,22 @@ class SettingsActivity : AppCompatActivity(),
         return true
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == UPDATE_REQUEST_CODE) {
+            when (resultCode) {
+                ActivityResult.RESULT_IN_APP_UPDATE_FAILED -> {
+                    Toast
+                        .makeText(this, "Failed to update app.", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+        }
+    }
+
     companion object {
         private const val TITLE_TAG = "settingsActivityTitle"
+        const val UPDATE_REQUEST_CODE = 1
     }
 }
