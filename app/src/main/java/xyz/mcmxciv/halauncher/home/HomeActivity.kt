@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.activities
+package xyz.mcmxciv.halauncher.home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

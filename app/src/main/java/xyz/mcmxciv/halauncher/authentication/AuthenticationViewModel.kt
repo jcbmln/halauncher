@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.fragments.authentication
+package xyz.mcmxciv.halauncher.authentication
 
 import android.net.Uri
 import android.util.Log

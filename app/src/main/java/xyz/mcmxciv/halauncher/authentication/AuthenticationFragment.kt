@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.fragments.authentication
+package xyz.mcmxciv.halauncher.authentication
 
 import android.annotation.SuppressLint
 import android.os.Bundle

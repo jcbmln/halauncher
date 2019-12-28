@@ -1,8 +1,8 @@
-package xyz.mcmxciv.halauncher.activities.settings.fragments
+package xyz.mcmxciv.halauncher.settings.fragments
 
 import android.os.Bundle
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.activities.settings.SettingsViewModel
+import xyz.mcmxciv.halauncher.settings.SettingsViewModel
 import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.utils.BasePreferenceFragment
 

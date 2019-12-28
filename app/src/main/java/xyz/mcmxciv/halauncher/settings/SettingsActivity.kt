@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.activities.settings
+package xyz.mcmxciv.halauncher.settings
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.google.android.play.core.install.model.ActivityResult
 import kotlinx.android.synthetic.main.settings_activity.*
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.activities.settings.fragments.MainPreferencesFragment
+import xyz.mcmxciv.halauncher.settings.fragments.MainPreferencesFragment
 
 class SettingsActivity : AppCompatActivity(),
     PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -21,7 +21,9 @@ class SettingsActivity : AppCompatActivity(),
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.settings, MainPreferencesFragment())
+                .replace(R.id.settings,
+                    MainPreferencesFragment()
+                )
                 .commit()
         } else {
             title = savedInstanceState.getCharSequence(TITLE_TAG)

@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.fragments.integration
+package xyz.mcmxciv.halauncher.integration
 
 import android.os.Build
 import android.util.Log

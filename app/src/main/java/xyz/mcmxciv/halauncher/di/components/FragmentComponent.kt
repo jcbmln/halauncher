@@ -1,15 +1,15 @@
 package xyz.mcmxciv.halauncher.di.components
 
 import dagger.Subcomponent
-import xyz.mcmxciv.halauncher.activities.settings.SettingsViewModel
+import xyz.mcmxciv.halauncher.settings.SettingsViewModel
 import xyz.mcmxciv.halauncher.di.modules.ApiModule
 import xyz.mcmxciv.halauncher.di.modules.DiscoveryModule
 import xyz.mcmxciv.halauncher.di.scopes.FragmentScope
-import xyz.mcmxciv.halauncher.fragments.authentication.AuthenticationViewModel
-import xyz.mcmxciv.halauncher.fragments.home.HomeViewModel
-import xyz.mcmxciv.halauncher.fragments.integration.IntegrationViewModel
-import xyz.mcmxciv.halauncher.fragments.setup.discovery.DiscoveryViewModel
-import xyz.mcmxciv.halauncher.fragments.setup.manual.ManualSetupViewModel
+import xyz.mcmxciv.halauncher.authentication.AuthenticationViewModel
+import xyz.mcmxciv.halauncher.home.HomeViewModel
+import xyz.mcmxciv.halauncher.integration.IntegrationViewModel
+import xyz.mcmxciv.halauncher.setup.discovery.DiscoveryViewModel
+import xyz.mcmxciv.halauncher.setup.manual.ManualSetupViewModel
 
 @FragmentScope
 @Subcomponent(modules = [ApiModule::class, DiscoveryModule::class])

@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.fragments.home
+package xyz.mcmxciv.halauncher.home
 
 import android.util.Log
 import androidx.core.net.toUri

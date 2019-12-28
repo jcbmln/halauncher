@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.activities.settings.fragments
+package xyz.mcmxciv.halauncher.settings.fragments
 
 import android.os.Bundle
 import androidx.preference.Preference
@@ -9,8 +9,8 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.activities.settings.SettingsActivity
-import xyz.mcmxciv.halauncher.activities.settings.SettingsViewModel
+import xyz.mcmxciv.halauncher.settings.SettingsActivity
+import xyz.mcmxciv.halauncher.settings.SettingsViewModel
 import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.utils.BasePreferenceFragment
 

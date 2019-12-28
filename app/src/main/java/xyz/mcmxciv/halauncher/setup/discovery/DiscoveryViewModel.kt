@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.fragments.setup.discovery
+package xyz.mcmxciv.halauncher.setup.discovery
 
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo

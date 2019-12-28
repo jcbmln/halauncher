@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.activities.settings
+package xyz.mcmxciv.halauncher.settings
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

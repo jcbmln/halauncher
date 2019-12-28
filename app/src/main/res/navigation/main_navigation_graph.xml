@@ -10,7 +10,7 @@
         app:startDestination="@id/authenticationFragment" >
         <fragment
             android:id="@+id/authenticationFragment"
-            android:name="xyz.mcmxciv.halauncher.fragments.authentication.AuthenticationFragment"
+            android:name="xyz.mcmxciv.halauncher.authentication.AuthenticationFragment"
             android:label="authentication_fragment"
             tools:layout="@layout/authentication_fragment">
             <action
@@ -25,7 +25,7 @@
             app:popUpToInclusive="false" />
         <fragment
             android:id="@+id/integrationFragment"
-            android:name="xyz.mcmxciv.halauncher.fragments.integration.IntegrationFragment"
+            android:name="xyz.mcmxciv.halauncher.integration.IntegrationFragment"
             android:label="integration_fragment"
             tools:layout="@layout/integration_fragment" />
     </navigation>
@@ -34,7 +34,7 @@
         app:startDestination="@id/discoveryFragment" >
         <fragment
             android:id="@+id/discoveryFragment"
-            android:name="xyz.mcmxciv.halauncher.fragments.setup.discovery.DiscoveryFragment"
+            android:name="xyz.mcmxciv.halauncher.setup.discovery.DiscoveryFragment"
             android:label="discovery_fragment"
             tools:layout="@layout/discovery_fragment">
             <action
@@ -43,7 +43,7 @@
         </fragment>
         <fragment
             android:id="@+id/manualSetupFragment"
-            android:name="xyz.mcmxciv.halauncher.fragments.setup.manual.ManualSetupFragment"
+            android:name="xyz.mcmxciv.halauncher.setup.manual.ManualSetupFragment"
             android:label="manual_setup_fragment"
             tools:layout="@layout/manual_setup_fragment">
             <action
@@ -63,7 +63,7 @@
     </navigation>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="xyz.mcmxciv.halauncher.fragments.home.HomeFragment"
+        android:name="xyz.mcmxciv.halauncher.home.HomeFragment"
         android:label="home_fragment"
         tools:layout="@layout/home_fragment" >
         <action
@@ -87,7 +87,7 @@
         app:startDestination="@id/settingsActivity" >
         <activity
             android:id="@+id/settingsActivity"
-            android:name="xyz.mcmxciv.halauncher.activities.settings.SettingsActivity"
+            android:name="xyz.mcmxciv.halauncher.settings.SettingsActivity"
             android:label="SettingsActivity" />
         <action
             android:id="@+id/action_global_homeFragment2"

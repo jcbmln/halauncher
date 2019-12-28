@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.fragments.setup.manual
+package xyz.mcmxciv.halauncher.setup.manual
 
 import androidx.lifecycle.ViewModel
 import xyz.mcmxciv.halauncher.utils.AppSettings

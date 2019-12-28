@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.fragments.home
+package xyz.mcmxciv.halauncher.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -39,10 +39,9 @@ class HomeFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = createViewModel { component.homeViewModel() }
 
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
+        activity?.onBackPressedDispatcher?.addCallback(this) {
             this.isEnabled = true
-            if (appList.visibility == View.VISIBLE)
-                appList.visibility = View.INVISIBLE
+            appList.isVisible = false
         }
 
         if (viewModel.isSetupDone()) {
