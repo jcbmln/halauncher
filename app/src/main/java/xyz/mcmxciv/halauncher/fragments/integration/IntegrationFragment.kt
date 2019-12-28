@@ -5,22 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
-import xyz.mcmxciv.halauncher.databinding.IntegrationFragmentBinding
+import androidx.navigation.fragment.findNavController
+import kotlinx.android.synthetic.main.integration_fragment.*
+import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.utils.BaseFragment
 
 class IntegrationFragment : BaseFragment() {
-    private lateinit var binding: IntegrationFragmentBinding
     private lateinit var viewModel: IntegrationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = IntegrationFragmentBinding.inflate(inflater, container, false)
-        return binding.root
+        return inflater.inflate(R.layout.integration_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -40,12 +40,12 @@ class IntegrationFragment : BaseFragment() {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
 
-        binding.integrationRetryButton.setOnClickListener {
+        integrationRetryButton.setOnClickListener {
             viewModel.registerDevice()
             hideButtons()
         }
 
-        binding.integrationSkipButton.setOnClickListener {
+        integrationSkipButton.setOnClickListener {
             finishIntegration()
         }
     }
@@ -53,18 +53,18 @@ class IntegrationFragment : BaseFragment() {
     private fun finishIntegration() {
         viewModel.finishSetup()
         val action = IntegrationFragmentDirections.actionGlobalHomeFragment()
-        binding.root.findNavController().navigate(action)
+        findNavController().navigate(action)
     }
 
     private fun showButtons() {
-        binding.integrationRetryButton.visibility = View.VISIBLE
-        binding.integrationSkipButton.visibility = View.VISIBLE
-        binding.integrationProgressBar.visibility = View.INVISIBLE
+        integrationRetryButton.isVisible = true
+        integrationSkipButton.isVisible = true
+        integrationProgressBar.isVisible = true
     }
 
     private fun hideButtons() {
-        binding.integrationRetryButton.visibility = View.INVISIBLE
-        binding.integrationSkipButton.visibility = View.INVISIBLE
-        binding.integrationProgressBar.visibility = View.VISIBLE
+        integrationRetryButton.isVisible = false
+        integrationSkipButton.isVisible = false
+        integrationProgressBar.isVisible = false
     }
 }

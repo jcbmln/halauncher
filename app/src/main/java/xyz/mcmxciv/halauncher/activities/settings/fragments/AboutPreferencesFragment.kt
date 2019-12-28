@@ -1,8 +1,6 @@
 package xyz.mcmxciv.halauncher.activities.settings.fragments
 
-import android.app.ProgressDialog.show
 import android.os.Bundle
-import androidx.core.view.accessibility.AccessibilityEventCompat.setAction
 import androidx.preference.Preference
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager

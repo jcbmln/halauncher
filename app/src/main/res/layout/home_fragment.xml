@@ -7,19 +7,19 @@
     tools:context=".fragments.home.HomeFragment">
 
     <WebView
-        android:id="@+id/home_web_view"
+        android:id="@+id/homeWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/app_list"
+        android:id="@+id/appList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorBackground"
         android:visibility="invisible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/all_apps_button"
+        android:id="@+id/allAppsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

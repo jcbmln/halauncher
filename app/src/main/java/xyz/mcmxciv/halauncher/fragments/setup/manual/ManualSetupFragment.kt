@@ -4,42 +4,41 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
-import xyz.mcmxciv.halauncher.databinding.ManualSetupFragmentBinding
+import androidx.navigation.fragment.findNavController
+import kotlinx.android.synthetic.main.manual_setup_fragment.*
+import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.utils.BaseFragment
 
 class ManualSetupFragment : BaseFragment() {
-    private lateinit var binding: ManualSetupFragmentBinding
     private lateinit var viewModel: ManualSetupViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = ManualSetupFragmentBinding.inflate(inflater, container, false)
-        return binding.root
+        return inflater.inflate(R.layout.manual_setup_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = createViewModel { component.manualSetupViewModel() }
 
-        binding.discoveryModeButton.setOnClickListener { view ->
+        discoveryModeButton.setOnClickListener {
             val action =
                 ManualSetupFragmentDirections.actionManualSetupFragmentToDiscoveryFragment()
-            view.findNavController().navigate(action)
+            findNavController().navigate(action)
         }
 
-        binding.setupManualButton.setOnClickListener { view ->
-            val text = binding.setupHostText.text.toString()
+        setupManualButton.setOnClickListener {
+            val text = setupHostText.text.toString()
 
             if (!text.isBlank()) {
                 viewModel.setUrl(text)
 
-                val action = ManualSetupFragmentDirections
-                    .actionGlobalAuthenticationNavigationGraph()
-                view.findNavController().navigate(action)
+                val action =
+                    ManualSetupFragmentDirections.actionGlobalAuthenticationNavigationGraph()
+                findNavController().navigate(action)
             }
         }
     }

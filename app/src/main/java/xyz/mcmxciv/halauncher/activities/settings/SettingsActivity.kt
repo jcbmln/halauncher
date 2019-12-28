@@ -1,6 +1,5 @@
 package xyz.mcmxciv.halauncher.activities.settings
 
-import android.app.Instrumentation
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -8,18 +7,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.play.core.install.model.ActivityResult
+import kotlinx.android.synthetic.main.settings_activity.*
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.activities.settings.fragments.MainPreferencesFragment
-import xyz.mcmxciv.halauncher.databinding.SettingsActivityBinding
 
 class SettingsActivity : AppCompatActivity(),
     PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
-    private lateinit var binding: SettingsActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = SettingsActivityBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.settings_activity)
 
         if (savedInstanceState == null) {
             supportFragmentManager
@@ -34,7 +31,7 @@ class SettingsActivity : AppCompatActivity(),
                 setTitle(R.string.title_activity_settings)
             }
         }
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 

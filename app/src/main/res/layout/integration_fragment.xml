@@ -7,12 +7,12 @@
     tools:context=".fragments.integration.IntegrationFragment">
 
     <TextView
-        android:id="@+id/integration_status_text"
+        android:id="@+id/integrationStatusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="@string/integration_status_loading"
-        app:layout_constraintBottom_toTopOf="@+id/integration_progress_bar"
+        app:layout_constraintBottom_toTopOf="@+id/integrationProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +20,7 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <ProgressBar
-        android:id="@+id/integration_progress_bar"
+        android:id="@+id/integrationProgressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,28 +29,28 @@
         android:indeterminate="true"
         android:indeterminateTint="@color/colorAccentLighter"
         android:progressTint="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/integration_retry_button"
+        app:layout_constraintBottom_toTopOf="@+id/integrationRetryButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/integration_status_text"
+        app:layout_constraintTop_toBottomOf="@+id/integrationStatusText"
         app:layout_constraintVertical_chainStyle="spread" />
 
     <Button
-        android:id="@+id/integration_retry_button"
+        android:id="@+id/integrationRetryButton"
         style="@style/Widget.Button.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/integration_retry"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/integration_skip_button"
+        app:layout_constraintBottom_toTopOf="@+id/integrationSkipButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/integration_progress_bar" />
+        app:layout_constraintTop_toBottomOf="@+id/integrationProgressBar" />
 
     <Button
-        android:id="@+id/integration_skip_button"
+        android:id="@+id/integrationSkipButton"
         style="@style/Widget.Button.Transparent.Secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,6 +61,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/integration_retry_button" />
+        app:layout_constraintTop_toBottomOf="@+id/integrationRetryButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

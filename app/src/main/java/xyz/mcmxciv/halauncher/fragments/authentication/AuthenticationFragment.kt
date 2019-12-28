@@ -9,28 +9,27 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
-import xyz.mcmxciv.halauncher.databinding.AuthenticationFragmentBinding
+import androidx.navigation.fragment.findNavController
+import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.utils.BaseFragment
+import kotlinx.android.synthetic.main.authentication_fragment.*
 
 class AuthenticationFragment : BaseFragment() {
-    private lateinit var binding: AuthenticationFragmentBinding
     private lateinit var viewModel: AuthenticationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = AuthenticationFragmentBinding.inflate(inflater, container, false)
-        return binding.root
+        return inflater.inflate(R.layout.authentication_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = createViewModel { component.authenticationViewModel() }
 
-        binding.authenticationWebView.apply {
+        authenticationWebView.apply {
             @SuppressLint("SetJavaScriptEnabled")
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
@@ -47,15 +46,14 @@ class AuthenticationFragment : BaseFragment() {
         })
 
         viewModel.authenticationSuccess.observe(this, Observer { authenticated ->
-            if (authenticated && viewModel.isSetupDone()) {
-                val action =
-                    AuthenticationFragmentDirections.actionGlobalHomeFragment()
-                binding.root.findNavController().navigate(action)
-            }
-            else if (authenticated) {
-                val action =
-                    AuthenticationFragmentDirections.actionAuthenticationFragmentToIntegrationFragment()
-                binding.root.findNavController().navigate(action)
+            if (authenticated) {
+                val action = if (viewModel.isSetupDone())
+                        AuthenticationFragmentDirections.actionGlobalHomeFragment()
+                    else
+                        AuthenticationFragmentDirections
+                            .actionAuthenticationFragmentToIntegrationFragment()
+
+                findNavController().navigate(action)
             }
         })
     }

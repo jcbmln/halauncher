@@ -9,9 +9,9 @@ def gitCommitCount = Integer.parseInt('git rev-list --count HEAD'
         .execute([], project.rootDir).text.trim())
 
 android {
-    viewBinding {
-        enabled = true
-    }
+//    viewBinding {
+//        enabled = true
+//    }
 
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
