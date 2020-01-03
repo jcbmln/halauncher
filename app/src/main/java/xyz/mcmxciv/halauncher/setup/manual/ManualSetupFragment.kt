@@ -8,7 +8,6 @@ import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.manual_setup_fragment.*
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.extensions.createViewModel
-import xyz.mcmxciv.halauncher.fragments.setup.manual.ManualSetupFragmentDirections
 import xyz.mcmxciv.halauncher.utils.BaseFragment
 
 class ManualSetupFragment : BaseFragment() {

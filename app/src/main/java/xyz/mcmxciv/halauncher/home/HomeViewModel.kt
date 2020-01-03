@@ -1,19 +1,16 @@
 package xyz.mcmxciv.halauncher.home
 
-import android.util.Log
 import androidx.core.net.toUri
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.launch
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.models.AppInfo
-import xyz.mcmxciv.halauncher.models.Token
 import xyz.mcmxciv.halauncher.repositories.ApplicationRepository
 import xyz.mcmxciv.halauncher.repositories.HomeAssistantRepository
 import xyz.mcmxciv.halauncher.utils.AppSettings
-import xyz.mcmxciv.halauncher.utils.AuthorizationException
+import xyz.mcmxciv.halauncher.utils.ResourceLiveData
+import xyz.mcmxciv.halauncher.utils.SessionState
+import xyz.mcmxciv.halauncher.utils.WebCallback
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
@@ -21,54 +18,61 @@ class HomeViewModel @Inject constructor(
     private val applicationRepository: ApplicationRepository,
     private val appSettings: AppSettings
 ) : ViewModel() {
-    private val appListExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Log.e(TAG, exception.message.toString())
-    }
+    val webCallback = ResourceLiveData<WebCallback>()
 
-    val appList: MutableLiveData<List<AppInfo>> by lazy {
-        MutableLiveData<List<AppInfo>>().also {
-            viewModelScope.launch(appListExceptionHandler) {
-                val apps = applicationRepository.getAppList()
-                appList.value = apps
-            }
+    val sessionState by lazy {
+        val liveData = ResourceLiveData<SessionState>()
+        val token = appSettings.token
+
+        if (!appSettings.setupDone) {
+            liveData.postSuccess(SessionState.NewUser)
         }
-    }
-
-    val externalAuthCallback = MutableLiveData<Pair<String, String>>()
-    val externalAuthRevokeCallback = MutableLiveData<String>()
-    val sessionValidated = MutableLiveData<Boolean>()
-
-    fun validateSession() {
-        val token = appSettings.token!!
-        viewModelScope.launch {
-            sessionValidated.value = if (token.accessToken.isNotEmpty()) {
+        else if (token == null || token.accessToken.isEmpty()) {
+            liveData.postSuccess(SessionState.Invalid)
+        }
+        else {
+            liveData.postValue(viewModelScope, "Failed to validate session.") {
                 appSettings.token = homeAssistantRepository.validateToken(token)
-                true
+                return@postValue SessionState.Valid
             }
-            else false
         }
+
+        return@lazy liveData
+    }
+
+    val launchableActivities by lazy {
+        val liveData = ResourceLiveData<List<AppInfo>>()
+        liveData.postValue(viewModelScope, "Failed to get app list.") {
+            return@postValue applicationRepository.getAppList()
+        }
+
+        return@lazy liveData
     }
 
     fun getExternalAuth(callback: String) {
-        var token: Token = appSettings.token ?: throw AuthorizationException()
-        viewModelScope.launch {
-            token = homeAssistantRepository.validateToken(token).also { appSettings.token = it }
-            externalAuthCallback.value = Pair(
-                callback,
-                JSONObject(mapOf(
-                    "access_token" to token.accessToken,
-                    "expires_in" to token.expiresIn
-                )).toString()
-            )
+        val cachedToken = appSettings.token
+
+        webCallback.postValue(viewModelScope, "Failed to authenticate.") {
+            val token = homeAssistantRepository.validateToken(cachedToken)
             appSettings.token = token
+
+            val json = JSONObject(mapOf(
+                "access_token" to token.accessToken,
+                "expires_in" to token.expiresIn
+            )).toString()
+
+            return@postValue WebCallback.AuthCallback("$callback(true, $json);")
         }
     }
 
     fun revokeExternalAuth(callback: String) {
-        viewModelScope.launch {
-            homeAssistantRepository.revokeToken(appSettings.token)
+        webCallback.postValue(viewModelScope, "Failed to revoke access.") {
+            val token = appSettings.token
             appSettings.token = null
-            externalAuthRevokeCallback.value = callback
+            homeAssistantRepository.revokeToken(token)
+
+            sessionState.postSuccess(SessionState.Invalid)
+            return@postValue WebCallback.RevokeAuthCallback("$callback(true);")
         }
     }
 
@@ -80,11 +84,5 @@ class HomeViewModel @Inject constructor(
             .appendQueryParameter("external_auth", "1")
             .build()
             .toString()
-    }
-
-    fun isSetupDone(): Boolean = appSettings.setupDone
-
-    companion object {
-        private const val TAG = "HomeViewModel"
     }
 }

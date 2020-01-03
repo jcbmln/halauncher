@@ -5,7 +5,7 @@
         app:title="@string/check_updates_title" />
 
     <Preference
-        app:fragment="xyz.mcmxciv.halauncher.activities.settings.fragments.WebviewPreferenceFragment"
+        app:fragment="xyz.mcmxciv.halauncher.settings.fragments.WebviewPreferenceFragment"
         app:key="privacy_policy"
         app:title="@string/privacy_policy_title" />
 </PreferenceScreen>

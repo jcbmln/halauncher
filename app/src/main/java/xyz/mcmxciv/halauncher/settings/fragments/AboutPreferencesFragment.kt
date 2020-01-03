@@ -5,17 +5,19 @@ import androidx.preference.Preference
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallState
+import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.settings.SettingsActivity
 import xyz.mcmxciv.halauncher.settings.SettingsViewModel
-import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.utils.BasePreferenceFragment
 
 @Suppress("unused")
-class AboutPreferencesFragment : BasePreferenceFragment() {
+class AboutPreferencesFragment : BasePreferenceFragment(), InstallStateUpdatedListener {
     private lateinit var viewModel: SettingsViewModel
     private lateinit var appUpdateManager: AppUpdateManager
 
@@ -47,7 +49,11 @@ class AboutPreferencesFragment : BasePreferenceFragment() {
         privacyPolicyPreference?.extras?.putString("url", BuildConfig.PRIVACY_POLICY_URL)
     }
 
-    fun popupSnackbarForCompleteUpdate() {
+    override fun onStateUpdate(state: InstallState) {
+        popupSnackbarForCompleteUpdate()
+    }
+
+    private fun popupSnackbarForCompleteUpdate() {
         Snackbar.make(view!!,
             "An update has just been downloaded.",
             Snackbar.LENGTH_INDEFINITE

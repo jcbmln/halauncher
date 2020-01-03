@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.discovery_fragment.*
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.ServiceListAdapter
 import xyz.mcmxciv.halauncher.extensions.createViewModel
-import xyz.mcmxciv.halauncher.fragments.setup.discovery.DiscoveryFragmentDirections
 import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
 import xyz.mcmxciv.halauncher.utils.BaseFragment
 

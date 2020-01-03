@@ -5,6 +5,7 @@ import xyz.mcmxciv.halauncher.api.HomeAssistantApi
 import xyz.mcmxciv.halauncher.models.DeviceIntegration
 import xyz.mcmxciv.halauncher.models.DeviceRegistration
 import xyz.mcmxciv.halauncher.models.Token
+import xyz.mcmxciv.halauncher.utils.AuthorizationException
 import javax.inject.Inject
 
 class HomeAssistantRepository @Inject constructor(
@@ -20,7 +21,8 @@ class HomeAssistantRepository @Inject constructor(
         token?.let { api.revokeToken(it.refreshToken!!, REVOKE_ACTION) }
     }
 
-    suspend fun validateToken(token: Token): Token {
+    suspend fun validateToken(cachedToken: Token?): Token {
+        val token = cachedToken ?: throw AuthorizationException()
         return if (token.isExpired()) {
             val refreshToken = refreshToken(token.refreshToken!!)
             Token(
