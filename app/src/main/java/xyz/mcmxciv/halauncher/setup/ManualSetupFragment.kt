@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.setup.manual
+package xyz.mcmxciv.halauncher.setup
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.utils.BaseFragment
 
 class ManualSetupFragment : BaseFragment() {
-    private lateinit var viewModel: ManualSetupViewModel
+    private lateinit var viewModel: SetupViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,12 +22,10 @@ class ManualSetupFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = createViewModel { component.manualSetupViewModel() }
+        viewModel = createViewModel { component.setupViewModel() }
 
         discoveryModeButton.setOnClickListener {
-            val action =
-                ManualSetupFragmentDirections.actionManualSetupFragmentToDiscoveryFragment()
-            findNavController().navigate(action)
+            navigateToDiscoveryFragment()
         }
 
         setupManualButton.setOnClickListener {
@@ -35,11 +33,20 @@ class ManualSetupFragment : BaseFragment() {
 
             if (!text.isBlank()) {
                 viewModel.setUrl(text)
-
-                val action =
-                    ManualSetupFragmentDirections.actionGlobalAuthenticationNavigationGraph()
-                findNavController().navigate(action)
+                navigateToAuthenticationGraph()
             }
         }
+    }
+
+    private fun navigateToDiscoveryFragment() {
+        val action =
+            ManualSetupFragmentDirections.actionManualSetupFragmentToDiscoveryFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToAuthenticationGraph() {
+        val action =
+            ManualSetupFragmentDirections.actionGlobalAuthenticationNavigationGraph()
+        findNavController().navigate(action)
     }
 }

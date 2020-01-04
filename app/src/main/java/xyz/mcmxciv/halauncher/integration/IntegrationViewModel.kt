@@ -1,30 +1,28 @@
 package xyz.mcmxciv.halauncher.integration
 
 import android.os.Build
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.launch
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.models.DeviceRegistration
 import xyz.mcmxciv.halauncher.repositories.HomeAssistantRepository
 import xyz.mcmxciv.halauncher.utils.AppSettings
+import xyz.mcmxciv.halauncher.utils.ResourceLiveData
 import javax.inject.Inject
 
 class IntegrationViewModel @Inject constructor(
     private val homeAssistantRepository: HomeAssistantRepository,
     private val appSettings: AppSettings
 ) : ViewModel() {
-    val integrationState: MutableLiveData<IntegrationState> = MutableLiveData()
+    val integrationState = ResourceLiveData<IntegrationState>()
     val integrationError: MutableLiveData<String> = MutableLiveData()
 
-    private val integrationExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Log.e(TAG, exception.message.toString())
-        integrationState.value = IntegrationState.FAILED
-        integrationError.value = "Unable to register device."
-    }
+//    private val integrationExceptionHandler = CoroutineExceptionHandler { _, exception ->
+//        Log.e(TAG, exception.message.toString())
+//        integrationState.value = IntegrationState.FAILED
+//        integrationError.value = "Unable to register device."
+//    }
 
     fun registerDevice() {
         val deviceRegistration = DeviceRegistration(
@@ -40,10 +38,9 @@ class IntegrationViewModel @Inject constructor(
             null
         )
 
-        viewModelScope.launch(integrationExceptionHandler) {
-            val bearerToken = homeAssistantRepository.bearerToken(appSettings.token!!)
-            homeAssistantRepository.registerDevice(bearerToken, deviceRegistration)
-            integrationState.value = IntegrationState.SUCCESS
+        integrationState.postValue(viewModelScope, "Unable to register device.") {
+            homeAssistantRepository.registerDevice(deviceRegistration)
+            return@postValue IntegrationState.SUCCESS
         }
     }
 
@@ -52,11 +49,10 @@ class IntegrationViewModel @Inject constructor(
     }
 
     enum class IntegrationState {
-        SUCCESS,
-        FAILED
+        SUCCESS
     }
 
-    companion object {
-        private const val TAG = "IntegrationViewModel"
-    }
+//    companion object {
+//        private const val TAG = "IntegrationViewModel"
+//    }
 }

@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.setup.discovery
+package xyz.mcmxciv.halauncher.setup
 
 import android.net.nsd.NsdServiceInfo
 import android.os.Bundle
@@ -16,9 +16,10 @@ import xyz.mcmxciv.halauncher.ServiceListAdapter
 import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
 import xyz.mcmxciv.halauncher.utils.BaseFragment
+import xyz.mcmxciv.halauncher.utils.Resource
 
 class DiscoveryFragment : BaseFragment(), ServiceSelectedListener {
-    private lateinit var viewModel: DiscoveryViewModel
+    private lateinit var viewModel: SetupViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,9 +28,16 @@ class DiscoveryFragment : BaseFragment(), ServiceSelectedListener {
         return inflater.inflate(R.layout.discovery_fragment, container, false)
     }
 
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        return inflater.inflate(R.layout.discovery_fragment, container, false)
+//    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = createViewModel { component.discoveryViewModel() }
+        viewModel = createViewModel { component.setupViewModel() }
 
         serviceList.layoutManager = LinearLayoutManager(context)
         val adapter = ServiceListAdapter(this)
@@ -40,23 +48,29 @@ class DiscoveryFragment : BaseFragment(), ServiceSelectedListener {
 
         viewModel.startDiscovery()
 
-        viewModel.services.observe(viewLifecycleOwner, Observer {
-            updateViewVisibility(it.isEmpty())
-            adapter.setData(it)
+        viewModel.servicesData.observe(viewLifecycleOwner, Observer { resource ->
+            when (resource) {
+                is Resource.Error -> displayMessage(resource.message)
+                is Resource.Success -> {
+                    val services = resource.data
+                    updateViewVisibility(services.isEmpty())
+                    adapter.setData(services)
+                }
+            }
         })
-        viewModel.resolvedUrl.observe(viewLifecycleOwner, Observer {
-            viewModel.setUrl(it)
 
-            val action =
-                DiscoveryFragmentDirections.actionGlobalAuthenticationNavigationGraph()
-            findNavController().navigate(action)
+        viewModel.resolvedUrl.observe(viewLifecycleOwner, Observer { resource ->
+            when (resource) {
+                is Resource.Error -> displayMessage(resource.message)
+                is Resource.Success -> {
+                    viewModel.setUrl(resource.data)
+                    navigateToAuthenticationGraph()
+                }
+            }
         })
 
         manualModeButton.setOnClickListener {
-            viewModel.clearServices()
-            val action =
-                DiscoveryFragmentDirections.actionDiscoveryFragmentToManualSetupFragment()
-            findNavController().navigate(action)
+            navigationToManualSetup()
         }
     }
 
@@ -68,6 +82,18 @@ class DiscoveryFragment : BaseFragment(), ServiceSelectedListener {
     override fun onServiceSelected(serviceInfo: NsdServiceInfo) {
         viewModel.stopDiscovery()
         viewModel.resolveService(serviceInfo)
+    }
+
+    private fun navigateToAuthenticationGraph() {
+        val action =
+            DiscoveryFragmentDirections.actionGlobalAuthenticationNavigationGraph()
+        findNavController().navigate(action)
+    }
+
+    private fun navigationToManualSetup() {
+        val action =
+            DiscoveryFragmentDirections.actionDiscoveryFragmentToManualSetupFragment()
+        findNavController().navigate(action)
     }
 
     private fun updateViewVisibility(serviceListIsEmpty: Boolean) {

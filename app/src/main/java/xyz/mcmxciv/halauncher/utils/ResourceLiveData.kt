@@ -7,16 +7,16 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ResourceLiveData<T : Any> : MutableLiveData<Resource<T>>() {
-    private fun postLoading() = postValue(Resource.Loading)
+    fun postLoading() = postValue(Resource.Loading)
 
-    private fun postError(message: String) {
+    fun postError(message: String) {
         val resourceData = value?.data
         postValue(Resource.Error(resourceData, message))
     }
 
     private fun postError(error: Resource.Error<T>) = postValue(error)
 
-    fun postSuccess(data: T) = postValue(Resource.Success(data, null))
+    fun postSuccess(data: T) = postValue(Resource.Success(data))
 
     fun postValue(scope: CoroutineScope, message: String? = null, block: suspend () -> T) =
         postValue(scope, null, message, block)

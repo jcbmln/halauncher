@@ -12,7 +12,7 @@ class ServiceListAdapter(
     private val listener: ServiceSelectedListener
 ) : RecyclerView.Adapter<ServiceListAdapter.ServiceListViewHolder>() {
 
-    private var serviceList: MutableList<NsdServiceInfo> = ArrayList()
+    private var serviceList: List<NsdServiceInfo> = ArrayList()
 
     class ServiceListViewHolder(val view: View)
         : RecyclerView.ViewHolder(view)
@@ -37,7 +37,7 @@ class ServiceListAdapter(
 
     override fun getItemCount(): Int = serviceList.count()
 
-    fun setData(services: MutableList<NsdServiceInfo>) {
+    fun setData(services: List<NsdServiceInfo>) {
         serviceList = services
         notifyDataSetChanged()
     }

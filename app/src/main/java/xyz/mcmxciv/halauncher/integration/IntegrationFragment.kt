@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.integration_fragment.*
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.extensions.createViewModel
 import xyz.mcmxciv.halauncher.utils.BaseFragment
+import xyz.mcmxciv.halauncher.utils.Resource
 
 class IntegrationFragment : BaseFragment() {
     private lateinit var viewModel: IntegrationViewModel
@@ -28,11 +29,13 @@ class IntegrationFragment : BaseFragment() {
         viewModel = createViewModel { component.integrationViewModel() }
         viewModel.registerDevice()
 
-        viewModel.integrationState.observe(this, Observer {
-            when (it) {
-                IntegrationViewModel.IntegrationState.SUCCESS -> finishIntegration()
-                IntegrationViewModel.IntegrationState.FAILED -> showButtons()
-                else -> throw Exception("Unexpected integration state.")
+        viewModel.integrationState.observe(this, Observer { resource ->
+            when (resource) {
+                is Resource.Error -> {
+                    displayMessage(resource.message)
+                    showButtons()
+                }
+                is Resource.Success -> finishIntegration()
             }
         })
 

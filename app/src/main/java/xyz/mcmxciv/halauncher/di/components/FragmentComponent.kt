@@ -8,8 +8,7 @@ import xyz.mcmxciv.halauncher.di.scopes.FragmentScope
 import xyz.mcmxciv.halauncher.authentication.AuthenticationViewModel
 import xyz.mcmxciv.halauncher.home.HomeViewModel
 import xyz.mcmxciv.halauncher.integration.IntegrationViewModel
-import xyz.mcmxciv.halauncher.setup.discovery.DiscoveryViewModel
-import xyz.mcmxciv.halauncher.setup.manual.ManualSetupViewModel
+import xyz.mcmxciv.halauncher.setup.SetupViewModel
 
 @FragmentScope
 @Subcomponent(modules = [ApiModule::class, DiscoveryModule::class])
@@ -17,8 +16,7 @@ interface FragmentComponent {
     fun homeViewModel(): HomeViewModel
     fun authenticationViewModel(): AuthenticationViewModel
     fun integrationViewModel(): IntegrationViewModel
-    fun discoveryViewModel(): DiscoveryViewModel
-    fun manualSetupViewModel(): ManualSetupViewModel
+    fun setupViewModel(): SetupViewModel
     fun settingsViewModel(): SettingsViewModel
 
     @Subcomponent.Builder
