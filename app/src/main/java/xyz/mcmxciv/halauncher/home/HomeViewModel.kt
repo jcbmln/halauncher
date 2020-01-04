@@ -7,10 +7,7 @@ import org.json.JSONObject
 import xyz.mcmxciv.halauncher.models.AppInfo
 import xyz.mcmxciv.halauncher.repositories.ApplicationRepository
 import xyz.mcmxciv.halauncher.repositories.HomeAssistantRepository
-import xyz.mcmxciv.halauncher.utils.AppSettings
-import xyz.mcmxciv.halauncher.utils.ResourceLiveData
-import xyz.mcmxciv.halauncher.utils.SessionState
-import xyz.mcmxciv.halauncher.utils.WebCallback
+import xyz.mcmxciv.halauncher.utils.*
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
@@ -51,8 +48,12 @@ class HomeViewModel @Inject constructor(
 
     fun getExternalAuth(callback: String) {
         val cachedToken = appSettings.token
+        val error = Resource.Error(
+            WebCallback.AuthCallback("$callback(false);"),
+            "Failed to authenticate."
+        )
 
-        webCallback.postValue(viewModelScope, "Failed to authenticate.") {
+        webCallback.postValue(viewModelScope, error) {
             val token = homeAssistantRepository.validateToken(cachedToken)
             appSettings.token = token
 
@@ -66,7 +67,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun revokeExternalAuth(callback: String) {
-        webCallback.postValue(viewModelScope, "Failed to revoke access.") {
+        val error = Resource.Error(
+            WebCallback.RevokeAuthCallback("$callback(false);"),
+            "Failed to revoke access."
+        )
+
+        webCallback.postValue(viewModelScope, error) {
             val token = appSettings.token
             appSettings.token = null
             homeAssistantRepository.revokeToken(token)

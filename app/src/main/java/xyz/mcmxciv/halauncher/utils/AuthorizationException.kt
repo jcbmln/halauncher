@@ -1,3 +1,3 @@
 package xyz.mcmxciv.halauncher.utils
 
-class AuthorizationException : Exception()
+class AuthorizationException(message: String = "Authorization failed.") : Exception(message)

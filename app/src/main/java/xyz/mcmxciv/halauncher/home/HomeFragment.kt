@@ -65,13 +65,14 @@ class HomeFragment : BaseFragment() {
         })
 
         viewModel.webCallback.observe(this, Observer { state ->
+            if (state != Resource.Loading) {
+                homeWebView.evaluateJavascript(state.data?.callback, null)
+            }
+
             when (state) {
                 is Resource.Error -> {
                     displayMessage(state.message)
                     navigateToAuthenticationGraph()
-                }
-                is Resource.Success -> {
-                    homeWebView.evaluateJavascript(state.data.callback, null)
                 }
             }
         })
@@ -130,11 +131,16 @@ class HomeFragment : BaseFragment() {
                                         "result" to JSONObject(mapOf("hasSettingsScreen" to true))
                                     )
                                 )});"
-                                homeWebView.evaluateJavascript(script) {
-                                    Timber.d("Callback $it")
-                                }
+                                homeWebView.evaluateJavascript(script, null)
                             }
                             "config_screen/show" -> navigateToSettingsActivity()
+                            "frontend/get_themes" -> {
+                                val keys: MutableList<String> = ArrayList()
+                                for (key in JSONObject(JSONObject(message).get("themes").toString()).keys()) {
+                                    keys.add(key as String)
+                                }
+                                Timber.d("Got themes!")
+                            }
                         }
                     }
                 }
@@ -155,8 +161,6 @@ class HomeFragment : BaseFragment() {
         }
 
         return callback?.let { "javascript:(function() { $it })()" }
-
-//        callback?.let { homeWebView.loadUrl("javascript:(function() { $it })()") }
     }
 
     private fun navigateToSetupGraph() {
