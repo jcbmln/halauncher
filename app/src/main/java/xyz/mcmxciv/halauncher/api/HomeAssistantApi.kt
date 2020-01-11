@@ -3,7 +3,7 @@ package xyz.mcmxciv.halauncher.api
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
-import xyz.mcmxciv.halauncher.models.Token
+import xyz.mcmxciv.halauncher.models.Session
 
 interface HomeAssistantApi {
     @FormUrlEncoded
@@ -12,7 +12,7 @@ interface HomeAssistantApi {
         @Field("grant_type") grantType: String,
         @Field("code") code: String,
         @Field("client_id") clientId: String
-    ): Token
+    ): Session
 
     @FormUrlEncoded
     @POST("auth/token")
@@ -20,7 +20,7 @@ interface HomeAssistantApi {
         @Field("grant_type") grantType: String,
         @Field("refresh_token") refreshToken: String,
         @Field("client_id") clientId: String
-    ): Token
+    ): Session
 
     @FormUrlEncoded
     @POST("auth/token")
@@ -28,7 +28,7 @@ interface HomeAssistantApi {
         @Field("grant_type") grantType: String,
         @Field("refresh_token") refreshToken: String,
         @Field("client_id") clientId: String
-    ): Token
+    ): Session
 
     @FormUrlEncoded
     @POST("auth/token")

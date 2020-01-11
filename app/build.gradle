@@ -9,16 +9,12 @@ def gitCommitCount = Integer.parseInt('git rev-list --count HEAD'
         .execute([], project.rootDir).text.trim())
 
 android {
-//    viewBinding {
-//        enabled = true
-//    }
-
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
 
     defaultConfig {
         applicationId "xyz.mcmxciv.halauncher"
-        minSdkVersion 27
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode gitCommitCount
         versionName gitTag

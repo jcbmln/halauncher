@@ -16,7 +16,6 @@
 -->
 
 <profiles xmlns:launcher="http://schemas.android.com/apk/res-auto" >
-
     <grid-option
         launcher:name="3_by_3"
         launcher:numRows="3"
@@ -38,7 +37,6 @@
             launcher:iconImageSize="48"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
-
     </grid-option>
 
     <grid-option
@@ -86,7 +84,6 @@
             launcher:iconImageSize="54"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
-
     </grid-option>
 
     <grid-option
@@ -110,7 +107,5 @@
             launcher:iconImageSize="48"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
-
     </grid-option>
-
 </profiles>

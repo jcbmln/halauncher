@@ -16,34 +16,30 @@
 
 package xyz.mcmxciv.halauncher.models
 
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.content.res.Resources
 import android.graphics.Point
 import android.graphics.drawable.AdaptiveIconDrawable
-import android.os.PatternMatcher
+import android.os.Build
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.util.Log
 import android.util.Xml
 import android.view.WindowManager
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
+import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.utils.ContextInstance
 import xyz.mcmxciv.halauncher.utils.Utilities
 import java.io.IOException
 import java.util.ArrayList
+import javax.inject.Inject
 import kotlin.Comparator
 import kotlin.math.hypot
-import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 
-class InvariantDeviceProfile constructor(context: Context?) {
+class InvariantDeviceProfile @Inject constructor(context: Context?) {
     var numColumns: Int = 0
     var iconSize: Float = 0.toFloat()
     var iconShapePath: String = ""
@@ -53,27 +49,21 @@ class InvariantDeviceProfile constructor(context: Context?) {
     var iconTextSize: Float = 0.toFloat()
     var iconForegroundSize: Int = 0
 
-    lateinit var landscapeProfile: DeviceProfile
-    lateinit var portraitProfile: DeviceProfile
-//
-//    var defaultWallpaperSize: Point
+//    lateinit var landscapeProfile: DeviceProfile
+//    lateinit var portraitProfile: DeviceProfile
+//    private val changeListeners = ArrayList<OnIDPChangeListener>()
 
-    private val changeListeners = ArrayList<OnIDPChangeListener>()
-    //private var overlayMonitor: OverlayMonitor? = null
-
-    private constructor(p: InvariantDeviceProfile) : this(null) {
-        numColumns = p.numColumns
-        iconSize = p.iconSize
-        iconShapePath = p.iconShapePath
-        landscapeIconSize = p.landscapeIconSize
-        iconTextSize = p.iconTextSize
-        //overlayMonitor = p.overlayMonitor
-    }
+//    private constructor(p: InvariantDeviceProfile) : this(null) {
+//        numColumns = p.numColumns
+//        iconSize = p.iconSize
+//        iconShapePath = p.iconShapePath
+//        landscapeIconSize = p.landscapeIconSize
+//        iconTextSize = p.iconTextSize
+//    }
 
     init {
         if (context != null) {
             initGrid(context, null)
-            //overlayMonitor = OverlayMonitor(context)
         }
     }
 
@@ -87,140 +77,84 @@ class InvariantDeviceProfile constructor(context: Context?) {
         val largestSize = Point()
         display.getCurrentSizeRange(smallestSize, largestSize)
 
-        val allOptions =
-            getPredefinedDeviceProfiles(
-                context,
-                gridName
-            )
+        val allOptions = getPredefinedDeviceProfiles(context, gridName)
+
         // This guarantees that width < height
         val minWidthDps = Utilities.dpiFromPx(min(smallestSize.x, smallestSize.y), dm)
         val minHeightDps = Utilities.dpiFromPx(min(largestSize.x, largestSize.y), dm)
+
         // Sort the profiles based on the closeness to the device size
         allOptions.sortWith(Comparator { a, b ->
-            dist(
-                minWidthDps,
-                minHeightDps,
-                a.minWidthDps,
-                a.minHeightDps
-            ).compareTo(
-                dist(
-                    minWidthDps,
-                    minHeightDps,
-                    b.minWidthDps,
-                    b.minHeightDps
-                )
+            dist(minWidthDps, minHeightDps, a.minWidthDps, a.minHeightDps).compareTo(
+                dist(minWidthDps, minHeightDps, b.minWidthDps, b.minHeightDps)
             )
         })
+
         val interpolatedDisplayOption =
-            invDistWeightedInterpolate(
-                minWidthDps,
-                minHeightDps,
-                allOptions
-            )
+            invDistWeightedInterpolate(minWidthDps, minHeightDps, allOptions)
 
         val closestProfile = allOptions[0].grid
         numColumns = closestProfile?.numColumns ?: numColumns
-
-//        if (closestProfile?.name != gridName) {
-//            Utilities.getPrefs(context).edit()
-//                .putString(KEY_IDP_GRID_NAME, closestProfile?.name).apply()
-//        }
 
         iconSize = interpolatedDisplayOption.iconSize
         iconShapePath =
             getIconShapePath(context)
         landscapeIconSize = interpolatedDisplayOption.landscapeIconSize
         iconBitmapSize = Utilities.pxFromDp(iconSize, dm)
-        iconForegroundSize = (iconBitmapSize / (1 + 2 *
-                AdaptiveIconDrawable.getExtraInsetFraction())).toInt()
+
+        iconForegroundSize = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            (iconBitmapSize / (1 + 2 * AdaptiveIconDrawable.getExtraInsetFraction())).toInt()
+        else iconBitmapSize
+
         iconTextSize = interpolatedDisplayOption.iconTextSize
         fillResIconDpi = getLauncherIconDensity(iconBitmapSize)
 
         val realSize = Point()
         display.getRealSize(realSize)
+
         // The real size never changes. smallSide and largeSide will remain the
         // same in any orientation.
-        val smallSide = min(realSize.x, realSize.y)
-        val largeSide = max(realSize.x, realSize.y)
+//        val smallSide = min(realSize.x, realSize.y)
+//        val largeSide = max(realSize.x, realSize.y)
 
-        landscapeProfile = DeviceProfile(
-            context, this, smallestSize, largestSize,
-            largeSide, smallSide,
-            isLandscape = true,
-            isMultiWindowMode = false
-        )
-        portraitProfile = DeviceProfile(
-            context, this, smallestSize, largestSize,
-            smallSide, largeSide,
-            isLandscape = false,
-            isMultiWindowMode = false
-        )
+//        landscapeProfile = DeviceProfile(
+//            context, this, smallestSize, largestSize,
+//            largeSide, smallSide,
+//            isLandscape = true,
+//            isMultiWindowMode = false
+//        )
+//        portraitProfile = DeviceProfile(
+//            context, this, smallestSize, largestSize,
+//            smallSide, largeSide,
+//            isLandscape = false,
+//            isMultiWindowMode = false
+//        )
 
         return closestProfile?.name
     }
 
-//    fun addOnChangeListener(listener: OnIDPChangeListener) {
-//        changeListeners.add(listener)
+//    private fun onConfigChanged(context: Context) {
+//        // Config changes, what shall we do?
+////        val oldProfile = InvariantDeviceProfile(this)
+//
+//        initGrid(context, null)
+//
+////        var changeFlags = 0
+//
+////        if (iconSize != oldProfile.iconSize || iconBitmapSize != oldProfile.iconBitmapSize ||
+////            iconShapePath != oldProfile.iconShapePath
+////        ) {
+////            changeFlags = changeFlags or CHANGE_FLAG_ICON_PARAMS
+////        }
+//
+////        apply(changeFlags)
 //    }
 //
-//    fun removeOnChangeListener(listener: OnIDPChangeListener) {
-//        changeListeners.remove(listener)
-//    }
-//
-//    fun verifyConfigChangedInBackground(context: Context) {
-//        val savedIconMaskPath = Utilities.getDevicePrefs(context).getString(KEY_ICON_PATH_REF, "")
-//        // Good place to check if grid size changed in themepicker when launcher was dead.
-//        if (savedIconMaskPath?.isEmpty() == true) {
-//            Utilities.getDevicePrefs(context).edit().putString(
-//                KEY_ICON_PATH_REF,
-//                getIconShapePath(
-//                    context
-//                )
-//            )
-//                .apply()
-//        } else if (savedIconMaskPath != getIconShapePath(
-//                context
-//            )
-//        ) {
-//            Utilities.getDevicePrefs(context).edit().putString(
-//                KEY_ICON_PATH_REF,
-//                getIconShapePath(
-//                    context
-//                )
-//            )
-//                .apply()
-//            apply(context,
-//                CHANGE_FLAG_ICON_PARAMS
-//            )
-//        }
-//    }
-
-    private fun onConfigChanged(context: Context) {
-        // Config changes, what shall we do?
-        val oldProfile = InvariantDeviceProfile(this)
-
-        initGrid(context, null)
-
-        var changeFlags = 0
-
-        if (iconSize != oldProfile.iconSize || iconBitmapSize != oldProfile.iconBitmapSize ||
-            iconShapePath != oldProfile.iconShapePath
-        ) {
-            changeFlags = changeFlags or CHANGE_FLAG_ICON_PARAMS
-        }
-
-        apply(changeFlags)
-    }
-
-    private fun apply(changeFlags: Int) {
-        // Create a new config monitor
-//        configMonitor!!.unregister()
-//        configMonitor = ConfigMonitor(context, ???({ this.onConfigChanged(it) }))
-
-        for (listener in changeListeners) {
-            listener.onIdpChanged(changeFlags, this)
-        }
-    }
+////    private fun apply(changeFlags: Int) {
+////        for (listener in changeListeners) {
+////            listener.onIdpChanged(changeFlags, this)
+////        }
+////    }
 
     private fun getLauncherIconDensity(requiredSize: Int): Int {
         // Densities typically defined by an app.
@@ -246,19 +180,9 @@ class InvariantDeviceProfile constructor(context: Context?) {
         return density
     }
 
-//    fun getDeviceProfile(context: Context): DeviceProfile {
-//        return if (
-//            context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-//        )
-//            landscapeProfile
-//        else
-//            portraitProfile
+//    interface OnIDPChangeListener {
+//        fun onIdpChanged(changeFlags: Int, profile: InvariantDeviceProfile)
 //    }
-
-    interface OnIDPChangeListener {
-        fun onIdpChanged(changeFlags: Int, profile: InvariantDeviceProfile)
-    }
-
 
     class GridOption(context: Context, attrs: AttributeSet) {
         val name: String
@@ -286,9 +210,9 @@ class InvariantDeviceProfile constructor(context: Context?) {
         val minHeightDps: Float
         val canBeDefault: Boolean
 
-        var iconSize: Float = 0.toFloat()
-        var landscapeIconSize: Float = 0.toFloat()
-        var iconTextSize: Float = 0.toFloat()
+        var iconSize: Float = 0f
+        var landscapeIconSize: Float = 0f
+        var iconTextSize: Float = 0f
 
         constructor() {
             grid = null
@@ -301,9 +225,7 @@ class InvariantDeviceProfile constructor(context: Context?) {
         constructor(grid: GridOption, context: Context, attrs: AttributeSet) {
             this.grid = grid
 
-            val a = context.obtainStyledAttributes(
-                attrs, R.styleable.ProfileDisplayOption
-            )
+            val a = context.obtainStyledAttributes(attrs, R.styleable.ProfileDisplayOption)
 
             name = a.getString(R.styleable.ProfileDisplayOption_name)
             minWidthDps = a.getFloat(R.styleable.ProfileDisplayOption_minWidthDps, 0f)
@@ -336,31 +258,23 @@ class InvariantDeviceProfile constructor(context: Context?) {
         }
     }
 
-    private inner class OverlayMonitor internal constructor(context: Context) :
-        BroadcastReceiver() {
+//    private inner class OverlayMonitor internal constructor(context: Context) :
+//        BroadcastReceiver() {
+//
+//        private val actionOverlayChanged = "android.intent.action.OVERLAY_CHANGED"
+//
+//        init {
+//            context.registerReceiver(this, "android".getPackageFilter(actionOverlayChanged))
+//        }
+//
+//        override fun onReceive(context: Context, intent: Intent) {
+//            onConfigChanged(context)
+//        }
+//    }
 
-        private val actionOverlayChanged = "android.intent.action.OVERLAY_CHANGED"
-
-        init {
-            context.registerReceiver(this, "android".getPackageFilter(actionOverlayChanged))
-        }
-
-        override fun onReceive(context: Context, intent: Intent) {
-            onConfigChanged(context)
-        }
-    }
-
-    companion object : ContextInstance<InvariantDeviceProfile>(::InvariantDeviceProfile) {
-        private const val TAG = "InvariantDeviceProfile"
-
-//        private const val KEY_IDP_GRID_NAME = "idp_grid_name"
-
+    companion object {
         private const val ICON_SIZE_DEFINED_IN_APP_DP = 48f
-
-        //const val CHANGE_FLAG_GRID = 1 shl 0
-        const val CHANGE_FLAG_ICON_PARAMS = 1 shl 1
-
-//        const val KEY_ICON_PATH_REF = "pref_icon_shape_path"
+//        const val CHANGE_FLAG_ICON_PARAMS = 1 shl 1
 
         // Constants that affects the interpolation curve between statically defined device profile
         // buckets.
@@ -379,15 +293,14 @@ class InvariantDeviceProfile constructor(context: Context?) {
          */
         private fun getIconShapePath(context: Context): String {
             if (CONFIG_ICON_MASK_RES_ID == 0) {
-                Log.e(TAG, "Icon mask res identifier failed to retrieve.")
+                Timber.e("Icon mask res identifier failed to retrieve.")
                 return ""
             }
             return context.resources.getString(CONFIG_ICON_MASK_RES_ID)
         }
 
         private fun getPredefinedDeviceProfiles(
-            context: Context,
-            gridName: String?
+            context: Context, gridName: String?
         ): ArrayList<DisplayOption> {
             val profiles = ArrayList<DisplayOption>()
             try {
@@ -398,12 +311,7 @@ class InvariantDeviceProfile constructor(context: Context?) {
                         type != XmlPullParser.END_DOCUMENT
                     ) {
                         if (type == XmlPullParser.START_TAG && GridOption.TAG_NAME == parser.name) {
-
-                            val gridOption =
-                                GridOption(
-                                    context,
-                                    Xml.asAttributeSet(parser)
-                                )
+                            val gridOption = GridOption(context, Xml.asAttributeSet(parser))
                             val displayDepth = parser.depth
 
                             type = parser.next()
@@ -466,52 +374,43 @@ class InvariantDeviceProfile constructor(context: Context?) {
             var weights = 0f
 
             var p = points[0]
-            if (dist(
-                    width,
-                    height,
-                    p.minWidthDps,
-                    p.minHeightDps
-                ) == 0f) {
+            if (dist(width, height, p.minWidthDps, p.minHeightDps) == 0f) {
                 return p
             }
 
             val out = DisplayOption()
             var i = 0
+
             while (i < points.size && i < K_NEAREST_NEIGHBOR) {
                 p = points[i]
-                val w = weight(
-                    width,
-                    height,
-                    p.minWidthDps,
-                    p.minHeightDps,
-                    WEIGHT_POWER
-                )
+
+                val w = weight(width, height, p.minWidthDps, p.minHeightDps, WEIGHT_POWER)
                 weights += w
                 out.add(DisplayOption().add(p).multiply(w))
                 ++i
             }
+
             return out.multiply(1.0f / weights)
         }
 
         private fun weight(x0: Float, y0: Float, x1: Float, y1: Float, pow: Float): Float {
-            val d =
-                dist(x0, y0, x1, y1)
-            return if (d.compareTo(0f) == 0) {
-                Float.POSITIVE_INFINITY
-            } else (WEIGHT_EFFICIENT / d.toDouble().pow(pow.toDouble())).toFloat()
+            val d = dist(x0, y0, x1, y1)
+
+            return if (d.compareTo(0f) == 0) Float.POSITIVE_INFINITY
+            else (WEIGHT_EFFICIENT / d.toDouble().pow(pow.toDouble())).toFloat()
         }
 
         /**
          * Creates an intent filter to listen for actions with a specific package in the data field.
          */
-        private fun String.getPackageFilter(vararg actions: String): IntentFilter {
-            val packageFilter = IntentFilter()
-            for (action in actions) {
-                packageFilter.addAction(action)
-            }
-            packageFilter.addDataScheme("package")
-            packageFilter.addDataSchemeSpecificPart(this, PatternMatcher.PATTERN_LITERAL)
-            return packageFilter
-        }
+//        private fun String.getPackageFilter(vararg actions: String): IntentFilter {
+//            val packageFilter = IntentFilter()
+//            for (action in actions) {
+//                packageFilter.addAction(action)
+//            }
+//            packageFilter.addDataScheme("package")
+//            packageFilter.addDataSchemeSpecificPart(this, PatternMatcher.PATTERN_LITERAL)
+//            return packageFilter
+//        }
     }
 }

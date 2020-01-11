@@ -1,13 +1,14 @@
 package xyz.mcmxciv.halauncher.di.components
 
 import dagger.Subcomponent
-import xyz.mcmxciv.halauncher.settings.SettingsViewModel
+import xyz.mcmxciv.halauncher.authentication.AuthenticationViewModel
 import xyz.mcmxciv.halauncher.di.modules.ApiModule
 import xyz.mcmxciv.halauncher.di.modules.DiscoveryModule
 import xyz.mcmxciv.halauncher.di.scopes.FragmentScope
-import xyz.mcmxciv.halauncher.authentication.AuthenticationViewModel
+import xyz.mcmxciv.halauncher.home.HomeFragment
 import xyz.mcmxciv.halauncher.home.HomeViewModel
 import xyz.mcmxciv.halauncher.integration.IntegrationViewModel
+import xyz.mcmxciv.halauncher.settings.SettingsViewModel
 import xyz.mcmxciv.halauncher.setup.SetupViewModel
 
 @FragmentScope
@@ -18,6 +19,8 @@ interface FragmentComponent {
     fun integrationViewModel(): IntegrationViewModel
     fun setupViewModel(): SetupViewModel
     fun settingsViewModel(): SettingsViewModel
+
+    fun inject(homeFragment: HomeFragment)
 
     @Subcomponent.Builder
     interface Builder {

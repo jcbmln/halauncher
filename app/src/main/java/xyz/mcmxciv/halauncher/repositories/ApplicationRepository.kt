@@ -10,7 +10,8 @@ import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import javax.inject.Inject
 
 class ApplicationRepository @Inject constructor(
-    private val context: Context
+    private val context: Context,
+    private val iconFactory: IconFactory
 ) {
     suspend fun getAppList() : List<AppInfo> {
         val appList = getInstalledApplications()
@@ -24,23 +25,22 @@ class ApplicationRepository @Inject constructor(
             val appList = ArrayList<AppInfo>()
             val pm = context.packageManager
             val launcherIntent = Intent().apply { addCategory(Intent.CATEGORY_LAUNCHER) }
-            val idp = InvariantDeviceProfile.getInstance(context)
-            val factory = IconFactory(context, idp.iconBitmapSize)
 
             pm.getInstalledApplications(0).forEach { appInfo ->
-                launcherIntent.`package` = appInfo.packageName
+                launcherIntent.setPackage(appInfo.packageName)
+
                 // only show launch-able apps
                 if (pm.queryIntentActivities(launcherIntent, 0).size > 0) {
                     val unbadgedIcon = appInfo.loadUnbadgedIcon(pm)
-                    appList.add(AppInfo().apply {
-                        packageName = appInfo.packageName
-                        displayName = pm.getApplicationLabel(appInfo).toString()
-                        icon = factory.createIcon(unbadgedIcon)
-                    })
+                    appList.add(AppInfo(
+                        appInfo.packageName,
+                        pm.getApplicationLabel(appInfo).toString(),
+                        iconFactory.createIcon(unbadgedIcon)
+                    ))
                 }
             }
 
-            appList
+            return@withContext appList
         }
     }
 }

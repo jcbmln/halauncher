@@ -16,6 +16,10 @@
 
 package xyz.mcmxciv.halauncher.models
 
+//import com.android.launcher3.CellLayout.ContainerType
+//import com.android.launcher3.graphics.IconShape
+//import com.android.launcher3.icons.DotRenderer
+//import com.android.launcher3.icons.IconNormalizer
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -26,15 +30,10 @@ import android.view.Surface
 import android.view.WindowManager
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.utils.Utilities
-
-//import com.android.launcher3.CellLayout.ContainerType
-//import com.android.launcher3.graphics.IconShape
-//import com.android.launcher3.icons.DotRenderer
-//import com.android.launcher3.icons.IconNormalizer
 import kotlin.math.max
 import kotlin.math.min
 
-class DeviceProfile(
+class DeviceProfile constructor(
     context: Context, private val inv: InvariantDeviceProfile,
     minSize: Point, maxSize: Point, private val widthPx: Int, private val heightPx: Int,
     private val isLandscape: Boolean, private val isMultiWindowMode: Boolean
@@ -94,8 +93,8 @@ class DeviceProfile(
      * Inverse of [.getMultiWindowProfile]
      * @return device profile corresponding to the current orientation in non multi-window mode.
      */
-    val fullScreenProfile: DeviceProfile
-        get() = if (isLandscape) inv.landscapeProfile else inv.portraitProfile
+//    val fullScreenProfile: DeviceProfile
+//        get() = if (isLandscape) inv.landscapeProfile else inv.portraitProfile
 
     // Since we are only concerned with the overall padding, layout direction does
     // not matter.

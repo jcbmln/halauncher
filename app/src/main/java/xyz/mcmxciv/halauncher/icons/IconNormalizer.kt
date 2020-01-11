@@ -16,21 +16,27 @@
 
 package xyz.mcmxciv.halauncher.icons
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
+import androidx.annotation.RequiresApi
+import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.utils.GraphicsUtils
 import java.nio.ByteBuffer
+import javax.inject.Inject
 import kotlin.experimental.and
 import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
-class IconNormalizer(context: Context, iconBitmapSize: Int) {
-    private val maxSize: Int = iconBitmapSize * 2
+class IconNormalizer @Inject constructor(
+    context: Context,
+    invariantDeviceProfile: InvariantDeviceProfile
+) {
+    private val maxSize: Int = invariantDeviceProfile.iconBitmapSize * 2
     private val bitmap = Bitmap.createBitmap(maxSize, maxSize, Bitmap.Config.ALPHA_8)
     private val canvas = Canvas(bitmap)
     private val pixels = ByteArray(maxSize * maxSize)
@@ -41,6 +47,8 @@ class IconNormalizer(context: Context, iconBitmapSize: Int) {
     private val paintMaskShape = Paint()
     private val paintMaskShapeOutline = Paint()
     private var adaptiveIconScale = SCALE_NOT_INITIALIZED
+    private val matrix = Matrix()
+    private val shapePath = IconShape.shapePath
 
     init {
         paintMaskShape.color = Color.RED
@@ -66,9 +74,14 @@ class IconNormalizer(context: Context, iconBitmapSize: Int) {
      * Refer {@link #MAX_CIRCLE_AREA_FACTOR} and {@link #MAX_SQUARE_AREA_FACTOR}
      */
     @Synchronized
-    fun getScale(d: Drawable): Float {
-        if (d is AdaptiveIconDrawable) {
-            adaptiveIconScale = normalizeAdaptiveIcon(d, maxSize, adaptiveIconBounds)
+    fun getScale(d: Drawable, outBounds: RectF?, path: Path?, outMaskShape: BooleanArray?): Float {
+        if (ATLEAST_OREO && d is AdaptiveIconDrawable) {
+            if (adaptiveIconScale == SCALE_NOT_INITIALIZED) {
+                adaptiveIconScale = normalizeAdaptiveIcon(d, maxSize, adaptiveIconBounds)
+            }
+
+            outBounds?.set(adaptiveIconBounds)
+
             return adaptiveIconScale
         }
 
@@ -135,8 +148,8 @@ class IconNormalizer(context: Context, iconBitmapSize: Int) {
                     topY = y
                 }
 
-                leftX = Math.min(leftX, firstX)
-                rightX = Math.max(rightX, lastX)
+                leftX = leftX.coerceAtMost(firstX)
+                rightX = rightX.coerceAtLeast(lastX)
             }
         }
 
@@ -162,12 +175,66 @@ class IconNormalizer(context: Context, iconBitmapSize: Int) {
         bounds.top = topY
         bounds.bottom = bottomY
 
+        outBounds?.set(
+            bounds.left.toFloat() / width,
+            bounds.top.toFloat() / height,
+            1 - bounds.right.toFloat() / width,
+            1 - bounds.bottom.toFloat() / height
+        )
+
+        if (outMaskShape != null && outMaskShape.isNotEmpty()) {
+            outMaskShape[0] = isShape(path)
+        }
+
         // Area of the rectangle required to fit the convex hull
         val rectArea = ((bottomY + 1 - topY) * (rightX + 1 - leftX)).toFloat()
         return getScale(area, rectArea, (width * height).toFloat())
     }
 
+    private fun isShape(path: Path?): Boolean {
+        val iconRatio = bounds.width().toFloat() / bounds.height()
+        if (abs(iconRatio - 1) > BOUND_RATIO_MARGIN) return false
+
+        matrix.reset()
+        matrix.setScale(bounds.width().toFloat(), bounds.height().toFloat())
+        matrix.postTranslate(bounds.left.toFloat(), bounds.top.toFloat())
+        path?.transform(matrix, shapePath)
+
+        canvas.drawPath(shapePath, paintMaskShape)
+        canvas.drawPath(shapePath, paintMaskShapeOutline)
+
+        return isTransparentBitmap()
+    }
+
+    private fun isTransparentBitmap(): Boolean {
+        val buffer = ByteBuffer.wrap(pixels)
+        buffer.rewind()
+        bitmap.copyPixelsToBuffer(buffer)
+
+        var y = bounds.top
+        var index = y * maxSize
+        val rowSizeDiff = maxSize - bounds.right
+
+        var sum = 0
+
+        while (y < bounds.bottom) {
+            index += bounds.left
+            for (x in bounds.left until bounds.right) {
+                if (pixels[index] and 0xFF.toByte() > MIN_VISIBLE_ALPHA) {
+                    sum++
+                }
+                index++
+            }
+            index += rowSizeDiff
+            y++
+        }
+
+        val percentageDiffPixels = sum.toFloat() / (bounds.width() * bounds.height())
+        return  percentageDiffPixels < PIXEL_DIFF_PERCENTAGE_THRESHOLD
+    }
+
     companion object {
+        private val ATLEAST_OREO = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
         // Ratio of icon visible area to full icon size for a square shaped icon
         private const val MAX_SQUARE_AREA_FACTOR = 375.0f / 576
         // Ratio of icon visible area to full icon size for a circular shaped icon
@@ -181,6 +248,8 @@ class IconNormalizer(context: Context, iconBitmapSize: Int) {
 
         private const val MIN_VISIBLE_ALPHA = 40
         private const val SCALE_NOT_INITIALIZED = 0f
+        private const val BOUND_RATIO_MARGIN = .05f
+        private const val PIXEL_DIFF_PERCENTAGE_THRESHOLD = 0.005f
 
         private fun getScale(hullArea: Float, boundingArea: Float, fullArea: Float): Float {
             val hullByRect = hullArea / boundingArea
@@ -199,11 +268,12 @@ class IconNormalizer(context: Context, iconBitmapSize: Int) {
          * @param drawable Should be AdaptiveIconDrawable
          * @param size Canvas size to use
          */
-        @TargetApi(Build.VERSION_CODES.O)
+        @RequiresApi(Build.VERSION_CODES.O)
         fun normalizeAdaptiveIcon(drawable: Drawable, size: Int, outBounds: RectF?): Float {
             val tempBounds = Rect(drawable.bounds)
             drawable.bounds = Rect(0, 0, size, size)
-            val path = IconShape.shapePath //(drawable as AdaptiveIconDrawable).iconMask
+
+            val path = (drawable as AdaptiveIconDrawable).iconMask
             val region = Region()
             region.setPath(path, Region(0, 0, size, size))
 

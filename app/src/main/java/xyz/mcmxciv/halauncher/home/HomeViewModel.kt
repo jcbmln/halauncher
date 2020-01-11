@@ -19,7 +19,7 @@ class HomeViewModel @Inject constructor(
 
     val sessionState by lazy {
         val liveData = ResourceLiveData<SessionState>()
-        val token = appSettings.token
+        val token = appSettings.session
 
         if (!appSettings.setupDone) {
             liveData.postSuccess(SessionState.NewUser)
@@ -29,7 +29,7 @@ class HomeViewModel @Inject constructor(
         }
         else {
             liveData.postValue(viewModelScope, "Failed to validate session.") {
-                appSettings.token = homeAssistantRepository.validateToken(token)
+                appSettings.session = homeAssistantRepository.validateToken(token)
                 return@postValue SessionState.Valid
             }
         }
@@ -47,7 +47,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getExternalAuth(callback: String) {
-        val cachedToken = appSettings.token
+        val cachedToken = appSettings.session
         val error = Resource.Error(
             WebCallback.AuthCallback("$callback(false);"),
             "Failed to authenticate."
@@ -55,7 +55,7 @@ class HomeViewModel @Inject constructor(
 
         webCallback.postValue(viewModelScope, error) {
             val token = homeAssistantRepository.validateToken(cachedToken)
-            appSettings.token = token
+            appSettings.session = token
 
             val json = JSONObject(mapOf(
                 "access_token" to token.accessToken,
@@ -73,8 +73,8 @@ class HomeViewModel @Inject constructor(
         )
 
         webCallback.postValue(viewModelScope, error) {
-            val token = appSettings.token
-            appSettings.token = null
+            val token = appSettings.session
+            appSettings.session = null
             homeAssistantRepository.revokeToken(token)
 
             sessionState.postSuccess(SessionState.Invalid)

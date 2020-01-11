@@ -4,6 +4,7 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import xyz.mcmxciv.halauncher.models.Session
 import xyz.mcmxciv.halauncher.repositories.HomeAssistantRepository
 import xyz.mcmxciv.halauncher.utils.AppSettings
 import xyz.mcmxciv.halauncher.utils.AuthorizationException
@@ -17,14 +18,19 @@ class TokenAuthenticator constructor(
             return null
 
         val homeAssistantApi = homeAssistantApiHolder.homeAssistantApi ?: return null
-
-        val refreshToken = appSettings.token?.refreshToken ?: throw AuthorizationException()
-        val token = homeAssistantApi.refreshTokenSync(
+        val refreshToken = appSettings.session?.refreshToken ?: throw AuthorizationException()
+        val refreshedToken = homeAssistantApi.refreshTokenSync(
             HomeAssistantRepository.GRANT_TYPE_REFRESH, refreshToken,
             HomeAssistantRepository.CLIENT_ID
         )
+        val token = Session(
+            refreshedToken.accessToken,
+            refreshedToken.expiresIn,
+            appSettings.session?.refreshToken,
+            refreshedToken.tokenType
+        )
 
-        appSettings.token = token
+        appSettings.session = token
         return response.request.newBuilder()
             .addHeader("Authorization", "Bearer ${token.accessToken}")
             .build()

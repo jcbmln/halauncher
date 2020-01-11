@@ -9,7 +9,7 @@ class TokenInterceptor constructor(
     val appSettings: AppSettings
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token = appSettings.token?.accessToken ?: throw AuthorizationException()
+        val token = appSettings.session?.accessToken ?: throw AuthorizationException()
         val request = chain.request().newBuilder()
             .addHeader("Authorization", "Bearer $token")
             .build()

@@ -16,26 +16,32 @@
 
 package xyz.mcmxciv.halauncher.icons
 
-import android.annotation.TargetApi
 import android.content.Context
-import android.graphics.Color
+import android.graphics.*
 import android.graphics.drawable.AdaptiveIconDrawable
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
+import javax.inject.Inject
+import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.math.round
 
-class IconFactory(private val context: Context,
-                  private val iconBitmapSize: Int
+class IconFactory @Inject constructor(
+    private val context: Context,
+    private val iconNormalizer: IconNormalizer,
+    private val invariantDeviceProfile: InvariantDeviceProfile
 ) : AutoCloseable {
     private var colorExtractorDisabled = false
     private var wrapperBackgroundColor = DEFAULT_WRAPPER_BACKGROUND
-
-    private var _normalizer: IconNormalizer? = null
-    private val normalizer: IconNormalizer
-        get() = _normalizer ?: IconNormalizer(context, iconBitmapSize)
+    private val canvas = Canvas()
+    private val oldBounds = Rect()
 
     init {
+        canvas.drawFilter = PaintFlagsDrawFilter(Paint.DITHER_FLAG, Paint.FILTER_BITMAP_FLAG)
         clear()
     }
 
@@ -43,31 +49,108 @@ class IconFactory(private val context: Context,
         clear()
     }
 
+    fun createIconBitmap(icon: Drawable): Bitmap {
+        val scale = FloatArray(1)
+        val normalizedIcon = normalizeAndWrapToAdaptiveIcon(icon, scale)
+        val bitmap = createIconBitmap(normalizedIcon, scale[0])
+
+        if (ATLEAST_OREO && icon is AdaptiveIconDrawable) {
+            canvas.setBitmap(bitmap)
+            canvas.setBitmap(null)
+        }
+
+        return bitmap
+    }
+
+    private fun createIconBitmap(icon: Drawable, scale: Float): Bitmap {
+        val size = invariantDeviceProfile.iconBitmapSize
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+
+        canvas.setBitmap(bitmap)
+        oldBounds.set(icon.bounds)
+
+        if (ATLEAST_OREO && icon is AdaptiveIconDrawable) {
+            val offset = max(ceil(BLUR_FACTOR * size), round(size * (1 - scale) / 2)).toInt()
+            icon.setBounds(offset, offset, size - offset, size - offset)
+            icon.draw(canvas)
+        }
+        else {
+            if (icon is BitmapDrawable) {
+                val bmp = icon.bitmap
+
+                if (bmp.density == Bitmap.DENSITY_NONE) {
+                    icon.setTargetDensity(context.resources.displayMetrics)
+                }
+            }
+
+            var width = size
+            var height = size
+
+            val intrinsicWidth = icon.intrinsicWidth
+            val intrinsicHeight = icon.intrinsicHeight
+
+            if (intrinsicWidth > 0 && intrinsicHeight > 0) {
+                val ratio = intrinsicWidth.toFloat() / intrinsicHeight
+
+                if (intrinsicWidth > intrinsicHeight) {
+                    height = (width / ratio).toInt()
+                }
+
+                if (intrinsicHeight > intrinsicWidth) {
+                    width = (height / ratio).toInt()
+                }
+            }
+
+            val left = (size - width) / 2
+            val top = (size - height) / 2
+
+            icon.setBounds(left, top, left + width, top + height)
+            canvas.save()
+            canvas.scale(scale, scale, size.toFloat() / 2, size.toFloat() / 2)
+            icon.draw(canvas)
+            canvas.restore()
+        }
+
+        icon.bounds = oldBounds
+        canvas.setBitmap(null)
+        return bitmap
+    }
+
     fun createIcon(icon: Drawable): Drawable {
         return normalizeAndWrapToAdaptiveIcon(icon)
     }
 
-    @TargetApi(Build.VERSION_CODES.O)
-    private fun normalizeAndWrapToAdaptiveIcon(icon: Drawable): Drawable {
-        var normalizedIcon = icon
+    private fun normalizeAndWrapToAdaptiveIcon(icon: Drawable, outScale: FloatArray): Drawable {
+        var scale: Float
+        val outBounds: RectF? = null
 
-        if (icon !is AdaptiveIconDrawable) {
-            val wrapperIcon = context.getDrawable(R.drawable.adaptive_icon_drawable_wrapper)!!
-                .mutate()
+        if (ATLEAST_OREO) {
+            val normalizedIcon: Drawable
+            val wrapperIcon = context
+                .getDrawable(R.drawable.adaptive_icon_drawable_wrapper)?.mutate()
+            val adaptiveIconDrawable = wrapperIcon as AdaptiveIconDrawable
+            adaptiveIconDrawable.setBounds(0, 0, 1, 1)
 
-            val dr = wrapperIcon as AdaptiveIconDrawable
-            dr.setBounds(0, 0, 1, 1)
+            val outShape = BooleanArray(1)
+            scale = iconNormalizer
+                .getScale(icon, outBounds, adaptiveIconDrawable.iconMask, outShape)
 
-            val scale = normalizer.getScale(icon)
-            val fsd = dr.foreground as FixedScaleDrawable
-            fsd.drawable = icon
-            fsd.setScale(scale)
-            normalizedIcon = dr
-
-            (dr.background as ColorDrawable).color = wrapperBackgroundColor
+            if (icon !is AdaptiveIconDrawable && !outShape[0]) {
+                val fixedScaleDrawable = adaptiveIconDrawable.foreground as FixedScaleDrawable
+                fixedScaleDrawable.drawable = icon
+                fixedScaleDrawable.setScale(scale)
+                normalizedIcon = adaptiveIconDrawable
+                scale = iconNormalizer
+                    .getScale(normalizedIcon, outBounds, null, null)
+                (adaptiveIconDrawable.background as ColorDrawable).color = wrapperBackgroundColor
+            }
+        }
+        else {
+            scale = iconNormalizer.getScale(icon, outBounds, null, null)
         }
 
-        return normalizedIcon
+        outScale[0] = scale
+        return icon
     }
 
     private fun clear() {
@@ -77,5 +160,7 @@ class IconFactory(private val context: Context,
 
     companion object {
         private const val DEFAULT_WRAPPER_BACKGROUND = Color.WHITE
+        private const val BLUR_FACTOR = 0.5f / 48
+        private val ATLEAST_OREO = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
     }
 }

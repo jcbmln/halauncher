@@ -8,7 +8,7 @@ import androidx.core.content.edit
 import xyz.mcmxciv.halauncher.icons.IconShape
 import xyz.mcmxciv.halauncher.models.BaseModel
 import xyz.mcmxciv.halauncher.models.DeviceIntegration
-import xyz.mcmxciv.halauncher.models.Token
+import xyz.mcmxciv.halauncher.models.Session
 import javax.inject.Inject
 
 class AppSettings @Inject constructor(
@@ -46,7 +46,7 @@ class AppSettings @Inject constructor(
         }
         set(value) = putString(ICON_SHAPE_TYPE_KEY, value.name)
 
-    var token: Token?
+    var session: Session?
         get() = getString(AUTHENTICATION_TOKEN_KEY)?.let { BaseModel.fromJson(it) }
         set(value) = putString(AUTHENTICATION_TOKEN_KEY, value?.let { BaseModel.toJson(it) })
 

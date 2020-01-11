@@ -5,7 +5,7 @@ import xyz.mcmxciv.halauncher.api.HomeAssistantApi
 import xyz.mcmxciv.halauncher.api.HomeAssistantSecureApi
 import xyz.mcmxciv.halauncher.models.DeviceIntegration
 import xyz.mcmxciv.halauncher.models.DeviceRegistration
-import xyz.mcmxciv.halauncher.models.Token
+import xyz.mcmxciv.halauncher.models.Session
 import xyz.mcmxciv.halauncher.utils.AuthorizationException
 import javax.inject.Inject
 
@@ -13,22 +13,22 @@ class HomeAssistantRepository @Inject constructor(
     private val homeAssistantApi: HomeAssistantApi,
     private val homeAssistantSecureApi: HomeAssistantSecureApi
 ) {
-    suspend fun getToken(code: String): Token =
+    suspend fun getToken(code: String): Session =
         homeAssistantApi.getToken(GRANT_TYPE_CODE, code, CLIENT_ID)
 
-    private suspend fun refreshToken(refreshToken: String): Token {
+    private suspend fun refreshToken(refreshToken: String): Session {
         return homeAssistantApi.refreshToken(GRANT_TYPE_REFRESH, refreshToken, CLIENT_ID)
     }
 
-    suspend fun revokeToken(token: Token?) {
-        token?.let { homeAssistantApi.revokeToken(it.refreshToken!!, REVOKE_ACTION) }
+    suspend fun revokeToken(session: Session?) {
+        session?.let { homeAssistantApi.revokeToken(it.refreshToken!!, REVOKE_ACTION) }
     }
 
-    suspend fun validateToken(cachedToken: Token?): Token {
-        val token = cachedToken ?: throw AuthorizationException()
+    suspend fun validateToken(cachedSession: Session?): Session {
+        val token = cachedSession ?: throw AuthorizationException()
         return if (token.isExpired()) {
             val refreshToken = refreshToken(token.refreshToken!!)
-            Token(
+            Session(
                 refreshToken.accessToken,
                 refreshToken.expiresIn,
                 token.refreshToken,
@@ -37,11 +37,6 @@ class HomeAssistantRepository @Inject constructor(
         }
         else token
     }
-
-//    suspend fun bearerToken(token: Token): String {
-//        val accessToken = validateToken(token).accessToken
-//        return "Bearer $accessToken"
-//    }
 
     suspend fun registerDevice(device: DeviceRegistration): DeviceIntegration {
         return homeAssistantSecureApi.registerDevice(device)

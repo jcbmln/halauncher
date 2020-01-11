@@ -2,6 +2,7 @@ package xyz.mcmxciv.halauncher.di.modules
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
@@ -12,13 +13,14 @@ import javax.inject.Singleton
 class AppModule(private val context: Context) {
     @Singleton
     @Provides
-    fun provideContext(): Context {
-        return context
-    }
+    fun provideContext(): Context = context
 
     @Singleton
     @Provides
-    fun provideSharedPreferences(context: Context): SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-    }
+    fun provideSharedPreferences(context: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
+
+    @Singleton
+    @Provides
+    fun providePackagaManager(context: Context): PackageManager = context.packageManager
 }

@@ -73,9 +73,10 @@ class AdaptiveIconView(
         foregroundPaint.shader = BitmapShader(foreground, CLAMP, CLAMP)
 
         textPaint.textSize = Utilities.pxFromSp(12f, context.resources.displayMetrics).toFloat()
-        textPaint.color = if (prefs.transparentBackground)
-            context.getColor(R.color.colorBackground)
-            else context.getColor(R.color.colorForeground)
+        textPaint.color = context.getColor(R.color.colorBackground)
+//        textPaint.color = if (prefs.transparentBackground)
+//            context.getColor(R.color.colorBackground)
+//            else context.getColor(R.color.colorForeground)
 
         IconShape.setShape(prefs.iconShapeType, layerCenter)
     }

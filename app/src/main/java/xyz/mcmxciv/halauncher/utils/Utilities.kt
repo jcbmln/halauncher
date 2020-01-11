@@ -23,6 +23,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import androidx.core.app.ActivityCompat
@@ -36,6 +37,7 @@ import kotlin.math.roundToInt
  */
 object Utilities {
     private const val BITMAP_SCALE = 0.4f
+    val ATLEAST_OREO = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
     fun isReadStoragePermissionGranted(activity: Activity): Boolean {
         val permissionStatus = ActivityCompat.checkSelfPermission(

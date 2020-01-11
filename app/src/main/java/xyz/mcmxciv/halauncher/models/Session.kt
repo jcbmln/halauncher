@@ -2,11 +2,10 @@ package xyz.mcmxciv.halauncher.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.squareup.moshi.Moshi
 import java.time.Instant
 
 @JsonClass(generateAdapter = true)
-data class Token(
+data class Session(
     @Json(name = "access_token")
     val accessToken: String,
     @Json(name = "expires_in")

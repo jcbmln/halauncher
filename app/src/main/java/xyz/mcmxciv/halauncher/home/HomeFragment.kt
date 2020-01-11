@@ -20,13 +20,18 @@ import xyz.mcmxciv.halauncher.AppListAdapter
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.extensions.createViewModel
+import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.utils.BaseFragment
 import xyz.mcmxciv.halauncher.utils.Resource
 import xyz.mcmxciv.halauncher.utils.SessionState
 import java.io.BufferedReader
+import javax.inject.Inject
 
 class HomeFragment : BaseFragment() {
     private lateinit var viewModel: HomeViewModel
+
+    @Inject
+    lateinit var invariantDeviceProfile: InvariantDeviceProfile
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +42,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        component.inject(this)
         viewModel = createViewModel { component.homeViewModel() }
 
         viewModel.sessionState.observe(this, Observer { state ->
@@ -48,14 +54,13 @@ class HomeFragment : BaseFragment() {
                         SessionState.Invalid -> navigateToAuthenticationGraph()
                         SessionState.Valid -> {
                             initializeWebView()
-                            appList.layoutManager = GridLayoutManager(context, 5)
                         }
                     }
                 }
             }
         })
 
-        appList.layoutManager = GridLayoutManager(context, 5)
+        appList.layoutManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
 
         viewModel.launchableActivities.observe(this, Observer { state ->
             when (state) {

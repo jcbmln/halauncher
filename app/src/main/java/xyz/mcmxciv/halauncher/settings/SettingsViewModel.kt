@@ -20,8 +20,8 @@ class SettingsViewModel @Inject constructor(
 
     fun revokeToken() {
         viewModelScope.launch(exceptionHandler) {
-            homeAssistantRepository.revokeToken(appSettings.token)
-            appSettings.token = null
+            homeAssistantRepository.revokeToken(appSettings.session)
+            appSettings.session = null
         }
     }
 

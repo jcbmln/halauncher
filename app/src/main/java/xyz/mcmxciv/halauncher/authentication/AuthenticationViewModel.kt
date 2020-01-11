@@ -28,7 +28,7 @@ class AuthenticationViewModel @Inject constructor(
         val code = Uri.parse(url).getQueryParameter(HomeAssistantRepository.RESPONSE_TYPE)
         return if (url.contains(HomeAssistantRepository.REDIRECT_URI) && !code.isNullOrBlank()) {
             viewModelScope.launch(authenticationExceptionHandler) {
-                appSettings.token = homeAssistantRepository.getToken(code)
+                appSettings.session = homeAssistantRepository.getToken(code)
                 authenticationSuccess.value = true
             }
 
