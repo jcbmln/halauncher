@@ -33,7 +33,8 @@ import kotlin.math.round
 class IconFactory @Inject constructor(
     private val context: Context,
     private val iconNormalizer: IconNormalizer,
-    private val invariantDeviceProfile: InvariantDeviceProfile
+    private val invariantDeviceProfile: InvariantDeviceProfile,
+    private val shadowGenerator: ShadowGenerator
 ) : AutoCloseable {
     private var colorExtractorDisabled = false
     private var wrapperBackgroundColor = DEFAULT_WRAPPER_BACKGROUND
@@ -56,6 +57,7 @@ class IconFactory @Inject constructor(
 
         if (ATLEAST_OREO && icon is AdaptiveIconDrawable) {
             canvas.setBitmap(bitmap)
+            shadowGenerator.recreateIcon(Bitmap.createBitmap(bitmap), canvas)
             canvas.setBitmap(null)
         }
 
@@ -116,9 +118,9 @@ class IconFactory @Inject constructor(
         return bitmap
     }
 
-    fun createIcon(icon: Drawable): Drawable {
-        return normalizeAndWrapToAdaptiveIcon(icon)
-    }
+//    fun createIcon(icon: Drawable): Drawable {
+//        return normalizeAndWrapToAdaptiveIcon(icon)
+//    }
 
     private fun normalizeAndWrapToAdaptiveIcon(icon: Drawable, outScale: FloatArray): Drawable {
         var scale: Float

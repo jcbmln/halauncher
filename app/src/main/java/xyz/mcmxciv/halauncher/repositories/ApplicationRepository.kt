@@ -2,6 +2,7 @@ package xyz.mcmxciv.halauncher.repositories
 
 import android.content.Context
 import android.content.Intent
+import androidx.core.graphics.drawable.toDrawable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import xyz.mcmxciv.halauncher.icons.IconFactory
@@ -35,7 +36,7 @@ class ApplicationRepository @Inject constructor(
                     appList.add(AppInfo(
                         appInfo.packageName,
                         pm.getApplicationLabel(appInfo).toString(),
-                        iconFactory.createIcon(unbadgedIcon)
+                        iconFactory.createIconBitmap(unbadgedIcon)
                     ))
                 }
             }

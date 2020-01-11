@@ -1,11 +1,11 @@
 package xyz.mcmxciv.halauncher.models
 
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
 
 data class AppInfo(
     val packageName: String,
     val displayName: String,
-    val icon: Drawable
+    val icon: Bitmap
 )
 
 //class AppInfo {

@@ -1,6 +1,7 @@
 package xyz.mcmxciv.halauncher.home
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -84,6 +85,8 @@ class HomeFragment : BaseFragment() {
 
         allAppsButton.setOnClickListener {
             appList.isVisible = !appList.isVisible
+            activity?.window?.statusBarColor =
+                if (appList.isVisible) Color.WHITE else activity!!.getColor(R.color.colorAccent)
         }
 
         activity?.onBackPressedDispatcher?.addCallback(this) {

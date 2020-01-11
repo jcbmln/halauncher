@@ -15,7 +15,7 @@
         android:id="@+id/appList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorForeground"
+        android:background="@color/colorBackground"
         android:visibility="invisible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -28,6 +28,7 @@
         android:clickable="true"
         app:backgroundTint="@color/colorAccent"
         app:rippleColor="@color/colorAccentLighter"
-        app:srcCompat="@drawable/apps" />
+        app:srcCompat="@drawable/apps"
+        android:focusable="true" />
 
 </FrameLayout>
