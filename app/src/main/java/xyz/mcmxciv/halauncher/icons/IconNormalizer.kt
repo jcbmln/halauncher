@@ -48,7 +48,7 @@ class IconNormalizer @Inject constructor(
     private val paintMaskShapeOutline = Paint()
     private var adaptiveIconScale = SCALE_NOT_INITIALIZED
     private val matrix = Matrix()
-    private val shapePath = IconShape.shapePath
+    private val shapePath = Path()
 
     init {
         paintMaskShape.color = Color.RED
@@ -98,7 +98,7 @@ class IconNormalizer @Inject constructor(
             height = maxSize * height / max
         }
 
-        bitmap.eraseColor(Color.TRANSPARENT)
+        bitmap.eraseColor(Color.WHITE)
         d.setBounds(0, 0, width, height)
         d.draw(canvas)
 
@@ -216,12 +216,13 @@ class IconNormalizer @Inject constructor(
         val rowSizeDiff = maxSize - bounds.right
 
         var sum = 0
-
+        var px = ""
         while (y < bounds.bottom) {
             index += bounds.left
             for (x in bounds.left until bounds.right) {
-                if (pixels[index] and 0xFF.toByte() > MIN_VISIBLE_ALPHA) {
+                if ((pixels[index] and 0xFF.toByte()) > MIN_VISIBLE_ALPHA) {
                     sum++
+                    px += "${(pixels[index] and 0xFF.toByte())},"
                 }
                 index++
             }

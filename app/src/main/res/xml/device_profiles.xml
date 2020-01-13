@@ -16,11 +16,11 @@
 -->
 
 <profiles xmlns:launcher="http://schemas.android.com/apk/res-auto" >
+
     <grid-option
         launcher:name="3_by_3"
         launcher:numRows="3"
-        launcher:numColumns="3"
-        launcher:numFavoritesIcons="3" >
+        launcher:numColumns="3" >
 
         <display-option
             launcher:name="Super Short Stubby"
@@ -37,13 +37,13 @@
             launcher:iconImageSize="48"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
+
     </grid-option>
 
     <grid-option
         launcher:name="4_by_4"
         launcher:numRows="4"
-        launcher:numColumns="4"
-        launcher:numFavoritesIcons="4" >
+        launcher:numColumns="4" >
 
         <display-option
             launcher:name="Short Stubby"
@@ -84,19 +84,19 @@
             launcher:iconImageSize="54"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
+
     </grid-option>
 
     <grid-option
         launcher:name="5_by_5"
         launcher:numRows="5"
-        launcher:numColumns="5"
-        launcher:numFavoritesIcons="5" >
+        launcher:numColumns="5" >
 
         <display-option
             launcher:name="Large Phone"
             launcher:minWidthDps="406"
             launcher:minHeightDps="694"
-            launcher:iconImageSize="72"
+            launcher:iconImageSize="56"
             launcher:iconTextSize="14.4"
             launcher:canBeDefault="true" />
 
@@ -107,5 +107,7 @@
             launcher:iconImageSize="48"
             launcher:iconTextSize="13.0"
             launcher:canBeDefault="true" />
+
     </grid-option>
+
 </profiles>

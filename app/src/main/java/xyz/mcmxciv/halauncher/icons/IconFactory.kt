@@ -17,12 +17,17 @@
 package xyz.mcmxciv.halauncher.icons
 
 import android.content.Context
+import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
+import android.content.res.Resources
+import android.content.res.Resources.NotFoundException
 import android.graphics.*
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
+import androidx.core.graphics.drawable.toDrawable
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import javax.inject.Inject
@@ -32,8 +37,9 @@ import kotlin.math.round
 
 class IconFactory @Inject constructor(
     private val context: Context,
-    private val iconNormalizer: IconNormalizer,
+    private val packageManager: PackageManager,
     private val invariantDeviceProfile: InvariantDeviceProfile,
+    private val iconNormalizer: IconNormalizer,
     private val shadowGenerator: ShadowGenerator
 ) : AutoCloseable {
     private var colorExtractorDisabled = false
@@ -50,7 +56,30 @@ class IconFactory @Inject constructor(
         clear()
     }
 
-    fun createIconBitmap(icon: Drawable): Bitmap {
+    fun getIcon(activityInfo: ActivityInfo): Bitmap {
+        val drawable = getDrawable(activityInfo) ?: activityInfo.loadIcon(packageManager)
+        return createIconBitmap(drawable)
+    }
+
+    private fun getDrawable(activityInfo: ActivityInfo): Drawable? {
+        val iconRes: Int = activityInfo.iconResource
+        val density = invariantDeviceProfile.fillResIconDpi
+        var icon: Drawable? = null
+
+        if (density != 0 && iconRes != 0) {
+            try {
+                val resources: Resources =
+                    packageManager.getResourcesForApplication(activityInfo.applicationInfo)
+                icon = resources.getDrawableForDensity(iconRes, density, null)
+            } catch (exc: PackageManager.NameNotFoundException) {
+            } catch (exc: NotFoundException) {
+            }
+        }
+
+        return icon
+    }
+
+    private fun createIconBitmap(icon: Drawable): Bitmap {
         val scale = FloatArray(1)
         val normalizedIcon = normalizeAndWrapToAdaptiveIcon(icon, scale)
         val bitmap = createIconBitmap(normalizedIcon, scale[0])
@@ -122,12 +151,12 @@ class IconFactory @Inject constructor(
 //        return normalizeAndWrapToAdaptiveIcon(icon)
 //    }
 
-    private fun normalizeAndWrapToAdaptiveIcon(icon: Drawable, outScale: FloatArray): Drawable {
+    private fun normalizeAndWrapToAdaptiveIcon(drawable: Drawable, outScale: FloatArray): Drawable {
         var scale: Float
         val outBounds: RectF? = null
+        var icon = drawable
 
         if (ATLEAST_OREO) {
-            val normalizedIcon: Drawable
             val wrapperIcon = context
                 .getDrawable(R.drawable.adaptive_icon_drawable_wrapper)?.mutate()
             val adaptiveIconDrawable = wrapperIcon as AdaptiveIconDrawable
@@ -141,9 +170,9 @@ class IconFactory @Inject constructor(
                 val fixedScaleDrawable = adaptiveIconDrawable.foreground as FixedScaleDrawable
                 fixedScaleDrawable.drawable = icon
                 fixedScaleDrawable.setScale(scale)
-                normalizedIcon = adaptiveIconDrawable
+                icon = adaptiveIconDrawable
                 scale = iconNormalizer
-                    .getScale(normalizedIcon, outBounds, null, null)
+                    .getScale(icon, outBounds, null, null)
                 (adaptiveIconDrawable.background as ColorDrawable).color = wrapperBackgroundColor
             }
         }
