@@ -1,8 +1,6 @@
 package xyz.mcmxciv.halauncher
 
-import android.content.Context
 import android.graphics.Paint
-import android.graphics.drawable.AdaptiveIconDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

@@ -37,20 +37,6 @@ class ApplicationRepository @Inject constructor(
                 ))
             }
 
-//            pm.getInstalledApplications(0).forEach { appInfo ->
-//                launcherIntent.setPackage(appInfo.packageName)
-//
-//                // only show launch-able apps
-//                if (pm.queryIntentActivities(launcherIntent, 0).size > 0) {
-//                    val unbadgedIcon = appInfo.loadUnbadgedIcon(pm)
-//                    appList.add(AppInfo(
-//                        appInfo.packageName,
-//                        pm.getApplicationLabel(appInfo).toString(),
-//                        iconFactory.getIcon(ac)
-//                    ))
-//                }
-//            }
-
             return@withContext appList
         }
     }

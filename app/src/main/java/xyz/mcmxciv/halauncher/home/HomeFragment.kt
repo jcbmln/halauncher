@@ -1,7 +1,6 @@
 package xyz.mcmxciv.halauncher.home
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +27,7 @@ import xyz.mcmxciv.halauncher.utils.SessionState
 import java.io.BufferedReader
 import javax.inject.Inject
 
+
 class HomeFragment : BaseFragment() {
     private lateinit var viewModel: HomeViewModel
 
@@ -46,7 +46,7 @@ class HomeFragment : BaseFragment() {
         component.inject(this)
         viewModel = createViewModel { component.homeViewModel() }
 
-        viewModel.sessionState.observe(this, Observer { state ->
+        viewModel.sessionState.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is Resource.Error -> displayMessage(state.message)
                 is Resource.Success -> {
@@ -63,14 +63,14 @@ class HomeFragment : BaseFragment() {
 
         appList.layoutManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
 
-        viewModel.launchableActivities.observe(this, Observer { state ->
+        viewModel.launchableActivities.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is Resource.Error -> displayMessage(state.message)
                 is Resource.Success -> appList.adapter = AppListAdapter(state.data)
             }
         })
 
-        viewModel.webCallback.observe(this, Observer { state ->
+        viewModel.webCallback.observe(viewLifecycleOwner, Observer { state ->
             if (state != Resource.Loading) {
                 homeWebView.evaluateJavascript(state.data?.callback, null)
             }
@@ -84,12 +84,11 @@ class HomeFragment : BaseFragment() {
         })
 
         allAppsButton.setOnClickListener {
-            appList.isVisible = !appList.isVisible
-            activity?.window?.statusBarColor =
-                if (appList.isVisible) Color.WHITE else activity!!.getColor(R.color.colorAccent)
+            setAppListVisibility()
+            changeStatusBar()
         }
 
-        activity?.onBackPressedDispatcher?.addCallback(this) {
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
             this.isEnabled = true
             appList.isVisible = false
         }
@@ -184,5 +183,24 @@ class HomeFragment : BaseFragment() {
     private fun navigateToSettingsActivity() {
         val action = HomeFragmentDirections.actionHomeFragmentToSettingsNavigationGraph()
         findNavController().navigate(action)
+    }
+
+    private fun setAppListVisibility() {
+        appList.isVisible = !appList.isVisible
+    }
+
+    private fun changeStatusBar() {
+        activity?.let {
+            if (appList.isVisible) {
+                it.window.statusBarColor = it.getColor(R.color.colorWindowBackground)
+                it.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            }
+            else {
+                it.window.statusBarColor = it.getColor(R.color.colorAccent)
+                it.window.decorView.systemUiVisibility =
+                    it.window.decorView.systemUiVisibility and
+                            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+            }
+        }
     }
 }

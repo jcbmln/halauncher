@@ -26,7 +26,6 @@ import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.utils.GraphicsUtils
 import java.nio.ByteBuffer
 import javax.inject.Inject
-import kotlin.experimental.and
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.max
@@ -48,7 +47,7 @@ class IconNormalizer @Inject constructor(
     private val paintMaskShapeOutline = Paint()
     private var adaptiveIconScale = SCALE_NOT_INITIALIZED
     private val matrix = Matrix()
-    private val shapePath = Path()
+    private val shapePath = IconShape.shapePath
 
     init {
         paintMaskShape.color = Color.RED
@@ -98,7 +97,7 @@ class IconNormalizer @Inject constructor(
             height = maxSize * height / max
         }
 
-        bitmap.eraseColor(Color.WHITE)
+        bitmap.eraseColor(Color.TRANSPARENT)
         d.setBounds(0, 0, width, height)
         d.draw(canvas)
 
@@ -128,7 +127,7 @@ class IconNormalizer @Inject constructor(
             lastX = -1
             firstX = lastX
             for (x in 0 until width) {
-                if (pixels[index] and 0xFF.toByte() > MIN_VISIBLE_ALPHA) {
+                if ((pixels[index].toInt() and 0xFF) > MIN_VISIBLE_ALPHA) {
                     if (firstX == -1) {
                         firstX = x
                     }
@@ -191,14 +190,14 @@ class IconNormalizer @Inject constructor(
         return getScale(area, rectArea, (width * height).toFloat())
     }
 
-    private fun isShape(path: Path?): Boolean {
+    private fun isShape(maskPath: Path?): Boolean {
         val iconRatio = bounds.width().toFloat() / bounds.height()
         if (abs(iconRatio - 1) > BOUND_RATIO_MARGIN) return false
 
         matrix.reset()
         matrix.setScale(bounds.width().toFloat(), bounds.height().toFloat())
         matrix.postTranslate(bounds.left.toFloat(), bounds.top.toFloat())
-        path?.transform(matrix, shapePath)
+        maskPath?.transform(matrix, shapePath)
 
         canvas.drawPath(shapePath, paintMaskShape)
         canvas.drawPath(shapePath, paintMaskShapeOutline)
@@ -211,23 +210,20 @@ class IconNormalizer @Inject constructor(
         buffer.rewind()
         bitmap.copyPixelsToBuffer(buffer)
 
-        var y = bounds.top
-        var index = y * maxSize
+        var index = bounds.top * maxSize
         val rowSizeDiff = maxSize - bounds.right
 
         var sum = 0
-        var px = ""
-        while (y < bounds.bottom) {
+
+        for (y in bounds.top until bounds.bottom) {
             index += bounds.left
             for (x in bounds.left until bounds.right) {
-                if ((pixels[index] and 0xFF.toByte()) > MIN_VISIBLE_ALPHA) {
+                if ((pixels[index].toInt() and 0xFF) > MIN_VISIBLE_ALPHA) {
                     sum++
-                    px += "${(pixels[index] and 0xFF.toByte())},"
                 }
                 index++
             }
             index += rowSizeDiff
-            y++
         }
 
         val percentageDiffPixels = sum.toFloat() / (bounds.width() * bounds.height())
@@ -309,9 +305,8 @@ class IconNormalizer @Inject constructor(
             val angles = FloatArray(total - 1) // The tangent at each pixel.
             var last = -1    // Last valid y coordinate which didn't have a missing value
             var lastAngle = Float.MAX_VALUE
-            var i = topY + 1
 
-            while (i <= bottomY) {
+            for (i in (topY + 1)..bottomY) {
                 if (xCoordinates[i] > -1) {
                     var start = topY
 
@@ -344,8 +339,6 @@ class IconNormalizer @Inject constructor(
 
                     last = i
                 }
-
-                i++
             }
         }
     }
