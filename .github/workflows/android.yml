@@ -30,8 +30,11 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Decrypt Signing Key
-        run: openssl aes-256-cbc -d -pass env:SECRET_PASSWORD -salt -pbkdf2 -in app/secret.enc -out app/releasekey.jks
+      - name: Decrypt Secrets
+        run: openssl aes-256-cbc -d -pass env:SECRET_PASSWORD -salt -pbkdf2 -in app/secrets.enc -out app/secrets.tar.gz
+
+      - name: Uncompress Secrets
+        run: tar xzf app/secrets.tar.gz -C app/
 
       - name: Make Gradle Runnable
         run: chmod +x ./gradlew
