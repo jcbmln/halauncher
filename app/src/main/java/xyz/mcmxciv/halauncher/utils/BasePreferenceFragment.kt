@@ -3,10 +3,12 @@ package xyz.mcmxciv.halauncher.utils
 import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import timber.log.Timber
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.di.components.FragmentComponent
 import xyz.mcmxciv.halauncher.views.ActionPreference
 import xyz.mcmxciv.halauncher.views.ActionPreferenceDialogFragmentCompat
+import java.lang.IllegalStateException
 
 abstract class BasePreferenceFragment : PreferenceFragmentCompat() {
     protected val component: FragmentComponent =
@@ -19,12 +21,12 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat() {
             fragment = ActionPreferenceDialogFragmentCompat.newInstance(preference.key)
         }
 
-        if (fragment != null) {
-            fragment.setTargetFragment(this, 0)
-            fragment.show(requireFragmentManager(), DIALOG_FRAGMENT_TAG)
+        fragment?.setTargetFragment(this, 0)
+        try {
+            fragment?.show(requireActivity().supportFragmentManager, DIALOG_FRAGMENT_TAG)
         }
-        else {
-            super.onDisplayPreferenceDialog(preference)
+        catch (ex: IllegalStateException) {
+            Timber.e(ex)
         }
     }
 
