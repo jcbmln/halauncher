@@ -19,17 +19,17 @@ class HomeViewModel @Inject constructor(
 
     val sessionState by lazy {
         val liveData = ResourceLiveData<SessionState>()
-        val token = appSettings.session
+        val cachedSession = appSettings.session
 
         if (!appSettings.setupDone) {
             liveData.postSuccess(SessionState.NewUser)
         }
-        else if (token == null || token.accessToken.isEmpty()) {
+        else if (cachedSession == null || cachedSession.accessToken.isEmpty()) {
             liveData.postSuccess(SessionState.Invalid)
         }
         else {
             liveData.postValue(viewModelScope, "Failed to validate session.") {
-                appSettings.session = homeAssistantRepository.validateToken(token)
+                appSettings.session = homeAssistantRepository.validateSession(cachedSession)
                 return@postValue SessionState.Valid
             }
         }
@@ -48,13 +48,13 @@ class HomeViewModel @Inject constructor(
 
     fun getExternalAuth(callback: String) {
         val cachedToken = appSettings.session
-        val error = Resource.Error(
+        val errorCallback = Resource.Error(
             WebCallback.AuthCallback("$callback(false);"),
             "Failed to authenticate."
         )
 
-        webCallback.postValue(viewModelScope, error) {
-            val token = homeAssistantRepository.validateToken(cachedToken)
+        webCallback.postValue(viewModelScope, errorCallback) {
+            val token = homeAssistantRepository.validateSession(cachedToken)
             appSettings.session = token
 
             val json = JSONObject(mapOf(
@@ -67,15 +67,14 @@ class HomeViewModel @Inject constructor(
     }
 
     fun revokeExternalAuth(callback: String) {
-        val error = Resource.Error(
+        val errorCallback = Resource.Error(
             WebCallback.RevokeAuthCallback("$callback(false);"),
             "Failed to revoke access."
         )
 
-        webCallback.postValue(viewModelScope, error) {
-            val token = appSettings.session
+        webCallback.postValue(viewModelScope, errorCallback) {
+            homeAssistantRepository.revokeToken(appSettings.session)
             appSettings.session = null
-            homeAssistantRepository.revokeToken(token)
 
             sessionState.postSuccess(SessionState.Invalid)
             return@postValue WebCallback.RevokeAuthCallback("$callback(true);")

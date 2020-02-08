@@ -30,6 +30,8 @@ class ResourceLiveData<T : Any> : MutableLiveData<Resource<T>>() {
         message: String?,
         block: suspend () -> T
     ) {
+        postLoading()
+
         val exceptionHandler = CoroutineExceptionHandler { _, ex ->
             Timber.e(ex)
 
@@ -39,7 +41,6 @@ class ResourceLiveData<T : Any> : MutableLiveData<Resource<T>>() {
                 postError(message ?: ex.message ?: "Unknown error.")
         }
 
-        postLoading()
         scope.launch(exceptionHandler) { postSuccess(block()) }
     }
 }

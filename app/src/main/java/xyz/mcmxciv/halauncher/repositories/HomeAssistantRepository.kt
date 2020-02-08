@@ -24,7 +24,7 @@ class HomeAssistantRepository @Inject constructor(
         session?.let { homeAssistantApi.revokeToken(it.refreshToken!!, REVOKE_ACTION) }
     }
 
-    suspend fun validateToken(cachedSession: Session?): Session {
+    suspend fun validateSession(cachedSession: Session?): Session {
         val token = cachedSession ?: throw AuthorizationException()
         return if (token.isExpired()) {
             val refreshToken = refreshToken(token.refreshToken!!)

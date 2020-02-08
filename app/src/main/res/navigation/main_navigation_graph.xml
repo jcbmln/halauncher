@@ -51,11 +51,6 @@
                 app:destination="@id/discoveryFragment" />
         </fragment>
         <action
-            android:id="@+id/action_global_homeFragment4"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="false" />
-        <action
             android:id="@+id/action_global_authentication_navigation_graph"
             app:destination="@id/authentication_navigation_graph"
             app:popUpTo="@id/setup_navigation_graph"

@@ -23,16 +23,16 @@ class TokenAuthenticator constructor(
             HomeAssistantRepository.GRANT_TYPE_REFRESH, refreshToken,
             HomeAssistantRepository.CLIENT_ID
         )
-        val token = Session(
+        val session = Session(
             refreshedToken.accessToken,
             refreshedToken.expiresIn,
             appSettings.session?.refreshToken,
             refreshedToken.tokenType
         )
 
-        appSettings.session = token
+        appSettings.session = session
         return response.request.newBuilder()
-            .addHeader("Authorization", "Bearer ${token.accessToken}")
+            .addHeader("Authorization", "Bearer ${session.accessToken}")
             .build()
     }
 }

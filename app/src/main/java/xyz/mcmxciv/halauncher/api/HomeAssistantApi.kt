@@ -36,10 +36,4 @@ interface HomeAssistantApi {
         @Field("refresh_token") refreshToken: String,
         @Field("action") action: String
     )
-
-//    @POST("/api/mobile_app/registrations")
-//    suspend fun registerDevice(
-//        @Header("Authorization") auth: String,
-//        @Body request: DeviceRegistration
-//    ): DeviceIntegration
 }

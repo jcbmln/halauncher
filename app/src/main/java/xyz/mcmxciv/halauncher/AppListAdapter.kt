@@ -1,5 +1,6 @@
 package xyz.mcmxciv.halauncher
 
+import android.content.Context
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,7 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.models.AppInfo
 
-class AppListAdapter(private val appList: List<AppInfo>) :
+class AppListAdapter(private val context: Context, private val appList: List<AppInfo>) :
     RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
 
     class AppListViewHolder(val view: View) : RecyclerView.ViewHolder(view)
@@ -30,9 +31,9 @@ class AppListAdapter(private val appList: List<AppInfo>) :
         appItem.text = appInfo.displayName
 
         appItem.setOnClickListener {
-            val context = LauncherApplication.instance.applicationContext
             val pm = context.packageManager
-            context.startActivity(pm.getLaunchIntentForPackage(appInfo.packageName))
+            val intent = pm.getLaunchIntentForPackage(appInfo.packageName)
+            context.startActivity(intent)
         }
     }
 

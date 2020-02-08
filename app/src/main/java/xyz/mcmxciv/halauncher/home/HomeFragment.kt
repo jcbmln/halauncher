@@ -53,9 +53,7 @@ class HomeFragment : BaseFragment() {
                     when (state.data) {
                         SessionState.NewUser -> navigateToSetupGraph()
                         SessionState.Invalid -> navigateToAuthenticationGraph()
-                        SessionState.Valid -> {
-                            initializeWebView()
-                        }
+                        SessionState.Valid -> initializeWebView()
                     }
                 }
             }
@@ -66,7 +64,7 @@ class HomeFragment : BaseFragment() {
         viewModel.launchableActivities.observe(viewLifecycleOwner, Observer { state ->
             when (state) {
                 is Resource.Error -> displayMessage(state.message)
-                is Resource.Success -> appList.adapter = AppListAdapter(state.data)
+                is Resource.Success -> appList.adapter = AppListAdapter(context!!, state.data)
             }
         })
 
@@ -143,10 +141,12 @@ class HomeFragment : BaseFragment() {
                             "config_screen/show" -> navigateToSettingsActivity()
                             "frontend/get_themes" -> {
                                 val keys: MutableList<String> = ArrayList()
-                                for (key in JSONObject(JSONObject(message).get("themes").toString()).keys()) {
+                                val themes = JSONObject(message).get("themes")
+                                val themesWrapper = JSONObject(themes.toString())
+
+                                for (key in themesWrapper.keys()) {
                                     keys.add(key as String)
                                 }
-                                Timber.d("Got themes!")
                             }
                         }
                     }

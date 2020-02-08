@@ -11,6 +11,4 @@ interface AppComponent {
     fun fragmentBuilder(): FragmentComponent.Builder
 
     fun inject(application: LauncherApplication)
-
-//    fun appSettings(): AppSettings
 }

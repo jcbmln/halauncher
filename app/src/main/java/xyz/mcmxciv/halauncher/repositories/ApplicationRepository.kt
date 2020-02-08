@@ -31,7 +31,7 @@ class ApplicationRepository @Inject constructor(
 
             for (resolveInfo in resolveInfoList) {
                 appList.add(AppInfo(
-                    resolveInfo.activityInfo.name,
+                    resolveInfo.activityInfo.packageName,
                     resolveInfo.loadLabel(pm).toString(),
                     iconFactory.getIcon(resolveInfo.activityInfo)
                 ))
