@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.home
+package xyz.mcmxciv.halauncher.ui.home
 
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel

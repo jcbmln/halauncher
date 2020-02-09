@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.authentication
+package xyz.mcmxciv.halauncher.ui.authentication
 
 import android.net.Uri
 import android.util.Log
@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import xyz.mcmxciv.halauncher.repositories.HomeAssistantRepository
 import xyz.mcmxciv.halauncher.utils.AppSettings
 import javax.inject.Inject
@@ -19,7 +20,7 @@ class AuthenticationViewModel @Inject constructor(
     val authenticationSuccess: MutableLiveData<Boolean> = MutableLiveData()
 
     private val authenticationExceptionHandler = CoroutineExceptionHandler { _, exception ->
-        Log.e(TAG, exception.message.toString())
+        Timber.e(exception.message.toString())
         authenticationErrorMessage.value = "Authentication failed."
         authenticationSuccess.value = false
     }

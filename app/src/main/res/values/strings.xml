@@ -31,14 +31,21 @@
     <string name="integration_retry">Retry</string>
 
     <!-- Preference Sections -->
+    <string name="preference_top_level">Settings</string>
     <string name="preference_connection">Connection</string>
     <string name="preference_connection_summary">Edit connection urls and revoke access</string>
+    <string name="preference_connection_key">connection_preference</string>
     <string name="preference_integration">Device Integration</string>
     <string name="preference_integration_summary">Change how Home Assistant sees this device</string>
+    <string name="preference_integration_key">integration_preference</string>
     <string name="preference_display">Display</string>
     <string name="preference_display_summary">Change themes and display settings</string>
+    <string name="preference_display_key">display_preference</string>
     <string name="preference_about">About HALauncher</string>
     <string name="preference_about_summary">Check for updates and view licenses and policies</string>
+    <string name="preference_about_key">about_preference</string>
+    <string name="preference_check_updates_key">check_updates_preference</string>
+    <string name="preference_privacy_policy_key">privacy_policy_preference</string>
 
     <!-- Connection Preferences -->
     <string name="internal_url_title">Home Assistant Url</string>
@@ -59,4 +66,7 @@
 
     <string name="action_preference_image">action preference image</string>
     <string name="default_confirmation_message">Are you sure you want to perform this action?</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

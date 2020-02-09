@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.integration
+package xyz.mcmxciv.halauncher.ui.integration
 
 import android.os.Build
 import androidx.lifecycle.MutableLiveData

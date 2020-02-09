@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.setup
+package xyz.mcmxciv.halauncher.ui.setup
 
 import android.net.nsd.NsdServiceInfo
 import android.os.Bundle
@@ -27,13 +27,6 @@ class DiscoveryFragment : BaseFragment(), ServiceSelectedListener {
     ): View? {
         return inflater.inflate(R.layout.discovery_fragment, container, false)
     }
-
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        return inflater.inflate(R.layout.discovery_fragment, container, false)
-//    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.settings.fragments
+package xyz.mcmxciv.halauncher.ui.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater

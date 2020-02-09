@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.authentication
+package xyz.mcmxciv.halauncher.ui.authentication
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -41,17 +41,16 @@ class AuthenticationFragment : BaseFragment() {
             loadUrl(viewModel.getAuthenticationUrl())
         }
 
-        viewModel.authenticationErrorMessage.observe(this, Observer {
+        viewModel.authenticationErrorMessage.observe(viewLifecycleOwner, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
 
-        viewModel.authenticationSuccess.observe(this, Observer { authenticated ->
+        viewModel.authenticationSuccess.observe(viewLifecycleOwner, Observer { authenticated ->
             if (authenticated) {
                 val action = if (viewModel.isSetupDone())
-                        AuthenticationFragmentDirections.actionGlobalHomeFragment()
+                    AuthenticationFragmentDirections.actionGlobalHomeFragment()
                     else
-                        AuthenticationFragmentDirections
-                            .actionAuthenticationFragmentToIntegrationFragment()
+                    AuthenticationFragmentDirections.actionAuthenticationFragmentToIntegrationFragment()
 
                 findNavController().navigate(action)
             }

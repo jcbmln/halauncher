@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.integration
+package xyz.mcmxciv.halauncher.ui.integration
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,7 +29,7 @@ class IntegrationFragment : BaseFragment() {
         viewModel = createViewModel { component.integrationViewModel() }
         viewModel.registerDevice()
 
-        viewModel.integrationState.observe(this, Observer { resource ->
+        viewModel.integrationState.observe(viewLifecycleOwner, Observer { resource ->
             when (resource) {
                 is Resource.Error -> {
                     displayMessage(resource.message)
@@ -39,7 +39,7 @@ class IntegrationFragment : BaseFragment() {
             }
         })
 
-        viewModel.integrationError.observe(this, Observer {
+        viewModel.integrationError.observe(viewLifecycleOwner, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
 
@@ -55,7 +55,8 @@ class IntegrationFragment : BaseFragment() {
 
     private fun finishIntegration() {
         viewModel.finishSetup()
-        val action = IntegrationFragmentDirections.actionGlobalHomeFragment()
+        val action =
+            IntegrationFragmentDirections.actionGlobalHomeFragment()
         findNavController().navigate(action)
     }
 

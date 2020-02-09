@@ -1,10 +1,11 @@
-package xyz.mcmxciv.halauncher.settings
+package xyz.mcmxciv.halauncher.ui.settings
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import xyz.mcmxciv.halauncher.repositories.HomeAssistantRepository
 import xyz.mcmxciv.halauncher.utils.AppSettings
 import javax.inject.Inject
@@ -14,7 +15,7 @@ class SettingsViewModel @Inject constructor(
     val appSettings: AppSettings
 ) : ViewModel() {
     private val exceptionHandler = CoroutineExceptionHandler { _, ex ->
-        Log.e(TAG, ex.message.toString())
+        Timber.e(ex.message.toString())
     }
 
 
@@ -23,9 +24,5 @@ class SettingsViewModel @Inject constructor(
             homeAssistantRepository.revokeToken(appSettings.session)
             appSettings.session = null
         }
-    }
-
-    companion object {
-        private const val TAG = "SettingsViewModel"
     }
 }

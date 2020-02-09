@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.home
+package xyz.mcmxciv.halauncher.ui.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -171,17 +171,20 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun navigateToSetupGraph() {
-        val action = HomeFragmentDirections.actionHomeFragmentToSetupNavigationGraph()
+        val action =
+            HomeFragmentDirections.actionHomeFragmentToSetupNavigationGraph()
         findNavController().navigate(action)
     }
 
     private fun navigateToAuthenticationGraph() {
-        val action = HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
+        val action =
+            HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
         findNavController().navigate(action)
     }
 
     private fun navigateToSettingsActivity() {
-        val action = HomeFragmentDirections.actionHomeFragmentToSettingsNavigationGraph()
+        val action =
+            HomeFragmentDirections.actionHomeFragmentToMainPreferencesFragment()
         findNavController().navigate(action)
     }
 

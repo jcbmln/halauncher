@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.settings.fragments
+package xyz.mcmxciv.halauncher.ui.settings
 
 import android.os.Bundle
 import androidx.preference.Preference
@@ -12,8 +12,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.extensions.createViewModel
-import xyz.mcmxciv.halauncher.settings.SettingsActivity
-import xyz.mcmxciv.halauncher.settings.SettingsViewModel
+import xyz.mcmxciv.halauncher.ui.MainActivity
 import xyz.mcmxciv.halauncher.utils.BasePreferenceFragment
 
 @Suppress("unused")
@@ -23,9 +22,19 @@ class AboutPreferencesFragment : BasePreferenceFragment(), InstallStateUpdatedLi
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         viewModel = createViewModel { component.settingsViewModel() }
-        setPreferencesFromResource(R.xml.about_preferences, rootKey)
+        addPreferencesFromResource(R.xml.about_preferences)
 
-        val checkUpdatesPreference = findPreference<Preference>(CHECK_UPDATES_KEY)
+        addClickListener(
+            findPreference(getString(R.string.preference_privacy_policy_key)),
+            AboutPreferencesFragmentDirections
+                .actionAboutPreferencesFragmentToWebviewPreferenceFragment(
+                    BuildConfig.PRIVACY_POLICY_URL
+                )
+        )
+
+        val checkUpdatesPreference = findPreference<Preference>(
+            getString(R.string.preference_check_updates_key)
+        )
         checkUpdatesPreference?.summary = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
         checkUpdatesPreference?.setOnPreferenceClickListener {
             appUpdateManager = AppUpdateManagerFactory.create(context)
@@ -37,16 +46,13 @@ class AboutPreferencesFragment : BasePreferenceFragment(), InstallStateUpdatedLi
                         appUpdateInfo,
                         AppUpdateType.FLEXIBLE,
                         activity,
-                        SettingsActivity.UPDATE_REQUEST_CODE
+                        MainActivity.UPDATE_REQUEST_CODE
                     )
                 }
             }
 
             true
         }
-
-        val privacyPolicyPreference = findPreference<Preference>(PRIVACY_POLICY_KEY)
-        privacyPolicyPreference?.extras?.putString("url", BuildConfig.PRIVACY_POLICY_URL)
     }
 
     override fun onStateUpdate(state: InstallState) {
@@ -61,10 +67,5 @@ class AboutPreferencesFragment : BasePreferenceFragment(), InstallStateUpdatedLi
             setAction("RESTART") { appUpdateManager.completeUpdate() }
             show()
         }
-    }
-
-    companion object {
-        private const val CHECK_UPDATES_KEY = "check_updates"
-        private const val PRIVACY_POLICY_KEY = "privacy_policy"
     }
 }

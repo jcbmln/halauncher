@@ -16,12 +16,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".settings.SettingsActivity"
-            android:parentActivityName=".home.HomeActivity"
-            android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme.Settings" />
-        <activity
-            android:name=".home.HomeActivity"
+            android:name=".ui.MainActivity"
             android:clearTaskOnLaunch="true"
             android:enabled="true"
             android:excludeFromRecents="true"

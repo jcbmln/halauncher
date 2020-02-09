@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
-        app:fragment="xyz.mcmxciv.halauncher.settings.fragments.ConnectionPreferencesFragment"
+        app:fragment="xyz.mcmxciv.halauncher.ui.settings.ConnectionPreferencesFragment"
         app:icon="@drawable/ic_connection"
-        app:key="connection_header"
+        app:key="@string/preference_connection_key"
         app:title="@string/preference_connection"
         app:summary="@string/preference_connection_summary"  />
 
     <Preference
-        app:fragment="xyz.mcmxciv.halauncher.settings.fragments.ConnectionPreferencesFragment"
+        app:fragment="xyz.mcmxciv.halauncher.ui.settings.IntegrationPreferencesFragment"
         app:icon="@drawable/ic_devices"
-        app:key="connection_header"
+        app:key="@string/preference_integration_key"
         app:title="@string/preference_integration"
         app:summary="@string/preference_integration_summary"  />
 
     <Preference
-        app:fragment="xyz.mcmxciv.halauncher.settings.fragments.DisplayPreferencesFragment"
+        app:fragment="xyz.mcmxciv.halauncher.ui.settings.DisplayPreferencesFragment"
         app:icon="@drawable/ic_display"
-        app:key="sync_header"
+        app:key="@string/preference_display_key"
         app:title="@string/preference_display"
         app:summary="@string/preference_display_summary" />
 
     <Preference
-        app:fragment="xyz.mcmxciv.halauncher.settings.fragments.AboutPreferencesFragment"
+        app:fragment="xyz.mcmxciv.halauncher.ui.settings.AboutPreferencesFragment"
         app:icon="@drawable/ic_info"
-        app:key="sync_header"
+        app:key="@string/preference_about_key"
         app:title="@string/preference_about"
         app:summary="@string/preference_about_summary"  />
 </PreferenceScreen>

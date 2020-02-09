@@ -13,6 +13,11 @@
         <item name="colorPrimaryDark">@color/colorForeground</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/AppTheme.PreferenceThemeOverlay</item>
+        <item name="actionBarTheme">@style/AppActionBar</item>
+    </style>f
+    <style name="AppTheme.PreferenceThemeOverlay" parent="PreferenceThemeOverlay">
+        <item name="android:layout">@layout/settings_fragment</item>
     </style>
     <style name="AppTheme.Transparent">
         <item name="android:windowShowWallpaper">true</item>
@@ -39,6 +44,7 @@
 
     <style name="AppActionBar" parent="android:Widget.Material.ActionBar">
         <item name="android:elevation">0dp</item>
+        <item name="android:background">@color/colorBackground</item>
     </style>
 
     <style name="Widget" parent="android:Widget" />
