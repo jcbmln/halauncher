@@ -5,4 +5,6 @@ data class DeviceIntegration(
     val remoteUiUrl: String?,
     val secret: String?,
     val webhookId: String
-) : Model()
+) : Model() {
+    companion object : JsonModel<DeviceIntegration>()
+}

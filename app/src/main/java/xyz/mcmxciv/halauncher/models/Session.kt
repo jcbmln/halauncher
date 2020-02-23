@@ -15,4 +15,6 @@ data class Session(
 
     val expiresIn: Long
         get() = expirationTimestamp - Instant.now().epochSecond
+
+    companion object : JsonModel<Session>()
 }

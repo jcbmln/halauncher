@@ -5,4 +5,6 @@ data class DiscoveryInfo(
     val locationName: String,
     val requiresApiPassword: Boolean,
     val version: String
-) : Model()
+) : Model() {
+    companion object : JsonModel<DiscoveryInfo>()
+}

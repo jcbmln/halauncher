@@ -10,16 +10,16 @@ class LocalStorageRepository(private val sharedPreferences: SharedPreferences) {
         set(value) = putString(HOME_ASSISTANT_URL_KEY, value)
 
     var session: Session?
-        get() = getString(SESSION_KEY)?.let { Model.fromJson(it) }
-        set(value) = putString(SESSION_KEY, value?.toJson<Session>() )
+        get() = getString(SESSION_KEY)?.let { Session.fromJson(it) }
+        set(value) = putString(SESSION_KEY, value?.toJson() )
 
     var deviceRegistration: DeviceRegistration?
-        get() = getString(DEVICE_REGISTRATION_KEY)?.let { Model.fromJson(it) }
-        set(value) = putString(DEVICE_REGISTRATION_KEY, value?.toJson<DeviceRegistration>())
+        get() = getString(DEVICE_REGISTRATION_KEY)?.let { DeviceRegistration.fromJson(it) }
+        set(value) = putString(DEVICE_REGISTRATION_KEY, value?.toJson())
 
     var deviceIntegration: DeviceIntegration?
-        get() = getString(DEVICE_INTEGRATION_KEY)?.let { Model.fromJson(it) }
-        set(value) = putString(DEVICE_INTEGRATION_KEY, value?.toJson<DeviceIntegration>())
+        get() = getString(DEVICE_INTEGRATION_KEY)?.let { DeviceIntegration.fromJson(it) }
+        set(value) = putString(DEVICE_INTEGRATION_KEY, value?.toJson())
 
     val hasHomeAssistantInstance: Boolean
         get() = baseUrl != PLACEHOLDER_URL

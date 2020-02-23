@@ -42,4 +42,6 @@ data class Config(
         result = 31 * result + themeColor.hashCode()
         return result
     }
+
+    companion object : JsonModel<Config>()
 }

@@ -13,4 +13,6 @@ data class DeviceRegistration(
     val appData: Map<String, String>? = null,
     // Added in HA 0.104.0
     val deviceId: String? = null
-) : Model()
+) : Model() {
+    companion object : JsonModel<DeviceRegistration>()
+}
