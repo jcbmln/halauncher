@@ -14,33 +14,39 @@
         android:labelFor="@id/setupHostText"
         android:text="@string/title_home_assistant_url"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toTopOf="@+id/setupHostText"
+        app:layout_constraintBottom_toTopOf="@+id/setupHostTextLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <EditText
-        android:id="@+id/setupHostText"
-        style="@style/Widget.EditText"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:autofillHints="@string/default_home_assistant_url"
-        android:ems="15"
-        android:inputType="textUri"
-        android:padding="10dp"
-        android:singleLine="true"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/setupHostTextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:hint="@string/default_home_assistant_url"
+        app:endIconMode="clear_text"
         app:layout_constraintBottom_toTopOf="@+id/setupManualButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setupManualLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/setupManualLabel">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/setupHostText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionGo"
+            android:inputType="textUri" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/setupManualButton"
-        style="@style/Widget.Button.Primary"
+        style="@style/AppTheme.Widget.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -50,14 +56,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setupHostText" />
+        app:layout_constraintTop_toBottomOf="@+id/setupHostTextLayout" />
 
     <Button
         android:id="@+id/discoveryModeButton"
-        style="@style/Widget.Button.Transparent.Secondary"
+        style="@style/AppTheme.Widget.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/setup_mode_discovery"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -25,7 +25,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
         android:indeterminate="true"
         android:indeterminateTint="@color/colorAccentLighter"
         android:progressTint="@color/colorAccent"
@@ -38,29 +37,28 @@
 
     <Button
         android:id="@+id/integrationRetryButton"
-        style="@style/Widget.Button.Primary"
+        style="@style/AppTheme.Widget.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="@string/integration_retry"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/integrationSkipButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/integrationProgressBar" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/integrationSkipButton"
-        style="@style/Widget.Button.Transparent.Secondary"
+        style="@style/AppTheme.Widget.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/integration_skip"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/integrationRetryButton" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

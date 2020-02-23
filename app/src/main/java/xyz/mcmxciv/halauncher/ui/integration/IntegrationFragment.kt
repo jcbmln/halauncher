@@ -54,12 +54,12 @@ class IntegrationFragment : LauncherFragment() {
     private fun showButtons() {
         integrationRetryButton.isVisible = true
         integrationSkipButton.isVisible = true
-        integrationProgressBar.isVisible = true
+        integrationProgressBar.isVisible = false
     }
 
     private fun hideButtons() {
         integrationRetryButton.isVisible = false
         integrationSkipButton.isVisible = false
-        integrationProgressBar.isVisible = false
+        integrationProgressBar.isVisible = true
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_manual_setup.*
 import xyz.mcmxciv.halauncher.R
@@ -28,13 +29,22 @@ class ManualSetupFragment : LauncherFragment() {
             navigateToDiscoveryFragment()
         }
 
-        setupManualButton.setOnClickListener {
-            val text = setupHostText.text.toString()
+        setupManualButton.setOnClickListener { finishManualSetup() }
 
-            if (!text.isBlank()) {
-                viewModel.setUrl(text)
-                navigateToAuthenticationGraph()
-            }
+        setupHostText.setOnEditorActionListener { _, actionId, _ ->
+            return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_GO) {
+                finishManualSetup()
+                true
+            } else false
+        }
+    }
+
+    private fun finishManualSetup() {
+        val text = setupHostText.text.toString()
+
+        if (!text.isBlank()) {
+            viewModel.setUrl(text)
+            navigateToAuthenticationGraph()
         }
     }
 

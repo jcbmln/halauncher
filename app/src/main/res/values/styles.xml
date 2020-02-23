@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@color/colorBackground</item>
         <item name="android:statusBarColor">@color/colorAccent</item>
         <item name="android:colorPrimary">@color/colorAccent</item>
@@ -16,7 +16,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlHighlight">@color/colorAccent</item>
         <item name="preferenceTheme">@style/AppTheme.PreferenceThemeOverlay</item>
-        <item name="actionBarTheme">@style/AppActionBar</item>
     </style>f
     <style name="AppTheme.PreferenceThemeOverlay" parent="PreferenceThemeOverlay">
         <item name="android:layout">@layout/fragment_settings</item>
@@ -44,12 +43,28 @@
         <item name="negativeButtonText">@android:string/cancel</item>
     </style>
 
-    <style name="AppActionBar" parent="android:Widget.Material.ActionBar">
+    <style name="AppActionBar" parent="Widget.MaterialComponents.ActionBar.Primary">
         <item name="android:elevation">0dp</item>
         <item name="android:background">@color/colorBackground</item>
+        <item name="android:textColor">@color/actionBarTextColor</item>
     </style>
 
-    <style name="Widget" parent="android:Widget" />
+    <style name="AppTheme.Widget" parent="android:Widget" />
+
+    <style name="AppTheme.Widget.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/buttonBackgroundTint</item>
+        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="AppTheme.Widget.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/textButtonTextColor</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="AppTheme.Widget.EditText" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+
+    </style>
 
     <style name="Widget.EditText" parent="android:Widget.EditText">
         <item name="android:background">@drawable/edit_text_background</item>
@@ -57,38 +72,5 @@
         <item name="android:layout_marginStart">10dp</item>
         <item name="android:layout_marginEnd">10dp</item>
         <item name="android:stateListAnimator">@animator/focus_animator</item>
-    </style>
-
-    <style name="Widget.TextView">
-        <item name="android:textAlignment">textStart</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
-    </style>
-    <style name="Widget.TextView.Clickable">
-        <item name="android:background">@drawable/button_transparent</item>
-    </style>
-
-    <style name="Widget.Button">
-        <item name="android:stateListAnimator">@animator/elevation_animator</item>
-    </style>
-    <style name="Widget.Button.Primary">
-        <item name="android:background">@drawable/button_primary</item>
-        <item name="android:textColor">@color/colorBackground</item>
-    </style>
-    <style name="Widget.Button.Secondary">
-        <item name="android:background">@drawable/button_secondary</item>
-        <item name="android:textColor">@color/colorAccent</item>
-    </style>
-
-    <style name="Widget.Button.Transparent">
-        <item name="android:background">@drawable/button_transparent</item>
-        <item name="android:stateListAnimator">@null</item>
-    </style>
-    <style name="Widget.Button.Transparent.Primary">
-        <item name="android:textColor">@color/colorBackground</item>
-    </style>
-    <style name="Widget.Button.Transparent.Secondary">
-        <item name="android:textColor">@color/colorAccent</item>
     </style>
 </resources>

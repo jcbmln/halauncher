@@ -17,6 +17,14 @@
     <color name="colorWindowBackground">@color/offWhite</color>
     <color name="colorForeground">#333333</color>
 
+    <!-- Action Bar -->
+    <color name="actionBarTextColor">@color/colorForeground</color>
+
+    <!-- Buttons -->
+    <color name="buttonBackgroundTint">@color/colorAccent</color>
+    <color name="buttonTextColor">@android:color/white</color>
+    <color name="textButtonTextColor">@color/colorAccent</color>
+
     <!-- View Colors -->
     <color name="legacy_icon_background">#FFFFFF</color>
     <color name="edit_text_background">@color/colorBackground</color>
