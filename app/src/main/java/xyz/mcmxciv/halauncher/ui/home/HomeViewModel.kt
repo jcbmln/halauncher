@@ -1,5 +1,6 @@
 package xyz.mcmxciv.halauncher.ui.home
 
+import android.app.Activity
 import androidx.lifecycle.*
 import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -27,16 +28,11 @@ class HomeViewModel @Inject constructor(
     private val errorEvent = LiveEvent<ErrorState>()
     val error: LiveData<ErrorState> = errorEvent
 
-    private val activityListData = MutableLiveData<List<ActivityInfo>>()
-    val activityList: LiveData<List<ActivityInfo>> by lazy {
-        activityListData.value?.let {
-            viewModelScope.launch {
-                val activities = activityInteractor.getLaunchableActivities()
-                activityListData.postValue(activities)
-            }
+    val activityList = MutableLiveData<List<ActivityInfo>>().also {
+        viewModelScope.launch {
+            val activities = activityInteractor.getLaunchableActivities()
+            it.postValue(activities)
         }
-
-        return@lazy activityListData
     }
 
     fun getExternalAuth(callback: String) {

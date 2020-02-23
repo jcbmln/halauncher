@@ -18,18 +18,18 @@ class ActivityInteractor @Inject constructor(
         val activityInfoList = activityRepository.getActivities().toMutableList()
 
         for (info in resolveInfo) {
-            val packageName = info.activityInfo.packageName
-            val activityInfo = activityInfoList.singleOrNull { a -> a.packageName == packageName}
-            val packageInfo = packageRepository.getPackageInfo(packageName)
+            val activityName = info.activityInfo.name
+            val activityInfo = activityInfoList.singleOrNull { a -> a.activityName == activityName}
+            val packageInfo = packageRepository.getPackageInfo(info.activityInfo.packageName)
 
             when {
                 activityInfo == null -> {
                     val icon = iconFactory.getIcon(info.activityInfo)
                     val newActivityInfo = ActivityInfo(
-                        packageName,
+                        activityName,
                         packageRepository.getDisplayName(info),
                         packageInfo.lastUpdateTime,
-                        localStorageRepository.saveBitmap(packageName, icon),
+                        localStorageRepository.saveBitmap(activityName, icon),
                         icon
                     )
                     activityRepository.addActivityInfo(newActivityInfo)
@@ -37,22 +37,23 @@ class ActivityInteractor @Inject constructor(
                 }
                 packageInfo.lastUpdateTime > activityInfo.lastUpdate -> {
                     val icon = iconFactory.getIcon(info.activityInfo)
-                    localStorageRepository.saveBitmap(packageName, icon)
+                    localStorageRepository.saveBitmap(activityName, icon)
                     activityInfo.icon = icon
                     activityInfo.lastUpdate = packageInfo.lastUpdateTime
                 }
                 else -> {
-                    activityInfo.icon = localStorageRepository.getBitmap(packageName)
+                    val fileName = activityInfo.iconFileName
+                    activityInfo.icon = localStorageRepository.getBitmap(fileName)
                         ?: iconFactory.getIcon(info.activityInfo).also {
-                            localStorageRepository.saveBitmap(packageName, it)
+                            localStorageRepository.saveBitmap(activityName, it)
                         }
                 }
             }
         }
 
-        val packageNames = resolveInfo.map { ri -> ri.activityInfo.packageName }
-        activityInfoList.removeIf { a -> !packageNames.contains(a.packageName) }
-        activityInfoList.sortBy { a -> a.packageName }
+        val packageNames = resolveInfo.map { ri -> ri.activityInfo.name }
+        activityInfoList.removeIf { a -> !packageNames.contains(a.activityName) }
+        activityInfoList.sortBy { a -> a.displayName }
 
         return activityInfoList
     }

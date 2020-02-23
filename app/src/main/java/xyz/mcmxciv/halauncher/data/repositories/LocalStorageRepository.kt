@@ -5,9 +5,12 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.core.content.edit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.models.*
 import java.io.*
+import java.lang.Exception
 import javax.inject.Inject
 
 class LocalStorageRepository @Inject constructor(
@@ -36,32 +39,39 @@ class LocalStorageRepository @Inject constructor(
     val isAuthenticated: Boolean
         get() = session != null
 
-    fun saveBitmap(name: String, bitmap: Bitmap): String {
-        val directory = context.getDir("imageDir", Context.MODE_PRIVATE)
-        val fileName = "$name.jpg"
-        val file = File(directory, fileName)
+    suspend fun saveBitmap(name: String, bitmap: Bitmap): String {
+        return withContext(Dispatchers.IO) {
+            val directory = context.getDir("imageDir", Context.MODE_PRIVATE)
+            val fileName = "$name.jpg"
+            val file = File(directory, fileName)
+            file.createNewFile()
 
-        FileOutputStream(file).use { output ->
-            try {
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
-            } catch (ex: IOException) {
-                Timber.e(ex)
+            FileOutputStream(file).use { output ->
+                try {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
+                } catch (ex: Exception) {
+                    Timber.e(ex)
+                }
+
+                output.flush()
             }
-        }
 
-        return fileName
+            return@withContext fileName
+        }
     }
 
-    fun getBitmap(fileName: String): Bitmap? {
-        val directory = context.getDir("imageDir", Context.MODE_PRIVATE)
-        val file = File(directory, fileName)
+    suspend fun getBitmap(fileName: String): Bitmap? {
+        return withContext(Dispatchers.IO) {
+            val directory = context.getDir("imageDir", Context.MODE_PRIVATE)
+            val file = File(directory, fileName)
 
-        return FileInputStream(file).use { input ->
-            try {
-                return@use BitmapFactory.decodeStream(input)
-            } catch (ex: FileNotFoundException) {
-                Timber.e(ex)
-                return@use null
+            return@withContext FileInputStream(file).use { input ->
+                try {
+                    return@use BitmapFactory.decodeStream(input)
+                } catch (ex: FileNotFoundException) {
+                    Timber.e(ex)
+                    return@use null
+                }
             }
         }
     }

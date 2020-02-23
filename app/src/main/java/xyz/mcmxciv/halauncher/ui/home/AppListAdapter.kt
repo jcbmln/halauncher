@@ -34,7 +34,7 @@ class AppListAdapter(private val context: Context, private val activityList: Lis
 
         appItem.setOnClickListener {
             val pm = context.packageManager
-            val intent = pm.getLaunchIntentForPackage(appInfo.packageName)
+            val intent = pm.getLaunchIntentForPackage(appInfo.activityName)
             context.startActivity(intent)
         }
     }
