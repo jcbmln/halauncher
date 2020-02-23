@@ -2,18 +2,12 @@ package xyz.mcmxciv.halauncher.ui.settings
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavDirections
-import androidx.navigation.fragment.findNavController
-import androidx.preference.Preference
-import kotlinx.android.synthetic.main.settings_fragment.*
+import kotlinx.android.synthetic.main.fragment_settings.*
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.ui.settings.SettingsViewModel
-import xyz.mcmxciv.halauncher.extensions.createViewModel
-import xyz.mcmxciv.halauncher.utils.BasePreferenceFragment
-import java.lang.IllegalStateException
+import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
+import xyz.mcmxciv.halauncher.ui.createViewModel
 
-class MainPreferencesFragment : BasePreferenceFragment() {
+class MainPreferencesFragment : LauncherPreferenceFragment() {
     private lateinit var viewModel: SettingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

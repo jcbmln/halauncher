@@ -11,7 +11,7 @@ import xyz.mcmxciv.halauncher.R
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.home_activity)
+        setContentView(R.layout.activity_home)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

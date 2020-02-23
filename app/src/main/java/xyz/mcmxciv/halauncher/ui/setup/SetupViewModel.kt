@@ -4,13 +4,12 @@ import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
-import xyz.mcmxciv.halauncher.utils.AppSettings
+import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
 import xyz.mcmxciv.halauncher.utils.ResourceLiveData
 import javax.inject.Inject
 
 class SetupViewModel @Inject constructor(
-    private val nsdManager: NsdManager,
-    private val appSettings: AppSettings
+    private val localStorageRepository: LocalStorageRepository
 ) : ViewModel() {
     private var services: MutableList<NsdServiceInfo> = ArrayList()
 
@@ -21,13 +20,13 @@ class SetupViewModel @Inject constructor(
 
     fun startDiscovery() {
         if (!discoveryStarted) {
-            nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener)
+//            nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener)
             discoveryStarted = true
         }
     }
 
     fun stopDiscovery() {
-        if (discoveryStarted) nsdManager.stopServiceDiscovery(discoveryListener)
+//        if (discoveryStarted) nsdManager.stopServiceDiscovery(discoveryListener)
     }
 
     fun resolveService(serviceInfo: NsdServiceInfo) {
@@ -44,11 +43,11 @@ class SetupViewModel @Inject constructor(
         }
 
         resolvedUrl.postLoading()
-        nsdManager.resolveService(serviceInfo, resolveListener)
+//        nsdManager.resolveService(serviceInfo, resolveListener)
     }
 
     fun setUrl(url: String) {
-        appSettings.url = url
+        localStorageRepository.baseUrl = url
     }
 
     private val discoveryListener = object : NsdManager.DiscoveryListener {
@@ -61,12 +60,12 @@ class SetupViewModel @Inject constructor(
 
         override fun onStopDiscoveryFailed(serviceType: String, errorCode: Int) {
             Timber.e("Discovery failed: Error code:$errorCode")
-            nsdManager.stopServiceDiscovery(this)
+//            nsdManager.stopServiceDiscovery(this)
         }
 
         override fun onStartDiscoveryFailed(serviceType: String, errorCode: Int) {
             Timber.e("Discovery failed: Error code:$errorCode")
-            nsdManager.stopServiceDiscovery(this)
+//            nsdManager.stopServiceDiscovery(this)
             discoveryStarted = false
         }
 

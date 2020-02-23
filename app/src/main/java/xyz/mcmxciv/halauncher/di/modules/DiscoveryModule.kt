@@ -4,14 +4,12 @@ import android.content.Context
 import android.net.nsd.NsdManager
 import dagger.Module
 import dagger.Provides
-import xyz.mcmxciv.halauncher.SystemServiceInstance
-import xyz.mcmxciv.halauncher.di.scopes.FragmentScope
+import xyz.mcmxciv.halauncher.di.scopes.ViewScope
 
 @Module
 class DiscoveryModule {
-    @FragmentScope
     @Provides
     fun provideNsdManager(context: Context): NsdManager {
-        return SystemServiceInstance(NsdManager::class.java).getInstance(context) as NsdManager
+        return context.getSystemService(NsdManager::class.java) as NsdManager
     }
 }

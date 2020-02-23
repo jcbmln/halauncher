@@ -13,7 +13,7 @@ class ActionPreference(
 ) : DialogPreference(context, attrs, defAttrStyle, defAttrRes) {
     private var textColor: ColorStateList?
     var confirmationMessage: String?
-    private val dialogLayoutResourceId = R.layout.confirmation_dialog
+    private val dialogLayoutResourceId = R.layout.dialog_confirmation
 
     @Suppress("unused")
     constructor(context: Context) : this(context, null)

@@ -10,22 +10,22 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.discovery_fragment.*
+import kotlinx.android.synthetic.main.fragment_discovery.*
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.ServiceListAdapter
-import xyz.mcmxciv.halauncher.extensions.createViewModel
-import xyz.mcmxciv.halauncher.interfaces.ServiceSelectedListener
-import xyz.mcmxciv.halauncher.utils.BaseFragment
+import xyz.mcmxciv.halauncher.ui.LauncherFragment
+import xyz.mcmxciv.halauncher.ui.createViewModel
+import xyz.mcmxciv.halauncher.ui.displayMessage
 import xyz.mcmxciv.halauncher.utils.Resource
 
-class DiscoveryFragment : BaseFragment(), ServiceSelectedListener {
+class DiscoveryFragment : LauncherFragment(),
+    ServiceSelectedListener {
     private lateinit var viewModel: SetupViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.discovery_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_discovery, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -33,7 +33,7 @@ class DiscoveryFragment : BaseFragment(), ServiceSelectedListener {
         viewModel = createViewModel { component.setupViewModel() }
 
         serviceList.layoutManager = LinearLayoutManager(context)
-        val adapter = ServiceListAdapter(this)
+        val adapter = ServiceAdapter(this)
         serviceList.adapter = adapter
         serviceList.addItemDecoration(DividerItemDecoration(
             serviceList.context, DividerItemDecoration.VERTICAL

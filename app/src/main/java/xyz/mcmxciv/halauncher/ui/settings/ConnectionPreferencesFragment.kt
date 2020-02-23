@@ -4,11 +4,11 @@ import android.os.Bundle
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.extensions.createViewModel
-import xyz.mcmxciv.halauncher.utils.BasePreferenceFragment
+import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
+import xyz.mcmxciv.halauncher.ui.createViewModel
 
 @Suppress("unused")
-class ConnectionPreferencesFragment : BasePreferenceFragment(), Preference.OnPreferenceChangeListener {
+class ConnectionPreferencesFragment : LauncherPreferenceFragment(), Preference.OnPreferenceChangeListener {
     private lateinit var viewModel: SettingsViewModel
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -16,23 +16,23 @@ class ConnectionPreferencesFragment : BasePreferenceFragment(), Preference.OnPre
         setPreferencesFromResource(R.xml.connection_preferences, rootKey)
 
         val internalUrlPreference = findPreference<EditTextPreference>(INTERNAL_URL_KEY)
-        internalUrlPreference?.summary = viewModel.appSettings.url
+//        internalUrlPreference?.summary = viewModel.launcherSettings.url
 
         val externalUrlPreference = findPreference<EditTextPreference>(EXTERNAL_URL_KEY)
-        externalUrlPreference?.summary = viewModel.appSettings.url
+//        externalUrlPreference?.summary = viewModel.launcherSettings.url
 
 //        val revokeTokenPreference = findPreference<Preference>(REVOKE_TOKEN_KEY)
-//        revokeTokenPreference?.layoutResource = R.layout.action_preference
+//        revokeTokenPreference?.layoutResource = R.layout.preference_action
     }
 
     override fun onPreferenceChange(preference: Preference, newValue: Any?): Boolean {
         when (preference.key) {
             INTERNAL_URL_KEY -> {
-                viewModel.appSettings.url = newValue.toString()
+//                viewModel.launcherSettings.url = newValue.toString()
                 preference.summary = newValue.toString()
             }
             EXTERNAL_URL_KEY -> {
-                viewModel.appSettings.url = newValue.toString()
+//                viewModel.launcherSettings.url = newValue.toString()
                 preference.summary = newValue.toString()
             }
             REVOKE_TOKEN_KEY -> {

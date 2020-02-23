@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">HALauncher</string>
+    <string name="app_name">HaLauncher</string>
     <string name="http_example_com">http://example.com</string>
     <string name="main_button_go">Open Url</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="content_description">image</string>
 
     <string name="title_home_assistant_url">Home Assistant Url</string>
     <string name="title_transparent_background">Transparent Background</string>
@@ -66,7 +67,10 @@
 
     <string name="action_preference_image">action preference image</string>
     <string name="default_confirmation_message">Are you sure you want to perform this action?</string>
+    <string name="title_core">core</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_connection_failed_message">Unable to connect to Home Assistant.</string>
+    <string name="error_authentication_failed_message">Unable to authenticate. Check that your configuration is correct and try again.</string>
+    <string name="error_no_session_message">It looks like your session was revoked. Please sign in again.</string>
+    <string name="error_webview_message">An error occurred connecting to Home Assistant. Please check your connection and try again.</string>
 </resources>

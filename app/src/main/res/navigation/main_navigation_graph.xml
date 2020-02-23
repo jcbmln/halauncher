@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/launchFragment">
 
     <navigation
         android:id="@+id/authentication_navigation_graph"
@@ -12,7 +12,7 @@
             android:id="@+id/authenticationFragment"
             android:name="xyz.mcmxciv.halauncher.ui.authentication.AuthenticationFragment"
             android:label="authentication_fragment"
-            tools:layout="@layout/authentication_fragment">
+            tools:layout="@layout/fragment_authentication">
             <action
                 android:id="@+id/action_authenticationFragment_to_integrationFragment"
                 app:destination="@id/integrationFragment"
@@ -27,7 +27,7 @@
             android:id="@+id/integrationFragment"
             android:name="xyz.mcmxciv.halauncher.ui.integration.IntegrationFragment"
             android:label="integration_fragment"
-            tools:layout="@layout/integration_fragment" />
+            tools:layout="@layout/fragment_integration" />
     </navigation>
     <navigation
         android:id="@+id/setup_navigation_graph"
@@ -36,7 +36,7 @@
             android:id="@+id/discoveryFragment"
             android:name="xyz.mcmxciv.halauncher.ui.setup.DiscoveryFragment"
             android:label="discovery_fragment"
-            tools:layout="@layout/discovery_fragment">
+            tools:layout="@layout/fragment_discovery">
             <action
                 android:id="@+id/action_discoveryFragment_to_manualSetupFragment"
                 app:destination="@id/manualSetupFragment" />
@@ -45,7 +45,7 @@
             android:id="@+id/manualSetupFragment"
             android:name="xyz.mcmxciv.halauncher.ui.setup.ManualSetupFragment"
             android:label="manual_setup_fragment"
-            tools:layout="@layout/manual_setup_fragment">
+            tools:layout="@layout/fragment_manual_setup">
             <action
                 android:id="@+id/action_manualSetupFragment_to_discoveryFragment"
                 app:destination="@id/discoveryFragment" />
@@ -60,7 +60,7 @@
         android:id="@+id/homeFragment"
         android:name="xyz.mcmxciv.halauncher.ui.home.HomeFragment"
         android:label="home_fragment"
-        tools:layout="@layout/home_fragment" >
+        tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_authentication_navigation_graph"
             app:destination="@id/authentication_navigation_graph"
@@ -126,10 +126,31 @@
             android:id="@+id/webviewPreferenceFragment"
             android:name="xyz.mcmxciv.halauncher.ui.settings.WebviewPreferenceFragment"
             android:label="webview_preference_fragment"
-            tools:layout="@layout/webview_preference_fragment" >
+            tools:layout="@layout/fragment_webview_preference" >
             <argument
                 android:name="url"
                 app:argType="string" />
         </fragment>
     </navigation>
+    <fragment
+        android:id="@+id/launchFragment"
+        android:name="xyz.mcmxciv.halauncher.ui.launch.LaunchFragment"
+        android:label="fragment_launch"
+        tools:layout="@layout/fragment_launch" >
+        <action
+            android:id="@+id/action_launchFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_launchFragment_to_setup_navigation_graph"
+            app:destination="@id/setup_navigation_graph"
+            app:popUpTo="@id/setup_navigation_graph"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_launchFragment_to_authentication_navigation_graph"
+            app:destination="@id/authentication_navigation_graph"
+            app:popUpTo="@id/authentication_navigation_graph"
+            app:popUpToInclusive="false" />
+    </fragment>
 </navigation>

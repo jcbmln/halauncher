@@ -1,58 +1,62 @@
 package xyz.mcmxciv.halauncher.ui.integration
 
 import android.os.Build
-import androidx.lifecycle.MutableLiveData
+import android.provider.Settings
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hadilq.liveevent.LiveEvent
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import xyz.mcmxciv.halauncher.BuildConfig
+import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
+import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import xyz.mcmxciv.halauncher.models.DeviceRegistration
-import xyz.mcmxciv.halauncher.repositories.HomeAssistantRepository
-import xyz.mcmxciv.halauncher.utils.AppSettings
+import xyz.mcmxciv.halauncher.models.IntegrationState
 import xyz.mcmxciv.halauncher.utils.ResourceLiveData
 import javax.inject.Inject
 
 class IntegrationViewModel @Inject constructor(
-    private val homeAssistantRepository: HomeAssistantRepository,
-    private val appSettings: AppSettings
+    private val integrationInteractor: IntegrationInteractor,
+    private val resourceProvider: ResourceProvider
 ) : ViewModel() {
-    val integrationState = ResourceLiveData<IntegrationState>()
-    val integrationError: MutableLiveData<String> = MutableLiveData()
-
-//    private val integrationExceptionHandler = CoroutineExceptionHandler { _, exception ->
-//        Log.e(TAG, exception.message.toString())
-//        integrationState.value = IntegrationState.FAILED
-//        integrationError.value = "Unable to register device."
-//    }
+    private val integrationEvent = LiveEvent<IntegrationState>()
+    val integrationState: LiveData<IntegrationState> by lazy {
+        registerDevice()
+        return@lazy integrationEvent
+    }
 
     fun registerDevice() {
+        integrationEvent.postValue(IntegrationState.LOADING)
+
         val deviceRegistration = DeviceRegistration(
             BuildConfig.APPLICATION_ID,
-            "HALauncher",
+            resourceProvider.getString(R.string.app_name),
             BuildConfig.VERSION_NAME,
-            appSettings.deviceName,
+            resourceProvider.getSettingsString("bluetooth_name") ?: Build.MODEL,
             Build.MANUFACTURER,
             Build.MODEL,
             "Android",
             Build.VERSION.SDK_INT.toString(),
             false,
-            null
+            null,
+            resourceProvider.getSettingsString(Settings.Secure.ANDROID_ID)
         )
 
-        integrationState.postValue(viewModelScope, "Unable to register device.") {
-            homeAssistantRepository.registerDevice(deviceRegistration)
-            return@postValue IntegrationState.SUCCESS
+        val exceptionHandler = CoroutineExceptionHandler { _, ex ->
+            Timber.e(ex)
+            integrationEvent.postValue(IntegrationState.ERROR)
+        }
+
+        viewModelScope.launch(exceptionHandler) {
+            integrationInteractor.registerDevice(deviceRegistration)
+            integrationEvent.postValue(IntegrationState.SUCCESS)
         }
     }
 
-    fun finishSetup() {
-        appSettings.setupDone = true
+    fun finishSetup(integrationSkipped: Boolean) {
+//        launcherSettings.setupDone = true
     }
-
-    enum class IntegrationState {
-        SUCCESS
-    }
-
-//    companion object {
-//        private const val TAG = "IntegrationViewModel"
-//    }
 }

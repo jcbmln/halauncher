@@ -10,25 +10,23 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import kotlinx.android.synthetic.main.home_fragment.*
+import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_webview_preference.*
 import org.json.JSONObject
 import timber.log.Timber
-import xyz.mcmxciv.halauncher.AppListAdapter
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.extensions.createViewModel
+import xyz.mcmxciv.halauncher.models.ActivityInfo
+import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
-import xyz.mcmxciv.halauncher.utils.BaseFragment
-import xyz.mcmxciv.halauncher.utils.Resource
-import xyz.mcmxciv.halauncher.utils.SessionState
+import xyz.mcmxciv.halauncher.ui.*
+import xyz.mcmxciv.halauncher.models.WebCallback
 import java.io.BufferedReader
 import javax.inject.Inject
 
 
-class HomeFragment : BaseFragment() {
+class HomeFragment : LauncherFragment() {
     private lateinit var viewModel: HomeViewModel
 
     @Inject
@@ -38,48 +36,39 @@ class HomeFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.home_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         component.inject(this)
         viewModel = createViewModel { component.homeViewModel() }
 
-        viewModel.sessionState.observe(viewLifecycleOwner, Observer { state ->
-            when (state) {
-                is Resource.Error -> displayMessage(state.message)
-                is Resource.Success -> {
-                    when (state.data) {
-                        SessionState.NewUser -> navigateToSetupGraph()
-                        SessionState.Invalid -> navigateToAuthenticationGraph()
-                        SessionState.Valid -> initializeWebView()
-                    }
+        observe(viewModel.error) { error ->
+            if (error == ErrorState.AUTHENTICATION) {
+                displayMessage(getString(R.string.error_no_session_message))
+                navigate {
+                    HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
                 }
             }
-        })
-
-        appList.layoutManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
-
-        viewModel.launchableActivities.observe(viewLifecycleOwner, Observer { state ->
-            when (state) {
-                is Resource.Error -> displayMessage(state.message)
-                is Resource.Success -> appList.adapter = AppListAdapter(context!!, state.data)
+            else {
+                displayMessage(getString(R.string.error_webview_message))
             }
-        })
+        }
 
-        viewModel.webCallback.observe(viewLifecycleOwner, Observer { state ->
-            if (state != Resource.Loading) {
-                homeWebView.evaluateJavascript(state.data?.callback, null)
-            }
+        observe(viewModel.activityList) { resource ->
+            initializeAppList(resource)
+        }
+        
+        observe(viewModel.callback) { resource ->
+            homeWebView.evaluateJavascript(resource.callback, null)
 
-            when (state) {
-                is Resource.Error -> {
-                    displayMessage(state.message)
-                    navigateToAuthenticationGraph()
+            if (resource is WebCallback.RevokeAuthCallback) {
+                navigate {
+                    HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
                 }
             }
-        })
+        }
 
         allAppsButton.setOnClickListener {
             setAppListVisibility()
@@ -88,8 +77,19 @@ class HomeFragment : BaseFragment() {
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
             this.isEnabled = true
-            appList.isVisible = false
+
+            when {
+                appList.isVisible -> appList.isVisible = false
+                webview.canGoBack() -> webview.goBack()
+            }
         }
+
+        initializeWebView()
+    }
+
+    private fun initializeAppList(activities: List<ActivityInfo>) {
+        appList.layoutManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
+        appList.adapter = AppListAdapter(context!!, activities)
     }
 
     private fun initializeWebView() {
@@ -138,7 +138,9 @@ class HomeFragment : BaseFragment() {
                                 )});"
                                 homeWebView.evaluateJavascript(script, null)
                             }
-                            "config_screen/show" -> navigateToSettingsActivity()
+                            "config_screen/show" -> navigate {
+                                HomeFragmentDirections.actionHomeFragmentToMainPreferencesFragment()
+                            }
                             "frontend/get_themes" -> {
                                 val keys: MutableList<String> = ArrayList()
                                 val themes = JSONObject(message).get("themes")
@@ -154,7 +156,7 @@ class HomeFragment : BaseFragment() {
             }, "externalApp")
         }
 
-        homeWebView.loadUrl(viewModel.buildUrl())
+        homeWebView.loadUrl(viewModel.webviewUrl)
     }
 
     private fun getThemeCallback() : String? {
@@ -168,24 +170,6 @@ class HomeFragment : BaseFragment() {
         }
 
         return callback?.let { "javascript:(function() { $it })()" }
-    }
-
-    private fun navigateToSetupGraph() {
-        val action =
-            HomeFragmentDirections.actionHomeFragmentToSetupNavigationGraph()
-        findNavController().navigate(action)
-    }
-
-    private fun navigateToAuthenticationGraph() {
-        val action =
-            HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
-        findNavController().navigate(action)
-    }
-
-    private fun navigateToSettingsActivity() {
-        val action =
-            HomeFragmentDirections.actionHomeFragmentToMainPreferencesFragment()
-        findNavController().navigate(action)
     }
 
     private fun setAppListVisibility() {

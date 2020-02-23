@@ -4,60 +4,51 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.integration_fragment.*
+import kotlinx.android.synthetic.main.fragment_integration.*
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.extensions.createViewModel
-import xyz.mcmxciv.halauncher.utils.BaseFragment
+import xyz.mcmxciv.halauncher.models.IntegrationState
+import xyz.mcmxciv.halauncher.ui.*
 import xyz.mcmxciv.halauncher.utils.Resource
 
-class IntegrationFragment : BaseFragment() {
+class IntegrationFragment : LauncherFragment() {
     private lateinit var viewModel: IntegrationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.integration_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_integration, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = createViewModel { component.integrationViewModel() }
-        viewModel.registerDevice()
 
-        viewModel.integrationState.observe(viewLifecycleOwner, Observer { resource ->
-            when (resource) {
-                is Resource.Error -> {
-                    displayMessage(resource.message)
+        observe(viewModel.integrationState) { state ->
+            when (state) {
+                IntegrationState.LOADING -> { hideButtons() }
+                IntegrationState.ERROR -> {
+                    displayMessage(getString(R.string.integration_status_failed))
                     showButtons()
                 }
-                is Resource.Success -> finishIntegration()
+                IntegrationState.SUCCESS -> finishIntegration()
             }
-        })
-
-        viewModel.integrationError.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
+        }
 
         integrationRetryButton.setOnClickListener {
             viewModel.registerDevice()
-            hideButtons()
         }
 
         integrationSkipButton.setOnClickListener {
-            finishIntegration()
+            finishIntegration(true)
         }
     }
 
-    private fun finishIntegration() {
-        viewModel.finishSetup()
-        val action =
-            IntegrationFragmentDirections.actionGlobalHomeFragment()
-        findNavController().navigate(action)
+    private fun finishIntegration(integrationSkipped: Boolean = false) {
+        viewModel.finishSetup(integrationSkipped)
+        navigate { IntegrationFragmentDirections.actionGlobalHomeFragment() }
     }
 
     private fun showButtons() {

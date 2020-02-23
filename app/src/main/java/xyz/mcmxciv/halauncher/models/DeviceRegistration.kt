@@ -1,28 +1,16 @@
 package xyz.mcmxciv.halauncher.models
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-
-@JsonClass(generateAdapter = true)
 data class DeviceRegistration(
-    @Json(name = "app_id")
-    val appId: String,
-    @Json(name = "app_name")
-    val appName: String,
-    @Json(name = "app_version")
-    val appVersion: String,
-    @Json(name = "device_name")
-    val deviceName: String,
-    @Json(name = "manufacturer")
-    val manufacturer: String,
-    @Json(name = "model")
-    val model: String,
-    @Json(name = "os_name")
-    val osName: String,
-    @Json(name = "os_version")
-    val osVersion: String,
-    @Json(name = "supports_encryption")
-    val supportsEncryption: Boolean,
-    @Json(name = "app_data")
-    val appData: Map<String, String>?
-)
+    val appId: String? = null,
+    val appName: String? = null,
+    val appVersion: String? = null,
+    val deviceName: String? = null,
+    val manufacturer: String? = null,
+    val model: String? = null,
+    val osName: String? = null,
+    val osVersion: String? = null,
+    val supportsEncryption: Boolean? = false,
+    val appData: Map<String, String>? = null,
+    // Added in HA 0.104.0
+    val deviceId: String? = null
+) : Model()

@@ -4,11 +4,11 @@ import android.os.Bundle
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.extensions.createViewModel
-import xyz.mcmxciv.halauncher.utils.BasePreferenceFragment
+import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
+import xyz.mcmxciv.halauncher.ui.createViewModel
 
 @Suppress("unused")
-class IntegrationPreferencesFragment : BasePreferenceFragment(), Preference.OnPreferenceChangeListener {
+class IntegrationPreferencesFragment : LauncherPreferenceFragment(), Preference.OnPreferenceChangeListener {
     private lateinit var viewModel: SettingsViewModel
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -16,19 +16,19 @@ class IntegrationPreferencesFragment : BasePreferenceFragment(), Preference.OnPr
         setPreferencesFromResource(R.xml.integration_preferences, rootKey)
 
         val localUrlPreference = findPreference<EditTextPreference>("local_url")
-        localUrlPreference?.summary = viewModel.appSettings.url
+//        localUrlPreference?.summary = viewModel.launcherSettings.url
     }
 
     override fun onPreferenceChange(preference: Preference, newValue: Any?): Boolean {
         when (preference.key) {
             LOCAL_URL_KEY -> {
-                viewModel.appSettings.url = newValue.toString()
+//                viewModel.launcherSettings.url = newValue.toString()
                 preference.summary = newValue.toString()
             }
-            DEVICE_NAME_KEY -> {
-                viewModel.appSettings.deviceName = newValue.toString()
-                preference.summary = newValue.toString()
-            }
+//            DEVICE_NAME_KEY -> {
+//                viewModel.launcherSettings.deviceName = newValue.toString()
+//                preference.summary = newValue.toString()
+//            }
         }
 
         return true

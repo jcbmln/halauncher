@@ -9,6 +9,8 @@
         <item name="android:textColor">@color/colorForeground</item>
         <item name="android:colorControlHighlight">@color/colorAccent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+<!--        <item name="android:windowTranslucentNavigation">true</item>-->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/colorForeground</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -17,7 +19,7 @@
         <item name="actionBarTheme">@style/AppActionBar</item>
     </style>f
     <style name="AppTheme.PreferenceThemeOverlay" parent="PreferenceThemeOverlay">
-        <item name="android:layout">@layout/settings_fragment</item>
+        <item name="android:layout">@layout/fragment_settings</item>
     </style>
     <style name="AppTheme.Transparent">
         <item name="android:windowShowWallpaper">true</item>
@@ -34,7 +36,7 @@
     </style>
 
     <style name="ActionPreference" parent="Preference.Material">
-        <item name="android:layout">@layout/action_preference</item>
+        <item name="android:layout">@layout/preference_action</item>
     </style>
 
     <style name="ActionPreference.DialogPreference">

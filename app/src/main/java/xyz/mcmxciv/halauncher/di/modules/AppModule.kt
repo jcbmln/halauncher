@@ -1,26 +1,30 @@
 package xyz.mcmxciv.halauncher.di.modules
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
-import xyz.mcmxciv.halauncher.di.components.FragmentComponent
-import javax.inject.Singleton
+import xyz.mcmxciv.halauncher.utils.LauncherResourceProvider
+import xyz.mcmxciv.halauncher.utils.ResourceProvider
+import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
+import xyz.mcmxciv.halauncher.di.components.ViewComponent
 
-@Module(subcomponents = [FragmentComponent::class])
+@Module(subcomponents = [ViewComponent::class])
 class AppModule(private val context: Context) {
-    @Singleton
     @Provides
-    fun provideContext(): Context = context
+    fun context(): Context = context
 
-    @Singleton
     @Provides
-    fun provideSharedPreferences(context: Context): SharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(context)
+    fun launcherStorage(context: Context): LocalStorageRepository =
+        LocalStorageRepository(
+            PreferenceManager.getDefaultSharedPreferences(context)
+        )
 
-    @Singleton
     @Provides
-    fun providePackagaManager(context: Context): PackageManager = context.packageManager
+    fun launcherResourceProvider(context: Context): ResourceProvider =
+        LauncherResourceProvider(context)
+
+    @Provides
+    fun packageManager(context: Context): PackageManager = context.packageManager
 }

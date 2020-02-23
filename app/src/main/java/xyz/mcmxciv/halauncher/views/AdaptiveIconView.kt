@@ -62,7 +62,7 @@ class AdaptiveIconView(
     private lateinit var text: String
 
     init {
-        val prefs = LauncherApplication.instance.appSettings
+//        val prefs = LauncherApplication.instance.launcherSettings
         iconSize = (layerSize / (1 + 2 * AdaptiveIconDrawable.getExtraInsetFraction())).toInt()
         layerCenter = iconSize / 2f
         offset = (layerSize - iconSize) / 2
@@ -78,7 +78,7 @@ class AdaptiveIconView(
 //            context.getColor(R.color.colorBackground)
 //            else context.getColor(R.color.colorForeground)
 
-        IconShape.setShape(prefs.iconShapeType, layerCenter)
+//        IconShape.setShape(prefs.iconShapeType, layerCenter)
     }
 
     fun setIcon(icon: AdaptiveIconDrawable) {
