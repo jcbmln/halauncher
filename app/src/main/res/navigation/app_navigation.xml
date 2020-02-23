@@ -6,7 +6,7 @@
     app:startDestination="@id/launchFragment">
 
     <navigation
-        android:id="@+id/authentication_navigation_graph"
+        android:id="@+id/authentication_navigation"
         app:startDestination="@id/authenticationFragment" >
         <fragment
             android:id="@+id/authenticationFragment"
@@ -30,7 +30,7 @@
             tools:layout="@layout/fragment_integration" />
     </navigation>
     <navigation
-        android:id="@+id/setup_navigation_graph"
+        android:id="@+id/setup_navigation"
         app:startDestination="@id/discoveryFragment" >
         <fragment
             android:id="@+id/discoveryFragment"
@@ -52,8 +52,8 @@
         </fragment>
         <action
             android:id="@+id/action_global_authentication_navigation_graph"
-            app:destination="@id/authentication_navigation_graph"
-            app:popUpTo="@id/setup_navigation_graph"
+            app:destination="@id/authentication_navigation"
+            app:popUpTo="@id/setup_navigation"
             app:popUpToInclusive="false" />
     </navigation>
     <fragment
@@ -63,11 +63,11 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_authentication_navigation_graph"
-            app:destination="@id/authentication_navigation_graph"
+            app:destination="@id/authentication_navigation"
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_homeFragment_to_setup_navigation_graph"
-            app:destination="@id/setup_navigation_graph"
+            app:destination="@id/setup_navigation"
             app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
@@ -75,10 +75,10 @@
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_homeFragment_to_mainPreferencesFragment"
-            app:destination="@id/settings_navigation_graph" />
+            app:destination="@id/settings_navigation" />
     </fragment>
     <navigation
-        android:id="@+id/settings_navigation_graph"
+        android:id="@+id/settings_navigation"
         app:startDestination="@id/mainPreferencesFragment" >
         <fragment
             android:id="@+id/mainPreferencesFragment"
@@ -144,13 +144,13 @@
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_launchFragment_to_setup_navigation_graph"
-            app:destination="@id/setup_navigation_graph"
-            app:popUpTo="@id/setup_navigation_graph"
+            app:destination="@id/setup_navigation"
+            app:popUpTo="@id/setup_navigation"
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_launchFragment_to_authentication_navigation_graph"
-            app:destination="@id/authentication_navigation_graph"
-            app:popUpTo="@id/authentication_navigation_graph"
+            app:destination="@id/authentication_navigation"
+            app:popUpTo="@id/authentication_navigation"
             app:popUpToInclusive="false" />
     </fragment>
 </navigation>

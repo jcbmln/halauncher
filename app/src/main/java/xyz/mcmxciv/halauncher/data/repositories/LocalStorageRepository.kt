@@ -1,10 +1,19 @@
 package xyz.mcmxciv.halauncher.data.repositories
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.core.content.edit
+import timber.log.Timber
 import xyz.mcmxciv.halauncher.models.*
+import java.io.*
+import javax.inject.Inject
 
-class LocalStorageRepository(private val sharedPreferences: SharedPreferences) {
+class LocalStorageRepository @Inject constructor(
+    private val context: Context,
+    private val sharedPreferences: SharedPreferences
+) {
     var baseUrl: String
         get() = getString(HOME_ASSISTANT_URL_KEY) ?: PLACEHOLDER_URL
         set(value) = putString(HOME_ASSISTANT_URL_KEY, value)
@@ -26,6 +35,36 @@ class LocalStorageRepository(private val sharedPreferences: SharedPreferences) {
 
     val isAuthenticated: Boolean
         get() = session != null
+
+    fun saveBitmap(name: String, bitmap: Bitmap): String {
+        val directory = context.getDir("imageDir", Context.MODE_PRIVATE)
+        val fileName = "$name.jpg"
+        val file = File(directory, fileName)
+
+        FileOutputStream(file).use { output ->
+            try {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
+            } catch (ex: IOException) {
+                Timber.e(ex)
+            }
+        }
+
+        return fileName
+    }
+
+    fun getBitmap(fileName: String): Bitmap? {
+        val directory = context.getDir("imageDir", Context.MODE_PRIVATE)
+        val file = File(directory, fileName)
+
+        return FileInputStream(file).use { input ->
+            try {
+                return@use BitmapFactory.decodeStream(input)
+            } catch (ex: FileNotFoundException) {
+                Timber.e(ex)
+                return@use null
+            }
+        }
+    }
 
     private fun getString(key: String): String? =
         sharedPreferences.getString(key, null)

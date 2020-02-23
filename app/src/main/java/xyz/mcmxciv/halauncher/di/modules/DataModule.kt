@@ -1,5 +1,7 @@
 package xyz.mcmxciv.halauncher.di.modules
 
+import android.content.Context
+import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -12,6 +14,7 @@ import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
 import xyz.mcmxciv.halauncher.di.qualifiers.Api
 import xyz.mcmxciv.halauncher.di.qualifiers.SecureApi
+import xyz.mcmxciv.halauncher.models.ActivityInfoDao
 
 @Module
 class DataModule {
@@ -54,4 +57,16 @@ class DataModule {
             .client(client)
             .build()
     }
+
+    @Provides
+    fun activityInfoDatabase(context: Context): ActivityInfoDatabase =
+        Room.databaseBuilder(
+            context.applicationContext,
+            ActivityInfoDatabase::class.java,
+            "activity_info_database"
+        ).build()
+
+    @Provides
+    fun activityInfoDao(database: ActivityInfoDatabase): ActivityInfoDao =
+        database.acctivityInfoDao()
 }

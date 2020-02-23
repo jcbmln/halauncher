@@ -1,6 +1,7 @@
 package xyz.mcmxciv.halauncher.di.modules
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import androidx.preference.PreferenceManager
 import dagger.Module
@@ -16,10 +17,8 @@ class AppModule(private val context: Context) {
     fun context(): Context = context
 
     @Provides
-    fun launcherStorage(context: Context): LocalStorageRepository =
-        LocalStorageRepository(
-            PreferenceManager.getDefaultSharedPreferences(context)
-        )
+    fun sharedPreferences(context: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
 
     @Provides
     fun launcherResourceProvider(context: Context): ResourceProvider =
