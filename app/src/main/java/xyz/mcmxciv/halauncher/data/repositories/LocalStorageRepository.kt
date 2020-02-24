@@ -33,6 +33,10 @@ class LocalStorageRepository @Inject constructor(
         get() = getString(DEVICE_INTEGRATION_KEY)?.let { DeviceIntegration.fromJson(it) }
         set(value) = putString(DEVICE_INTEGRATION_KEY, value?.toJson())
 
+    var config: Config?
+        get() = getString(CONFIG_KEY)?.let { Config.fromJson(it) }
+        set(value) = putString(CONFIG_KEY, value?.toJson())
+
     val hasHomeAssistantInstance: Boolean
         get() = baseUrl != PLACEHOLDER_URL
 
@@ -95,6 +99,7 @@ class LocalStorageRepository @Inject constructor(
         private const val SESSION_KEY = "session"
         private const val DEVICE_REGISTRATION_KEY = "device_registration"
         private const val DEVICE_INTEGRATION_KEY = "device_integration"
+        private const val CONFIG_KEY = "config"
 
         const val PLACEHOLDER_URL = "http://localhost:8123/"
     }

@@ -1,6 +1,6 @@
 package xyz.mcmxciv.halauncher.models
 
-data class IntegrationRequest<T>(
+data class IntegrationRequest(
     val type: String,
-    val data: T?
+    val data: Any?
 )

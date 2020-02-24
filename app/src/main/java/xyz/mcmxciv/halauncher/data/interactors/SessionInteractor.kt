@@ -35,8 +35,20 @@ class SessionInteractor @Inject constructor(
         localStorageRepository.baseUrl = LocalStorageRepository.PLACEHOLDER_URL
     }
 
-    fun getExternalAuthentication(): String {
-        val session = localStorageRepository.session ?: throw AuthenticationException()
+    suspend fun getExternalAuthentication(): String {
+        var session = localStorageRepository.session ?: throw AuthenticationException()
+
+        if (session.isExpired) {
+            val token = authenticationRepository.refreshToken(session.refreshToken)
+            session = Session(
+                token.accessToken,
+                Instant.now().epochSecond + token.expiresIn,
+                session.refreshToken,
+                token.tokenType
+            )
+            localStorageRepository.session = session
+        }
+
         return JSONObject(
             mapOf(
                 "access_token" to session.accessToken,

@@ -1,6 +1,7 @@
 package xyz.mcmxciv.halauncher.ui.home
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.addCallback
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.graphics.toColor
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -32,6 +35,8 @@ class HomeFragment : LauncherFragment() {
     @Inject
     lateinit var invariantDeviceProfile: InvariantDeviceProfile
 
+    private var color: Int? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +48,7 @@ class HomeFragment : LauncherFragment() {
         super.onViewCreated(view, savedInstanceState)
         component.inject(this)
         viewModel = createViewModel { component.homeViewModel() }
+        color = activity?.getColor(R.color.colorAccent)
 
         observe(viewModel.error) { error ->
             if (error == ErrorState.AUTHENTICATION) {
@@ -62,12 +68,17 @@ class HomeFragment : LauncherFragment() {
         
         observe(viewModel.callback) { resource ->
             homeWebView.evaluateJavascript(resource.callback, null)
+            viewModel.getConfig()
 
             if (resource is WebCallback.RevokeAuthCallback) {
                 navigate {
                     HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
                 }
             }
+        }
+
+        observe(viewModel.configEvent) { config ->
+            setStatusBarColor(Color.parseColor(config.themeColor))
         }
 
         allAppsButton.setOnClickListener {
@@ -174,6 +185,13 @@ class HomeFragment : LauncherFragment() {
 
     private fun setAppListVisibility() {
         appList.isVisible = !appList.isVisible
+    }
+
+    private fun setStatusBarColor(color: Int) {
+        activity?.let {
+            it.window.statusBarColor = color
+            it.window.navigationBarColor = color
+        }
     }
 
     private fun changeStatusBar() {

@@ -1,47 +1,28 @@
 package xyz.mcmxciv.halauncher.models
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class Config(
+    @Json(name = "latitude")
     val latitude: Double,
+    @Json(name = "longitude")
     val longitude: Double,
+    @Json(name = "elevation")
     val elevation: Double,
-    val unitSystem: HashMap<String, String>,
+    @Json(name = "unit_system")
+    val unitSystem: Map<String, String>,
+    @Json(name = "location_name")
     val locationName: String,
+    @Json(name = "time_zone")
     val timeZone: String,
-    val components: Array<String>,
+    @Json(name = "components")
+    val components: List<String>,
+    @Json(name = "version")
     val version: String,
+    @Json(name = "theme_color")
     val themeColor: String
 ) : Model() {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Config
-
-        if (latitude != other.latitude) return false
-        if (longitude != other.longitude) return false
-        if (elevation != other.elevation) return false
-        if (unitSystem != other.unitSystem) return false
-        if (locationName != other.locationName) return false
-        if (timeZone != other.timeZone) return false
-        if (!components.contentEquals(other.components)) return false
-        if (version != other.version) return false
-        if (themeColor != other.themeColor) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = latitude.hashCode()
-        result = 31 * result + longitude.hashCode()
-        result = 31 * result + elevation.hashCode()
-        result = 31 * result + unitSystem.hashCode()
-        result = 31 * result + locationName.hashCode()
-        result = 31 * result + timeZone.hashCode()
-        result = 31 * result + components.contentHashCode()
-        result = 31 * result + version.hashCode()
-        result = 31 * result + themeColor.hashCode()
-        return result
-    }
-
     companion object : JsonModel<Config>()
 }

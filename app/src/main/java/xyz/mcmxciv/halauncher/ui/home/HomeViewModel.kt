@@ -7,9 +7,11 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.data.interactors.ActivityInteractor
+import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
 import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
 import xyz.mcmxciv.halauncher.models.ActivityInfo
+import xyz.mcmxciv.halauncher.models.Config
 import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.WebCallback
 import javax.inject.Inject
@@ -17,7 +19,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val urlInteractor: UrlInteractor,
     private val sessionInteractor: SessionInteractor,
-    private val activityInteractor: ActivityInteractor
+    private val activityInteractor: ActivityInteractor,
+    private val integrationInteractor: IntegrationInteractor
 ) : ViewModel() {
     val webviewUrl: String
         get() = urlInteractor.externalAuthUrl
@@ -27,6 +30,9 @@ class HomeViewModel @Inject constructor(
 
     private val errorEvent = LiveEvent<ErrorState>()
     val error: LiveData<ErrorState> = errorEvent
+
+    val configEvent = LiveEvent<Config>()
+    val config: LiveData<Config> = configEvent
 
     val activityList = MutableLiveData<List<ActivityInfo>>().also {
         viewModelScope.launch {
@@ -64,4 +70,15 @@ class HomeViewModel @Inject constructor(
             callbackEvent.postValue(WebCallback.RevokeAuthCallback("$callback(true);"))
         }
     }
+
+    fun getConfig() {
+        val exceptionHandler = CoroutineExceptionHandler { _, ex ->
+            Timber.e(ex)
+        }
+
+        viewModelScope.launch(exceptionHandler) {
+            configEvent.postValue(integrationInteractor.getConfig())
+        }
+    }
+
 }

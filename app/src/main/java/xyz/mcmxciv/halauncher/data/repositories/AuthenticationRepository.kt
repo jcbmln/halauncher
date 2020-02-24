@@ -1,11 +1,7 @@
 package xyz.mcmxciv.halauncher.data.repositories
 
-import org.json.JSONObject
-import org.threeten.bp.Instant
 import xyz.mcmxciv.halauncher.data.AuthenticationException
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantApi
-import xyz.mcmxciv.halauncher.models.Session
-import xyz.mcmxciv.halauncher.models.SessionState
 import xyz.mcmxciv.halauncher.models.Token
 import javax.inject.Inject
 
@@ -19,8 +15,16 @@ class AuthenticationRepository @Inject constructor(
         return homeAssistantApi.getToken(GRANT_TYPE_CODE, authenticationCode, CLIENT_ID)
     }
 
-    suspend fun revokeToken(refreshToken: String) {
-        homeAssistantApi.revokeToken(refreshToken, REVOKE_ACTION)
+    suspend fun refreshToken(refreshToken: String): Token {
+        val response = homeAssistantApi.refreshToken(GRANT_TYPE_REFRESH, refreshToken, CLIENT_ID)
+
+        return if (response.isSuccessful) {
+            response.body()!!
+        } else throw AuthenticationException()
+    }
+
+    suspend fun revokeToken(token: String) {
+        homeAssistantApi.revokeToken(token, REVOKE_ACTION)
     }
 
 //    suspend fun validateSession(): SessionState {

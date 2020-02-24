@@ -31,6 +31,12 @@ interface HomeAssistantApi {
     @POST
     suspend fun updateRegistration(
         @Url url: String,
-        @Body request: IntegrationRequest<DeviceRegistration>
+        @Body request: IntegrationRequest
     ): Response<*>
+
+    @POST
+    suspend fun getConfig(
+        @Url url: String,
+        @Body request: IntegrationRequest
+    ): Response<Config>
 }

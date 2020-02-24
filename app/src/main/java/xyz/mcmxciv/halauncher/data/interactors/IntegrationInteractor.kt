@@ -1,9 +1,11 @@
 package xyz.mcmxciv.halauncher.data.interactors
 
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import timber.log.Timber
 import xyz.mcmxciv.halauncher.data.IntegrationException
 import xyz.mcmxciv.halauncher.data.repositories.IntegrationRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
+import xyz.mcmxciv.halauncher.models.Config
 import xyz.mcmxciv.halauncher.models.DeviceRegistration
 import java.lang.Exception
 import javax.inject.Inject
@@ -40,7 +42,16 @@ class IntegrationInteractor @Inject constructor(
         }
     }
 
-    private suspend fun tryUrls(block: suspend (url: String) -> Boolean) {
+    suspend fun getConfig(): Config {
+        return tryUrls { url ->
+            val response = integrationRepository.getConfig(url)
+            return@tryUrls if (response.isSuccessful) {
+                response.body()!!
+            } else throw IntegrationException()
+        }
+    }
+
+    private suspend fun <T> tryUrls(block: suspend (url: String) -> T): T {
         val integration = localStorageRepository.deviceIntegration ?: throw IntegrationException()
         val urls = ArrayList<String>()
         val cloudhookUrl = integration.cloudhookUrl
@@ -53,8 +64,10 @@ class IntegrationInteractor @Inject constructor(
 
         for (url in urls) {
             try {
-                if (block(url)) return
-            } catch (ex: Exception) {}
+                return block(url)
+            } catch (ex: Exception) {
+                Timber.e(ex)
+            }
         }
 
         throw IntegrationException()
