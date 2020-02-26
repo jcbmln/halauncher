@@ -2,6 +2,7 @@ package xyz.mcmxciv.halauncher.ui.home
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +32,7 @@ import javax.inject.Inject
 
 class HomeFragment : LauncherFragment() {
     private lateinit var viewModel: HomeViewModel
+    private lateinit var appListAdapter: AppListAdapter
 
     @Inject
     lateinit var invariantDeviceProfile: InvariantDeviceProfile
@@ -50,6 +52,10 @@ class HomeFragment : LauncherFragment() {
         viewModel = createViewModel { component.homeViewModel() }
         color = activity?.getColor(R.color.colorAccent)
 
+        appListAdapter = AppListAdapter(context!!, listOf())
+        appList.layoutManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
+        appList.adapter = appListAdapter
+
         observe(viewModel.error) { error ->
             if (error == ErrorState.AUTHENTICATION) {
                 displayMessage(getString(R.string.error_no_session_message))
@@ -63,7 +69,7 @@ class HomeFragment : LauncherFragment() {
         }
 
         observe(viewModel.activityList) { resource ->
-            initializeAppList(resource)
+            appListAdapter.update(resource)
         }
         
         observe(viewModel.callback) { resource ->
@@ -83,7 +89,7 @@ class HomeFragment : LauncherFragment() {
 
         allAppsButton.setOnClickListener {
             setAppListVisibility()
-            changeStatusBar()
+//            changeStatusBar()
         }
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
@@ -96,11 +102,6 @@ class HomeFragment : LauncherFragment() {
         }
 
         initializeWebView()
-    }
-
-    private fun initializeAppList(activities: List<ActivityInfo>) {
-        appList.layoutManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
-        appList.adapter = AppListAdapter(context!!, activities)
     }
 
     private fun initializeWebView() {
@@ -192,6 +193,12 @@ class HomeFragment : LauncherFragment() {
             it.window.statusBarColor = color
             it.window.navigationBarColor = color
         }
+
+        val drawable = ColorDrawable(color)
+        drawable.alpha = 240
+        appList.background = drawable
+
+        appListAdapter.setThemeColor(color)
     }
 
     private fun changeStatusBar() {

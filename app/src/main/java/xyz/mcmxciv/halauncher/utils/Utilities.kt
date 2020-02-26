@@ -27,6 +27,7 @@ import android.os.Build
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
 import kotlin.math.ceil
 import kotlin.math.roundToInt
@@ -126,4 +127,10 @@ object Utilities {
 
         return dark
     }
+
+    fun isDarkColor(color: Int): Boolean {
+        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) Color.luminance(color) < 0.5
+            else ColorUtils.calculateLuminance(color) < 0.5
+    }
+
 }

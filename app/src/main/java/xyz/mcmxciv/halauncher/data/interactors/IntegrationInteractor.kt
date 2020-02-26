@@ -46,12 +46,12 @@ class IntegrationInteractor @Inject constructor(
         return tryUrls { url ->
             val response = integrationRepository.getConfig(url)
             return@tryUrls if (response.isSuccessful) {
-                response.body()!!
-            } else throw IntegrationException()
+                response.body()
+            } else null
         }
     }
 
-    private suspend fun <T> tryUrls(block: suspend (url: String) -> T): T {
+    private suspend fun <T> tryUrls(block: suspend (url: String) -> T?): T {
         val integration = localStorageRepository.deviceIntegration ?: throw IntegrationException()
         val urls = ArrayList<String>()
         val cloudhookUrl = integration.cloudhookUrl
@@ -62,15 +62,18 @@ class IntegrationInteractor @Inject constructor(
         remoteUiUrl?.let { urls.add(it) }
         urls.add(localUrl)
 
+        var result: T? = null
+
         for (url in urls) {
             try {
-                return block(url)
+                result = block(url)
+                if (result != null) break
             } catch (ex: Exception) {
                 Timber.e(ex)
             }
         }
 
-        throw IntegrationException()
+        return result ?: throw IntegrationException()
     }
 
     private fun buildUrl(url: String, id: String): String =

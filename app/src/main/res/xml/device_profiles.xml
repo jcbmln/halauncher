@@ -110,4 +110,27 @@
 
     </grid-option>
 
+    <grid-option
+        launcher:name="6_by_6"
+        launcher:numRows="6"
+        launcher:numColumns="6" >
+
+        <display-option
+            launcher:name="Tablet"
+            launcher:minWidthDps="820"
+            launcher:minHeightDps="1200"
+            launcher:iconImageSize="72"
+            launcher:iconTextSize="16"
+            launcher:canBeDefault="true" />
+
+        <display-option
+            launcher:name="Shorter Stubby"
+            launcher:minWidthDps="255"
+            launcher:minHeightDps="400"
+            launcher:iconImageSize="48"
+            launcher:iconTextSize="13.0"
+            launcher:canBeDefault="true" />
+
+    </grid-option>
+
 </profiles>

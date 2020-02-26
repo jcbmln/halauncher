@@ -23,12 +23,12 @@ class IntegrationRepository @Inject constructor(
         url: String,
         deviceRegistration: DeviceRegistration
     ): Response<*> {
-        val request = IntegrationRequest("update_registration", deviceRegistration)
+        val request = WebhookRequest("update_registration", deviceRegistration)
         return homeAssistantApi.updateRegistration(url, request)
     }
 
     suspend fun getConfig(url: String): Response<Config> {
-        val request = IntegrationRequest("get_config", null)
+        val request = WebhookRequest("get_config", null)
         return homeAssistantApi.getConfig(url, request)
     }
 }

@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     android:background="@android:color/transparent"
+    android:gravity="center_horizontal"
     android:padding="10dp"
     android:stateListAnimator="@animator/app_list_item"
     android:textAlignment="center" />

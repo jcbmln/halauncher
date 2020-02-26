@@ -9,7 +9,8 @@ import xyz.mcmxciv.halauncher.utils.ResourceLiveData
 import javax.inject.Inject
 
 class SetupViewModel @Inject constructor(
-    private val localStorageRepository: LocalStorageRepository
+    private val localStorageRepository: LocalStorageRepository,
+    private val nsdManager: NsdManager
 ) : ViewModel() {
     private var services: MutableList<NsdServiceInfo> = ArrayList()
 
@@ -20,13 +21,13 @@ class SetupViewModel @Inject constructor(
 
     fun startDiscovery() {
         if (!discoveryStarted) {
-//            nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener)
+            nsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener)
             discoveryStarted = true
         }
     }
 
     fun stopDiscovery() {
-//        if (discoveryStarted) nsdManager.stopServiceDiscovery(discoveryListener)
+        if (discoveryStarted) nsdManager.stopServiceDiscovery(discoveryListener)
     }
 
     fun resolveService(serviceInfo: NsdServiceInfo) {
@@ -43,7 +44,7 @@ class SetupViewModel @Inject constructor(
         }
 
         resolvedUrl.postLoading()
-//        nsdManager.resolveService(serviceInfo, resolveListener)
+        nsdManager.resolveService(serviceInfo, resolveListener)
     }
 
     fun setUrl(url: String) {
@@ -60,12 +61,12 @@ class SetupViewModel @Inject constructor(
 
         override fun onStopDiscoveryFailed(serviceType: String, errorCode: Int) {
             Timber.e("Discovery failed: Error code:$errorCode")
-//            nsdManager.stopServiceDiscovery(this)
+            nsdManager.stopServiceDiscovery(this)
         }
 
         override fun onStartDiscoveryFailed(serviceType: String, errorCode: Int) {
             Timber.e("Discovery failed: Error code:$errorCode")
-//            nsdManager.stopServiceDiscovery(this)
+            nsdManager.stopServiceDiscovery(this)
             discoveryStarted = false
         }
 
