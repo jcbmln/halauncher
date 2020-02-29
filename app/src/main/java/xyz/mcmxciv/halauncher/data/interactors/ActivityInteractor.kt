@@ -1,5 +1,6 @@
 package xyz.mcmxciv.halauncher.data.interactors
 
+import android.os.Build
 import xyz.mcmxciv.halauncher.data.repositories.ActivityRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
 import xyz.mcmxciv.halauncher.data.repositories.PackageRepository
@@ -27,6 +28,7 @@ class ActivityInteractor @Inject constructor(
                     val icon = iconFactory.getIcon(info.activityInfo)
                     val newActivityInfo = ActivityInfo(
                         activityName,
+                        packageInfo.packageName,
                         packageRepository.getDisplayName(info),
                         packageInfo.lastUpdateTime,
                         localStorageRepository.saveBitmap(activityName, icon),
@@ -52,7 +54,9 @@ class ActivityInteractor @Inject constructor(
         }
 
         val packageNames = resolveInfo.map { ri -> ri.activityInfo.name }
-        activityInfoList.removeIf { a -> !packageNames.contains(a.activityName) }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            activityInfoList.removeIf { a -> !packageNames.contains(a.activityName) }
+        }
         activityInfoList.sortBy { a -> a.displayName }
 
         return activityInfoList

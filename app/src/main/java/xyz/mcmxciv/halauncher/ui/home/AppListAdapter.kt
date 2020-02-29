@@ -7,6 +7,7 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toDrawable
@@ -43,8 +44,16 @@ class AppListAdapter(private val context: Context, activityList: List<ActivityIn
 
         appItem.setOnClickListener {
             val pm = context.packageManager
-            val intent = pm.getLaunchIntentForPackage(appInfo.activityName)
+            val intent = pm.getLaunchIntentForPackage(appInfo.packageName)
             context.startActivity(intent)
+        }
+
+        appItem.setOnLongClickListener {
+            val popup = PopupMenu(context, appItem)
+            popup.menuInflater.inflate(R.menu.app_popup_menu, popup.menu)
+            popup.show()
+
+            return@setOnLongClickListener true
         }
     }
 

@@ -12,7 +12,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat.getColor
-import androidx.core.graphics.toColor
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -21,7 +20,6 @@ import org.json.JSONObject
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.models.ActivityInfo
 import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.ui.*
@@ -89,7 +87,6 @@ class HomeFragment : LauncherFragment() {
 
         allAppsButton.setOnClickListener {
             setAppListVisibility()
-//            changeStatusBar()
         }
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
@@ -100,6 +97,8 @@ class HomeFragment : LauncherFragment() {
                 webview.canGoBack() -> webview.goBack()
             }
         }
+
+        activity?.window?.setBackgroundDrawable(ColorDrawable(getColor(context!!, R.color.colorAccent)))
 
         initializeWebView()
     }
@@ -173,7 +172,7 @@ class HomeFragment : LauncherFragment() {
 
     private fun getThemeCallback() : String? {
         val callback = try {
-            val input = LauncherApplication.instance.assets.open("websocketBridge.js")
+            val input = LauncherApplication.instance.assets.open("var handleThemeUpdate=function(a){a=a.data||a;var b=a.default_theme;window.externalApp.externalBus(JSON.stringify({type:\"frontend/get_themes\",themes:a.themes}));\"default\"===b?window.externalApp.themesUpdated(JSON.stringify({name:b})):window.externalApp.themesUpdated(JSON.stringify({name:b,styles:a.themes[b]}))};window.hassConnection.then(function(a){a=a.conn;a.sendMessagePromise({type:\"frontend/get_themes\"}).then(handleThemeUpdate);a.subscribeEvents(handleThemeUpdate,\"themes_updated\")});\n")
             input.bufferedReader().use(BufferedReader::readText)
         }
         catch (ex: Exception) {

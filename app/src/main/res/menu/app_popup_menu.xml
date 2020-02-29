@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/app_info"
+        android:icon="@drawable/ic_info_dark"
+        android:title="@string/popup_app_info" />
+    <item android:id="@+id/uninstall"
+        android:icon="@drawable/ic_uninstall_dark"
+        android:title="@string/popup_uninstall" />
+</menu>

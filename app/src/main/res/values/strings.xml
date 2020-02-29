@@ -73,4 +73,7 @@
     <string name="error_authentication_failed_message">Unable to authenticate. Check that your configuration is correct and try again.</string>
     <string name="error_no_session_message">It looks like your session was revoked. Please sign in again.</string>
     <string name="error_webview_message">An error occurred connecting to Home Assistant. Please check your connection and try again.</string>
+
+    <string name="popup_app_info">App Info</string>
+    <string name="popup_uninstall">Uninstall</string>
 </resources>

@@ -11,6 +11,8 @@ data class ActivityInfo(
     @PrimaryKey
     @ColumnInfo(name = "activity_name")
     val activityName: String,
+    @ColumnInfo(name = "package_name")
+    val packageName: String,
     @ColumnInfo(name = "display_name")
     val displayName: String,
     @ColumnInfo(name = "last_update")
@@ -23,11 +25,12 @@ data class ActivityInfo(
 
     constructor(
         activityName: String,
+        packageName: String,
         displayName: String,
         lastUpdate: Long,
         iconPath: String,
         bitmap: Bitmap
-    ) : this(activityName, displayName, lastUpdate, iconPath) {
+    ) : this(activityName, packageName, displayName, lastUpdate, iconPath) {
         icon = bitmap
     }
 }

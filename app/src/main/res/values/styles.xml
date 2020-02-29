@@ -7,7 +7,7 @@
         <item name="android:colorPrimaryDark">@color/colorAccent</item>
         <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/colorForeground</item>
-        <item name="android:colorControlHighlight">@color/colorAccent</item>
+        <item name="android:colorControlHighlight">@color/offWhite</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
 <!--        <item name="android:windowTranslucentNavigation">true</item>-->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
