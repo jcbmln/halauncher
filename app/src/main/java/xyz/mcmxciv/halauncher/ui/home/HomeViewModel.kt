@@ -1,16 +1,15 @@
 package xyz.mcmxciv.halauncher.ui.home
 
-import android.app.Activity
 import androidx.lifecycle.*
 import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import xyz.mcmxciv.halauncher.data.interactors.ActivityInteractor
+import xyz.mcmxciv.halauncher.data.interactors.AppsInteractor
 import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
 import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
-import xyz.mcmxciv.halauncher.models.ActivityInfo
+import xyz.mcmxciv.halauncher.models.apps.AppInfo
 import xyz.mcmxciv.halauncher.models.Config
 import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.WebCallback
@@ -19,7 +18,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val urlInteractor: UrlInteractor,
     private val sessionInteractor: SessionInteractor,
-    private val activityInteractor: ActivityInteractor,
+    private val appsInteractor: AppsInteractor,
     private val integrationInteractor: IntegrationInteractor
 ) : ViewModel() {
     val webviewUrl: String
@@ -34,9 +33,9 @@ class HomeViewModel @Inject constructor(
     val configEvent = LiveEvent<Config>()
     val config: LiveData<Config> = configEvent
 
-    val activityList = MutableLiveData<List<ActivityInfo>>().also {
+    val activityList = MutableLiveData<List<AppInfo>>().also {
         viewModelScope.launch {
-            val activities = activityInteractor.getLaunchableActivities()
+            val activities = appsInteractor.getLaunchableActivities()
             it.postValue(activities)
         }
     }

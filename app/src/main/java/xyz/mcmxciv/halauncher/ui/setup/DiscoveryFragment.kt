@@ -1,69 +1,51 @@
 package xyz.mcmxciv.halauncher.ui.setup
 
-import android.net.nsd.NsdServiceInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_discovery.*
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.databinding.FragmentDiscoveryBinding
 import xyz.mcmxciv.halauncher.ui.LauncherFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
-import xyz.mcmxciv.halauncher.ui.displayMessage
-import xyz.mcmxciv.halauncher.utils.Resource
+import xyz.mcmxciv.halauncher.ui.navigate
+import xyz.mcmxciv.halauncher.ui.observe
 
-class DiscoveryFragment : LauncherFragment(),
-    ServiceSelectedListener {
+class DiscoveryFragment : LauncherFragment(), ServiceSelectedListener {
+    private lateinit var binding: FragmentDiscoveryBinding
     private lateinit var viewModel: SetupViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_discovery, container, false)
+        binding = FragmentDiscoveryBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = createViewModel { component.setupViewModel() }
 
-        serviceList.layoutManager = LinearLayoutManager(context)
+        binding.serviceList.layoutManager = LinearLayoutManager(context)
         val adapter = ServiceAdapter(this)
-        serviceList.adapter = adapter
-        serviceList.addItemDecoration(DividerItemDecoration(
-            serviceList.context, DividerItemDecoration.VERTICAL
+        binding.serviceList.adapter = adapter
+        binding.serviceList.addItemDecoration(DividerItemDecoration(
+            binding.serviceList.context, DividerItemDecoration.VERTICAL
         ))
 
         viewModel.startDiscovery()
 
-        viewModel.servicesData.observe(viewLifecycleOwner, Observer { resource ->
-            when (resource) {
-                is Resource.Error -> displayMessage(resource.message)
-                is Resource.Success -> {
-                    val services = resource.data
-                    updateViewVisibility(services.isEmpty())
-                    adapter.setData(services)
-                }
-            }
-        })
+        observe(viewModel.servicesData) { services ->
+            updateViewVisibility(services.isEmpty())
+            adapter.setData(services)
+        }
 
-        viewModel.resolvedUrl.observe(viewLifecycleOwner, Observer { resource ->
-            when (resource) {
-                is Resource.Error -> displayMessage(resource.message)
-                is Resource.Success -> {
-                    viewModel.setUrl(resource.data)
-                    navigateToAuthenticationGraph()
-                }
-            }
-        })
-
-        manualModeButton.setOnClickListener {
-            navigationToManualSetup()
+        binding.manualModeButton.setOnClickListener {
+            navigate(DiscoveryFragmentDirections.actionDiscoveryFragmentToManualSetupFragment())
         }
     }
 
@@ -72,25 +54,18 @@ class DiscoveryFragment : LauncherFragment(),
         viewModel.stopDiscovery()
     }
 
-    override fun onServiceSelected(serviceInfo: NsdServiceInfo) {
+    override fun onServiceSelected(url: String) {
         viewModel.stopDiscovery()
-        viewModel.resolveService(serviceInfo)
-    }
-
-    private fun navigateToAuthenticationGraph() {
-        val action =
-            DiscoveryFragmentDirections.actionGlobalAuthenticationNavigationGraph()
-        findNavController().navigate(action)
-    }
-
-    private fun navigationToManualSetup() {
-        val action =
-            DiscoveryFragmentDirections.actionDiscoveryFragmentToManualSetupFragment()
-        findNavController().navigate(action)
+        viewModel.setUrl(url)
+        navigate(DiscoveryFragmentDirections.actionGlobalAuthenticationNavigationGraph())
     }
 
     private fun updateViewVisibility(serviceListIsEmpty: Boolean) {
-        serviceListProgress.isVisible = serviceListIsEmpty
-        serviceList.isVisible = !serviceListIsEmpty
+        binding.serviceListProgressBar.isVisible = serviceListIsEmpty
+        binding.serviceList.isVisible = !serviceListIsEmpty
+
+        binding.discoveryText.text =
+            if (serviceListIsEmpty) getString(R.string.setup_discovery_text)
+            else getString(R.string.setup_selection_text)
     }
 }

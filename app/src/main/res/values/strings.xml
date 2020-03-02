@@ -18,7 +18,7 @@
     <string name="drag_handle">drag handle</string>
     <string name="settings_button">settings button</string>
 
-    <string name="setup_descovery_text">Searching for Home Assistant</string>
+    <string name="setup_discovery_text">Searching for Home Assistant</string>
     <string name="setup_selection_text">Choose your Home Assistant</string>
     <string name="setup_logo_description">HALauncher Logo</string>
     <string name="setup_mode_manual">Manual Mode</string>
@@ -74,6 +74,8 @@
     <string name="error_no_session_message">It looks like your session was revoked. Please sign in again.</string>
     <string name="error_webview_message">An error occurred connecting to Home Assistant. Please check your connection and try again.</string>
 
-    <string name="popup_app_info">App Info</string>
-    <string name="popup_uninstall">Uninstall</string>
+    <string name="system_shortcut_app_info">App Info</string>
+    <string name="system_shortcut_uninstall">Uninstall</string>
+
+    <string name="dummy_content_description">content description</string>
 </resources>

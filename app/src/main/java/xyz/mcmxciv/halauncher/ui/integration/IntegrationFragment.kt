@@ -5,21 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.fragment_integration.*
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.databinding.FragmentIntegrationBinding
 import xyz.mcmxciv.halauncher.models.IntegrationState
 import xyz.mcmxciv.halauncher.ui.*
-import xyz.mcmxciv.halauncher.utils.Resource
 
 class IntegrationFragment : LauncherFragment() {
+    private lateinit var binding: FragmentIntegrationBinding
     private lateinit var viewModel: IntegrationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_integration, container, false)
+        binding = FragmentIntegrationBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,29 +37,29 @@ class IntegrationFragment : LauncherFragment() {
             }
         }
 
-        integrationRetryButton.setOnClickListener {
+        binding.skipButton.setOnClickListener {
             viewModel.registerDevice()
         }
 
-        integrationSkipButton.setOnClickListener {
+        binding.skipButton.setOnClickListener {
             finishIntegration(true)
         }
     }
 
     private fun finishIntegration(integrationSkipped: Boolean = false) {
         viewModel.finishSetup(integrationSkipped)
-        navigate { IntegrationFragmentDirections.actionGlobalHomeFragment() }
+        navigate(IntegrationFragmentDirections.actionGlobalHomeFragment())
     }
 
     private fun showButtons() {
-        integrationRetryButton.isVisible = true
-        integrationSkipButton.isVisible = true
-        integrationProgressBar.isVisible = false
+        binding.retryButton.isVisible = true
+        binding.skipButton.isVisible = true
+        binding.progressBar.isVisible = false
     }
 
     private fun hideButtons() {
-        integrationRetryButton.isVisible = false
-        integrationSkipButton.isVisible = false
-        integrationProgressBar.isVisible = true
+        binding.retryButton.isVisible = false
+        binding.skipButton.isVisible = false
+        binding.progressBar.isVisible = true
     }
 }

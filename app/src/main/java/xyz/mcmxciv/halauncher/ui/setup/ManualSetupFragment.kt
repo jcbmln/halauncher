@@ -6,32 +6,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.fragment_manual_setup.*
-import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.databinding.FragmentManualSetupBinding
 import xyz.mcmxciv.halauncher.ui.LauncherFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
+import xyz.mcmxciv.halauncher.utils.textString
 
 class ManualSetupFragment : LauncherFragment() {
+    private lateinit var binding: FragmentManualSetupBinding
     private lateinit var viewModel: SetupViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_manual_setup, container, false)
+        binding = FragmentManualSetupBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = createViewModel { component.setupViewModel() }
 
-        discoveryModeButton.setOnClickListener {
+        binding.discoveryModeButton.setOnClickListener {
             navigateToDiscoveryFragment()
         }
 
-        setupManualButton.setOnClickListener { finishManualSetup() }
+        binding.openUrlButton.setOnClickListener { finishManualSetup() }
 
-        setupHostText.setOnEditorActionListener { _, actionId, _ ->
+        binding.hostText.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_GO) {
                 finishManualSetup()
                 true
@@ -40,7 +42,7 @@ class ManualSetupFragment : LauncherFragment() {
     }
 
     private fun finishManualSetup() {
-        val text = setupHostText.text.toString()
+        val text = binding.hostText.textString
 
         if (!text.isBlank()) {
             viewModel.setUrl(text)

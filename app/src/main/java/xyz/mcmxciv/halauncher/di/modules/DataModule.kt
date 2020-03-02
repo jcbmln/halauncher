@@ -16,7 +16,7 @@ import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
 import xyz.mcmxciv.halauncher.di.qualifiers.Api
 import xyz.mcmxciv.halauncher.di.qualifiers.SecureApi
-import xyz.mcmxciv.halauncher.models.ActivityInfoDao
+import xyz.mcmxciv.halauncher.models.apps.AppInfoDao
 
 @Module
 class DataModule {
@@ -68,14 +68,14 @@ class DataModule {
     }
 
     @Provides
-    fun activityInfoDatabase(context: Context): ActivityInfoDatabase =
+    fun appInfoDatabase(context: Context): AppInfoDatabase =
         Room.databaseBuilder(
             context.applicationContext,
-            ActivityInfoDatabase::class.java,
-            "activity_info_database"
+            AppInfoDatabase::class.java,
+            "app_info_database"
         ).build()
 
     @Provides
-    fun activityInfoDao(database: ActivityInfoDatabase): ActivityInfoDao =
-        database.acctivityInfoDao()
+    fun appInfoDao(database: AppInfoDatabase): AppInfoDao =
+        database.appInfoDao()
 }

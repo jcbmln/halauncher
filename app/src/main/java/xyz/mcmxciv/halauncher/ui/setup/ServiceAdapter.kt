@@ -1,12 +1,11 @@
 package xyz.mcmxciv.halauncher.ui.setup
 
+import android.annotation.SuppressLint
 import android.net.nsd.NsdServiceInfo
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.list_item_service.view.*
-import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.databinding.ListItemServiceBinding
 
 class ServiceAdapter(
     private val listener: ServiceSelectedListener
@@ -14,28 +13,25 @@ class ServiceAdapter(
 
     private var serviceList: List<NsdServiceInfo> = ArrayList()
 
-    class ServiceListViewHolder(val view: View)
-        : RecyclerView.ViewHolder(view)
+    class ServiceListViewHolder(val binding: ListItemServiceBinding)
+        : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceListViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
+        val inflater = LayoutInflater.from(parent.context)
         return ServiceListViewHolder(
-            layoutInflater.inflate(
-                R.layout.list_item_service,
-                parent,
-                false
-            )
+            ListItemServiceBinding.inflate(inflater, parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: ServiceListViewHolder, position: Int) {
         val serviceInfo = serviceList[position]
         val name = serviceInfo.serviceName
+        val url = "http://${serviceInfo.host.hostAddress}:${serviceInfo.port}"
 
-        val serviceText = holder.view.serviceText
-        serviceText.text = name
-        serviceText.setOnClickListener {
-            listener.onServiceSelected(serviceInfo)
+        holder.binding.serviceNameText.text = name
+        holder.binding.serviceHostUrl.text = url
+        holder.binding.serviceItemContainer.setOnClickListener {
+            listener.onServiceSelected(url)
         }
     }
 

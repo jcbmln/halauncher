@@ -7,7 +7,7 @@
     tools:context=".ui.authentication.AuthenticationFragment">
 
     <WebView
-        android:id="@+id/authenticationWebView"
+        android:id="@+id/authentication_web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -27,11 +27,14 @@ fun Fragment.displayMessage(message: String) {
     Toast.makeText(context, message, Toast.LENGTH_LONG).show()
 }
 
-fun Fragment.navigate(action: () -> NavDirections) {
+fun Fragment.navigate(block: () -> NavDirections) {
     val navController = findNavController()
-    val directions = action()
+    navController.navigate(block())
+}
 
-    navController.navigate(directions)
+fun Fragment.navigate(action: NavDirections) {
+    val navController = findNavController()
+    navController.navigate(action)
 }
 
 inline fun <reified T : LiveData<V>, reified V: Any> Fragment.observe(

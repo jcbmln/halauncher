@@ -18,6 +18,7 @@ package xyz.mcmxciv.halauncher.icons
 
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.content.pm.LauncherActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.content.res.Resources.NotFoundException
@@ -27,7 +28,8 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
-import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.drawable.toBitmap
+import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import javax.inject.Inject
@@ -41,24 +43,47 @@ class IconFactory @Inject constructor(
     private val invariantDeviceProfile: InvariantDeviceProfile,
     private val iconNormalizer: IconNormalizer,
     private val shadowGenerator: ShadowGenerator
-) : AutoCloseable {
-    private var colorExtractorDisabled = false
+) {
     private var wrapperBackgroundColor = DEFAULT_WRAPPER_BACKGROUND
     private val canvas = Canvas()
     private val oldBounds = Rect()
 
     init {
         canvas.drawFilter = PaintFlagsDrawFilter(Paint.DITHER_FLAG, Paint.FILTER_BITMAP_FLAG)
-        clear()
     }
 
-    override fun close() {
-        clear()
+    fun getIcon(launcherActivityInfo: LauncherActivityInfo): Bitmap {
+        val drawable = getDrawable(launcherActivityInfo)
+            ?: launcherActivityInfo.getIcon(invariantDeviceProfile.fillResIconDpi)
+        return createIconBitmap(drawable)
     }
 
     fun getIcon(activityInfo: ActivityInfo): Bitmap {
         val drawable = getDrawable(activityInfo) ?: activityInfo.loadIcon(packageManager)
         return createIconBitmap(drawable)
+    }
+
+    fun getShortcutIcon(activityInfo: ActivityInfo): Bitmap {
+        return activityInfo.loadIcon(packageManager).toBitmap()
+    }
+
+    private fun getDrawable(launcherActivityInfo: LauncherActivityInfo): Drawable? {
+        val iconRes = launcherActivityInfo.applicationInfo.icon
+        val density = invariantDeviceProfile.fillResIconDpi
+
+        return if (density != 0 && iconRes != 0) {
+            try {
+                packageManager
+                    .getResourcesForApplication(launcherActivityInfo.applicationInfo)
+                    .getDrawableForDensity(iconRes, density, null)
+            } catch (ex: PackageManager.NameNotFoundException) {
+                Timber.e(ex)
+                null
+            } catch (ex: NotFoundException) {
+                Timber.e(ex)
+                null
+            }
+        } else null
     }
 
     private fun getDrawable(activityInfo: ActivityInfo): Drawable? {
@@ -147,10 +172,6 @@ class IconFactory @Inject constructor(
         return bitmap
     }
 
-//    fun createIcon(icon: Drawable): Drawable {
-//        return normalizeAndWrapToAdaptiveIcon(icon)
-//    }
-
     private fun normalizeAndWrapToAdaptiveIcon(drawable: Drawable, outScale: FloatArray): Drawable {
         var scale: Float
         val outBounds: RectF? = null
@@ -182,11 +203,6 @@ class IconFactory @Inject constructor(
 
         outScale[0] = scale
         return icon
-    }
-
-    private fun clear() {
-        wrapperBackgroundColor = DEFAULT_WRAPPER_BACKGROUND
-        colorExtractorDisabled = false
     }
 
     companion object {

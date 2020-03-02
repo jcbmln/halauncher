@@ -2,14 +2,14 @@ package xyz.mcmxciv.halauncher.di.modules
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
 import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
+import xyz.mcmxciv.halauncher.di.components.ViewComponent
 import xyz.mcmxciv.halauncher.utils.LauncherResourceProvider
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
-import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
-import xyz.mcmxciv.halauncher.di.components.ViewComponent
 
 @Module(subcomponents = [ViewComponent::class])
 class AppModule(private val context: Context) {
@@ -26,4 +26,8 @@ class AppModule(private val context: Context) {
 
     @Provides
     fun packageManager(context: Context): PackageManager = context.packageManager
+
+    @Provides
+    fun launcherApps(context: Context): LauncherApps =
+        context.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
 }

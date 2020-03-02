@@ -10,25 +10,27 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.fragment_authentication.*
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.databinding.FragmentAuthenticationBinding
 import xyz.mcmxciv.halauncher.ui.*
 
 class AuthenticationFragment : LauncherFragment() {
+    private lateinit var binding: FragmentAuthenticationBinding
     private lateinit var viewModel: AuthenticationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_authentication, container, false)
+        binding = FragmentAuthenticationBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = createViewModel { component.authenticationViewModel() }
 
-        authenticationWebView.apply {
+        binding.authenticationWebView.apply {
             @SuppressLint("SetJavaScriptEnabled")
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true

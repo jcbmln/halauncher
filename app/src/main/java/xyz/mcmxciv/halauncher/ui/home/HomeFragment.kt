@@ -14,23 +14,24 @@ import androidx.activity.addCallback
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_webview_preference.*
 import org.json.JSONObject
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
 import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
-import xyz.mcmxciv.halauncher.ui.*
 import xyz.mcmxciv.halauncher.models.WebCallback
+import xyz.mcmxciv.halauncher.ui.*
 import java.io.BufferedReader
 import javax.inject.Inject
 
 
 class HomeFragment : LauncherFragment() {
+    private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var appListAdapter: AppListAdapter
+
 
     @Inject
     lateinit var invariantDeviceProfile: InvariantDeviceProfile
@@ -41,7 +42,8 @@ class HomeFragment : LauncherFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,15 +53,15 @@ class HomeFragment : LauncherFragment() {
         color = activity?.getColor(R.color.colorAccent)
 
         appListAdapter = AppListAdapter(context!!, listOf())
-        appList.layoutManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
-        appList.adapter = appListAdapter
+        binding.appList.layoutManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
+        binding.appList.adapter = appListAdapter
 
         observe(viewModel.error) { error ->
             if (error == ErrorState.AUTHENTICATION) {
                 displayMessage(getString(R.string.error_no_session_message))
-                navigate {
+                navigate(
                     HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
-                }
+                )
             }
             else {
                 displayMessage(getString(R.string.error_webview_message))
@@ -71,13 +73,11 @@ class HomeFragment : LauncherFragment() {
         }
         
         observe(viewModel.callback) { resource ->
-            homeWebView.evaluateJavascript(resource.callback, null)
+            binding.homeWebView.evaluateJavascript(resource.callback, null)
             viewModel.getConfig()
 
             if (resource is WebCallback.RevokeAuthCallback) {
-                navigate {
-                    HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
-                }
+                navigate(HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph())
             }
         }
 
@@ -85,7 +85,7 @@ class HomeFragment : LauncherFragment() {
             setStatusBarColor(Color.parseColor(config.themeColor))
         }
 
-        allAppsButton.setOnClickListener {
+        binding.allAppsButton.setOnClickListener {
             setAppListVisibility()
         }
 
@@ -93,19 +93,20 @@ class HomeFragment : LauncherFragment() {
             this.isEnabled = true
 
             when {
-                appList.isVisible -> appList.isVisible = false
-                webview.canGoBack() -> webview.goBack()
+                binding.appList.isVisible -> binding.appList.isVisible = false
+                binding.homeWebView.canGoBack() -> binding.homeWebView.goBack()
             }
         }
 
         activity?.window?.setBackgroundDrawable(ColorDrawable(getColor(context!!, R.color.colorAccent)))
+        activity?.setTheme(R.style.AppTheme)
 
         initializeWebView()
     }
 
     private fun initializeWebView() {
         WebView.setWebContentsDebuggingEnabled(true)
-        homeWebView.apply {
+        binding.homeWebView.apply {
             @SuppressLint("SetJavaScriptEnabled")
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
@@ -136,7 +137,7 @@ class HomeFragment : LauncherFragment() {
                 @JavascriptInterface
                 fun externalBus(message: String) {
                     Timber.d("External bus $message")
-                    homeWebView.post {
+                    binding.homeWebView.post {
                         when (JSONObject(message).get("type")) {
                             "config/get" -> {
                                 val script = "externalBus(${JSONObject(
@@ -147,11 +148,11 @@ class HomeFragment : LauncherFragment() {
                                         "result" to JSONObject(mapOf("hasSettingsScreen" to true))
                                     )
                                 )});"
-                                homeWebView.evaluateJavascript(script, null)
+                                binding.homeWebView.evaluateJavascript(script, null)
                             }
-                            "config_screen/show" -> navigate {
+                            "config_screen/show" -> navigate(
                                 HomeFragmentDirections.actionHomeFragmentToMainPreferencesFragment()
-                            }
+                            )
                             "frontend/get_themes" -> {
                                 val keys: MutableList<String> = ArrayList()
                                 val themes = JSONObject(message).get("themes")
@@ -167,12 +168,12 @@ class HomeFragment : LauncherFragment() {
             }, "externalApp")
         }
 
-        homeWebView.loadUrl(viewModel.webviewUrl)
+        binding.homeWebView.loadUrl(viewModel.webviewUrl)
     }
 
     private fun getThemeCallback() : String? {
         val callback = try {
-            val input = LauncherApplication.instance.assets.open("var handleThemeUpdate=function(a){a=a.data||a;var b=a.default_theme;window.externalApp.externalBus(JSON.stringify({type:\"frontend/get_themes\",themes:a.themes}));\"default\"===b?window.externalApp.themesUpdated(JSON.stringify({name:b})):window.externalApp.themesUpdated(JSON.stringify({name:b,styles:a.themes[b]}))};window.hassConnection.then(function(a){a=a.conn;a.sendMessagePromise({type:\"frontend/get_themes\"}).then(handleThemeUpdate);a.subscribeEvents(handleThemeUpdate,\"themes_updated\")});\n")
+            val input = LauncherApplication.instance.assets.open("websocketBridge.js")
             input.bufferedReader().use(BufferedReader::readText)
         }
         catch (ex: Exception) {
@@ -184,7 +185,7 @@ class HomeFragment : LauncherFragment() {
     }
 
     private fun setAppListVisibility() {
-        appList.isVisible = !appList.isVisible
+        binding.appList.isVisible = !binding.appList.isVisible
     }
 
     private fun setStatusBarColor(color: Int) {
@@ -195,23 +196,23 @@ class HomeFragment : LauncherFragment() {
 
         val drawable = ColorDrawable(color)
         drawable.alpha = 240
-        appList.background = drawable
+        binding.appList.background = drawable
 
         appListAdapter.setThemeColor(color)
     }
 
-    private fun changeStatusBar() {
-        activity?.let {
-            if (appList.isVisible) {
-                it.window.statusBarColor = it.getColor(R.color.colorWindowBackground)
-                it.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            }
-            else {
-                it.window.statusBarColor = it.getColor(R.color.colorAccent)
-                it.window.decorView.systemUiVisibility =
-                    it.window.decorView.systemUiVisibility and
-                            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-            }
-        }
-    }
+//    private fun changeStatusBar() {
+//        activity?.let {
+//            if (binding.appList.isVisible) {
+//                it.window.statusBarColor = it.getColor(R.color.colorWindowBackground)
+//                it.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+//            }
+//            else {
+//                it.window.statusBarColor = it.getColor(R.color.colorAccent)
+//                it.window.decorView.systemUiVisibility =
+//                    it.window.decorView.systemUiVisibility and
+//                            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+//            }
+//        }
+//    }
 }

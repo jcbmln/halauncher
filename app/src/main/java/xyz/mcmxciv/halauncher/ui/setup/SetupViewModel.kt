@@ -2,6 +2,7 @@ package xyz.mcmxciv.halauncher.ui.setup
 
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
@@ -12,10 +13,8 @@ class SetupViewModel @Inject constructor(
     private val localStorageRepository: LocalStorageRepository,
     private val nsdManager: NsdManager
 ) : ViewModel() {
-    private var services: MutableList<NsdServiceInfo> = ArrayList()
-
-    val servicesData = ResourceLiveData<List<NsdServiceInfo>>()
-    val resolvedUrl = ResourceLiveData<String>()
+    private var services = mutableListOf<NsdServiceInfo>()
+    val servicesData = MutableLiveData<List<NsdServiceInfo>>()
 
     private var discoveryStarted: Boolean = false
 
@@ -30,23 +29,6 @@ class SetupViewModel @Inject constructor(
         if (discoveryStarted) nsdManager.stopServiceDiscovery(discoveryListener)
     }
 
-    fun resolveService(serviceInfo: NsdServiceInfo) {
-        val resolveListener = object : NsdManager.ResolveListener {
-            override fun onResolveFailed(serviceInfo: NsdServiceInfo, errorCode: Int) {
-                Timber.e("Resolve failed: $errorCode")
-                resolvedUrl.postError("Could not resolve service.")
-            }
-
-            override fun onServiceResolved(serviceInfo: NsdServiceInfo) {
-                val url = "http://${serviceInfo.host.hostAddress}:${serviceInfo.port}"
-                resolvedUrl.postSuccess(url)
-            }
-        }
-
-        resolvedUrl.postLoading()
-        nsdManager.resolveService(serviceInfo, resolveListener)
-    }
-
     fun setUrl(url: String) {
         localStorageRepository.baseUrl = url
     }
@@ -54,8 +36,16 @@ class SetupViewModel @Inject constructor(
     private val discoveryListener = object : NsdManager.DiscoveryListener {
         override fun onServiceFound(serviceInfo: NsdServiceInfo) {
             if (serviceInfo.serviceType == SERVICE_TYPE) {
-                services.add(serviceInfo)
-                servicesData.postSuccess(services)
+                nsdManager.resolveService(serviceInfo, object : NsdManager.ResolveListener {
+                    override fun onResolveFailed(serviceInfo: NsdServiceInfo, errorCode: Int) {
+                        Timber.e("Resolve failed: $errorCode")
+                    }
+
+                    override fun onServiceResolved(serviceInfo: NsdServiceInfo) {
+                        services.add(serviceInfo)
+                        servicesData.postValue(services)
+                    }
+                })
             }
         }
 
@@ -71,17 +61,15 @@ class SetupViewModel @Inject constructor(
         }
 
         override fun onDiscoveryStarted(serviceType: String) {
-            servicesData.postLoading()
         }
 
         override fun onDiscoveryStopped(serviceType: String) {
-            servicesData.postLoading()
             discoveryStarted = false
         }
 
         override fun onServiceLost(serviceInfo: NsdServiceInfo) {
             services.remove(serviceInfo)
-            servicesData.postSuccess(services)
+            servicesData.postValue(services)
         }
     }
 
