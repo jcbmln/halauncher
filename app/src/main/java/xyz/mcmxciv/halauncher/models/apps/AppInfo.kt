@@ -1,7 +1,6 @@
 package xyz.mcmxciv.halauncher.models.apps
 
 import android.content.ComponentName
-import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -30,7 +29,7 @@ data class AppInfo(
     var componentName: ComponentName? = null
 
     @Ignore
-    var shortcuts: List<ShortcutInfo>? = null
+    var shortcutItems: List<ShortcutItem>? = null
 
     constructor(
         activityName: String,
@@ -39,10 +38,10 @@ data class AppInfo(
         lastUpdate: Long,
         iconBytes: ByteArray?,
         componentName: ComponentName,
-        shortcuts: List<ShortcutInfo>
+        shortcutItems: List<ShortcutItem>
     ) : this(activityName, packageName, displayName, lastUpdate, iconBytes) {
         this.componentName = componentName
-        this.shortcuts = shortcuts
+        this.shortcutItems = shortcutItems
     }
 
     override fun equals(other: Any?): Boolean {

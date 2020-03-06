@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/app_item"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    style="@style/AppTheme.Widget.AppIcon"
     android:layout_gravity="center_horizontal"
-    android:background="@android:color/transparent"
     android:gravity="center_horizontal"
     android:padding="10dp"
     android:stateListAnimator="@animator/app_list_item"

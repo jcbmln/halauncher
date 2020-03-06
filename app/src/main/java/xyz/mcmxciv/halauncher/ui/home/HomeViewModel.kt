@@ -9,10 +9,10 @@ import xyz.mcmxciv.halauncher.data.interactors.AppsInteractor
 import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
 import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
-import xyz.mcmxciv.halauncher.models.apps.AppInfo
 import xyz.mcmxciv.halauncher.models.Config
 import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.WebCallback
+import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
@@ -33,10 +33,9 @@ class HomeViewModel @Inject constructor(
     val configEvent = LiveEvent<Config>()
     val config: LiveData<Config> = configEvent
 
-    val activityList = MutableLiveData<List<AppInfo>>().also {
+    val appListItems = MutableLiveData<List<AppListItem>>().also {
         viewModelScope.launch {
-            val activities = appsInteractor.getLaunchableActivities()
-            it.postValue(activities)
+            it.postValue(appsInteractor.getAppListItems())
         }
     }
 

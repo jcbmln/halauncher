@@ -1,10 +1,13 @@
 package xyz.mcmxciv.halauncher.data.interactors
 
+import android.content.ComponentName
+import android.content.pm.ShortcutInfo
+import xyz.mcmxciv.halauncher.data.models.App
 import xyz.mcmxciv.halauncher.data.repositories.AppRepository
 import xyz.mcmxciv.halauncher.data.repositories.PackageRepository
 import xyz.mcmxciv.halauncher.icons.IconFactory
-import xyz.mcmxciv.halauncher.models.apps.AppInfo
-import xyz.mcmxciv.halauncher.models.apps.ShortcutInfo
+import xyz.mcmxciv.halauncher.models.apps.AppListItem
+import xyz.mcmxciv.halauncher.models.apps.ShortcutItem
 import xyz.mcmxciv.halauncher.utils.toByteArray
 import javax.inject.Inject
 
@@ -13,77 +16,84 @@ class AppsInteractor @Inject constructor(
     private val appRepository: AppRepository,
     private val iconFactory: IconFactory
 ) {
-    suspend fun getLaunchableActivities(): List<AppInfo> {
-        val launcherAppInfoList = packageRepository.getLauncherActivityInfo()
-        val cachedAppInfoList = appRepository.getApps()
-        val appInfoList = mutableListOf<AppInfo>()
-
-        for (info in cachedAppInfoList) {
-            val launcherAppInfo = launcherAppInfoList.singleOrNull { lai ->
-                lai.name == info.activityName
-            }
-            val packageInfo = packageRepository.getPackageInfo(info.packageName)
-
-            when {
-                launcherAppInfo == null -> appRepository.removeAppInfo(info)
-                packageInfo.lastUpdateTime > info.lastUpdate -> {
-                    val icon = iconFactory.getIcon(launcherAppInfo)
-                    val activityInfo =
-                        AppInfo(
-                            info.activityName,
-                            info.packageName,
-                            info.displayName,
-                            packageInfo.lastUpdateTime,
-                            icon.toByteArray(),
-                            launcherAppInfo.componentName,
-                            createShortcuts(info.packageName)
-                        )
-                    appRepository.updateAppInfo(activityInfo)
-                    appInfoList.add(activityInfo)
-                }
-                else -> {
-                    info.componentName = launcherAppInfo.componentName
-                    appInfoList.add(info)
-                }
-            }
+    private val shortcutComparator = Comparator<ShortcutInfo> { a, b ->
+        return@Comparator when {
+            a.isDeclaredInManifest && !b.isDeclaredInManifest -> -1
+            !a.isDeclaredInManifest && b.isDeclaredInManifest -> 1
+            else -> a.rank.compareTo(b.rank)
         }
-
-        for (info in launcherAppInfoList) {
-            val appInfo = appInfoList.singleOrNull { a ->
-                a.activityName == info.name
-            }
-
-            if (appInfo == null) {
-                val packageInfo = packageRepository.getPackageInfo(info.applicationInfo.packageName)
-                val icon = iconFactory.getIcon(info)
-                val newAppInfo = AppInfo(
-                    info.name,
-                    packageInfo.packageName,
-                    packageRepository.getDisplayName(info),
-                    packageInfo.lastUpdateTime,
-                    icon.toByteArray(),
-                    info.componentName,
-                    createShortcuts(packageInfo.packageName)
-                )
-
-                appRepository.addAppInfo(newAppInfo)
-                appInfoList.add(newAppInfo)
-            }
-        }
-
-        appInfoList.sortBy { a -> a.displayName }
-
-        return appInfoList
     }
 
-    private fun createShortcuts(packageName: String): List<ShortcutInfo> {
-        val shortcutActivityInfo = packageRepository.getShortcutActivityInfo(packageName)
-        return shortcutActivityInfo.map { s ->
-            ShortcutInfo(
-                s.name,
-                s.packageName,
-                iconFactory.getShortcutIcon(s)
+    suspend fun getAppListItems(): List<AppListItem> {
+        val launcherActivityInfo = packageRepository.getLauncherActivityInfo()
+        val cachedApps = appRepository.getApps()
+        val appListItems = cachedApps.mapNotNull { app ->
+            val launcherActivity = launcherActivityInfo.singleOrNull { info ->
+                info.name == app.activityName
+            }
+
+            if (launcherActivity == null) {
+                appRepository.removeApp(app)
+                return@mapNotNull null
+            }
+
+            val packageInfo = packageRepository.getPackageInfo(app.packageName)
+            if (packageInfo.lastUpdateTime > app.lastUpdate) {
+                app.lastUpdate = packageInfo.lastUpdateTime
+                app.icon = iconFactory.getIcon(launcherActivity).toByteArray()
+                appRepository.updateApp(app)
+            }
+
+            return@mapNotNull AppListItem(
+                app,
+                launcherActivity.componentName,
+                createShortcuts(app.packageName, launcherActivity.componentName)
+            )
+        }.toMutableList()
+
+        val newApps = launcherActivityInfo.filterNot { info ->
+            appListItems.map { a -> a.activityName }.contains(info.name)
+        }.map { info ->
+            val packageInfo = packageRepository.getPackageInfo(info.applicationInfo.packageName)
+            val app = App(
+                info.name,
+                packageInfo.packageName,
+                packageRepository.getDisplayName(info),
+                packageInfo.lastUpdateTime,
+                iconFactory.getIcon(info).toByteArray()
+            )
+            appRepository.addApp(app)
+            return@map AppListItem(
+                app,
+                info.componentName,
+                createShortcuts(app.packageName, info.componentName)
             )
         }
+
+        appListItems.union(newApps)
+        appListItems.sortBy { a -> a.displayName }
+
+        return appListItems
+    }
+
+    private fun createShortcuts(
+        packageName: String,
+        componentName: ComponentName
+    ): List<ShortcutItem> {
+        return if (packageRepository.hasShortcutHostPermission) {
+            val shortcuts = packageRepository
+                .queryShortcuts(packageName, componentName)
+                .sortedWith(shortcutComparator)
+                .take(4)
+
+            shortcuts.map { s ->
+                ShortcutItem(
+                    s.id,
+                    packageName,
+                    s.shortLabel?.toString()!!,
+                    iconFactory.getShortcutIcon(s)
+                )
+            }
+        } else listOf()
     }
 }

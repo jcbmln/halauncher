@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.models.apps
+package xyz.mcmxciv.halauncher.data.dao
 
 import androidx.room.*
 import xyz.mcmxciv.halauncher.models.apps.AppInfo

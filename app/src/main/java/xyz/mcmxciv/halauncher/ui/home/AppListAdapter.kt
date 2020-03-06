@@ -11,15 +11,16 @@ import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.ListItemAppBinding
 import xyz.mcmxciv.halauncher.models.apps.AppInfo
+import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import xyz.mcmxciv.halauncher.utils.Utilities
 
-class AppListAdapter(private val context: Context, appList: List<AppInfo>) :
+class AppListAdapter(private val context: Context, private var appListItems: List<AppListItem>) :
     RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
 
-    class AppListViewHolder(val binding: ListItemAppBinding) : RecyclerView.ViewHolder(binding.root)
+    class AppListViewHolder(val binding: ListItemAppBinding)
+        : RecyclerView.ViewHolder(binding.root)
 
     private var isDarkBackground: Boolean = false
-    private var activities = appList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : AppListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -27,17 +28,19 @@ class AppListAdapter(private val context: Context, appList: List<AppInfo>) :
     }
 
     override fun onBindViewHolder(holder: AppListViewHolder, position: Int) {
-        val appInfo = activities[position]
+        val appListItem = appListItems[position]
         holder.binding.root.setLayerType(View.LAYER_TYPE_SOFTWARE, Paint())
         val resources = LauncherApplication.instance.resources
-        val drawable = appInfo.icon?.toDrawable(resources)
+        val drawable = appListItem.icon?.toDrawable(resources)
         holder.binding.appItem
             .setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null)
-        holder.binding.appItem.text = appInfo.displayName
-        holder.binding.appItem.tag = appInfo
+        holder.binding.appItem.text = appListItem.displayName
+        holder.binding.appItem.tag = appListItem
 
         if (isDarkBackground)
             holder.binding.appItem.setTextColor(context.getColor(R.color.colorBackground))
+
+        val popup = ShortcutPopupWindow(context, appListItem.shortcutItems)
 
         holder.binding.appItem.setOnClickListener { view ->
             val info = view.tag as AppInfo
@@ -45,12 +48,17 @@ class AppListAdapter(private val context: Context, appList: List<AppInfo>) :
             val intent = pm.getLaunchIntentForPackage(info.packageName)
             context.startActivity(intent)
         }
+
+        holder.binding.appItem.setOnLongClickListener {
+            popup.show(it)
+            return@setOnLongClickListener true
+        }
     }
 
-    override fun getItemCount() = activities.size
+    override fun getItemCount() = appListItems.size
 
-    fun update(appList: List<AppInfo>) {
-        activities = appList
+    fun update(items: List<AppListItem>) {
+        appListItems = items
         notifyDataSetChanged()
     }
 

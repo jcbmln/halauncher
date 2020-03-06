@@ -12,11 +12,13 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import xyz.mcmxciv.halauncher.data.*
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantApi
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantSecureApi
+import xyz.mcmxciv.halauncher.data.dao.AppDao
 import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
 import xyz.mcmxciv.halauncher.di.qualifiers.Api
 import xyz.mcmxciv.halauncher.di.qualifiers.SecureApi
-import xyz.mcmxciv.halauncher.models.apps.AppInfoDao
+import xyz.mcmxciv.halauncher.data.dao.AppInfoDao
+import xyz.mcmxciv.halauncher.data.dao.ShortcutDao
 
 @Module
 class DataModule {
@@ -78,4 +80,18 @@ class DataModule {
     @Provides
     fun appInfoDao(database: AppInfoDatabase): AppInfoDao =
         database.appInfoDao()
+
+    @Provides
+    fun appDatabase(context: Context): AppDatabase =
+        Room.databaseBuilder(
+            context.applicationContext,
+            AppDatabase::class.java,
+            "app_database"
+        ).build()
+
+    @Provides
+    fun appDao(database: AppDatabase): AppDao = database.appDao()
+
+    @Provides
+    fun shortcutDao(database: AppDatabase): ShortcutDao = database.shortcutDao()
 }

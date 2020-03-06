@@ -17,9 +17,7 @@
 package xyz.mcmxciv.halauncher.icons
 
 import android.content.Context
-import android.content.pm.ActivityInfo
-import android.content.pm.LauncherActivityInfo
-import android.content.pm.PackageManager
+import android.content.pm.*
 import android.content.res.Resources
 import android.content.res.Resources.NotFoundException
 import android.graphics.*
@@ -28,6 +26,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
@@ -42,7 +41,8 @@ class IconFactory @Inject constructor(
     private val packageManager: PackageManager,
     private val invariantDeviceProfile: InvariantDeviceProfile,
     private val iconNormalizer: IconNormalizer,
-    private val shadowGenerator: ShadowGenerator
+    private val shadowGenerator: ShadowGenerator,
+    private val launcherApps: LauncherApps
 ) {
     private var wrapperBackgroundColor = DEFAULT_WRAPPER_BACKGROUND
     private val canvas = Canvas()
@@ -66,6 +66,13 @@ class IconFactory @Inject constructor(
     fun getShortcutIcon(activityInfo: ActivityInfo): Bitmap {
         return activityInfo.loadIcon(packageManager).toBitmap()
     }
+
+    @RequiresApi(Build.VERSION_CODES.N_MR1)
+    fun getShortcutIcon(shortcutInfo: ShortcutInfo): Bitmap? =
+        launcherApps.getShortcutIconDrawable(
+            shortcutInfo,
+            invariantDeviceProfile.fillResIconDpi
+        )?.toBitmap()
 
     private fun getDrawable(launcherActivityInfo: LauncherActivityInfo): Drawable? {
         val iconRes = launcherActivityInfo.applicationInfo.icon

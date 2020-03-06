@@ -6,7 +6,8 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
-def gitTag = 'git describe --tags --abbrev=0'.execute([], project.rootDir).text.trim()
+def gitTag = 'git describe --tags --abbrev=0'.execute([], project.rootDir)
+        .text.trim().replace(".beta", "")
 def gitCommitCount = Integer.parseInt('git rev-list --count HEAD'
         .execute([], project.rootDir).text.trim())
 
@@ -29,7 +30,7 @@ android {
 
     defaultConfig {
         applicationId "xyz.mcmxciv.halauncher"
-        minSdkVersion 23
+        minSdkVersion 26
         targetSdkVersion 29
         versionCode gitCommitCount
         versionName gitTag
@@ -86,7 +87,7 @@ dependencies {
     implementation 'org.threeten:threetenbp:1.4.1'
 
     implementation 'com.google.android.play:core:1.6.5'
-    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    implementation 'com.google.firebase:firebase-analytics:17.2.3'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'

@@ -1,27 +1,27 @@
 package xyz.mcmxciv.halauncher.data.repositories
 
-import xyz.mcmxciv.halauncher.models.apps.AppInfo
-import xyz.mcmxciv.halauncher.models.apps.AppInfoDao
+import xyz.mcmxciv.halauncher.data.dao.AppDao
+import xyz.mcmxciv.halauncher.data.models.App
 import javax.inject.Inject
 
 class AppRepository @Inject constructor(
-    private val appInfoDao: AppInfoDao
+    private val appDao: AppDao
 ) {
-    suspend fun getApps(): List<AppInfo> =
-        appInfoDao.getAllAppInfo()
+    suspend fun getApps(): List<App> =
+        appDao.getApps()
 
-    suspend fun getApp(activityName: String): AppInfo? =
-        appInfoDao.getAppInfo(activityName)
+    suspend fun getApp(activityName: String): App? =
+        appDao.getApp(activityName)
 
-    suspend fun addAppInfo(appInfo: AppInfo) {
-        appInfoDao.insert(appInfo)
+    suspend fun addApp(app: App) {
+        appDao.insert(app)
     }
 
-    suspend fun updateAppInfo(appInfo: AppInfo) {
-        appInfoDao.update(appInfo)
+    suspend fun updateApp(app: App) {
+        appDao.update(app)
     }
 
-    suspend fun removeAppInfo(appInfo: AppInfo) {
-        appInfoDao.delete(appInfo)
+    suspend fun removeApp(app: App) {
+        appDao.delete(app)
     }
 }

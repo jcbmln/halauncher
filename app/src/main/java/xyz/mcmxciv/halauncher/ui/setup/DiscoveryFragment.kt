@@ -26,8 +26,8 @@ class DiscoveryFragment : LauncherFragment(), ServiceSelectedListener {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = createViewModel { component.setupViewModel() }
 
         binding.serviceList.layoutManager = LinearLayoutManager(context)
@@ -47,6 +47,7 @@ class DiscoveryFragment : LauncherFragment(), ServiceSelectedListener {
         binding.manualModeButton.setOnClickListener {
             navigate(DiscoveryFragmentDirections.actionDiscoveryFragmentToManualSetupFragment())
         }
+
     }
 
     override fun onPause() {

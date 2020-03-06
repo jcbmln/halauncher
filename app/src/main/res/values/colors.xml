@@ -33,4 +33,6 @@
     <color name="button_text_color">@color/colorAccent</color>
 
     <color name="icon_background">#1D2951</color>
+
+    <color name="transparent">#00ffffff</color>
 </resources>
