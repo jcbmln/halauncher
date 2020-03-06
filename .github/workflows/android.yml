@@ -5,12 +5,12 @@ on:
     branches:
       - development
     tags:
-      - "v*"
+      - 'v*'
     paths-ignore:
-      - "_docs/**"
-      - "docs/**"
-      - "README.md"
-      - "LICENSE"
+      - '_docs/**'
+      - 'docs/**'
+      - 'README.md'
+      - 'LICENSE'
 
 jobs:
   build:
@@ -52,7 +52,7 @@ jobs:
   release:
     name: Create Release
     needs: build
-    if: (!contains(github.ref, 'development')) && (!endsWith(github.ref, '-beta'))
+    if: (!contains(github.ref, 'development'))
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact
@@ -69,7 +69,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: HALauncher ${{ github.ref }}
-          body: ""
+          body: ''
           draft: false
           prerelease: ${{ contains(github.ref, '-beta') }}
 
