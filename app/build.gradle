@@ -7,7 +7,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 def gitTag = 'git describe --tags --abbrev=0'.execute([], project.rootDir)
-        .text.trim().replace("v", "").replace(".beta", "")
+        .text.trim().replace("v", "").split("-")[0]
 def gitCommitCount = Integer.parseInt('git rev-list --count HEAD'
         .execute([], project.rootDir).text.trim())
 
