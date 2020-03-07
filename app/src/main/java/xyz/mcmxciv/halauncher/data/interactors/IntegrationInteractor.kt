@@ -1,23 +1,31 @@
 package xyz.mcmxciv.halauncher.data.interactors
 
+import android.content.Context
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import timber.log.Timber
+import xyz.mcmxciv.halauncher.SensorWorker
 import xyz.mcmxciv.halauncher.data.IntegrationException
+import xyz.mcmxciv.halauncher.data.models.Sensor
+import xyz.mcmxciv.halauncher.data.models.SensorRegistration
 import xyz.mcmxciv.halauncher.data.repositories.IntegrationRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
+import xyz.mcmxciv.halauncher.data.repositories.SensorRepository
 import xyz.mcmxciv.halauncher.models.Config
 import xyz.mcmxciv.halauncher.models.DeviceRegistration
 import java.lang.Exception
 import javax.inject.Inject
 
 class IntegrationInteractor @Inject constructor(
+    private val context: Context,
     private val localStorageRepository: LocalStorageRepository,
-    private val integrationRepository: IntegrationRepository
+    private val integrationRepository: IntegrationRepository,
+    private val sensorRepository: SensorRepository
 ) {
     suspend fun registerDevice(deviceRegistration: DeviceRegistration) {
         localStorageRepository.deviceRegistration = deviceRegistration
         localStorageRepository.deviceIntegration =
             integrationRepository.registerDevice(deviceRegistration)
+        SensorWorker.start(context)
     }
 
     suspend fun updateRegistration(
@@ -42,6 +50,57 @@ class IntegrationInteractor @Inject constructor(
         }
     }
 
+    suspend fun updateSensors() {
+        val sensors = mutableListOf<Sensor>()
+        sensorRepository.getBatterySensor()?.let { sensors.add(it) }
+
+        tryUrls { url ->
+            val response = integrationRepository.updateSensor(url, sensors)
+            response.body()?.let { results ->
+                results["battery_level"]?.let { result ->
+                    if (result["success"] == false) {
+                        registerBatterySensor()
+                    }
+                }
+                results["wifi_connection"]?.let { result ->
+                    if (result["success"] == false) {
+                        registerNetworkSensor()
+                    }
+                }
+            }
+
+            return@tryUrls response.isSuccessful
+        }
+    }
+
+    private suspend fun registerBatterySensor() {
+        sensorRepository.getBatterySensor()?.let { sensor ->
+            val registration = SensorRegistration(
+                sensor,
+                "battery",
+                "Battery Level",
+                "%"
+            )
+
+            return@let tryUrls { url ->
+                val response = integrationRepository.registerSensor(url, registration)
+                return@tryUrls response.isSuccessful
+            }
+        }
+    }
+
+    private suspend fun registerNetworkSensor() {
+        val registration = SensorRegistration(
+            sensorRepository.getNetworkSensor(),
+            "WiFi Connection"
+        )
+
+        tryUrls { url ->
+            val response = integrationRepository.registerSensor(url, registration)
+            return@tryUrls response.isSuccessful
+        }
+    }
+
     suspend fun getConfig(): Config {
         return tryUrls { url ->
             val response = integrationRepository.getConfig(url)
@@ -54,13 +113,10 @@ class IntegrationInteractor @Inject constructor(
     private suspend fun <T> tryUrls(block: suspend (url: String) -> T?): T {
         val integration = localStorageRepository.deviceIntegration ?: throw IntegrationException()
         val urls = ArrayList<String>()
-        val cloudhookUrl = integration.cloudhookUrl
-        val remoteUiUrl = integration.remoteUiUrl?.let { buildUrl(it, integration.webhookId) }
-        val localUrl = buildUrl(localStorageRepository.baseUrl, integration.webhookId)
 
-        cloudhookUrl?.let { urls.add(it) }
-        remoteUiUrl?.let { urls.add(it) }
-        urls.add(localUrl)
+        integration.cloudhookUrl?.let { urls.add(it) }
+        integration.remoteUiUrl?.let { urls.add(buildUrl(it, integration.webhookId)) }
+        urls.add(buildUrl(localStorageRepository.baseUrl, integration.webhookId))
 
         var result: T? = null
 

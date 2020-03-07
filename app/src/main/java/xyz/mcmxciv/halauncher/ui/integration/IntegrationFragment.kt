@@ -42,12 +42,11 @@ class IntegrationFragment : LauncherFragment() {
         }
 
         binding.skipButton.setOnClickListener {
-            finishIntegration(true)
+            finishIntegration()
         }
     }
 
-    private fun finishIntegration(integrationSkipped: Boolean = false) {
-        viewModel.finishSetup(integrationSkipped)
+    private fun finishIntegration() {
         navigate(IntegrationFragmentDirections.actionGlobalHomeFragment())
     }
 

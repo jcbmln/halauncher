@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.SensorWorker
 import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import xyz.mcmxciv.halauncher.models.DeviceRegistration
@@ -54,9 +55,5 @@ class IntegrationViewModel @Inject constructor(
             integrationInteractor.registerDevice(deviceRegistration)
             integrationEvent.postValue(IntegrationState.SUCCESS)
         }
-    }
-
-    fun finishSetup(integrationSkipped: Boolean) {
-//        launcherSettings.setupDone = true
     }
 }

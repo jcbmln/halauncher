@@ -35,6 +35,18 @@ interface HomeAssistantApi {
     ): Response<*>
 
     @POST
+    suspend fun registerSensor(
+        @Url url: String,
+        @Body request: WebhookRequest
+    ): Response<*>
+
+    @POST
+    suspend fun updateSensors(
+        @Url url: String,
+        @Body request: WebhookRequest
+    ) : Response<Map<String, Map<String, Any>>>
+
+    @POST
     suspend fun getConfig(
         @Url url: String,
         @Body request: WebhookRequest
