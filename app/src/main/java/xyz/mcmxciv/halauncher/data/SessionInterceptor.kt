@@ -8,7 +8,7 @@ import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
 import xyz.mcmxciv.halauncher.data.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
 import xyz.mcmxciv.halauncher.models.Session
-import xyz.mcmxciv.halauncher.models.Token
+import xyz.mcmxciv.halauncher.data.models.Token
 
 class SessionInterceptor constructor(
     private val urlInteractor: UrlInteractor,

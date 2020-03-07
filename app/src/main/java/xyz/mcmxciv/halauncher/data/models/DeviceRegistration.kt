@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.models
+package xyz.mcmxciv.halauncher.data.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -28,6 +28,6 @@ data class DeviceRegistration(
     // Added in HA 0.104.0
     @Json(name = "device_id")
     val deviceId: String? = null
-) : Model() {
-    companion object : JsonModel<DeviceRegistration>()
+) : SerializableModel() {
+    companion object : SerializerObject<DeviceRegistration>()
 }

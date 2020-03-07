@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.models
+package xyz.mcmxciv.halauncher.data.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -13,6 +13,6 @@ data class DeviceIntegration(
     val secret: String?,
     @Json(name = "webhook_id")
     val webhookId: String
-) : Model() {
-    companion object : JsonModel<DeviceIntegration>()
+) : SerializableModel() {
+    companion object : SerializerObject<DeviceIntegration>()
 }

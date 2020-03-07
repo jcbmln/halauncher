@@ -2,7 +2,9 @@ package xyz.mcmxciv.halauncher.data.api
 
 import retrofit2.Response
 import retrofit2.http.*
-import xyz.mcmxciv.halauncher.models.*
+import xyz.mcmxciv.halauncher.data.models.Config
+import xyz.mcmxciv.halauncher.data.models.Token
+import xyz.mcmxciv.halauncher.data.models.WebhookRequest
 
 interface HomeAssistantApi {
     @FormUrlEncoded

@@ -1,6 +1,7 @@
 package xyz.mcmxciv.halauncher.ui.home
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.getColorStateList
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import org.json.JSONObject
@@ -21,6 +23,7 @@ import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.models.WebCallback
 import xyz.mcmxciv.halauncher.ui.*
+import xyz.mcmxciv.halauncher.utils.Utilities
 import javax.inject.Inject
 
 
@@ -28,7 +31,6 @@ class HomeFragment : LauncherFragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var appListAdapter: AppListAdapter
-
 
     @Inject
     lateinit var invariantDeviceProfile: InvariantDeviceProfile
@@ -79,7 +81,7 @@ class HomeFragment : LauncherFragment() {
         }
 
         observe(viewModel.configEvent) { config ->
-            setStatusBarColor(Color.parseColor(config.themeColor))
+            setThemeColor(Color.parseColor(config.themeColor))
         }
 
         binding.allAppsButton.setOnClickListener {
@@ -131,25 +133,24 @@ class HomeFragment : LauncherFragment() {
 //                    Timber.d(name)
 //                }
 
-//                @JavascriptInterface
-//                fun externalBus(message: String) {
-//                    Timber.d("External bus $message")
-//                    binding.homeWebView.post {
-//                        when (JSONObject(message).get("type")) {
-//                            "config/get" -> {
-//                                val script = "externalBus(${JSONObject(
-//                                    mapOf(
-//                                        "id" to JSONObject(message).get("id"),
-//                                        "type" to "result",
-//                                        "success" to true,
-//                                        "result" to JSONObject(mapOf("hasSettingsScreen" to true))
-//                                    )
-//                                )});"
-//                                binding.homeWebView.evaluateJavascript(script, null)
-//                            }
-//                            "config_screen/show" -> navigate(
-//                                HomeFragmentDirections.actionHomeFragmentToMainPreferencesFragment()
-//                            )
+                @JavascriptInterface
+                fun externalBus(message: String) {
+                    binding.homeWebView.post {
+                        when (JSONObject(message).get("type")) {
+                            "config/get" -> {
+                                val script = "externalBus(${JSONObject(
+                                    mapOf(
+                                        "id" to JSONObject(message).get("id"),
+                                        "type" to "result",
+                                        "success" to true,
+                                        "result" to JSONObject(mapOf("hasSettingsScreen" to true))
+                                    )
+                                )});"
+                                binding.homeWebView.evaluateJavascript(script, null)
+                            }
+                            "config_screen/show" -> navigate(
+                                HomeFragmentDirections.actionHomeFragmentToMainPreferencesFragment()
+                            )
 //                            "frontend/get_themes" -> {
 //                                val keys: MutableList<String> = ArrayList()
 //                                val themes = JSONObject(message).get("themes")
@@ -159,9 +160,9 @@ class HomeFragment : LauncherFragment() {
 //                                    keys.add(key as String)
 //                                }
 //                            }
-//                        }
-//                    }
-//                }
+                        }
+                    }
+                }
             }, "externalApp")
         }
 
@@ -185,7 +186,7 @@ class HomeFragment : LauncherFragment() {
         binding.appList.isVisible = !binding.appList.isVisible
     }
 
-    private fun setStatusBarColor(color: Int) {
+    private fun setThemeColor(color: Int) {
         activity?.let {
             it.window.statusBarColor = color
             it.window.navigationBarColor = color

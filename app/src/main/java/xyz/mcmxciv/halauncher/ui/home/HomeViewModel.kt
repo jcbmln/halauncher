@@ -9,7 +9,7 @@ import xyz.mcmxciv.halauncher.data.interactors.AppsInteractor
 import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
 import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
-import xyz.mcmxciv.halauncher.models.Config
+import xyz.mcmxciv.halauncher.data.models.Config
 import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.WebCallback
 import xyz.mcmxciv.halauncher.models.apps.AppListItem

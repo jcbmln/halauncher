@@ -21,7 +21,7 @@ data class SensorRegistration(
     val deviceClass: String? = null,
     @Json(name = "unit_of_measurement")
     val unitOfMeasurement: String? = null
-) {
+) : SerializableModel() {
     constructor(
         sensor: Sensor,
         name: String,
@@ -37,4 +37,6 @@ data class SensorRegistration(
         deviceClass,
         unitOfMeasurement
     )
+
+    companion object : SerializerObject<Sensor>()
 }

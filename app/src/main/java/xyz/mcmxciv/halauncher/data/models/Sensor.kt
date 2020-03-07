@@ -15,4 +15,6 @@ data class Sensor(
     val icon: String,
     @Json(name = "attributes")
     val attributes: Map<String, Any>
-)
+) : SerializableModel() {
+    companion object : SerializerObject<Sensor>()
+}

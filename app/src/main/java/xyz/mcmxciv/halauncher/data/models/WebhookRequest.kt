@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.models
+package xyz.mcmxciv.halauncher.data.models
 
 import com.squareup.moshi.JsonClass
 

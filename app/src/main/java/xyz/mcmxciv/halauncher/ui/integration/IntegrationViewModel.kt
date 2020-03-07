@@ -11,12 +11,10 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.SensorWorker
 import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
-import xyz.mcmxciv.halauncher.models.DeviceRegistration
+import xyz.mcmxciv.halauncher.data.models.DeviceRegistration
 import xyz.mcmxciv.halauncher.models.IntegrationState
-import xyz.mcmxciv.halauncher.utils.ResourceLiveData
 import javax.inject.Inject
 
 class IntegrationViewModel @Inject constructor(
@@ -32,19 +30,20 @@ class IntegrationViewModel @Inject constructor(
     fun registerDevice() {
         integrationEvent.postValue(IntegrationState.LOADING)
 
-        val deviceRegistration = DeviceRegistration(
-            BuildConfig.APPLICATION_ID,
-            resourceProvider.getString(R.string.app_name),
-            BuildConfig.VERSION_NAME,
-            resourceProvider.getSettingsString("bluetooth_name") ?: Build.MODEL,
-            Build.MANUFACTURER,
-            Build.MODEL,
-            "Android",
-            Build.VERSION.SDK_INT.toString(),
-            false,
-            null,
-            resourceProvider.getSettingsString(Settings.Secure.ANDROID_ID)
-        )
+        val deviceRegistration =
+            DeviceRegistration(
+                BuildConfig.APPLICATION_ID,
+                resourceProvider.getString(R.string.app_name),
+                BuildConfig.VERSION_NAME,
+                resourceProvider.getSettingsString("bluetooth_name") ?: Build.MODEL,
+                Build.MANUFACTURER,
+                Build.MODEL,
+                "Android",
+                Build.VERSION.SDK_INT.toString(),
+                false,
+                null,
+                resourceProvider.getSettingsString(Settings.Secure.ANDROID_ID)
+            )
 
         val exceptionHandler = CoroutineExceptionHandler { _, ex ->
             Timber.e(ex)

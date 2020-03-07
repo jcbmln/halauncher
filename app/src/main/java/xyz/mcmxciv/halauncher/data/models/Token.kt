@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.models
+package xyz.mcmxciv.halauncher.data.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -13,6 +13,6 @@ data class Token(
     val refreshToken: String?,
     @Json(name = "token_type")
     val tokenType: String
-) : Model() {
-    companion object : JsonModel<Token>()
+) : SerializableModel() {
+    companion object : SerializerObject<Token>()
 }

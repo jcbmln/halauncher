@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.models
+package xyz.mcmxciv.halauncher.data.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -23,6 +23,6 @@ data class Config(
     val version: String,
     @Json(name = "theme_color")
     val themeColor: String
-) : Model() {
-    companion object : JsonModel<Config>()
+) : SerializableModel() {
+    companion object : SerializerObject<Config>()
 }

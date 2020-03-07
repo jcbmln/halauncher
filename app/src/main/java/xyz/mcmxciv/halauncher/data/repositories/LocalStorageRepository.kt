@@ -8,6 +8,10 @@ import androidx.core.content.edit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import xyz.mcmxciv.halauncher.data.models.Config
+import xyz.mcmxciv.halauncher.data.models.DeviceIntegration
+import xyz.mcmxciv.halauncher.data.models.DeviceRegistration
+import xyz.mcmxciv.halauncher.data.models.toJson
 import xyz.mcmxciv.halauncher.models.*
 import java.io.*
 import java.lang.Exception

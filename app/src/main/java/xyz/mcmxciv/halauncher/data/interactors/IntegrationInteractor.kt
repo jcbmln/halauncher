@@ -10,8 +10,8 @@ import xyz.mcmxciv.halauncher.data.models.SensorRegistration
 import xyz.mcmxciv.halauncher.data.repositories.IntegrationRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
 import xyz.mcmxciv.halauncher.data.repositories.SensorRepository
-import xyz.mcmxciv.halauncher.models.Config
-import xyz.mcmxciv.halauncher.models.DeviceRegistration
+import xyz.mcmxciv.halauncher.data.models.Config
+import xyz.mcmxciv.halauncher.data.models.DeviceRegistration
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -37,12 +37,13 @@ class IntegrationInteractor @Inject constructor(
         val cachedDeviceRegistration = localStorageRepository.deviceRegistration
             ?: throw IntegrationException()
 
-        val newDeviceRegistration = DeviceRegistration(
-            appVersion = appVersion ?: cachedDeviceRegistration.appVersion,
-            deviceName = deviceName ?: cachedDeviceRegistration.deviceName,
-            osVersion = osVersion ?: cachedDeviceRegistration.osName,
-            appData =  appData ?: cachedDeviceRegistration.appData
-        )
+        val newDeviceRegistration =
+            DeviceRegistration(
+                appVersion = appVersion ?: cachedDeviceRegistration.appVersion,
+                deviceName = deviceName ?: cachedDeviceRegistration.deviceName,
+                osVersion = osVersion ?: cachedDeviceRegistration.osName,
+                appData = appData ?: cachedDeviceRegistration.appData
+            )
 
         tryUrls { url ->
             val response = integrationRepository.updateRegistration(url, newDeviceRegistration)

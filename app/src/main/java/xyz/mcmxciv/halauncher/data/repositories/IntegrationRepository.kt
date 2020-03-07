@@ -3,8 +3,7 @@ package xyz.mcmxciv.halauncher.data.repositories
 import retrofit2.Response
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantApi
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantSecureApi
-import xyz.mcmxciv.halauncher.data.models.Sensor
-import xyz.mcmxciv.halauncher.data.models.SensorRegistration
+import xyz.mcmxciv.halauncher.data.models.*
 import xyz.mcmxciv.halauncher.models.*
 import javax.inject.Inject
 
@@ -22,7 +21,10 @@ class IntegrationRepository @Inject constructor(
         url: String,
         deviceRegistration: DeviceRegistration
     ): Response<*> {
-        val request = WebhookRequest("update_registration", deviceRegistration)
+        val request = WebhookRequest(
+            "update_registration",
+            deviceRegistration
+        )
         return homeAssistantApi.updateRegistration(url, request)
     }
 
@@ -30,7 +32,10 @@ class IntegrationRepository @Inject constructor(
         url: String,
         sensorRegistration: SensorRegistration
     ): Response<*> {
-        val request = WebhookRequest("register_sensor", sensorRegistration)
+        val request = WebhookRequest(
+            "register_sensor",
+            sensorRegistration
+        )
         return homeAssistantApi.registerSensor(url, request)
     }
 
@@ -38,7 +43,10 @@ class IntegrationRepository @Inject constructor(
         url: String,
         sensors: List<Sensor>
     ) : Response<Map<String, Map<String, Any>>> {
-        val request = WebhookRequest("update_sensor_states", sensors)
+        val request = WebhookRequest(
+            "update_sensor_states",
+            sensors
+        )
         return homeAssistantApi.updateSensors(url, request)
     }
 
@@ -48,7 +56,8 @@ class IntegrationRepository @Inject constructor(
 
 
     suspend fun getConfig(url: String): Response<Config> {
-        val request = WebhookRequest("get_config", null)
+        val request =
+            WebhookRequest("get_config", null)
         return homeAssistantApi.getConfig(url, request)
     }
 }
