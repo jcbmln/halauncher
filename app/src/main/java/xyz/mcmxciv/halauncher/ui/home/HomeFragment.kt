@@ -70,7 +70,6 @@ class HomeFragment : LauncherFragment() {
         
         observe(viewModel.callback) { resource ->
             binding.homeWebView.evaluateJavascript(resource.callback, null)
-            viewModel.getConfig()
 
             if (resource is WebCallback.RevokeAuthCallback) {
                 navigate(HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph())
@@ -93,9 +92,6 @@ class HomeFragment : LauncherFragment() {
                 binding.homeWebView.canGoBack() -> binding.homeWebView.goBack()
             }
         }
-
-        activity?.window?.setBackgroundDrawable(ColorDrawable(getColor(context!!, R.color.colorAccent)))
-        activity?.setTheme(R.style.HaLauncherTheme)
 
         initializeWebView()
     }

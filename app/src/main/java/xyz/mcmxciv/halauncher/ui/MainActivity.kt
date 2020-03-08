@@ -12,6 +12,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        instance = this
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        instance = null
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -40,5 +46,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val UPDATE_REQUEST_CODE = 1
+        var instance: MainActivity? = null
     }
 }

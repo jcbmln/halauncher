@@ -40,7 +40,7 @@ class AppListAdapter(private val context: Context, private var appListItems: Lis
         if (isDarkBackground)
             holder.binding.appItem.setTextColor(context.getColor(R.color.colorBackground))
 
-        val popup = ShortcutPopupWindow(context, appListItem.shortcutItems)
+        val popup = ShortcutPopupWindow(context, appListItem)
 
         holder.binding.appItem.setOnClickListener { view ->
             val info = view.tag as AppInfo

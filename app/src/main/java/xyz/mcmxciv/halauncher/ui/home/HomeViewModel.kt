@@ -30,7 +30,15 @@ class HomeViewModel @Inject constructor(
     private val errorEvent = LiveEvent<ErrorState>()
     val error: LiveData<ErrorState> = errorEvent
 
-    val configEvent = LiveEvent<Config>()
+    val configEvent = LiveEvent<Config>().also { event ->
+        val exceptionHandler = CoroutineExceptionHandler { _, ex ->
+            Timber.e(ex)
+        }
+
+        viewModelScope.launch(exceptionHandler) {
+            event.postValue(integrationInteractor.getConfig())
+        }
+    }
     val config: LiveData<Config> = configEvent
 
     val appListItems = MutableLiveData<List<AppListItem>>().also {
@@ -68,15 +76,4 @@ class HomeViewModel @Inject constructor(
             callbackEvent.postValue(WebCallback.RevokeAuthCallback("$callback(true);"))
         }
     }
-
-    fun getConfig() {
-        val exceptionHandler = CoroutineExceptionHandler { _, ex ->
-            Timber.e(ex)
-        }
-
-        viewModelScope.launch(exceptionHandler) {
-            configEvent.postValue(integrationInteractor.getConfig())
-        }
-    }
-
 }

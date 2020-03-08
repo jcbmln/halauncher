@@ -1,17 +1,15 @@
 package xyz.mcmxciv.halauncher.data.repositories
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import xyz.mcmxciv.halauncher.data.models.Config
 import xyz.mcmxciv.halauncher.data.models.DeviceIntegration
 import xyz.mcmxciv.halauncher.data.models.DeviceRegistration
 import xyz.mcmxciv.halauncher.data.models.toJson
-import xyz.mcmxciv.halauncher.models.*
+import xyz.mcmxciv.halauncher.models.Session
 import javax.inject.Inject
 
 class LocalStorageRepository @Inject constructor(
-    private val context: Context,
     private val sharedPreferences: SharedPreferences
 ) {
     var baseUrl: String

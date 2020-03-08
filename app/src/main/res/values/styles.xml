@@ -18,7 +18,6 @@
     </style>
     <style name="HaLauncherTheme.PreferenceThemeOverlay" parent="PreferenceThemeOverlay">
         <item name="android:layout">@layout/fragment_settings</item>
-        <item name="android:background">@color/colorBackground</item>
     </style>
 
     <style name="ActionPreference" parent="Preference.Material">
