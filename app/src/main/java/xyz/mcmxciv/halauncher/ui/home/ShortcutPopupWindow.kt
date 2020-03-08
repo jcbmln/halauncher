@@ -6,13 +6,12 @@ import android.content.pm.LauncherApps
 import android.content.pm.PackageInstaller
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Process
 import android.util.DisplayMetrics
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.widget.PopupWindow
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.R
@@ -79,10 +78,15 @@ class ShortcutPopupWindow(
             binding.root.measuredHeight
         )
         popup.isOutsideTouchable = true
+        popup.isFocusable = true
+    }
+
+    override fun onShortcutSelected() {
+        popup.dismiss()
     }
 
     fun show(view: View) {
-        val baseXPos = view.left - (view.width / 2)
+        val baseXPos = (view.left + (view.width / 2)) - (popup.width / 2)
         val xPos = when {
             view.left == 0 -> view.left + Utilities.pxFromDp(10f, dm)
             baseXPos + popup.width >= dm.widthPixels ->
@@ -92,13 +96,9 @@ class ShortcutPopupWindow(
         val yPos = when {
             (view.bottom + popup.height) > dm.heightPixels ->
                 view.top + (view.height / 2) - popup.height
-            else -> view.bottom + (view.height / 2)
+            else -> view.bottom
         }
 
         popup.showAtLocation(view, Gravity.NO_GRAVITY, xPos, yPos)
-    }
-
-    override fun onShortcutSelected() {
-        popup.dismiss()
     }
 }

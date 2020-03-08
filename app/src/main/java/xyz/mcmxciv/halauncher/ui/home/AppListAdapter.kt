@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.ListItemAppBinding
-import xyz.mcmxciv.halauncher.models.apps.AppInfo
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import xyz.mcmxciv.halauncher.utils.Utilities
 
@@ -43,9 +42,9 @@ class AppListAdapter(private val context: Context, private var appListItems: Lis
         val popup = ShortcutPopupWindow(context, appListItem)
 
         holder.binding.appItem.setOnClickListener { view ->
-            val info = view.tag as AppInfo
+            val item = view.tag as AppListItem
             val pm = context.packageManager
-            val intent = pm.getLaunchIntentForPackage(info.packageName)
+            val intent = pm.getLaunchIntentForPackage(item.packageName)
             context.startActivity(intent)
         }
 
