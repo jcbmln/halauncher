@@ -37,7 +37,7 @@
 
     <Button
         android:id="@+id/retry_button"
-        style="@style/AppTheme.Widget.Button"
+        style="@style/HaLauncher.Widget.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -50,7 +50,7 @@
 
     <Button
         android:id="@+id/skip_button"
-        style="@style/AppTheme.Widget.Button.TextButton"
+        style="@style/HaLauncher.Widget.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"

@@ -33,37 +33,31 @@
 
     <!-- Preference Sections -->
     <string name="preference_top_level">Settings</string>
-    <string name="preference_connection">Connection</string>
-    <string name="preference_connection_summary">Edit connection urls and revoke access</string>
-    <string name="preference_connection_key">connection_preference</string>
-    <string name="preference_integration">Device Integration</string>
-    <string name="preference_integration_summary">Change how Home Assistant sees this device</string>
-    <string name="preference_integration_key">integration_preference</string>
-    <string name="preference_display">Display</string>
-    <string name="preference_display_summary">Change themes and display settings</string>
-    <string name="preference_display_key">display_preference</string>
-    <string name="preference_about">About HALauncher</string>
-    <string name="preference_about_summary">Check for updates and view licenses and policies</string>
-    <string name="preference_about_key">about_preference</string>
     <string name="preference_check_updates_key">check_updates_preference</string>
     <string name="preference_privacy_policy_key">privacy_policy_preference</string>
 
     <!-- Connection Preferences -->
-    <string name="internal_url_title">Home Assistant Url</string>
-    <string name="external_url_title">Home Assistant Url</string>
+    <string name="preference_connection_title">Connection</string>
+    <string name="preference_connection_summary">Edit connection urls and revoke access</string>
+    <string name="connection_url_title">Home Assistant Url</string>
     <string name="revoke_token_title">Revoke Token</string>
     <string name="revoke_token_confirmation_message">Are you sure you want to revoke this access token?</string>
 
+    <!-- Integration Preferences -->
+    <string name="preference_integration_title">Device Integration</string>
+    <string name="preference_integration_summary">Change how Home Assistant sees this device</string>
+    <string name="device_name_title">Device Name</string>
+    <string name="sensor_update_interval_title">Sensor Update Interval</string>
+
+    <!-- Display Preferences -->
+    <string name="preference_display_title">Display</string>
+    <string name="preference_display_summary">Change themes and display settings</string>
+
     <!-- About Preferences -->
+    <string name="preference_about_title">About HALauncher</string>
+    <string name="preference_about_summary">Check for updates and view licenses and policies</string>
     <string name="check_updates_title">Check for updates</string>
     <string name="privacy_policy_title">Privacy Policy</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
     <string name="action_preference_image">action preference image</string>
     <string name="default_confirmation_message">Are you sure you want to perform this action?</string>

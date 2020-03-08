@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.widget.TextView
 import androidx.preference.DialogPreference
 import androidx.preference.PreferenceViewHolder
+import okhttp3.internal.notify
 import xyz.mcmxciv.halauncher.R
 
 class ActionPreference(
@@ -49,5 +50,9 @@ class ActionPreference(
 
     override fun getDialogLayoutResource(): Int {
         return dialogLayoutResourceId
+    }
+
+    fun doAction() {
+        notifyChanged()
     }
 }

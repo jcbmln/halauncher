@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <EditTextPreference
-        app:key="internal_url"
-        app:title="@string/internal_url_title" />
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditTextPreference
-        app:key="external_url"
-        app:title="@string/external_url_title" />
+        android:key="connection_url"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/connection_url_title" />
 
     <xyz.mcmxciv.halauncher.views.ActionPreference
         app:actionTextColor="@color/red"

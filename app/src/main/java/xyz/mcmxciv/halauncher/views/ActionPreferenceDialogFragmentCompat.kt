@@ -20,8 +20,9 @@ class ActionPreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
     }
 
     override fun onDialogClosed(positiveResult: Boolean) {
-        if (preference is ActionPreference) {
-            preference.callChangeListener(positiveResult)
+        val actionPreference = preference as ActionPreference
+        if (actionPreference.callChangeListener(positiveResult)) {
+            actionPreference.doAction()
         }
     }
 

@@ -1,7 +1,6 @@
 package xyz.mcmxciv.halauncher.ui.home
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -13,7 +12,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat.getColor
-import androidx.core.content.ContextCompat.getColorStateList
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import org.json.JSONObject
@@ -23,7 +21,6 @@ import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.models.WebCallback
 import xyz.mcmxciv.halauncher.ui.*
-import xyz.mcmxciv.halauncher.utils.Utilities
 import javax.inject.Inject
 
 
@@ -98,7 +95,7 @@ class HomeFragment : LauncherFragment() {
         }
 
         activity?.window?.setBackgroundDrawable(ColorDrawable(getColor(context!!, R.color.colorAccent)))
-        activity?.setTheme(R.style.AppTheme)
+        activity?.setTheme(R.style.HaLauncherTheme)
 
         initializeWebView()
     }

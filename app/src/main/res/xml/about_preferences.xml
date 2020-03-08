@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
-        app:key="@string/preference_check_updates_key"
+        app:key="check_updates"
         app:title="@string/check_updates_title" />
 
     <Preference
-        app:key="@string/preference_privacy_policy_key"
+        app:key="privacy_policy"
         app:title="@string/privacy_policy_title" />
 </PreferenceScreen>

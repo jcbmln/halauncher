@@ -10,8 +10,9 @@ import javax.inject.Inject
 class UrlInteractor @Inject constructor(
     private val localStorageRepository: LocalStorageRepository
 ) {
-    val baseUrl: String
+    var baseUrl: String
         get() = localStorageRepository.baseUrl
+        set(value) { localStorageRepository.baseUrl = value }
 
     val externalAuthUrl: String
         get() = localStorageRepository.baseUrl.toHttpUrl()

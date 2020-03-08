@@ -61,7 +61,7 @@ class SensorRepository @Inject constructor(private val context: Context) {
 
     fun getNetworkSensor(): Sensor {
         val wifiManager =
-            context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            context.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val connection = wifiManager.connectionInfo
 
         val ssid = if (connection.networkId == -1) {
@@ -101,10 +101,6 @@ class SensorRepository @Inject constructor(private val context: Context) {
         )
     }
 
-    private fun formatIPAddress(ip: Int): String {
-        return (ip and 0xFF).toString() + "." +
-                (ip shr 8 and 0xFF) + "." +
-                (ip shr 16 and 0xFF) + "." +
-                (ip shr 24 and 0xFF)
-    }
+    private fun formatIPAddress(ip: Int): String =
+        "${(ip and 0xff)}.${(ip shr 8 and 0xff)}.${(ip shr 16 and 0xff)}.${(ip shr 24 and 0xff)}"
 }

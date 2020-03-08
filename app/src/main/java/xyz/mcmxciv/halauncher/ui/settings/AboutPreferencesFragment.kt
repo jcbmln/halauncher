@@ -15,7 +15,6 @@ import xyz.mcmxciv.halauncher.ui.MainActivity
 import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 
-@Suppress("unused")
 class AboutPreferencesFragment : LauncherPreferenceFragment(), InstallStateUpdatedListener {
     private lateinit var viewModel: SettingsViewModel
     private lateinit var appUpdateManager: AppUpdateManager
@@ -25,16 +24,14 @@ class AboutPreferencesFragment : LauncherPreferenceFragment(), InstallStateUpdat
         addPreferencesFromResource(R.xml.about_preferences)
 
         addClickListener(
-            findPreference(getString(R.string.preference_privacy_policy_key)),
+            findPreference(PRIVACY_POLICY_KEY),
             AboutPreferencesFragmentDirections
                 .actionAboutPreferencesFragmentToWebviewPreferenceFragment(
                     BuildConfig.PRIVACY_POLICY_URL
                 )
         )
 
-        val checkUpdatesPreference = findPreference<Preference>(
-            getString(R.string.preference_check_updates_key)
-        )
+        val checkUpdatesPreference = findPreference<Preference>(CHECK_UPDATES_KEY)
         checkUpdatesPreference?.summary = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
         checkUpdatesPreference?.setOnPreferenceClickListener {
             appUpdateManager = AppUpdateManagerFactory.create(context)
@@ -51,7 +48,7 @@ class AboutPreferencesFragment : LauncherPreferenceFragment(), InstallStateUpdat
                 }
             }
 
-            true
+            return@setOnPreferenceClickListener true
         }
     }
 
@@ -67,5 +64,10 @@ class AboutPreferencesFragment : LauncherPreferenceFragment(), InstallStateUpdat
             setAction("RESTART") { appUpdateManager.completeUpdate() }
             show()
         }
+    }
+
+    companion object {
+        private const val CHECK_UPDATES_KEY = "check_updates"
+        private const val PRIVACY_POLICY_KEY = "privacy_policy"
     }
 }

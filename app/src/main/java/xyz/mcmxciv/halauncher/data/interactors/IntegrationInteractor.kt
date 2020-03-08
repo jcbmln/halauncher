@@ -3,7 +3,7 @@ package xyz.mcmxciv.halauncher.data.interactors
 import android.content.Context
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import timber.log.Timber
-import xyz.mcmxciv.halauncher.SensorWorker
+import xyz.mcmxciv.halauncher.SensorUpdateWorker
 import xyz.mcmxciv.halauncher.data.IntegrationException
 import xyz.mcmxciv.halauncher.data.models.Sensor
 import xyz.mcmxciv.halauncher.data.models.SensorRegistration
@@ -13,6 +13,7 @@ import xyz.mcmxciv.halauncher.data.repositories.SensorRepository
 import xyz.mcmxciv.halauncher.data.models.Config
 import xyz.mcmxciv.halauncher.data.models.DeviceRegistration
 import java.lang.Exception
+import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class IntegrationInteractor @Inject constructor(
@@ -21,18 +22,28 @@ class IntegrationInteractor @Inject constructor(
     private val integrationRepository: IntegrationRepository,
     private val sensorRepository: SensorRepository
 ) {
+    val deviceRegistration: DeviceRegistration
+        get() = localStorageRepository.deviceRegistration ?: throw IllegalStateException()
+
+    var sensorUpdateInterval: Long
+        get() = localStorageRepository.sensorUpdateInterval
+        set(value) {
+            localStorageRepository.sensorUpdateInterval = value
+            SensorUpdateWorker.start(context, value)
+        }
+
     suspend fun registerDevice(deviceRegistration: DeviceRegistration) {
         localStorageRepository.deviceRegistration = deviceRegistration
         localStorageRepository.deviceIntegration =
             integrationRepository.registerDevice(deviceRegistration)
-        SensorWorker.start(context)
+        SensorUpdateWorker.start(context)
     }
 
     suspend fun updateRegistration(
-        appVersion: String?,
         deviceName: String?,
-        osVersion: String?,
-        appData: Map<String, String>?
+        appVersion: String? = null,
+        osVersion: String? = null,
+        appData: Map<String, String>? = null
     ) {
         val cachedDeviceRegistration = localStorageRepository.deviceRegistration
             ?: throw IntegrationException()

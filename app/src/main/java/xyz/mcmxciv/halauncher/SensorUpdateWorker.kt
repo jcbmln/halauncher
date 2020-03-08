@@ -8,7 +8,7 @@ import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class SensorWorker(
+class SensorUpdateWorker(
     context: Context,
     workerParameters: WorkerParameters
 ) : CoroutineWorker(context, workerParameters) {
@@ -26,16 +26,17 @@ class SensorWorker(
     }
 
     companion object {
-        fun start(context: Context) {
+        fun start(context: Context, updateInterval: Long = 15) {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
 
-            val worker =
-                PeriodicWorkRequestBuilder<SensorWorker>(15, TimeUnit.NANOSECONDS)
-                    .setConstraints(constraints)
-                    .addTag("sensors")
-                    .build()
+            val worker = PeriodicWorkRequestBuilder<SensorUpdateWorker>(
+                updateInterval,
+                TimeUnit.MINUTES
+            ).setConstraints(constraints)
+                .addTag("sensors")
+                .build()
 
             WorkManager.getInstance(context).cancelAllWorkByTag("sensors")
             WorkManager.getInstance(context).enqueue(worker)

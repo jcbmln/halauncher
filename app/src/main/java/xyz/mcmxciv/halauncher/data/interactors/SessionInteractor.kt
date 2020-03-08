@@ -32,7 +32,6 @@ class SessionInteractor @Inject constructor(
         val token = localStorageRepository.session?.accessToken ?: ""
         authenticationRepository.revokeToken(token)
         localStorageRepository.session = null
-        localStorageRepository.baseUrl = LocalStorageRepository.PLACEHOLDER_URL
     }
 
     suspend fun getExternalAuthentication(): String {

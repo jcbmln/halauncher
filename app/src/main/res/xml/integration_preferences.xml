@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
-        app:key="internal_url"
-        app:title="@string/internal_url_title"
-        app:useSimpleSummaryProvider="true" />
+        android:key="device_name"
+        android:title="@string/device_name_title" />
 
-    <EditTextPreference
-        app:key="external_name"
-        app:title="@string/external_url_title"
-        app:useSimpleSummaryProvider="true" />
+    <ListPreference
+        android:defaultValue="15"
+        android:entries="@array/sensor_update_interval_keys"
+        android:entryValues="@array/sensor_update_interval_values"
+        android:key="sensor_update_interval"
+        android:title="@string/sensor_update_interval_title" />
 </PreferenceScreen>

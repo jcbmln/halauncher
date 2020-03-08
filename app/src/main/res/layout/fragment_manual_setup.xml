@@ -47,7 +47,7 @@
 
     <Button
         android:id="@+id/open_url_button"
-        style="@style/AppTheme.Widget.Button"
+        style="@style/HaLauncher.Widget.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -61,7 +61,7 @@
 
     <Button
         android:id="@+id/discovery_mode_button"
-        style="@style/AppTheme.Widget.Button.TextButton"
+        style="@style/HaLauncher.Widget.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"

@@ -2,7 +2,7 @@ package xyz.mcmxciv.halauncher.di.components
 
 import dagger.Component
 import xyz.mcmxciv.halauncher.LauncherApplication
-import xyz.mcmxciv.halauncher.SensorWorker
+import xyz.mcmxciv.halauncher.SensorUpdateWorker
 import xyz.mcmxciv.halauncher.di.modules.AppModule
 import xyz.mcmxciv.halauncher.di.modules.DataModule
 import javax.inject.Singleton
@@ -13,5 +13,5 @@ interface AppComponent {
     fun viewComponentBuilder(): ViewComponent.Builder
 
     fun inject(application: LauncherApplication)
-    fun inject(sensorWorker: SensorWorker)
+    fun inject(sensorUpdateWorker: SensorUpdateWorker)
 }
