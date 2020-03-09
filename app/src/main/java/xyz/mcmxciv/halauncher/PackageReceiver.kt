@@ -3,21 +3,34 @@ package xyz.mcmxciv.halauncher
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 
-class PackageReceiver : BroadcastReceiver() {
+class PackageReceiver private constructor(
+    intentFiler: IntentFilter,
+    private val listener: PackageListener
+): BroadcastReceiver() {
+    val filter = intentFiler
+
     override fun onReceive(context: Context, intent: Intent) {
-        when (intent.action) {
-            Intent.ACTION_PACKAGE_ADDED -> addPackage(intent.`package`)
-            Intent.ACTION_PACKAGE_REMOVED -> {}
-            Intent.ACTION_PACKAGE_CHANGED -> {}
+        listener.onPackageReceived()
+    }
+
+    companion object {
+        fun initialize(listener: PackageListener): PackageReceiver {
+            val filter = IntentFilter()
+            filter.addAction(Intent.ACTION_PACKAGE_ADDED)
+            filter.addAction(Intent.ACTION_PACKAGE_REMOVED)
+            filter.addAction(Intent.ACTION_PACKAGE_CHANGED)
+
+            filter.addDataScheme("package")
+            return PackageReceiver(filter, listener)
         }
     }
 
-    private fun addPackage(intentPackage: String?) {}
-
-    companion object {
-        fun initialize() {
-
-        }
+    interface PackageListener {
+        fun onPackageReceived()
+//        fun onPackageAdded(packageName: String)
+//        fun onPackageRemoved(packageName: String)
+//        fun onPackageChanged(packageName: String)
     }
 }

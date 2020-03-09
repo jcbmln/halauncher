@@ -1,18 +1,43 @@
 package xyz.mcmxciv.halauncher.ui
 
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.play.core.install.model.ActivityResult
+import xyz.mcmxciv.halauncher.LauncherApplication
+import xyz.mcmxciv.halauncher.PackageReceiver
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.data.interactors.AppsInteractor
+import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
+    private lateinit var packageReceiver: PackageReceiver
+    lateinit var viewModel: MainActivityViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        LauncherApplication.instance.component.inject(this)
+        viewModel = createViewModel {
+            LauncherApplication.instance.component.mainActivityViewModel()
+        }
         instance = this
+    }
+
+    override fun onResume() {
+        super.onResume()
+        packageReceiver = PackageReceiver.initialize(this)
+        registerReceiver(packageReceiver, packageReceiver.filter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(packageReceiver)
     }
 
     override fun onDestroy() {
@@ -42,6 +67,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         return super.onSupportNavigateUp()
+    }
+
+    override fun onPackageReceived() {
+        viewModel.updateAppListItems()
     }
 
     companion object {

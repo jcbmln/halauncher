@@ -1,6 +1,7 @@
 package xyz.mcmxciv.halauncher.data.interactors
 
 import android.content.ComponentName
+import android.content.pm.ApplicationInfo
 import android.content.pm.ShortcutInfo
 import xyz.mcmxciv.halauncher.data.models.App
 import xyz.mcmxciv.halauncher.data.repositories.AppRepository
@@ -60,6 +61,7 @@ class AppsInteractor @Inject constructor(
                 packageInfo.packageName,
                 packageRepository.getDisplayName(info),
                 packageInfo.lastUpdateTime,
+                (info.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 1,
                 iconFactory.getIcon(info).toByteArray()
             )
             appRepository.addApp(app)

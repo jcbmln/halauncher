@@ -41,11 +41,11 @@ class HomeViewModel @Inject constructor(
     }
     val config: LiveData<Config> = configEvent
 
-    val appListItems = MutableLiveData<List<AppListItem>>().also {
-        viewModelScope.launch {
-            it.postValue(appsInteractor.getAppListItems())
-        }
-    }
+//    val appListItems = MutableLiveData<List<AppListItem>>().also {
+//        viewModelScope.launch {
+//            it.postValue(appsInteractor.getAppListItems())
+//        }
+//    }
 
     fun getExternalAuth(callback: String) {
         val exceptionHandler = CoroutineExceptionHandler { _, ex ->

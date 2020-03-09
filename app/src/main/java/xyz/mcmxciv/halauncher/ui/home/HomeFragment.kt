@@ -13,6 +13,7 @@ import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.R
@@ -46,6 +47,12 @@ class HomeFragment : LauncherFragment() {
         super.onViewCreated(view, savedInstanceState)
         component.inject(this)
         viewModel = createViewModel { component.homeViewModel() }
+        activity?.let {
+            val activityViewModel = (it as MainActivity).viewModel
+            observe(activityViewModel.appListItems) { items ->
+                appListAdapter.update(items)
+            }
+        }
         color = activity?.getColor(R.color.colorAccent)
 
         appListAdapter = AppListAdapter(context!!, listOf())
@@ -64,9 +71,9 @@ class HomeFragment : LauncherFragment() {
             }
         }
 
-        observe(viewModel.appListItems) { resource ->
-            appListAdapter.update(resource)
-        }
+//        observe(viewModel.appListItems) { resource ->
+//            appListAdapter.update(resource)
+//        }
         
         observe(viewModel.callback) { resource ->
             binding.homeWebView.evaluateJavascript(resource.callback, null)

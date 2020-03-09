@@ -10,6 +10,7 @@ data class AppListItem(
     val packageName: String,
     val displayName: String,
     var lastUpdate: Long,
+    val isSystemApp: Boolean,
     val icon: Bitmap?,
     var componentName: ComponentName?,
     var shortcutItems: List<ShortcutItem>?
@@ -22,6 +23,7 @@ data class AppListItem(
         app.packageName,
         app.displayName,
         app.lastUpdate,
+        app.isSystemApp,
         app.icon?.toBitmap(),
         componentName,
         shortcutItems

@@ -15,6 +15,8 @@ data class App(
     val displayName: String,
     @ColumnInfo(name = "last_update")
     var lastUpdate: Long,
+    @ColumnInfo(name = "system_app")
+    val isSystemApp: Boolean,
     @ColumnInfo(name = "icon", typeAffinity = ColumnInfo.BLOB)
     var icon: ByteArray?
 ) {
@@ -28,6 +30,7 @@ data class App(
         if (packageName != other.packageName) return false
         if (displayName != other.displayName) return false
         if (lastUpdate != other.lastUpdate) return false
+        if (isSystemApp != other.isSystemApp) return false
         if (icon != null) {
             if (other.icon == null) return false
             if (!icon!!.contentEquals(other.icon!!)) return false
@@ -41,6 +44,7 @@ data class App(
         result = 31 * result + packageName.hashCode()
         result = 31 * result + displayName.hashCode()
         result = 31 * result + lastUpdate.hashCode()
+        result = 31 * result + isSystemApp.hashCode()
         result = 31 * result + (icon?.contentHashCode() ?: 0)
         return result
     }

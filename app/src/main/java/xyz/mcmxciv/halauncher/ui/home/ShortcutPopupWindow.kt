@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.LauncherApps
 import android.content.pm.PackageInstaller
+import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
@@ -23,7 +24,7 @@ import xyz.mcmxciv.halauncher.utils.Utilities
 import xyz.mcmxciv.halauncher.utils.getBounds
 
 class ShortcutPopupWindow(
-    context: Context,
+    private val context: Context,
     appListItem: AppListItem
 ) : ShortcutListAdapter.ShorcutSelectedListener {
     private val binding: PopupWindowShortcutsBinding
@@ -34,13 +35,22 @@ class ShortcutPopupWindow(
         val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         wm.defaultDisplay.getMetrics(dm)
 
-        val launcherApps = context
-            .getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = PopupWindowShortcutsBinding.inflate(inflater)
+        binding.root.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+
+        popup = PopupWindow(
+            binding.root,
+            binding.root.measuredWidth,
+            binding.root.measuredHeight
+        )
+        popup.isOutsideTouchable = true
+        popup.isFocusable = true
 
         binding.appInfoText.setOnClickListener { view ->
+            popup.dismiss()
+            val launcherApps = context
+                .getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
             launcherApps.startAppDetailsActivity(
                 appListItem.componentName,
                 Process.myUserHandle(),
@@ -49,12 +59,18 @@ class ShortcutPopupWindow(
             )
         }
 
-
-        if (appListItem.componentName == null) {
+        if (appListItem.isSystemApp) {
             binding.uninstallText.isEnabled = false
+            binding.uninstallText.setCompoundDrawablesWithIntrinsicBounds(
+                null,
+                context.getDrawable(R.drawable.ic_uninstall_disabled),
+                null,
+                null
+            )
         } else {
             val cn = appListItem.componentName!!
             binding.uninstallText.setOnClickListener {
+                popup.dismiss()
                 val intent = Intent(Intent.ACTION_DELETE)
                     .setData(Uri.fromParts("package", cn.packageName, cn.className))
                     .putExtra(Intent.EXTRA_USER, Process.myUserHandle())
@@ -70,15 +86,9 @@ class ShortcutPopupWindow(
             binding.shortcutList.isVisible = false
             binding.systemShotcuts.background = ColorDrawable(context.getColor(R.color.transparent))
         }
-        binding.root.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
 
-        popup = PopupWindow(
-            binding.root,
-            binding.root.measuredWidth,
-            binding.root.measuredHeight
-        )
-        popup.isOutsideTouchable = true
-        popup.isFocusable = true
+
+
     }
 
     override fun onShortcutSelected() {
