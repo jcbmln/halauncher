@@ -7,7 +7,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 def gitTag = 'git describe --tags --abbrev=0'.execute([], project.rootDir)
-        .text.trim().replace("v", "").split("-")[0]
+        .text.trim().replace("v", "")
 def gitCommitCount = Integer.parseInt('git rev-list --count HEAD'
         .execute([], project.rootDir).text.trim())
 
@@ -109,6 +109,4 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.github.hadilq.liveevent:liveevent:1.2.0'
-
-
 }

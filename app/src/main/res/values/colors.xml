@@ -5,6 +5,7 @@
     <color name="lightGray">#e0e0e0</color>
     <color name="transparentWhite">#00ffffff</color>
     <color name="red">#ef5350</color>
+    <color name="transparent">#00ffffff</color>
 
     <color name="colorPrimary">#03a9f4</color>
     <color name="colorPrimaryDark">#0076C1</color>
@@ -34,7 +35,7 @@
 
     <color name="icon_background">#1D2951</color>
 
-    <color name="transparent">#00ffffff</color>
+
 
     <color name="disableTint">#7fffffff</color>
 </resources>

@@ -36,6 +36,18 @@
     <string name="preference_check_updates_key">check_updates_preference</string>
     <string name="preference_privacy_policy_key">privacy_policy_preference</string>
 
+    <!-- Home Assistant Preferences -->
+    <string name="pt_homeassistant">Home Assistant</string>
+    <string name="pt_homeassistant_url">Home Assistant Url</string>
+    <string name="pt_device_name">Device Name</string>
+    <string name="pt_sensor_update_interval">Sensor Update Interval</string>
+    <string name="ps_homeassistant">Manage your Home Assistant settings</string>
+    <string name="pc_connection">Connection Settings</string>
+    <string name="pc_integration">Device Integration Settings</string>
+    <string name="pk_homeassistant_url" translatable="false">home_assistant_url</string>
+    <string name="pk_device_name">device_name</string>
+    <string name="pk_sensor_update_interval">sensor_update_interval</string>
+
     <!-- Connection Preferences -->
     <string name="preference_connection_title">Connection</string>
     <string name="preference_connection_summary">Edit connection urls and revoke access</string>
@@ -58,6 +70,12 @@
     <string name="preference_about_summary">Check for updates and view licenses and policies</string>
     <string name="check_updates_title">Check for updates</string>
     <string name="privacy_policy_title">Privacy Policy</string>
+
+    <!-- Other Preference Keys -->
+    <string name="pk_session">session</string>
+    <string name="pk_device_registration">device_registration</string>
+    <string name="pk_device_integration">device_integration</string>
+    <string name="pk_config">config</string>
 
     <string name="action_preference_image">action preference image</string>
     <string name="default_confirmation_message">Are you sure you want to perform this action?</string>

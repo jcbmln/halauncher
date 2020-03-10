@@ -26,9 +26,9 @@ class IntegrationInteractor @Inject constructor(
         get() = localStorageRepository.deviceRegistration ?: throw IllegalStateException()
 
     var sensorUpdateInterval: Long
-        get() = localStorageRepository.sensorUpdateInterval
+        get() = localStorageRepository.sensorUpdateInterval.toLong()
         set(value) {
-            localStorageRepository.sensorUpdateInterval = value
+            localStorageRepository.sensorUpdateInterval = value.toInt()
             SensorUpdateWorker.start(context, value)
         }
 

@@ -97,20 +97,16 @@
                 android:id="@+id/action_mainPreferencesFragment_to_connectionPreferencesFragment"
                 app:destination="@id/connectionPreferencesFragment" />
             <action
-                android:id="@+id/action_mainPreferencesFragment_to_displayPreferencesFragment"
-                app:destination="@id/displayPreferencesFragment" />
-            <action
                 android:id="@+id/action_mainPreferencesFragment_to_integrationPreferencesFragment"
                 app:destination="@id/integrationPreferencesFragment" />
+            <action
+                android:id="@+id/action_mainPreferencesFragment_to_homeAssistantPreferencesFragment"
+                app:destination="@id/homeAssistantPreferencesFragment" />
         </fragment>
         <fragment
             android:id="@+id/connectionPreferencesFragment"
             android:name="xyz.mcmxciv.halauncher.ui.settings.ConnectionPreferencesFragment"
             android:label="ConnectionPreferencesFragment" />
-        <fragment
-            android:id="@+id/displayPreferencesFragment"
-            android:name="xyz.mcmxciv.halauncher.ui.settings.DisplayPreferencesFragment"
-            android:label="DisplayPreferencesFragment" />
         <fragment
             android:id="@+id/aboutPreferencesFragment"
             android:name="xyz.mcmxciv.halauncher.ui.settings.AboutPreferencesFragment"
@@ -132,6 +128,10 @@
                 android:name="url"
                 app:argType="string" />
         </fragment>
+        <fragment
+            android:id="@+id/homeAssistantPreferencesFragment"
+            android:name="xyz.mcmxciv.halauncher.ui.settings.HomeAssistantPreferencesFragment"
+            android:label="HomeAssistantPreferencesFragment" />
     </navigation>
     <fragment
         android:id="@+id/launchFragment"

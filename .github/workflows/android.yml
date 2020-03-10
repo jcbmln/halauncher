@@ -71,7 +71,7 @@ jobs:
           release_name: HALauncher ${{ github.ref }}
           body: ''
           draft: false
-          prerelease: ${{ contains(github.ref, '-beta') }}
+          prerelease: ${{ contains(github.ref, '-beta') || contains(github.ref, '-rc') }}
 
       - name: Upload Apk
         uses: actions/upload-release-asset@v1.0.1

@@ -26,6 +26,11 @@ class MainPreferencesFragment : LauncherPreferenceFragment() {
         addPreferencesFromResource(R.xml.main_preferences)
 
         addClickListener(
+            findPreference(HOME_ASSISTANT_PREFERENCE_KEY),
+            MainPreferencesFragmentDirections
+                .actionMainPreferencesFragmentToHomeAssistantPreferencesFragment()
+        )
+        addClickListener(
             findPreference(CONNECTION_PREFERENCE_KEY),
             MainPreferencesFragmentDirections
                 .actionMainPreferencesFragmentToConnectionPreferencesFragment()
@@ -36,11 +41,6 @@ class MainPreferencesFragment : LauncherPreferenceFragment() {
                 .actionMainPreferencesFragmentToIntegrationPreferencesFragment()
         )
         addClickListener(
-            findPreference(DISPLAY_PREFERENCE_KEY),
-            MainPreferencesFragmentDirections
-                .actionMainPreferencesFragmentToDisplayPreferencesFragment()
-        )
-        addClickListener(
             findPreference(ABOUT_PREFERENCE_KEY),
             MainPreferencesFragmentDirections
                 .actionMainPreferencesFragmentToAboutPreferencesFragment()
@@ -48,9 +48,9 @@ class MainPreferencesFragment : LauncherPreferenceFragment() {
     }
 
     companion object {
+        private const val HOME_ASSISTANT_PREFERENCE_KEY = "home_assistant_preference"
         private const val CONNECTION_PREFERENCE_KEY = "connection_preference"
         private const val INTEGRATION_PREFERENCE_KEY = "integration_preference"
-        private const val DISPLAY_PREFERENCE_KEY = "display_preference"
         private const val ABOUT_PREFERENCE_KEY = "about_preference"
     }
 }
