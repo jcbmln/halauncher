@@ -2,10 +2,16 @@ package xyz.mcmxciv.halauncher.ui.settings
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
+import androidx.preference.Preference
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.SensorUpdateWorker
 import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
+import xyz.mcmxciv.halauncher.ui.MainActivityViewModel
 
-class HomeAssistantPreferencesFragment : LauncherPreferenceFragment() {
+class HomeAssistantPreferencesFragment
+    : LauncherPreferenceFragment(), Preference.OnPreferenceChangeListener {
+    private val viewModel: MainActivityViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -15,6 +21,17 @@ class HomeAssistantPreferencesFragment : LauncherPreferenceFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.home_assistant_preferences, rootKey)
 
-        // TODO: Restart SensorUpdateWorker when option changed
+        findPreference(R.string.pk_homeassistant_url)?.onPreferenceChangeListener = this
+        findPreference(R.string.pk_sensor_update_interval)?.onPreferenceChangeListener = this
+    }
+
+    override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
+        when(preference.key) {
+            getString(R.string.pk_homeassistant_url) -> viewModel.revokeSession()
+            getString(R.string.pk_sensor_update_interval) ->
+                context?.let { SensorUpdateWorker.start(it, newValue as Long) }
+        }
+
+        return true
     }
 }

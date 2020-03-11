@@ -7,7 +7,7 @@ import xyz.mcmxciv.halauncher.data.dao.ShortcutDao
 import xyz.mcmxciv.halauncher.data.models.App
 import xyz.mcmxciv.halauncher.data.models.Shortcut
 
-@Database(entities = [App::class, Shortcut::class], version = 2, exportSchema = true)
+@Database(entities = [App::class, Shortcut::class], version = 3, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun appDao(): AppDao
     abstract fun shortcutDao(): ShortcutDao

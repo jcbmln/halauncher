@@ -6,5 +6,5 @@ data class ShortcutItem(
     val shortcutId: String,
     val packageName: String,
     val displayName: String,
-    val icon: Bitmap?
+    val icon: Bitmap
 )

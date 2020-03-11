@@ -17,8 +17,10 @@ data class App(
     var lastUpdate: Long,
     @ColumnInfo(name = "system_app")
     val isSystemApp: Boolean,
+    @ColumnInfo(name = "is_hidden")
+    val isHidden: Boolean,
     @ColumnInfo(name = "icon", typeAffinity = ColumnInfo.BLOB)
-    var icon: ByteArray?
+    var icon: ByteArray
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -31,10 +33,7 @@ data class App(
         if (displayName != other.displayName) return false
         if (lastUpdate != other.lastUpdate) return false
         if (isSystemApp != other.isSystemApp) return false
-        if (icon != null) {
-            if (other.icon == null) return false
-            if (!icon!!.contentEquals(other.icon!!)) return false
-        } else if (other.icon != null) return false
+        if (!icon.contentEquals(other.icon)) return false
 
         return true
     }
@@ -45,7 +44,7 @@ data class App(
         result = 31 * result + displayName.hashCode()
         result = 31 * result + lastUpdate.hashCode()
         result = 31 * result + isSystemApp.hashCode()
-        result = 31 * result + (icon?.contentHashCode() ?: 0)
+        result = 31 * result + (icon.contentHashCode())
         return result
     }
 }

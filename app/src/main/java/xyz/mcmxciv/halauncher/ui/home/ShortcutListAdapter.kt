@@ -3,17 +3,14 @@ package xyz.mcmxciv.halauncher.ui.home
 import android.content.Context
 import android.content.pm.LauncherApps
 import android.os.Process
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.databinding.ShortcutItemBinding
 import xyz.mcmxciv.halauncher.models.apps.ShortcutItem
-import xyz.mcmxciv.halauncher.utils.Utilities
-import xyz.mcmxciv.halauncher.utils.getBounds
+import xyz.mcmxciv.halauncher.utils.getSourceBounds
 
 class ShortcutListAdapter(
     private val context: Context,
@@ -34,14 +31,7 @@ class ShortcutListAdapter(
     override fun onBindViewHolder(holder: ShortcutListViewHolder, position: Int) {
         val shortcutItem = shortcutItems[position]
         val resources = LauncherApplication.instance.resources
-        val drawable = shortcutItem.icon?.toDrawable(resources)
-        val dm = DisplayMetrics()
-        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        wm.defaultDisplay.getMetrics(dm)
-        val size = Utilities.pxFromDp(32f, dm)
-        drawable?.setBounds(0, 0, size, size)
-        holder.binding.shortcutNameText
-            .setCompoundDrawables(drawable, null, null, null)
+        holder.binding.shortcutNameText.leftIcon = shortcutItem.icon.toDrawable(resources)
         holder.binding.shortcutNameText.text = shortcutItem.displayName
         holder.binding.shortcutNameText.tag = shortcutItem
 
@@ -53,7 +43,7 @@ class ShortcutListAdapter(
                 launcherApps.startShortcut(
                     item.packageName,
                     item.shortcutId,
-                    view.getBounds(),
+                    view.getSourceBounds(),
                     null,
                     Process.myUserHandle()
                 )

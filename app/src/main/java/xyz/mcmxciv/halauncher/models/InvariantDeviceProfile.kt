@@ -45,7 +45,9 @@ class InvariantDeviceProfile @Inject constructor(context: Context?) {
     var iconShapePath: String = ""
     var landscapeIconSize: Float = 0.toFloat()
     var iconBitmapSize: Int = 0
+    var shortcutBitmapSize: Int = 0
     var fillResIconDpi: Int = 0
+    var shortcutIconDpi: Int = 0
     var iconTextSize: Float = 0.toFloat()
     var iconForegroundSize: Int = 0
 
@@ -101,6 +103,7 @@ class InvariantDeviceProfile @Inject constructor(context: Context?) {
             getIconShapePath(context)
         landscapeIconSize = interpolatedDisplayOption.landscapeIconSize
         iconBitmapSize = Utilities.pxFromDp(iconSize, dm)
+        shortcutBitmapSize = Utilities.pxFromDp(24f, dm)
 
         iconForegroundSize = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             (iconBitmapSize / (1 + 2 * AdaptiveIconDrawable.getExtraInsetFraction())).toInt()
@@ -108,6 +111,7 @@ class InvariantDeviceProfile @Inject constructor(context: Context?) {
 
         iconTextSize = interpolatedDisplayOption.iconTextSize
         fillResIconDpi = getLauncherIconDensity(iconBitmapSize)
+        shortcutIconDpi = getLauncherIconDensity(shortcutBitmapSize)
 
         val realSize = Point()
         display.getRealSize(realSize)

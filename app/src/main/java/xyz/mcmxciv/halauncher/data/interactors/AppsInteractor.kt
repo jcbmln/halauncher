@@ -62,6 +62,7 @@ class AppsInteractor @Inject constructor(
                 packageRepository.getDisplayName(info),
                 packageInfo.lastUpdateTime,
                 (info.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 1,
+                false,
                 iconFactory.getIcon(info).toByteArray()
             )
             appRepository.addApp(app)

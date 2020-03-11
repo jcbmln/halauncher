@@ -58,21 +58,12 @@ class IconFactory @Inject constructor(
         return createIconBitmap(drawable)
     }
 
-    fun getIcon(activityInfo: ActivityInfo): Bitmap {
-        val drawable = getDrawable(activityInfo) ?: activityInfo.loadIcon(packageManager)
-        return createIconBitmap(drawable)
-    }
-
-    fun getShortcutIcon(activityInfo: ActivityInfo): Bitmap {
-        return activityInfo.loadIcon(packageManager).toBitmap()
-    }
-
     @RequiresApi(Build.VERSION_CODES.N_MR1)
-    fun getShortcutIcon(shortcutInfo: ShortcutInfo): Bitmap? =
+    fun getShortcutIcon(shortcutInfo: ShortcutInfo): Bitmap =
         launcherApps.getShortcutIconDrawable(
             shortcutInfo,
-            invariantDeviceProfile.fillResIconDpi
-        )?.toBitmap()
+            invariantDeviceProfile.shortcutBitmapSize
+        ).toBitmap()
 
     private fun getDrawable(launcherActivityInfo: LauncherActivityInfo): Drawable? {
         val iconRes = launcherActivityInfo.applicationInfo.icon

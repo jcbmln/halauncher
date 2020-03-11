@@ -11,20 +11,20 @@ data class AppListItem(
     val displayName: String,
     var lastUpdate: Long,
     val isSystemApp: Boolean,
-    val icon: Bitmap?,
-    var componentName: ComponentName?,
+    val icon: Bitmap,
+    var componentName: ComponentName,
     var shortcutItems: List<ShortcutItem>?
 ) {
     constructor(
         app: App,
-        componentName: ComponentName?,
+        componentName: ComponentName,
         shortcutItems: List<ShortcutItem>?) : this(
         app.activityName,
         app.packageName,
         app.displayName,
         app.lastUpdate,
         app.isSystemApp,
-        app.icon?.toBitmap(),
+        app.icon.toBitmap(),
         componentName,
         shortcutItems
     )

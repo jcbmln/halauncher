@@ -1,7 +1,9 @@
 package xyz.mcmxciv.halauncher.ui.home
 
 import android.content.Context
+import android.content.pm.LauncherApps
 import android.graphics.Paint
+import android.os.Process
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +13,16 @@ import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.ListItemAppBinding
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
+import xyz.mcmxciv.halauncher.utils.AppLauncher
 import xyz.mcmxciv.halauncher.utils.Utilities
+import xyz.mcmxciv.halauncher.utils.getSourceBounds
+import javax.inject.Inject
 
-class AppListAdapter(private val context: Context, private var appListItems: List<AppListItem>) :
-    RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
+class AppListAdapter @Inject constructor(
+    private val context: Context,
+    private val appLauncher: AppLauncher
+) : RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
+    private var appListItems = listOf<AppListItem>()
 
     class AppListViewHolder(val binding: ListItemAppBinding)
         : RecyclerView.ViewHolder(binding.root)
@@ -30,22 +38,18 @@ class AppListAdapter(private val context: Context, private var appListItems: Lis
         val appListItem = appListItems[position]
         holder.binding.root.setLayerType(View.LAYER_TYPE_SOFTWARE, Paint())
         val resources = LauncherApplication.instance.resources
-        val drawable = appListItem.icon?.toDrawable(resources)
-        holder.binding.appItem
-            .setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null)
+        holder.binding.appItem.topIcon = appListItem.icon.toDrawable(resources)
         holder.binding.appItem.text = appListItem.displayName
         holder.binding.appItem.tag = appListItem
 
         if (isDarkBackground)
             holder.binding.appItem.setTextColor(context.getColor(R.color.colorBackground))
 
-        val popup = ShortcutPopupWindow(context, appListItem)
+        val popup = ShortcutPopupWindow(context, appListItem, appLauncher)
 
         holder.binding.appItem.setOnClickListener { view ->
             val item = view.tag as AppListItem
-            val pm = context.packageManager
-            val intent = pm.getLaunchIntentForPackage(item.packageName)
-            context.startActivity(intent)
+            appLauncher.startMainActivity(item.componentName, view)
         }
 
         holder.binding.appItem.setOnLongClickListener {

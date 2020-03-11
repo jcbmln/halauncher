@@ -1,31 +1,26 @@
 package xyz.mcmxciv.halauncher.ui.home
 
 import android.content.Context
-import android.content.Intent
 import android.content.pm.LauncherApps
-import android.content.pm.PackageInstaller
-import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
-import android.os.Build
 import android.os.Process
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.PopupWindow
-import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.PopupWindowShortcutsBinding
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
-import xyz.mcmxciv.halauncher.models.apps.ShortcutItem
-import xyz.mcmxciv.halauncher.ui.MainActivity
+import xyz.mcmxciv.halauncher.utils.AppLauncher
 import xyz.mcmxciv.halauncher.utils.Utilities
-import xyz.mcmxciv.halauncher.utils.getBounds
+import xyz.mcmxciv.halauncher.utils.getSourceBounds
+
 
 class ShortcutPopupWindow(
     private val context: Context,
-    appListItem: AppListItem
+    private val appListItem: AppListItem,
+    private val appLauncher: AppLauncher
 ) : ShortcutListAdapter.ShorcutSelectedListener {
     private val binding: PopupWindowShortcutsBinding
     private val popup: PopupWindow
@@ -37,24 +32,15 @@ class ShortcutPopupWindow(
 
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = PopupWindowShortcutsBinding.inflate(inflater)
-        binding.root.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-
-        popup = PopupWindow(
-            binding.root,
-            binding.root.measuredWidth,
-            binding.root.measuredHeight
-        )
-        popup.isOutsideTouchable = true
-        popup.isFocusable = true
 
         binding.appInfoText.setOnClickListener { view ->
-            popup.dismiss()
+            dismiss()
             val launcherApps = context
                 .getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
             launcherApps.startAppDetailsActivity(
                 appListItem.componentName,
                 Process.myUserHandle(),
-                view.getBounds(),
+                view.getSourceBounds(),
                 null
             )
         }
@@ -63,18 +49,14 @@ class ShortcutPopupWindow(
             binding.uninstallText.isEnabled = false
             binding.uninstallText.setCompoundDrawablesWithIntrinsicBounds(
                 null,
-                context.getDrawable(R.drawable.ic_uninstall_disabled),
+                context.getDrawable(R.drawable.ic_remove_disabled),
                 null,
                 null
             )
         } else {
-            val cn = appListItem.componentName!!
             binding.uninstallText.setOnClickListener {
-                popup.dismiss()
-                val intent = Intent(Intent.ACTION_DELETE)
-                    .setData(Uri.fromParts("package", cn.packageName, cn.className))
-                    .putExtra(Intent.EXTRA_USER, Process.myUserHandle())
-                MainActivity.instance?.startActivity(intent)
+                dismiss()
+                appLauncher.uninstall(appListItem.componentName, context)
             }
         }
 
@@ -84,14 +66,26 @@ class ShortcutPopupWindow(
             binding.shortcutList.adapter = ShortcutListAdapter(context, shortcutItems, this)
         } else {
             binding.shortcutList.isVisible = false
-            binding.systemShotcuts.background = ColorDrawable(context.getColor(R.color.transparent))
+            binding.systemShortcuts.background = ColorDrawable(context.getColor(R.color.transparent))
         }
 
+        binding.root.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
 
-
+        popup = PopupWindow(
+            binding.root,
+            binding.root.measuredWidth,
+            binding.root.measuredHeight
+        )
+        popup.animationStyle = R.style.HaLauncherTheme_PopupAnimation
+        popup.isOutsideTouchable = true
+        popup.isFocusable = true
     }
 
     override fun onShortcutSelected() {
+        dismiss()
+    }
+
+    private fun dismiss() {
         popup.dismiss()
     }
 

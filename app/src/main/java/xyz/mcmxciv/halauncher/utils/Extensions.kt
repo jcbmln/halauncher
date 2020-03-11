@@ -10,32 +10,19 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
-fun Bitmap.toByteArray(): ByteArray? {
-    val size = width * height * 4
-    return try {
-        ByteArrayOutputStream(size).use { out ->
-            compress(Bitmap.CompressFormat.PNG, 100, out)
-            out.flush()
-            return@use out.toByteArray()
-        }
-    } catch (ex: IOException) {
-        Timber.e(ex)
-        return null
+fun Bitmap.toByteArray(): ByteArray =
+    ByteArrayOutputStream().use { out ->
+        compress(Bitmap.CompressFormat.PNG, 100, out)
+        out.flush()
+        return@use out.toByteArray()
     }
-}
 
-fun ByteArray.toBitmap(): Bitmap? {
-    return try {
-        ByteArrayInputStream(this).use { input ->
-            return@use BitmapFactory.decodeStream(input)
-        }
-    } catch (ex: IOException) {
-        Timber.e(ex)
-        return null
+fun ByteArray.toBitmap(): Bitmap =
+    ByteArrayInputStream(this).use { input ->
+        return@use BitmapFactory.decodeStream(input)
     }
-}
 
-fun View.getBounds(): Rect {
+fun View.getSourceBounds(): Rect {
     val position = IntArray(2)
     getLocationOnScreen(position)
     return Rect(

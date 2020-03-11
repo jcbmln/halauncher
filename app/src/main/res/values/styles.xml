@@ -61,5 +61,11 @@
         <item name="android:ellipsize">marquee</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Caption</item>
+        <item name="selectableItemBackground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="HaLauncherTheme.PopupAnimation">
+        <item name="android:windowEnterAnimation">@anim/popup_enter</item>
+        <item name="android:windowExitAnimation">@anim/popup_exit</item>
     </style>
 </resources>

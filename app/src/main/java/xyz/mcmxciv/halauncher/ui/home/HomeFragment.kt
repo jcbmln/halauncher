@@ -11,9 +11,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.addCallback
-import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.R
@@ -28,10 +26,12 @@ import javax.inject.Inject
 class HomeFragment : LauncherFragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
-    private lateinit var appListAdapter: AppListAdapter
 
     @Inject
     lateinit var invariantDeviceProfile: InvariantDeviceProfile
+
+    @Inject
+    lateinit var appListAdapter: AppListAdapter
 
     private var color: Int? = null
 
@@ -55,7 +55,6 @@ class HomeFragment : LauncherFragment() {
         }
         color = activity?.getColor(R.color.colorAccent)
 
-        appListAdapter = AppListAdapter(context!!, listOf())
         binding.appList.layoutManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
         binding.appList.adapter = appListAdapter
 

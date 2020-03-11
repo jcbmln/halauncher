@@ -2,6 +2,7 @@ package xyz.mcmxciv.halauncher.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
@@ -55,6 +56,9 @@ abstract class LauncherPreferenceFragment : PreferenceFragmentCompat() {
             return@setOnPreferenceClickListener true
         }
     }
+
+    protected fun findPreference(@StringRes resId: Int): Preference? =
+        findPreference(getString(resId))
 
     companion object {
         private const val DIALOG_FRAGMENT_TAG = "androidx.preference.PreferenceFragment.DIALOG"
