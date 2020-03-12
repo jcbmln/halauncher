@@ -30,6 +30,7 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"
-        android:src="@drawable/ic_apps"
-        app:backgroundTint="@color/colorAccent" />
+        app:backgroundTint="@color/colorAccent"
+        app:srcCompat="@drawable/ic_apps"
+        app:tint="@color/white" />
 </FrameLayout>

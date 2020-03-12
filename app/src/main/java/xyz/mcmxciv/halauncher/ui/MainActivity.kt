@@ -1,9 +1,13 @@
 package xyz.mcmxciv.halauncher.ui
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.View
+import android.view.ViewAnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -17,6 +21,8 @@ import xyz.mcmxciv.halauncher.databinding.ActivityMainBinding
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.ui.home.AppListAdapter
 import javax.inject.Inject
+import kotlin.math.hypot
+
 
 class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
     private lateinit var binding: ActivityMainBinding
@@ -52,7 +58,7 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
         }
 
         binding.allAppsButton.setOnClickListener {
-            binding.appList.isVisible = !binding.appList.isVisible
+            openCloseAppList()
         }
     }
 
@@ -98,6 +104,38 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
 
     override fun onPackageReceived() {
         viewModel.updateAppListItems()
+    }
+
+    private fun openCloseAppList() {
+        val x = binding.allAppsButton.left + (binding.allAppsButton.width / 2)
+        val y = binding.allAppsButton.top + (binding.allAppsButton.height / 2)
+        val closedRadius = 0f
+        val openRadius = hypot(
+            binding.root.width.toDouble(),
+            binding.root.height.toDouble()
+        ).toFloat()
+
+        if (binding.appList.isVisible) {
+            val animation = ViewAnimationUtils.createCircularReveal(
+                binding.appList, x, y, openRadius, closedRadius
+            )
+
+            animation.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+                    binding.appList.visibility = View.GONE
+                }
+            })
+            animation.start()
+        }
+        else {
+            val animation = ViewAnimationUtils.createCircularReveal(
+                binding.appList, x, y, closedRadius, openRadius
+            )
+
+            binding.appList.visibility = View.VISIBLE
+            animation.start()
+        }
     }
 
     private fun setThemeColor(color: Int) {
