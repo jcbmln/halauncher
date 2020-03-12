@@ -6,6 +6,9 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Process
 import android.util.DisplayMetrics
 import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -76,9 +79,20 @@ class ShortcutPopupWindow(
             binding.root.measuredWidth,
             binding.root.measuredHeight
         )
-        popup.animationStyle = R.style.HaLauncherTheme_PopupAnimation
+//        popup.animationStyle = R.style.HaLauncherTheme_PopupAnimation
         popup.isOutsideTouchable = true
         popup.isFocusable = true
+        popup.setTouchInterceptor { v, event ->
+            return@setTouchInterceptor if (
+                event.x < 0
+                || event.x > v.width
+                || event.y < 0
+                || event.y > v.height
+            ) {
+                dismiss()
+                true
+            } else false
+        }
     }
 
     override fun onShortcutSelected() {
@@ -103,6 +117,19 @@ class ShortcutPopupWindow(
             else -> view.bottom
         }
 
+        val pivotX = if (xPos == baseXPos) 0.5f
+            else ((xPos + (popup.width / 2)).toFloat() / dm.widthPixels)
+
+        val animation = ScaleAnimation(
+            0f, 1f,
+            0f, 1f,
+            Animation.RELATIVE_TO_SELF, pivotX,
+            Animation.RELATIVE_TO_SELF, 0f
+        )
+        animation.interpolator = AccelerateDecelerateInterpolator()
+        animation.duration = 250
+
+        binding.root.startAnimation(animation)
         popup.showAtLocation(view, Gravity.NO_GRAVITY, xPos, yPos)
     }
 }
