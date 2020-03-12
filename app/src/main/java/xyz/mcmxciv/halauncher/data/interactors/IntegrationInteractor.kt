@@ -113,12 +113,14 @@ class IntegrationInteractor @Inject constructor(
         }
     }
 
-    suspend fun getConfig(): Config {
-        return tryUrls { url ->
-            val response = integrationRepository.getConfig(url)
-            return@tryUrls if (response.isSuccessful) {
-                response.body()
-            } else null
+    suspend fun getConfig(): Config? {
+        return localStorageRepository.deviceIntegration?.let {
+            return@let tryUrls { url ->
+                val response = integrationRepository.getConfig(url)
+                return@tryUrls if (response.isSuccessful) {
+                    response.body()
+                } else null
+            }
         }
     }
 

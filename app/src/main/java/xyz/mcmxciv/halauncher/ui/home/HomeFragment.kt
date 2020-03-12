@@ -12,6 +12,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.R
@@ -22,16 +23,16 @@ import xyz.mcmxciv.halauncher.models.WebCallback
 import xyz.mcmxciv.halauncher.ui.*
 import javax.inject.Inject
 
-
 class HomeFragment : LauncherFragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
+    private val activityViewModel: MainActivityViewModel by activityViewModels()
 
-    @Inject
-    lateinit var invariantDeviceProfile: InvariantDeviceProfile
-
-    @Inject
-    lateinit var appListAdapter: AppListAdapter
+//    @Inject
+//    lateinit var invariantDeviceProfile: InvariantDeviceProfile
+//
+//    @Inject
+//    lateinit var appListAdapter: AppListAdapter
 
     private var color: Int? = null
 
@@ -47,16 +48,14 @@ class HomeFragment : LauncherFragment() {
         super.onViewCreated(view, savedInstanceState)
         component.inject(this)
         viewModel = createViewModel { component.homeViewModel() }
-        activity?.let {
-            val activityViewModel = (it as MainActivity).viewModel
-            observe(activityViewModel.appListItems) { items ->
-                appListAdapter.update(items)
-            }
-        }
         color = activity?.getColor(R.color.colorAccent)
 
-        binding.appList.layoutManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
-        binding.appList.adapter = appListAdapter
+//        binding.appList.layoutManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
+//        binding.appList.adapter = appListAdapter
+//
+//        observe(activityViewModel.appListItems) { items ->
+//            appListAdapter.update(items)
+//        }
 
         observe(viewModel.error) { error ->
             if (error == ErrorState.AUTHENTICATION) {
@@ -69,10 +68,6 @@ class HomeFragment : LauncherFragment() {
                 displayMessage(getString(R.string.error_webview_message))
             }
         }
-
-//        observe(viewModel.appListItems) { resource ->
-//            appListAdapter.update(resource)
-//        }
         
         observe(viewModel.callback) { resource ->
             binding.homeWebView.evaluateJavascript(resource.callback, null)
@@ -82,19 +77,19 @@ class HomeFragment : LauncherFragment() {
             }
         }
 
-        observe(viewModel.configEvent) { config ->
-            setThemeColor(Color.parseColor(config.themeColor))
-        }
+//        observe(viewModel.configEvent) { config ->
+//            setThemeColor(Color.parseColor(config.themeColor))
+//        }
 
-        binding.allAppsButton.setOnClickListener {
-            setAppListVisibility()
-        }
+//        binding.allAppsButton.setOnClickListener {
+//            setAppListVisibility()
+//        }
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
             this.isEnabled = true
 
             when {
-                binding.appList.isVisible -> binding.appList.isVisible = false
+//                binding.appList.isVisible -> binding.appList.isVisible = false
                 binding.homeWebView.canGoBack() -> binding.homeWebView.goBack()
             }
         }
@@ -182,7 +177,7 @@ class HomeFragment : LauncherFragment() {
 //    }
 
     private fun setAppListVisibility() {
-        binding.appList.isVisible = !binding.appList.isVisible
+//        binding.appList.isVisible = !binding.appList.isVisible
     }
 
     private fun setThemeColor(color: Int) {
@@ -193,9 +188,9 @@ class HomeFragment : LauncherFragment() {
 
         val drawable = ColorDrawable(color)
         drawable.alpha = 240
-        binding.appList.background = drawable
+//        binding.appList.background = drawable
 
-        appListAdapter.setThemeColor(color)
+//        appListAdapter.setThemeColor(color)
     }
 
 //    private fun changeStatusBar() {

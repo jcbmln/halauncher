@@ -30,16 +30,16 @@ class HomeViewModel @Inject constructor(
     private val errorEvent = LiveEvent<ErrorState>()
     val error: LiveData<ErrorState> = errorEvent
 
-    val configEvent = LiveEvent<Config>().also { event ->
-        val exceptionHandler = CoroutineExceptionHandler { _, ex ->
-            Timber.e(ex)
-        }
-
-        viewModelScope.launch(exceptionHandler) {
-            event.postValue(integrationInteractor.getConfig())
-        }
-    }
-    val config: LiveData<Config> = configEvent
+//    val configEvent = LiveEvent<Config>().also { event ->
+//        val exceptionHandler = CoroutineExceptionHandler { _, ex ->
+//            Timber.e(ex)
+//        }
+//
+//        viewModelScope.launch(exceptionHandler) {
+//            event.postValue(integrationInteractor.getConfig())
+//        }
+//    }
+//    val config: LiveData<Config> = configEvent
 
 //    val appListItems = MutableLiveData<List<AppListItem>>().also {
 //        viewModelScope.launch {
