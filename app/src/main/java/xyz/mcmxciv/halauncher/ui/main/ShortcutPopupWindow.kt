@@ -6,7 +6,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.view.animation.*
+import android.view.animation.Animation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.PopupWindowShortcutsBinding
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
+import xyz.mcmxciv.halauncher.ui.ViewAnimator
 import xyz.mcmxciv.halauncher.utils.AppLauncher
 import xyz.mcmxciv.halauncher.utils.Utilities
 
@@ -31,6 +32,7 @@ class ShortcutPopupWindow(
     private val leftRightMargin: Int
     private val screenWidth: Int
     private val screenHeight: Int
+    private val viewAnimator = ViewAnimator()
 
     init {
         val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -100,6 +102,8 @@ class ShortcutPopupWindow(
                 true
             } else false
         }
+
+        viewAnimator.duration = 200
     }
 
     fun show() {
@@ -118,34 +122,34 @@ class ShortcutPopupWindow(
             VerticalPosition.BOTTOM -> 0f
         }
 
-        val scaleAnimation = ScaleAnimation(
-            0f, 1f,
-            0f, 1f,
-            Animation.RELATIVE_TO_SELF, pivotX,
-            Animation.RELATIVE_TO_SELF, pivotY
-        )
-        val alphaAnimation = AlphaAnimation(0f, 1f)
-
-        val animationSet = AnimationSet(true)
-        animationSet.addAnimation(scaleAnimation)
-        animationSet.addAnimation(alphaAnimation)
-        animationSet.interpolator = AccelerateDecelerateInterpolator()
-        animationSet.duration = 150
-
         visibleArrow.translationX = when(horizontalLocation) {
             HorizontalLocation.LEFT ->
                 (parentView.width / 2) - visibleArrow.measuredWidth
             HorizontalLocation.RIGHT ->
-                window.width - (parentView.width / 2)
+                window.width - (parentView.width / 2) - (visibleArrow.measuredWidth / 2)
             HorizontalLocation.MIDDLE ->
                 (binding.root.measuredWidth / 2) - (visibleArrow.measuredWidth / 2)
         }.toFloat()
-        binding.root.startAnimation(animationSet)
+
+        viewAnimator.createScaleFadeAnimation(pivotX, pivotY)
+        binding.root.startAnimation(viewAnimator.showViewAnimationSet)
         window.showAtLocation(parentView, Gravity.NO_GRAVITY, xPos, yPos)
     }
 
     private fun dismiss() {
-        window.dismiss()
+        viewAnimator
+            .hideViewAnimationSet.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                window.dismiss()
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+            }
+        })
+        binding.root.startAnimation(viewAnimator.hideViewAnimationSet)
     }
 
     override fun onShortcutSelected() {

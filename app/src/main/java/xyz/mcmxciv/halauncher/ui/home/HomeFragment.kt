@@ -22,14 +22,6 @@ import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
 class HomeFragment : LauncherFragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
-    private val activityViewModel: MainActivityViewModel by activityViewModels()
-
-//    @Inject
-//    lateinit var invariantDeviceProfile: InvariantDeviceProfile
-//
-//    @Inject
-//    lateinit var appListAdapter: AppListAdapter
-
     private var color: Int? = null
 
     override fun onCreateView(
@@ -44,14 +36,6 @@ class HomeFragment : LauncherFragment() {
         super.onViewCreated(view, savedInstanceState)
         component.inject(this)
         viewModel = createViewModel { component.homeViewModel() }
-        color = activity?.getColor(R.color.colorAccent)
-
-//        binding.appList.layoutManager = GridLayoutManager(context, invariantDeviceProfile.numColumns)
-//        binding.appList.adapter = appListAdapter
-//
-//        observe(activityViewModel.appListItems) { items ->
-//            appListAdapter.update(items)
-//        }
 
         observe(viewModel.error) { error ->
             if (error == ErrorState.AUTHENTICATION) {
@@ -73,19 +57,10 @@ class HomeFragment : LauncherFragment() {
             }
         }
 
-//        observe(viewModel.configEvent) { config ->
-//            setThemeColor(Color.parseColor(config.themeColor))
-//        }
-
-//        binding.allAppsButton.setOnClickListener {
-//            setAppListVisibility()
-//        }
-
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
             this.isEnabled = true
 
             when {
-//                binding.appList.isVisible -> binding.appList.isVisible = false
                 binding.homeWebView.canGoBack() -> binding.homeWebView.goBack()
             }
         }
@@ -170,37 +145,5 @@ class HomeFragment : LauncherFragment() {
 //        }
 //
 //        return callback?.let { "javascript:(function() { $it })()" }
-//    }
-
-    private fun setAppListVisibility() {
-//        binding.appList.isVisible = !binding.appList.isVisible
-    }
-
-    private fun setThemeColor(color: Int) {
-        activity?.let {
-            it.window.statusBarColor = color
-            it.window.navigationBarColor = color
-        }
-
-        val drawable = ColorDrawable(color)
-        drawable.alpha = 240
-//        binding.appList.background = drawable
-
-//        appListAdapter.setThemeColor(color)
-    }
-
-//    private fun changeStatusBar() {
-//        activity?.let {
-//            if (binding.appList.isVisible) {
-//                it.window.statusBarColor = it.getColor(R.color.colorWindowBackground)
-//                it.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-//            }
-//            else {
-//                it.window.statusBarColor = it.getColor(R.color.colorAccent)
-//                it.window.decorView.systemUiVisibility =
-//                    it.window.decorView.systemUiVisibility and
-//                            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-//            }
-//        }
 //    }
 }

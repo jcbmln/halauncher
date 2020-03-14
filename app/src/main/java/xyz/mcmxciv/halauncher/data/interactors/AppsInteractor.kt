@@ -52,7 +52,7 @@ class AppsInteractor @Inject constructor(
             )
         }.toMutableList()
 
-        val newApps = launcherActivityInfo.filterNot { info ->
+        val newAppListItems = launcherActivityInfo.filterNot { info ->
             appListItems.map { a -> a.activityName }.contains(info.name)
         }.map { info ->
             val packageInfo = packageRepository.getPackageInfo(info.applicationInfo.packageName)
@@ -73,7 +73,7 @@ class AppsInteractor @Inject constructor(
             )
         }
 
-        appListItems.union(newApps)
+        appListItems.addAll(newAppListItems)
         appListItems.sortBy { a -> a.displayName }
 
         return appListItems
@@ -94,7 +94,7 @@ class AppsInteractor @Inject constructor(
                     ShortcutItem(
                         s.id,
                         packageName,
-                        s.shortLabel?.toString()!!,
+                        s.shortLabel!!.toString(),
                         it
                     )
                 }
