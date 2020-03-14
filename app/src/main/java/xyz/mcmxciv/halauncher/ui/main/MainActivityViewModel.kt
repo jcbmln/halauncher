@@ -19,32 +19,37 @@ class MainActivityViewModel @Inject constructor(
     private val sessionInteractor: SessionInteractor,
     private val integrationInteractor: IntegrationInteractor
 ) : ViewModel() {
-    val appListItems = MutableLiveData<List<AppListItem>>().also { data ->
+    private val exceptionHandler = CoroutineExceptionHandler { _, ex ->
+        Timber.e(ex)
+    }
+
+    val appListItemData = MutableLiveData<List<AppListItem>>().also { data ->
         viewModelScope.launch {
             data.postValue(appsInteractor.getAppListItems())
         }
     }
+    val appListItems: LiveData<List<AppListItem>> = appListItemData
 
-    private val configData = MutableLiveData<Config?>().also { data ->
-        val exceptionHandler = CoroutineExceptionHandler { _, ex ->
-            Timber.e(ex)
-        }
-
-        viewModelScope.launch(exceptionHandler) {
-            data.postValue(integrationInteractor.getConfig())
-        }
+    private val configData = MutableLiveData<Config?>().also {
+        getConfig()
     }
     val config: LiveData<Config?> = configData
 
     fun updateAppListItems() {
         viewModelScope.launch {
-            appListItems.postValue(appsInteractor.getAppListItems())
+            appListItemData.postValue(appsInteractor.getAppListItems())
         }
     }
 
     fun revokeSession() {
         viewModelScope.launch {
             sessionInteractor.revokeSession()
+        }
+    }
+
+    fun getConfig() {
+        viewModelScope.launch(exceptionHandler) {
+            configData.postValue(integrationInteractor.getConfig())
         }
     }
 }
