@@ -3,7 +3,7 @@ package xyz.mcmxciv.halauncher.data.interactors
 import android.content.Context
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import timber.log.Timber
-import xyz.mcmxciv.halauncher.SensorUpdateWorker
+import xyz.mcmxciv.halauncher.background.SensorUpdateWorker
 import xyz.mcmxciv.halauncher.data.IntegrationException
 import xyz.mcmxciv.halauncher.data.models.Sensor
 import xyz.mcmxciv.halauncher.data.models.SensorRegistration

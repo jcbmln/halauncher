@@ -24,12 +24,12 @@ class IconTextView(context: Context, attrs: AttributeSet?, defStyle: Int)
         get() = icon
         set(value) {
             icon = value
-            val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val dm = DisplayMetrics()
-            wm.defaultDisplay.getMetrics(dm)
-            val size = Utilities.pxFromDp(24f, dm)
-            value?.bounds = Rect(0, 0, size, size)
-            setCompoundDrawables(value, null, null, null)
+//            val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+//            val dm = DisplayMetrics()
+//            wm.defaultDisplay.getMetrics(dm)
+//            val size = Utilities.pxFromDp(24f, dm)
+//            value?.bounds = Rect(0, 0, size, size)
+            setCompoundDrawablesWithIntrinsicBounds(value, null, null, null)
         }
 
     constructor(context: Context) : this(context, null , 0)

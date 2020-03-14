@@ -8,9 +8,9 @@ import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
 import xyz.mcmxciv.halauncher.di.components.ViewComponent
-import xyz.mcmxciv.halauncher.ui.home.AppListAdapter
 import xyz.mcmxciv.halauncher.utils.LauncherResourceProvider
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
+import javax.inject.Singleton
 
 @Module(subcomponents = [ViewComponent::class])
 class AppModule(private val context: Context) {

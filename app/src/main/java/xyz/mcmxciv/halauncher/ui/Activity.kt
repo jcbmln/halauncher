@@ -21,7 +21,7 @@ inline fun <reified T: ViewModel> AppCompatActivity.createViewModel(
     }).get(viewModel)
 }
 
-inline fun <reified T : LiveData<V>, reified V: Any> AppCompatActivity.observe(
+inline fun <reified T : LiveData<V>, reified V: Any?> AppCompatActivity.observe(
     obj: T, crossinline block: (V) -> Unit
 ) {
     obj.observe(this, Observer {

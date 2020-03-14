@@ -88,6 +88,7 @@
 
     <string name="system_shortcut_app_info">App Info</string>
     <string name="system_shortcut_uninstall">Uninstall</string>
+    <string name="system_shortcut_hide">Hide</string>
 
     <string name="dummy_content_description">content description</string>
 </resources>

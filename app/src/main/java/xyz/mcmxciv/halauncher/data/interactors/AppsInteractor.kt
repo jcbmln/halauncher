@@ -89,13 +89,15 @@ class AppsInteractor @Inject constructor(
                 .sortedWith(shortcutComparator)
                 .take(4)
 
-            shortcuts.map { s ->
-                ShortcutItem(
-                    s.id,
-                    packageName,
-                    s.shortLabel?.toString()!!,
-                    iconFactory.getShortcutIcon(s)
-                )
+            shortcuts.mapNotNull { s ->
+                iconFactory.getShortcutIcon(s)?.let {
+                    ShortcutItem(
+                        s.id,
+                        packageName,
+                        s.shortLabel?.toString()!!,
+                        it
+                    )
+                }
             }
         } else listOf()
     }

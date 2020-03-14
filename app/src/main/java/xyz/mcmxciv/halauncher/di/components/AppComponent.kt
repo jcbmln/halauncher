@@ -2,11 +2,11 @@ package xyz.mcmxciv.halauncher.di.components
 
 import dagger.Component
 import xyz.mcmxciv.halauncher.LauncherApplication
-import xyz.mcmxciv.halauncher.SensorUpdateWorker
+import xyz.mcmxciv.halauncher.background.SensorUpdateWorker
 import xyz.mcmxciv.halauncher.di.modules.AppModule
 import xyz.mcmxciv.halauncher.di.modules.DataModule
-import xyz.mcmxciv.halauncher.ui.MainActivity
-import xyz.mcmxciv.halauncher.ui.MainActivityViewModel
+import xyz.mcmxciv.halauncher.ui.main.MainActivity
+import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
 import javax.inject.Singleton
 
 @Singleton

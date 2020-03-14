@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui
+package xyz.mcmxciv.halauncher.ui.main
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -15,11 +15,12 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.play.core.install.model.ActivityResult
 import xyz.mcmxciv.halauncher.LauncherApplication
-import xyz.mcmxciv.halauncher.PackageReceiver
+import xyz.mcmxciv.halauncher.background.PackageReceiver
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.ActivityMainBinding
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
-import xyz.mcmxciv.halauncher.ui.home.AppListAdapter
+import xyz.mcmxciv.halauncher.ui.createViewModel
+import xyz.mcmxciv.halauncher.ui.observe
 import javax.inject.Inject
 import kotlin.math.hypot
 
@@ -54,7 +55,7 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
         }
 
         observe(viewModel.config) { config ->
-            setThemeColor(Color.parseColor(config.themeColor))
+            config?.let { setThemeColor(Color.parseColor(it.themeColor)) }
         }
 
         binding.allAppsButton.setOnClickListener {

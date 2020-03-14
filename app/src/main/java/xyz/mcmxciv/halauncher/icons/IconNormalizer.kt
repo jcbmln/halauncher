@@ -26,11 +26,13 @@ import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.utils.GraphicsUtils
 import java.nio.ByteBuffer
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
+@Singleton
 class IconNormalizer @Inject constructor(
     context: Context,
     invariantDeviceProfile: InvariantDeviceProfile

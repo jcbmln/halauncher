@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui.home
+package xyz.mcmxciv.halauncher.ui.main
 
 import android.content.Context
 import android.content.pm.LauncherApps

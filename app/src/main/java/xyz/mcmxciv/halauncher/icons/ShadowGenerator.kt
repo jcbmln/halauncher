@@ -6,7 +6,9 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ShadowGenerator @Inject constructor(
     invariantDeviceProfile: InvariantDeviceProfile
 ) {

@@ -34,34 +34,24 @@ import xyz.mcmxciv.halauncher.utils.Utilities
 import java.io.IOException
 import java.util.ArrayList
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.Comparator
 import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.math.pow
 
+@Singleton
 class InvariantDeviceProfile @Inject constructor(context: Context?) {
     var numColumns: Int = 0
     var iconSize: Float = 0.toFloat()
-    var iconShapePath: String = ""
+    private var iconShapePath: String = ""
     var landscapeIconSize: Float = 0.toFloat()
     var iconBitmapSize: Int = 0
     var shortcutBitmapSize: Int = 0
     var fillResIconDpi: Int = 0
     var shortcutIconDpi: Int = 0
     var iconTextSize: Float = 0.toFloat()
-    var iconForegroundSize: Int = 0
-
-//    lateinit var landscapeProfile: DeviceProfile
-//    lateinit var portraitProfile: DeviceProfile
-//    private val changeListeners = ArrayList<OnIDPChangeListener>()
-
-//    private constructor(p: InvariantDeviceProfile) : this(null) {
-//        numColumns = p.numColumns
-//        iconSize = p.iconSize
-//        iconShapePath = p.iconShapePath
-//        landscapeIconSize = p.landscapeIconSize
-//        iconTextSize = p.iconTextSize
-//    }
+    private var iconForegroundSize: Int = 0
 
     init {
         if (context != null) {

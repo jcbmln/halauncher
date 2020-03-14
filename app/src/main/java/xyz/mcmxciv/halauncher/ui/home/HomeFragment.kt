@@ -1,7 +1,6 @@
 package xyz.mcmxciv.halauncher.ui.home
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,17 +10,14 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.addCallback
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
 import xyz.mcmxciv.halauncher.models.ErrorState
-import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.models.WebCallback
 import xyz.mcmxciv.halauncher.ui.*
-import javax.inject.Inject
+import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
 
 class HomeFragment : LauncherFragment() {
     private lateinit var binding: FragmentHomeBinding

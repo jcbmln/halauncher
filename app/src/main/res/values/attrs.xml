@@ -54,4 +54,9 @@
         <attr name="actionTextColor" format="color" />
         <attr name="confirmationMessage" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="IconTextView">
+        <attr name="topIcon" format="reference" />
+        <attr name="leftIcon" format="reference" />
+    </declare-styleable>
 </resources>

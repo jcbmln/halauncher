@@ -1,10 +1,9 @@
-package xyz.mcmxciv.halauncher.ui
+package xyz.mcmxciv.halauncher.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -26,7 +25,7 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    private val configData = MutableLiveData<Config>().also { data ->
+    private val configData = MutableLiveData<Config?>().also { data ->
         val exceptionHandler = CoroutineExceptionHandler { _, ex ->
             Timber.e(ex)
         }
@@ -35,7 +34,7 @@ class MainActivityViewModel @Inject constructor(
             data.postValue(integrationInteractor.getConfig())
         }
     }
-    val config: LiveData<Config> = configData
+    val config: LiveData<Config?> = configData
 
     fun updateAppListItems() {
         viewModelScope.launch {

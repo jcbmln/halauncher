@@ -25,6 +25,15 @@ class AppLauncher @Inject constructor(context: Context) {
         )
     }
 
+    fun startAppDetailsActivity(componentName: ComponentName, view: View) {
+        launcherApps.startAppDetailsActivity(
+            componentName,
+            Process.myUserHandle(),
+            view.getSourceBounds(),
+            getActivityLaunchOptions(view)
+        )
+    }
+
     fun uninstall(componentName: ComponentName, context: Context) {
         val intent = Intent(Intent.ACTION_DELETE)
             .setData(Uri.fromParts(

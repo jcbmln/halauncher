@@ -11,7 +11,7 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.ui.MainActivity
+import xyz.mcmxciv.halauncher.ui.main.MainActivity
 import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 

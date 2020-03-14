@@ -26,16 +26,21 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.util.DisplayMetrics
+import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
+import xyz.mcmxciv.halauncher.utils.Utilities
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.round
 
+@Singleton
 class IconFactory @Inject constructor(
     private val context: Context,
     private val packageManager: PackageManager,
@@ -58,12 +63,16 @@ class IconFactory @Inject constructor(
         return createIconBitmap(drawable)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
-    fun getShortcutIcon(shortcutInfo: ShortcutInfo): Bitmap =
-        launcherApps.getShortcutIconDrawable(
+    fun getShortcutIcon(shortcutInfo: ShortcutInfo): Bitmap? {
+        return launcherApps.getShortcutIconDrawable(
             shortcutInfo,
+            invariantDeviceProfile.shortcutIconDpi
+        )?.toBitmap(
+            invariantDeviceProfile.shortcutBitmapSize,
             invariantDeviceProfile.shortcutBitmapSize
-        ).toBitmap()
+        )
+    }
+
 
     private fun getDrawable(launcherActivityInfo: LauncherActivityInfo): Drawable? {
         val iconRes = launcherActivityInfo.applicationInfo.icon

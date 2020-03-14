@@ -3,7 +3,7 @@
     android:id="@+id/app_item"
     style="@style/HaLauncher.Widget.AppIcon"
     android:layout_gravity="center_horizontal"
+    android:layout_margin="10dp"
     android:gravity="center_horizontal"
-    android:padding="10dp"
     android:stateListAnimator="@animator/app_list_item"
     android:textAlignment="center" />

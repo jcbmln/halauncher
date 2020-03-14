@@ -1,9 +1,10 @@
-package xyz.mcmxciv.halauncher
+package xyz.mcmxciv.halauncher.background
 
 import android.content.Context
 import androidx.work.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
