@@ -9,12 +9,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Process
 import android.view.View
+import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.views.IconTextView
 import javax.inject.Inject
 
-class AppLauncher @Inject constructor(context: Context) {
-    private val launcherApps =
-        context.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+class AppLauncher @Inject constructor(resourceProvider: ResourceProvider) {
+    private val launcherApps = resourceProvider.launcherApps
 
     fun startMainActivity(componentName: ComponentName, view: View) {
         launcherApps.startMainActivity(
@@ -34,14 +34,27 @@ class AppLauncher @Inject constructor(context: Context) {
         )
     }
 
-    fun uninstall(componentName: ComponentName, context: Context) {
+    fun startShortcut(packageName: String, shortcutId: String, view: View) {
+        if (launcherApps.hasShortcutHostPermission()) {
+            launcherApps.startShortcut(
+                packageName,
+                shortcutId,
+                view.getSourceBounds(),
+                null,
+                Process.myUserHandle()
+            )
+        }
+    }
+
+
+    fun uninstall(componentName: ComponentName) {
         val intent = Intent(Intent.ACTION_DELETE)
             .setData(Uri.fromParts(
                 "package",
                 componentName.packageName,
                 componentName.className
             )).putExtra(Intent.EXTRA_USER, Process.myUserHandle())
-        context.startActivity(intent)
+        LauncherApplication.instance.applicationContext.startActivity(intent)
     }
 
     private fun getActivityLaunchOptions(view: View): Bundle {

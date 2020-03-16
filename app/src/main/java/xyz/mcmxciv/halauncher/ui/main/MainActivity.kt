@@ -24,11 +24,35 @@ import xyz.mcmxciv.halauncher.ui.observe
 import javax.inject.Inject
 import kotlin.math.hypot
 
-
 class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var packageReceiver: PackageReceiver
+    private val appListAnimators: List<Animator> by lazy {
+        val x = binding.allAppsButton.left + (binding.allAppsButton.width / 2)
+        val y = binding.allAppsButton.top + (binding.allAppsButton.height / 2)
+        val closedRadius = 0f
+        val openRadius = hypot(
+            binding.root.width.toDouble(),
+            binding.root.height.toDouble()
+        ).toFloat()
+
+        val openAnimator = ViewAnimationUtils.createCircularReveal(
+            binding.appList, x, y, closedRadius, openRadius
+        )
+        val closeAnimator = ViewAnimationUtils.createCircularReveal(
+            binding.appList, x, y, openRadius, closedRadius
+        )
+
+        closeAnimator.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                binding.appList.visibility = View.GONE
+            }
+        })
+
+        return@lazy listOf(openAnimator, closeAnimator)
+    }
 
     @Inject
     lateinit var idp: InvariantDeviceProfile
@@ -108,34 +132,14 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
     }
 
     private fun openCloseAppList() {
-        val x = binding.allAppsButton.left + (binding.allAppsButton.width / 2)
-        val y = binding.allAppsButton.top + (binding.allAppsButton.height / 2)
-        val closedRadius = 0f
-        val openRadius = hypot(
-            binding.root.width.toDouble(),
-            binding.root.height.toDouble()
-        ).toFloat()
-
         if (binding.appList.isVisible) {
-            val animation = ViewAnimationUtils.createCircularReveal(
-                binding.appList, x, y, openRadius, closedRadius
-            )
-
-            animation.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    super.onAnimationEnd(animation)
-                    binding.appList.visibility = View.GONE
-                }
-            })
-            animation.start()
+            val animator = appListAnimators[1]
+            animator.start()
         }
         else {
-            val animation = ViewAnimationUtils.createCircularReveal(
-                binding.appList, x, y, closedRadius, openRadius
-            )
-
+            val animator = appListAnimators[0]
             binding.appList.visibility = View.VISIBLE
-            animation.start()
+            animator.start()
         }
     }
 

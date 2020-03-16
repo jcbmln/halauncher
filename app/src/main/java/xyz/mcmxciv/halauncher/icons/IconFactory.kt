@@ -16,9 +16,10 @@
 
 package xyz.mcmxciv.halauncher.icons
 
-import android.content.Context
-import android.content.pm.*
-import android.content.res.Resources
+import android.content.pm.LauncherActivityInfo
+import android.content.pm.LauncherApps
+import android.content.pm.PackageManager
+import android.content.pm.ShortcutInfo
 import android.content.res.Resources.NotFoundException
 import android.graphics.*
 import android.graphics.drawable.AdaptiveIconDrawable
@@ -26,15 +27,11 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.DisplayMetrics
-import android.view.WindowManager
-import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
-import xyz.mcmxciv.halauncher.ui.ViewAnimator
-import xyz.mcmxciv.halauncher.utils.Utilities
+import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.ceil
@@ -43,7 +40,7 @@ import kotlin.math.round
 
 @Singleton
 class IconFactory @Inject constructor(
-    private val context: Context,
+    private val resourceProvider: ResourceProvider,
     private val packageManager: PackageManager,
     private val invariantDeviceProfile: InvariantDeviceProfile,
     private val iconNormalizer: IconNormalizer,
@@ -94,24 +91,6 @@ class IconFactory @Inject constructor(
         } else null
     }
 
-    private fun getDrawable(activityInfo: ActivityInfo): Drawable? {
-        val iconRes: Int = activityInfo.iconResource
-        val density = invariantDeviceProfile.fillResIconDpi
-        var icon: Drawable? = null
-
-        if (density != 0 && iconRes != 0) {
-            try {
-                val resources: Resources =
-                    packageManager.getResourcesForApplication(activityInfo.applicationInfo)
-                icon = resources.getDrawableForDensity(iconRes, density, null)
-            } catch (exc: PackageManager.NameNotFoundException) {
-            } catch (exc: NotFoundException) {
-            }
-        }
-
-        return icon
-    }
-
     private fun createIconBitmap(icon: Drawable): Bitmap {
         val scale = FloatArray(1)
         val normalizedIcon = normalizeAndWrapToAdaptiveIcon(icon, scale)
@@ -143,7 +122,7 @@ class IconFactory @Inject constructor(
                 val bmp = icon.bitmap
 
                 if (bmp.density == Bitmap.DENSITY_NONE) {
-                    icon.setTargetDensity(context.resources.displayMetrics)
+                    icon.setTargetDensity(resourceProvider.displayMetrics)
                 }
             }
 
@@ -186,7 +165,7 @@ class IconFactory @Inject constructor(
         var icon = drawable
 
         if (ATLEAST_OREO) {
-            val wrapperIcon = context
+            val wrapperIcon = resourceProvider
                 .getDrawable(R.drawable.adaptive_icon_drawable_wrapper)?.mutate()
             val adaptiveIconDrawable = wrapperIcon as AdaptiveIconDrawable
             adaptiveIconDrawable.setBounds(0, 0, 1, 1)

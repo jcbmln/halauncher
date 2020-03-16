@@ -1,11 +1,7 @@
 package xyz.mcmxciv.halauncher.ui.main
 
-import android.content.Context
-import android.util.DisplayMetrics
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
 import android.view.animation.Animation
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -18,12 +14,13 @@ import xyz.mcmxciv.halauncher.databinding.PopupWindowShortcutsBinding
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import xyz.mcmxciv.halauncher.ui.ViewAnimator
 import xyz.mcmxciv.halauncher.utils.AppLauncher
+import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import xyz.mcmxciv.halauncher.utils.Utilities
 
 
 class ShortcutPopupWindow(
     private val parentView: View,
-    private val context: Context,
+    resourceProvider: ResourceProvider,
     private val appListItem: AppListItem,
     private val appLauncher: AppLauncher
 ) : ShortcutListAdapter.ShorcutSelectedListener {
@@ -35,15 +32,11 @@ class ShortcutPopupWindow(
     private val viewAnimator = ViewAnimator()
 
     init {
-        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val dm = DisplayMetrics()
-        wm.defaultDisplay.getMetrics(dm)
+        val dm = resourceProvider.displayMetrics
         leftRightMargin = Utilities.pxFromDp(10f, dm)
         screenWidth = dm.widthPixels
         screenHeight = dm.heightPixels
-
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        binding = PopupWindowShortcutsBinding.inflate(inflater)
+        binding = PopupWindowShortcutsBinding.inflate(resourceProvider.layoutInflater)
 
         binding.appInfoText.setOnClickListener { view ->
             appLauncher.startAppDetailsActivity(appListItem.componentName, view)
@@ -54,26 +47,21 @@ class ShortcutPopupWindow(
             binding.uninstallText.isEnabled = false
             binding.uninstallText.setCompoundDrawablesWithIntrinsicBounds(
                 null,
-                context.getDrawable(R.drawable.ic_remove_disabled),
+                resourceProvider.getDrawable(R.drawable.ic_remove_disabled),
                 null,
                 null
             )
         } else {
             binding.uninstallText.setOnClickListener {
                 dismiss()
-                appLauncher.uninstall(appListItem.componentName, context)
+                appLauncher.uninstall(appListItem.componentName)
             }
         }
 
         val shortcutItems = appListItem.shortcutItems
         if (shortcutItems != null && shortcutItems.isNotEmpty()) {
-            binding.shortcutList.layoutManager = LinearLayoutManager(context)
-            binding.shortcutList.adapter =
-                ShortcutListAdapter(
-                    context,
-                    shortcutItems,
-                    this
-                )
+            binding.shortcutList.layoutManager = LinearLayoutManager(binding.shortcutList.context)
+            binding.shortcutList.adapter = ShortcutListAdapter(shortcutItems, this)
         } else {
             binding.shortcutList.isVisible = false
         }
@@ -93,10 +81,8 @@ class ShortcutPopupWindow(
         window.isFocusable = true
         window.setTouchInterceptor { view, event ->
             if (
-                event.x < 0
-                || event.x > view.width
-                || event.y < 0
-                || event.y > view.height
+                event.x < 0 || event.x > view.width
+                || event.y < 0 || event.y > view.height
             ) {
                 dismiss()
                 true
@@ -107,21 +93,6 @@ class ShortcutPopupWindow(
     }
 
     fun show() {
-        val xPos = when(horizontalLocation) {
-            HorizontalLocation.LEFT -> parentView.left + leftRightMargin
-            HorizontalLocation.RIGHT -> screenWidth - window.width - leftRightMargin
-            HorizontalLocation.MIDDLE -> baseXPos
-        }
-        val yPos = when(verticalPosition) {
-            VerticalPosition.TOP -> parentViewLocation[1] - window.height
-            VerticalPosition.BOTTOM -> parentViewLocation[1] + parentView.height
-        }
-        val pivotX = getPivotX(xPos)
-        val pivotY = when(verticalPosition) {
-            VerticalPosition.TOP -> 1f
-            VerticalPosition.BOTTOM -> 0f
-        }
-
         visibleArrow.translationX = when(horizontalLocation) {
             HorizontalLocation.LEFT ->
                 (parentView.width / 2) - visibleArrow.measuredWidth
@@ -133,7 +104,7 @@ class ShortcutPopupWindow(
 
         viewAnimator.createScaleFadeAnimation(pivotX, pivotY)
         binding.root.startAnimation(viewAnimator.showViewAnimationSet)
-        window.showAtLocation(parentView, Gravity.NO_GRAVITY, xPos, yPos)
+        window.showAtLocation(parentView, Gravity.NO_GRAVITY, xOffset, yOffset)
     }
 
     private fun dismiss() {
@@ -156,13 +127,41 @@ class ShortcutPopupWindow(
         dismiss()
     }
 
-    private val baseXPos: Int
+    private val baseXOffset: Int
         get() = (parentView.left + (parentView.width / 2)) - (window.width / 2)
+
+    private val xOffset: Int
+        get() = when(horizontalLocation) {
+            HorizontalLocation.LEFT -> parentView.left + leftRightMargin
+            HorizontalLocation.RIGHT -> screenWidth - window.width - leftRightMargin
+            HorizontalLocation.MIDDLE -> baseXOffset
+        }
+
+    private val yOffset: Int
+        get() = when(verticalPosition) {
+            VerticalPosition.TOP -> parentViewLocation[1] - window.height
+            VerticalPosition.BOTTOM -> parentViewLocation[1] + parentView.height
+        }
+
+    private val pivotX: Float
+        get() = when (horizontalLocation) {
+            HorizontalLocation.LEFT ->
+                (xOffset + (parentView.width / 2)).toFloat() / screenWidth
+            HorizontalLocation.RIGHT ->
+                (xOffset + window.width - (parentView.width / 2)).toFloat() / screenWidth
+            HorizontalLocation.MIDDLE -> 0.5f
+        }
+
+    private val pivotY: Float
+        get() = when(verticalPosition) {
+            VerticalPosition.TOP -> 1f
+            VerticalPosition.BOTTOM -> 0f
+        }
 
     private val horizontalLocation: HorizontalLocation
         get() = when {
             parentView.left == parentView.marginStart -> HorizontalLocation.LEFT
-            baseXPos + window.width >= screenWidth -> HorizontalLocation.RIGHT
+            baseXOffset + window.width >= screenWidth -> HorizontalLocation.RIGHT
             else -> HorizontalLocation.MIDDLE
         }
 
@@ -188,15 +187,6 @@ class ShortcutPopupWindow(
             val position = IntArray(2)
             parentView.getLocationOnScreen(position)
             return position
-        }
-
-    private fun getPivotX(xPos: Int): Float =
-        when (horizontalLocation) {
-            HorizontalLocation.LEFT ->
-                (xPos + (parentView.width / 2)).toFloat() / screenWidth
-            HorizontalLocation.RIGHT ->
-                (xPos + window.width - (parentView.width / 2)).toFloat() / screenWidth
-            HorizontalLocation.MIDDLE -> 0.5f
         }
 
 

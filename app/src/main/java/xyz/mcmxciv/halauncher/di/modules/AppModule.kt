@@ -12,6 +12,7 @@ import xyz.mcmxciv.halauncher.utils.LauncherResourceProvider
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Singleton
 
+@Singleton
 @Module(subcomponents = [ViewComponent::class])
 class AppModule(private val context: Context) {
     @Provides

@@ -18,7 +18,9 @@ import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
 import xyz.mcmxciv.halauncher.di.qualifiers.Api
 import xyz.mcmxciv.halauncher.di.qualifiers.SecureApi
 import xyz.mcmxciv.halauncher.data.dao.ShortcutDao
+import javax.inject.Singleton
 
+@Singleton
 @Module
 class DataModule {
     @Provides

@@ -7,6 +7,7 @@ import xyz.mcmxciv.halauncher.di.modules.AppModule
 import xyz.mcmxciv.halauncher.di.modules.DataModule
 import xyz.mcmxciv.halauncher.ui.main.MainActivity
 import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
+import xyz.mcmxciv.halauncher.ui.main.ShortcutListAdapter
 import javax.inject.Singleton
 
 @Singleton
@@ -19,4 +20,5 @@ interface AppComponent {
     fun inject(application: LauncherApplication)
     fun inject(activity: MainActivity)
     fun inject(sensorUpdateWorker: SensorUpdateWorker)
+    fun inject(shortcutListAdapter: ShortcutListAdapter)
 }

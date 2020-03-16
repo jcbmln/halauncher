@@ -16,14 +16,13 @@
 
 package xyz.mcmxciv.halauncher.icons
 
-import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
-import androidx.annotation.RequiresApi
 import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.utils.GraphicsUtils
+import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import java.nio.ByteBuffer
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,7 +33,7 @@ import kotlin.math.sqrt
 
 @Singleton
 class IconNormalizer @Inject constructor(
-    context: Context,
+    resourceProvider: ResourceProvider,
     invariantDeviceProfile: InvariantDeviceProfile
 ) {
     private val maxSize: Int = invariantDeviceProfile.iconBitmapSize * 2
@@ -56,7 +55,7 @@ class IconNormalizer @Inject constructor(
         paintMaskShape.style = Paint.Style.FILL
         paintMaskShape.xfermode = PorterDuffXfermode(PorterDuff.Mode.XOR)
 
-        paintMaskShapeOutline.strokeWidth = 2 * context.resources.displayMetrics.density
+        paintMaskShapeOutline.strokeWidth = 2 * resourceProvider.displayMetrics.density
         paintMaskShapeOutline.style = Paint.Style.STROKE
         paintMaskShapeOutline.color = Color.BLACK
         paintMaskShapeOutline.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
@@ -267,7 +266,6 @@ class IconNormalizer @Inject constructor(
          * @param drawable Should be AdaptiveIconDrawable
          * @param size Canvas size to use
          */
-        @RequiresApi(Build.VERSION_CODES.O)
         fun normalizeAdaptiveIcon(drawable: Drawable, size: Int, outBounds: RectF?): Float {
             val tempBounds = Rect(drawable.bounds)
             drawable.bounds = Rect(0, 0, size, size)
