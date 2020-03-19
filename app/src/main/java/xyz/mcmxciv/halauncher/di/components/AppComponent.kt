@@ -7,7 +7,7 @@ import xyz.mcmxciv.halauncher.di.modules.AppModule
 import xyz.mcmxciv.halauncher.di.modules.DataModule
 import xyz.mcmxciv.halauncher.ui.main.MainActivity
 import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
-import xyz.mcmxciv.halauncher.ui.main.ShortcutListAdapter
+import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutListAdapter
 import javax.inject.Singleton
 
 @Singleton

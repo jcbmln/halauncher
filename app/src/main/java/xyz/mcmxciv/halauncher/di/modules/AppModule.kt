@@ -12,23 +12,27 @@ import xyz.mcmxciv.halauncher.utils.LauncherResourceProvider
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Singleton
 
-@Singleton
 @Module(subcomponents = [ViewComponent::class])
 class AppModule(private val context: Context) {
+    @Singleton
     @Provides
     fun context(): Context = context
 
+    @Singleton
     @Provides
     fun sharedPreferences(context: Context): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
 
+    @Singleton
     @Provides
     fun launcherResourceProvider(context: Context): ResourceProvider =
         LauncherResourceProvider(context)
 
+    @Singleton
     @Provides
     fun packageManager(context: Context): PackageManager = context.packageManager
 
+    @Singleton
     @Provides
     fun launcherApps(context: Context): LauncherApps =
         context.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps

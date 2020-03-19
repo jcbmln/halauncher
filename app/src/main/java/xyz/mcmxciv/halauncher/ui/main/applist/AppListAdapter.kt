@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui.main
+package xyz.mcmxciv.halauncher.ui.main.applist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +9,7 @@ import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.ListItemAppBinding
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
+import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutPopupWindow
 import xyz.mcmxciv.halauncher.utils.AppLauncher
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import xyz.mcmxciv.halauncher.utils.Utilities
@@ -52,7 +53,13 @@ class AppListAdapter @Inject constructor(
 
         override fun onLongClick(view: View): Boolean {
             if (popup == null) {
-                popup = ShortcutPopupWindow(view, resourceProvider, appListItem, appLauncher)
+                popup =
+                    ShortcutPopupWindow(
+                        view,
+                        resourceProvider,
+                        appListItem,
+                        appLauncher
+                    )
             }
 
             popup?.show()

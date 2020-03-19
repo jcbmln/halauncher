@@ -5,20 +5,27 @@
     android:id="@+id/popup_container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/top_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/dummy_content_description"
+        android:elevation="3dp"
         android:src="@drawable/popup_arror_up" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/system_shortcuts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_background">
+        android:background="@drawable/rounded_background"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:elevation="3dp">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/app_info_text"
@@ -75,6 +82,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:background="@drawable/rounded_background"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:elevation="3dp"
         android:nestedScrollingEnabled="false"
         android:scrollbars="none" />
 
@@ -83,5 +93,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/dummy_content_description"
+        android:elevation="3dp"
         android:src="@drawable/popup_arror_down" />
 </LinearLayout>

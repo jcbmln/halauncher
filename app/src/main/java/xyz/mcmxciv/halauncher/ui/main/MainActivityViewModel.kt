@@ -23,15 +23,15 @@ class MainActivityViewModel @Inject constructor(
         Timber.e(ex)
     }
 
-    val appListItemData = MutableLiveData<List<AppListItem>>().also { data ->
+    private val appListItemData = MutableLiveData<List<AppListItem>>().also { data ->
         viewModelScope.launch {
             data.postValue(appsInteractor.getAppListItems())
         }
     }
     val appListItems: LiveData<List<AppListItem>> = appListItemData
 
-    private val configData = MutableLiveData<Config?>().also {
-        getConfig()
+    private val configData = MutableLiveData<Config?>().also { data ->
+        getConfig(data)
     }
     val config: LiveData<Config?> = configData
 
@@ -47,9 +47,9 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    fun getConfig() {
+    fun getConfig(data: MutableLiveData<Config?> = configData) {
         viewModelScope.launch(exceptionHandler) {
-            configData.postValue(integrationInteractor.getConfig())
+            data.postValue(integrationInteractor.getConfig())
         }
     }
 }

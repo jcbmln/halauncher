@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui.main
+package xyz.mcmxciv.halauncher.ui.main.shortcuts
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

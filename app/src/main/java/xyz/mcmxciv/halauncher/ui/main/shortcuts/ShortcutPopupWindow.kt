@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui.main
+package xyz.mcmxciv.halauncher.ui.main.shortcuts
 
 import android.view.Gravity
 import android.view.View
@@ -61,7 +61,11 @@ class ShortcutPopupWindow(
         val shortcutItems = appListItem.shortcutItems
         if (shortcutItems != null && shortcutItems.isNotEmpty()) {
             binding.shortcutList.layoutManager = LinearLayoutManager(binding.shortcutList.context)
-            binding.shortcutList.adapter = ShortcutListAdapter(shortcutItems, this)
+            binding.shortcutList.adapter =
+                ShortcutListAdapter(
+                    shortcutItems,
+                    this
+                )
         } else {
             binding.shortcutList.isVisible = false
         }

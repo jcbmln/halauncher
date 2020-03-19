@@ -20,9 +20,9 @@ import xyz.mcmxciv.halauncher.di.qualifiers.SecureApi
 import xyz.mcmxciv.halauncher.data.dao.ShortcutDao
 import javax.inject.Singleton
 
-@Singleton
 @Module
 class DataModule {
+    @Singleton
     @Provides
     fun homeAssistantApi(@Api retrofit: Retrofit): HomeAssistantApi =
         retrofit.create(HomeAssistantApi::class.java)
@@ -31,12 +31,14 @@ class DataModule {
     fun homeAssistantSecureApi(@SecureApi retrofit: Retrofit): HomeAssistantSecureApi =
         retrofit.create(HomeAssistantSecureApi::class.java)
 
+    @Singleton
     @Provides
     fun moshi(): Moshi =
         Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
 
+    @Singleton
     @Provides
     @SecureApi
     fun secureRetrofit(
@@ -56,6 +58,7 @@ class DataModule {
             .build()
     }
 
+    @Singleton
     @Provides
     @Api
     fun retrofit(moshi: Moshi, localStorageRepository: LocalStorageRepository): Retrofit {
@@ -70,6 +73,7 @@ class DataModule {
             .build()
     }
 
+    @Singleton
     @Provides
     fun appDatabase(context: Context): AppDatabase =
         Room.databaseBuilder(
@@ -79,9 +83,11 @@ class DataModule {
         ).fallbackToDestructiveMigration()
             .build()
 
+    @Singleton
     @Provides
     fun appDao(database: AppDatabase): AppDao = database.appDao()
 
+    @Singleton
     @Provides
     fun shortcutDao(database: AppDatabase): ShortcutDao = database.shortcutDao()
 }
