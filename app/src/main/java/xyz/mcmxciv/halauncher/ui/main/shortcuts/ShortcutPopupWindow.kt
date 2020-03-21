@@ -175,7 +175,7 @@ class ShortcutPopupWindow(
             else -> VerticalPosition.BOTTOM
         }
 
-    private val visibleArrow: ImageView
+    private val visibleArrow: View
         get() {
             binding.topArrow.isVisible = verticalPosition == VerticalPosition.BOTTOM
             binding.bottomArrow.isVisible = verticalPosition == VerticalPosition.TOP

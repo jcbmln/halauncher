@@ -1,13 +1,17 @@
 package xyz.mcmxciv.halauncher.ui.main
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.play.core.install.model.ActivityResult
 import xyz.mcmxciv.halauncher.LauncherApplication
@@ -18,6 +22,8 @@ import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
 import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.ui.main.applist.AppListAdapter
 import xyz.mcmxciv.halauncher.ui.observe
+import xyz.mcmxciv.halauncher.utils.BlurBuilder
+import xyz.mcmxciv.halauncher.utils.Utilities
 import javax.inject.Inject
 
 
@@ -25,7 +31,9 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var packageReceiver: PackageReceiver
+    private var palette: Palette? = null
     private var themeColor: Int = 0
+    private var accentColor: Int = 0
 
     @Inject
     lateinit var idp: InvariantDeviceProfile
@@ -60,6 +68,12 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
             config?.let { setThemeColor(Color.parseColor(it.themeColor)) }
         }
 
+        observe(viewModel.theme) { theme ->
+            themeColor = theme.primaryColor
+            accentColor = theme.accentColor
+            binding.allAppsButton.backgroundTintList = ColorStateList.valueOf(accentColor)
+        }
+
         binding.allAppsButton.setOnClickListener {
             openAppList()
         }
@@ -69,6 +83,7 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
         }
 
         themeColor = getColor(R.color.colorAccent)
+        accentColor = getColor(R.color.colorAccent)
     }
 
     override fun onResume() {
@@ -96,6 +111,14 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
         }
     }
 
+    override fun onBackPressed() {
+        if (binding.appListContainer.isVisible) {
+            closeAppList()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.app_navigation_host_fragment)
 
@@ -110,18 +133,55 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
         viewModel.updateAppListItems()
     }
 
-    private fun openAppList() {
-        if (!binding.appListContainer.isVisible) {
-            binding.appListContainer.animateOpen {
-                window.statusBarColor = getColor(R.color.white)
-                window.navigationBarColor = getColor(R.color.white)
+    private fun generatePalette() {
+        val bitmap = BlurBuilder.blur(binding.appNavigationHostFragment)
+        Palette.from(bitmap).generate {
+            palette = it
+
+            it?.dominantSwatch?.let { swatch ->
+                val states = arrayOf(
+                    intArrayOf(android.R.attr.state_focused),
+                    intArrayOf(android.R.attr.state_hovered),
+                    intArrayOf(android.R.attr.state_enabled),
+                    intArrayOf()
+                )
+
+                val colors = intArrayOf(
+                    accentColor,
+                    accentColor,
+                    accentColor,
+                    swatch.bodyTextColor
+                )
+                val stateList = ColorStateList(states, colors)
+                binding.searchInputLayout.setBoxStrokeColorStateList(stateList)
+                binding.searchInputLayout.defaultHintTextColor = stateList
+                binding.moreButton.drawable.setTint(swatch.bodyTextColor)
+                binding.closeButton.drawable.setTint(swatch.bodyTextColor)
+                appListAdapter.setTextColor(swatch.bodyTextColor)
             }
+        }
+    }
+
+    private fun openAppList() {
+        generatePalette()
+        if (!binding.appListContainer.isVisible) {
+            val background = BlurBuilder.blur(binding.appNavigationHostFragment)
+            binding.appListBackground.background = BitmapDrawable(
+                resources,
+                background
+            )
+            binding.appListBackground.visibility = View.VISIBLE
+            binding.appListContainer.background = ColorDrawable(
+                Utilities.createColorFromBitmap(background, themeColor, 0.75f)
+            )
+            binding.appListContainer.animateOpen()
             binding.allAppsButton.animateClose()
         }
     }
 
     private fun closeAppList() {
         if (binding.appListContainer.isVisible) {
+            binding.appListBackground.visibility = View.GONE
             binding.appListContainer.animateClose()
             binding.allAppsButton.visibility = View.VISIBLE
             binding.allAppsButton.animateOpen()

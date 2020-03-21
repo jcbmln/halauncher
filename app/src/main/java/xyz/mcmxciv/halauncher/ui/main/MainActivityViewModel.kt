@@ -11,6 +11,7 @@ import xyz.mcmxciv.halauncher.data.interactors.AppsInteractor
 import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
 import xyz.mcmxciv.halauncher.data.models.Config
+import xyz.mcmxciv.halauncher.models.HassTheme
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import javax.inject.Inject
 
@@ -35,6 +36,9 @@ class MainActivityViewModel @Inject constructor(
     }
     val config: LiveData<Config?> = configData
 
+    private val themeData = MutableLiveData<HassTheme>()
+    val theme: LiveData<HassTheme> = themeData
+
     fun updateAppListItems() {
         viewModelScope.launch {
             appListItemData.postValue(appsInteractor.getAppListItems())
@@ -51,5 +55,9 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch(exceptionHandler) {
             data.postValue(integrationInteractor.getConfig())
         }
+    }
+
+    fun updateTheme(theme: HassTheme) {
+        themeData.postValue(theme)
     }
 }

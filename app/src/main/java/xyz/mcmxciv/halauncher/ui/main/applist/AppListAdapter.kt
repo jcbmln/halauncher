@@ -20,6 +20,7 @@ class AppListAdapter @Inject constructor(
     private val appLauncher: AppLauncher
 ) : RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
     private var appListItems = listOf<AppListItem>()
+    private var textColor: Int = 0
 
     class AppListViewHolder(
         val binding: ListItemAppBinding,
@@ -34,15 +35,15 @@ class AppListAdapter @Inject constructor(
             binding.appItem.setOnLongClickListener(this)
         }
 
-        fun populate(item: AppListItem, isDarkBackground: Boolean) {
+        fun populate(item: AppListItem, textColor: Int) {
             appListItem = item
             val resources = LauncherApplication.instance.resources
             binding.appItem.topIcon = appListItem.icon.toDrawable(resources)
             binding.appItem.text = appListItem.displayName
             binding.appItem.tag = appListItem
 
-            if (isDarkBackground)
-                binding.appItem.setTextColor(resourceProvider.getColor(R.color.colorBackground))
+            if (textColor != 0)
+                binding.appItem.setTextColor(textColor)
 
         }
 
@@ -79,7 +80,7 @@ class AppListAdapter @Inject constructor(
     }
 
     override fun onBindViewHolder(holder: AppListViewHolder, position: Int) {
-        holder.populate(appListItems[position], isDarkBackground)
+        holder.populate(appListItems[position], textColor)
     }
 
     override fun getItemCount() = appListItems.size
@@ -89,8 +90,8 @@ class AppListAdapter @Inject constructor(
         notifyDataSetChanged()
     }
 
-    fun setThemeColor(color: Int) {
-        isDarkBackground = Utilities.isDarkColor(color)
+    fun setTextColor(color: Int) {
+        textColor = color
         notifyDataSetChanged()
     }
 }

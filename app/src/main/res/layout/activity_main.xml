@@ -13,13 +13,19 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/app_navigation" />
 
-    <xyz.mcmxciv.halauncher.ui.main.applist.AppListContainer
+    <View
+        android:id="@+id/app_list_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
+
+    <xyz.mcmxciv.halauncher.views.AnimatedContainer
         android:id="@+id/app_list_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/transparentWhite"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="invisible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -80,9 +86,9 @@
             android:layout_height="match_parent"
             android:layout_gravity="bottom|end"
             android:visibility="visible" />
-    </xyz.mcmxciv.halauncher.ui.main.applist.AppListContainer>
+    </xyz.mcmxciv.halauncher.views.AnimatedContainer>
 
-    <xyz.mcmxciv.halauncher.ui.main.applist.AppListButton
+    <xyz.mcmxciv.halauncher.views.AnimatedFloatingActionButton
         android:id="@+id/all_apps_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -95,4 +101,5 @@
         app:backgroundTint="@color/colorAccent"
         app:srcCompat="@drawable/ic_apps"
         app:tint="@color/white" />
+
 </FrameLayout>

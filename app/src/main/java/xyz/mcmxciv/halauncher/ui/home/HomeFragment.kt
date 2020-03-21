@@ -1,6 +1,7 @@
 package xyz.mcmxciv.halauncher.ui.home
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,18 +12,23 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
+import org.json.JSONArray
 import org.json.JSONObject
+import timber.log.Timber
+import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
 import xyz.mcmxciv.halauncher.models.ErrorState
+import xyz.mcmxciv.halauncher.models.HassTheme
 import xyz.mcmxciv.halauncher.models.WebCallback
 import xyz.mcmxciv.halauncher.ui.*
 import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
+import java.io.BufferedReader
 
 class HomeFragment : LauncherFragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
-    private var color: Int? = null
+    private val activityViewModel by activityViewModels<MainActivityViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,10 +81,10 @@ class HomeFragment : LauncherFragment() {
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             webViewClient = object : WebViewClient() {
-//                override fun onPageFinished(view: WebView?, url: String?) {
-//                    view?.loadUrl(getThemeCallback())
-//                    super.onPageFinished(view, url)
-//                }
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    view?.loadUrl(getThemeCallback())
+                    super.onPageFinished(view, url)
+                }
             }
 
             addJavascriptInterface(object : Any() {
@@ -92,11 +98,19 @@ class HomeFragment : LauncherFragment() {
                     viewModel.revokeExternalAuth(JSONObject(result).get("callback") as String)
                 }
 
-//                @JavascriptInterface
-//                fun themesUpdated(result: String) {
-//                    val name = JSONObject(result).get("name") as String
-//                    Timber.d(name)
-//                }
+                @JavascriptInterface
+                fun themesUpdated(result: String) {
+                    val name = JSONObject(result).get("name") as String
+                    val styles = JSONObject(result).get("styles") as JSONObject
+                    val primaryColor = styles.get("primary-color") as String?
+                    val accentColor = styles.get("accent-color") as String?
+                    val theme = HassTheme(
+                        Color.parseColor(primaryColor),
+                        Color.parseColor(accentColor)
+                    )
+                    activityViewModel.updateTheme(theme)
+                    Timber.d(name)
+                }
 
                 @JavascriptInterface
                 fun externalBus(message: String) {
@@ -116,15 +130,15 @@ class HomeFragment : LauncherFragment() {
                             "config_screen/show" -> navigate(
                                 HomeFragmentDirections.actionHomeFragmentToMainPreferencesFragment()
                             )
-//                            "frontend/get_themes" -> {
-//                                val keys: MutableList<String> = ArrayList()
-//                                val themes = JSONObject(message).get("themes")
-//                                val themesWrapper = JSONObject(themes.toString())
-//
-//                                for (key in themesWrapper.keys()) {
-//                                    keys.add(key as String)
-//                                }
-//                            }
+                            "frontend/get_themes" -> {
+                                val keys: MutableList<String> = ArrayList()
+                                val themes = JSONObject(message).get("themes")
+                                val themesWrapper = JSONObject(themes.toString())
+
+                                for (key in themesWrapper.keys()) {
+                                    keys.add(key as String)
+                                }
+                            }
                         }
                     }
                 }
@@ -134,16 +148,16 @@ class HomeFragment : LauncherFragment() {
         binding.homeWebView.loadUrl(viewModel.webviewUrl)
     }
 
-//    private fun getThemeCallback() : String? {
-//        val callback = try {
-//            val input = LauncherApplication.instance.assets.open("websocketBridge.js")
-//            input.bufferedReader().use(BufferedReader::readText)
-//        }
-//        catch (ex: Exception) {
-//            Timber.e(ex)
-//            null
-//        }
-//
-//        return callback?.let { "javascript:(function() { $it })()" }
-//    }
+    private fun getThemeCallback() : String? {
+        val callback = try {
+            val input = LauncherApplication.instance.assets.open("websocketBridge.js")
+            input.bufferedReader().use(BufferedReader::readText)
+        }
+        catch (ex: Exception) {
+            Timber.e(ex)
+            null
+        }
+
+        return callback?.let { "javascript:(function() { $it })()" }
+    }
 }
