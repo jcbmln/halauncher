@@ -30,7 +30,7 @@ import android.os.Build
 import androidx.core.graphics.drawable.toBitmap
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
+import xyz.mcmxciv.halauncher.models.DeviceProfile
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -42,7 +42,7 @@ import kotlin.math.round
 class IconFactory @Inject constructor(
     private val resourceProvider: ResourceProvider,
     private val packageManager: PackageManager,
-    private val invariantDeviceProfile: InvariantDeviceProfile,
+    private val deviceProfile: DeviceProfile,
     private val iconNormalizer: IconNormalizer,
     private val shadowGenerator: ShadowGenerator,
     private val launcherApps: LauncherApps
@@ -57,24 +57,24 @@ class IconFactory @Inject constructor(
 
     fun getIcon(launcherActivityInfo: LauncherActivityInfo): Bitmap {
         val drawable = getDrawable(launcherActivityInfo)
-            ?: launcherActivityInfo.getIcon(invariantDeviceProfile.fillResIconDpi)
+            ?: launcherActivityInfo.getIcon(deviceProfile.appIconDpi)
         return createIconBitmap(drawable)
     }
 
     fun getShortcutIcon(shortcutInfo: ShortcutInfo): Bitmap? {
         return launcherApps.getShortcutIconDrawable(
             shortcutInfo,
-            invariantDeviceProfile.shortcutIconDpi
+            deviceProfile.shortcutIconDpi
         )?.toBitmap(
-            invariantDeviceProfile.shortcutBitmapSize,
-            invariantDeviceProfile.shortcutBitmapSize
+            deviceProfile.shortcutBitmapSize,
+            deviceProfile.shortcutBitmapSize
         )
     }
 
 
     private fun getDrawable(launcherActivityInfo: LauncherActivityInfo): Drawable? {
         val iconRes = launcherActivityInfo.applicationInfo.icon
-        val density = invariantDeviceProfile.fillResIconDpi
+        val density = deviceProfile.appIconDpi
 
         return if (density != 0 && iconRes != 0) {
             try {
@@ -106,7 +106,7 @@ class IconFactory @Inject constructor(
     }
 
     private fun createIconBitmap(icon: Drawable, scale: Float): Bitmap {
-        val size = invariantDeviceProfile.iconBitmapSize
+        val size = deviceProfile.iconBitmapSize
         val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
 
         canvas.setBitmap(bitmap)

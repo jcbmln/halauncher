@@ -18,7 +18,7 @@ import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.background.PackageReceiver
 import xyz.mcmxciv.halauncher.databinding.ActivityMainBinding
-import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
+import xyz.mcmxciv.halauncher.models.DeviceProfile
 import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.ui.main.applist.AppListAdapter
 import xyz.mcmxciv.halauncher.ui.observe
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
     private var accentColor: Int = 0
 
     @Inject
-    lateinit var idp: InvariantDeviceProfile
+    lateinit var idp: DeviceProfile
 
     @Inject
     lateinit var appListAdapter: AppListAdapter
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
             binding.appListContainer.setAnimationStartPoint(x, y)
         }
 
-        binding.appList.layoutManager = GridLayoutManager(this, idp.numColumns)
+        binding.appList.layoutManager = GridLayoutManager(this, idp.appDrawerColumns)
         binding.appList.adapter = appListAdapter
 
         observe(viewModel.appListItems) { items ->

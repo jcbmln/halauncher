@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2015 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,424 +16,300 @@
 
 package xyz.mcmxciv.halauncher.models
 
-//import com.android.launcher3.CellLayout.ContainerType
-//import com.android.launcher3.graphics.IconShape
-//import com.android.launcher3.icons.DotRenderer
-//import com.android.launcher3.icons.IconNormalizer
 import android.content.Context
-import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
-import android.graphics.Rect
+import android.text.TextUtils
+import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.view.Surface
+import android.util.Xml
 import android.view.WindowManager
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserException
+import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.utils.Utilities
-import kotlin.math.max
+import java.io.IOException
+import java.util.ArrayList
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlin.Comparator
+import kotlin.math.hypot
 import kotlin.math.min
+import kotlin.math.pow
 
-class DeviceProfile constructor(
-    context: Context, private val inv: InvariantDeviceProfile,
-    minSize: Point, maxSize: Point, private val widthPx: Int, private val heightPx: Int,
-    private val isLandscape: Boolean, private val isMultiWindowMode: Boolean
-) {
-    // Device properties
-    val isTablet: Boolean
-    val isLargeTablet: Boolean
-    val isPhone: Boolean
-    val transposeLayoutWithOrientation: Boolean
-    val availableWidthPx: Int
-    val availableHeightPx: Int
-
-    val aspectRatio: Float
-
-    // Workspace
-    val desiredWorkspaceLeftRightMarginPx: Int
-    val cellLayoutPaddingLeftRightPx: Int
-    val cellLayoutBottomPaddingPx: Int
-    val edgeMarginPx: Int
-    var workspaceSpringLoadShrinkFactor: Float = 0.toFloat()
-    val workspaceSpringLoadedBottomSpace: Int
-
-    // Drag handle
-    val verticalDragHandleSizePx: Int
-    private val verticalDragHandleOverlapWorkspace: Int
-
-    // Workspace icons
-    var iconSizePx: Int = 0
-    var iconTextSizePx: Int = 0
-    var iconDrawablePaddingPx: Int = 0
-    var iconDrawablePaddingOriginalPx: Int = 0
-
-    var cellWidthPx: Int = 0
-    var cellHeightPx: Int = 0
-    var workspaceCellPaddingXPx: Int = 0
-
-    // All apps
-    var allAppsCellHeightPx: Int = 0
-    var allAppsIconSizePx: Int = 0
-    var allAppsIconDrawablePaddingPx: Int = 0
-    var allAppsIconTextSizePx: Float = 0.toFloat()
-
-    // Drop Target
-    var dropTargetBarSizePx: Int = 0
-
-    // Insets
-    /**
-     * The current device insets. This is generally same as the insets being dispatched to
-     * [Insettable] elements, but can differ if the element is using a different profile.
-     */
-    val insets = Rect()
-    val workspacePadding = Rect()
-    // When true, nav bar is on the left side of the screen.
-    private var mIsSeascape: Boolean = false
-
-    /**
-     * Inverse of [.getMultiWindowProfile]
-     * @return device profile corresponding to the current orientation in non multi-window mode.
-     */
-//    val fullScreenProfile: DeviceProfile
-//        get() = if (isLandscape) inv.landscapeProfile else inv.portraitProfile
-
-    // Since we are only concerned with the overall padding, layout direction does
-    // not matter.
-    val cellSize: Point
-        get() {
-            val result = Point()
-            val padding = totalWorkspacePadding
-            result.x = calculateCellWidth(
-                availableWidthPx - padding.x
-                        - cellLayoutPaddingLeftRightPx * 2, inv.numColumns
-            )
-            result.y = calculateCellHeight(
-                (availableHeightPx - padding.y
-                        - cellLayoutBottomPaddingPx), inv.numColumns
-            )
-            return result
-        }
-
-    val totalWorkspacePadding: Point
-        get() {
-            updateWorkspacePadding()
-            return Point(
-                workspacePadding.left + workspacePadding.right,
-                workspacePadding.top + workspacePadding.bottom
-            )
-        }
-
-    /**
-     * When `true`, the device is in landscape mode and the hotseat is on the right column.
-     * When `false`, either device is in portrait mode or the device is in landscape mode and
-     * the hotseat is on the bottom row.
-     */
-    val isVerticalBarLayout: Boolean
-        get() = isLandscape && transposeLayoutWithOrientation
-
-    val isSeascape: Boolean
-        get() = isVerticalBarLayout && mIsSeascape
+@Singleton
+class DeviceProfile @Inject constructor(context: Context) {
+    var appDrawerColumns: Int = 0
+    var iconTextSize: Float = 0f
+    private var iconShapePath: String = ""
+    var iconBitmapSize: Int = 0
+    var shortcutBitmapSize: Int = 0
+    var appIconDpi: Int = 0
+    var shortcutIconDpi: Int = 0
+    private val isTablet: Boolean = context.resources.getBoolean(R.bool.is_tablet)
+    private val isLargeTablet: Boolean = context.resources.getBoolean(R.bool.is_large_tablet)
+    private val isPhone: Boolean
 
     init {
-        var orientationContext = context
+        isPhone = !(isTablet || isLargeTablet)
+        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = wm.defaultDisplay
+        val dm = DisplayMetrics()
+        display.getMetrics(dm)
 
-        if (isLandscape) {
-            availableWidthPx = maxSize.x
-            availableHeightPx = minSize.y
-        } else {
-            availableWidthPx = minSize.x
-            availableHeightPx = maxSize.y
-        }
+        val smallestSize = Point()
+        val largestSize = Point()
+        display.getCurrentSizeRange(smallestSize, largestSize)
 
-        var res = orientationContext.resources
-        val dm = res.displayMetrics
+        val allOptions = getPredefinedDeviceProfiles(context, null)
 
-        // Constants from resources
-        isTablet = res.getBoolean(R.bool.is_tablet)
-        isLargeTablet = res.getBoolean(R.bool.is_large_tablet)
-        isPhone = !isTablet && !isLargeTablet
+        // This guarantees that width < height
+        val minWidthDps = Utilities.dpiFromPx(min(smallestSize.x, smallestSize.y), dm)
+        val minHeightDps = Utilities.dpiFromPx(min(largestSize.x, largestSize.y), dm)
 
-        aspectRatio = (max(widthPx, heightPx).toFloat()) / min(widthPx, heightPx)
-        val isTallDevice =
-            aspectRatio.compareTo(TALL_DEVICE_ASPECT_RATIO_THRESHOLD) >= 0
-
-        // Some more constants
-        transposeLayoutWithOrientation =
-            res.getBoolean(R.bool.hotseat_transpose_layout_with_orientation)
-
-        orientationContext = getContext(
-            context, if (isVerticalBarLayout)
-                Configuration.ORIENTATION_LANDSCAPE
-            else
-                Configuration.ORIENTATION_PORTRAIT
-        )
-        res = orientationContext.resources
-
-        edgeMarginPx = res.getDimensionPixelSize(R.dimen.dynamic_grid_edge_margin)
-        desiredWorkspaceLeftRightMarginPx = if (isVerticalBarLayout) 0 else edgeMarginPx
-
-        val cellLayoutPaddingLeftRightMultiplier = if (!isVerticalBarLayout && isTablet)
-            PORTRAIT_TABLET_LEFT_RIGHT_PADDING_MULTIPLIER
-            else
-                1
-        val cellLayoutPadding = res.getDimensionPixelSize(R.dimen.dynamic_grid_cell_layout_padding)
-
-        if (isLandscape) {
-            cellLayoutPaddingLeftRightPx = 0
-            cellLayoutBottomPaddingPx = cellLayoutPadding
-        }
-        else {
-            cellLayoutPaddingLeftRightPx = cellLayoutPaddingLeftRightMultiplier * cellLayoutPadding
-            cellLayoutBottomPaddingPx = 0
-        }
-
-        verticalDragHandleSizePx = res.getDimensionPixelSize(R.dimen.vertical_drag_handle_size)
-        verticalDragHandleOverlapWorkspace =
-            res.getDimensionPixelSize(R.dimen.vertical_drag_handle_overlap_workspace)
-        iconDrawablePaddingOriginalPx =
-            res.getDimensionPixelSize(R.dimen.dynamic_grid_icon_drawable_padding)
-        dropTargetBarSizePx = res.getDimensionPixelSize(R.dimen.dynamic_grid_drop_target_size)
-        workspaceSpringLoadedBottomSpace =
-            res.getDimensionPixelSize(R.dimen.dynamic_grid_min_spring_loaded_space)
-
-        workspaceCellPaddingXPx = res.getDimensionPixelSize(R.dimen.dynamic_grid_cell_padding_x)
-
-        // Calculate all of the remaining variables.
-        updateAvailableDimensions(dm, res)
-        updateWorkspacePadding()
-    }
-
-    fun copy(context: Context): DeviceProfile {
-        val size = Point(availableWidthPx, availableHeightPx)
-        return DeviceProfile(
-            context, inv, size, size, widthPx, heightPx, isLandscape,
-            isMultiWindowMode
-        )
-    }
-
-    fun getMultiWindowProfile(context: Context, mwSize: Point): DeviceProfile {
-        // We take the minimum sizes of this profile and it's multi-window variant to ensure that
-        // the system decor is always excluded.
-        mwSize.set(min(availableWidthPx, mwSize.x), min(availableHeightPx, mwSize.y))
-
-        // In multi-window mode, we can have widthPx = availableWidthPx
-        // and heightPx = availableHeightPx because Launcher uses the InvariantDeviceProfiles'
-        // widthPx and heightPx values where it's needed.
-        val profile = DeviceProfile(
-            context, inv, mwSize, mwSize, mwSize.x, mwSize.y,
-            isLandscape, true
-        )
-
-        // If there isn't enough vertical cell padding with the labels displayed, hide the labels.
-        val workspaceCellPaddingY = (profile.cellSize.y - profile.iconSizePx
-                - iconDrawablePaddingPx - profile.iconTextSizePx).toFloat()
-        if (workspaceCellPaddingY < profile.iconDrawablePaddingPx * 2) {
-            profile.adjustToHideWorkspaceLabels()
-        }
-
-        profile.updateWorkspacePadding()
-
-        return profile
-    }
-
-    /**
-     * Adjusts the profile so that the labels on the Workspace are hidden.
-     * It is important to call this method after the All Apps variables have been set.
-     */
-    private fun adjustToHideWorkspaceLabels() {
-        iconTextSizePx = 0
-        iconDrawablePaddingPx = 0
-        cellHeightPx = iconSizePx
-
-        // In normal cases, All Apps cell height should equal the Workspace cell height.
-        // Since we are removing labels from the Workspace, we need to manually compute the
-        // All Apps cell height.
-        val topBottomPadding = allAppsIconDrawablePaddingPx * (if (isVerticalBarLayout) 2 else 1)
-        allAppsCellHeightPx = (allAppsIconSizePx + allAppsIconDrawablePaddingPx
-                + Utilities.calculateTextHeight(allAppsIconTextSizePx)
-                + topBottomPadding * 2)
-    }
-
-    private fun updateAvailableDimensions(dm: DisplayMetrics, res: Resources) {
-        updateIconSize(1f, res, dm)
-
-        // Check to see if the icons fit within the available height.  If not, then scale down.
-        val usedHeight = (cellHeightPx * inv.numColumns)
-        val maxHeight = (availableHeightPx - totalWorkspacePadding.y)
-        if (usedHeight > maxHeight) {
-            val scale = maxHeight / usedHeight
-            updateIconSize(scale.toFloat(), res, dm)
-        }
-    }
-
-    private fun updateIconSize(scale: Float, res: Resources, dm: DisplayMetrics) {
-        // Workspace
-        val isVerticalLayout = isVerticalBarLayout
-        val invIconSizePx = if (isVerticalLayout) inv.landscapeIconSize else inv.iconSize
-        iconSizePx = max(1, (Utilities.pxFromDp(invIconSizePx, dm) * scale).toInt())
-        iconTextSizePx = (Utilities.pxFromSp(inv.iconTextSize, dm) * scale).toInt()
-        iconDrawablePaddingPx = (iconDrawablePaddingOriginalPx * scale).toInt()
-
-        cellHeightPx = (iconSizePx + iconDrawablePaddingPx
-                + Utilities.calculateTextHeight(iconTextSizePx.toFloat()))
-        val cellYPadding = (cellSize.y - cellHeightPx) / 2
-        if ((iconDrawablePaddingPx > cellYPadding && !isVerticalLayout
-                    && !isMultiWindowMode)
-        ) {
-            // Ensures that the label is closer to its corresponding icon. This is not an issue
-            // with vertical bar layout or multi-window mode since the issue is handled separately
-            // with their calls to {@link #adjustToHideWorkspaceLabels}.
-            cellHeightPx -= (iconDrawablePaddingPx - cellYPadding)
-            iconDrawablePaddingPx = cellYPadding
-        }
-        cellWidthPx = iconSizePx + iconDrawablePaddingPx
-
-        // All apps
-        allAppsIconTextSizePx = iconTextSizePx.toFloat()
-        allAppsIconSizePx = iconSizePx
-        allAppsIconDrawablePaddingPx = iconDrawablePaddingPx
-        allAppsCellHeightPx = cellSize.y
-
-        if (isVerticalLayout) {
-            // Always hide the Workspace text with vertical bar layout.
-            adjustToHideWorkspaceLabels()
-        }
-
-        workspaceSpringLoadShrinkFactor = if (!isVerticalLayout) {
-            val expectedWorkspaceHeight = (availableHeightPx -
-                    verticalDragHandleSizePx - edgeMarginPx)
-            val minRequiredHeight =
-                (dropTargetBarSizePx + workspaceSpringLoadedBottomSpace).toFloat()
-            min(
-                res.getInteger(R.integer.config_workspaceSpringLoadShrinkPercentage) / 100.0f,
-                1 - (minRequiredHeight / expectedWorkspaceHeight)
+        // Sort the profiles based on the closeness to the device size
+        allOptions.sortWith(Comparator { a, b ->
+            dist(minWidthDps, minHeightDps, a.minWidthDps, a.minHeightDps).compareTo(
+                dist(minWidthDps, minHeightDps, b.minWidthDps, b.minHeightDps)
             )
-        } else {
-            res.getInteger(R.integer.config_workspaceSpringLoadShrinkPercentage) / 100.0f
+        })
+
+        val interpolatedDisplayOption =
+            invDistWeightedInterpolate(minWidthDps, minHeightDps, allOptions)
+
+        val closestProfile = allOptions[0].grid
+        appDrawerColumns = closestProfile?.numColumns ?: appDrawerColumns
+
+        iconShapePath = getIconShapePath(context)
+        iconBitmapSize = Utilities.pxFromDp(interpolatedDisplayOption.iconImageSize, dm)
+        shortcutBitmapSize = Utilities.pxFromDp(interpolatedDisplayOption.shortcutImageSize, dm)
+
+        iconTextSize = interpolatedDisplayOption.iconTextSize
+        appIconDpi = getLauncherIconDensity(iconBitmapSize)
+        shortcutIconDpi = getLauncherIconDensity(shortcutBitmapSize)
+    }
+
+    private fun getLauncherIconDensity(requiredSize: Int): Int {
+        // Densities typically defined by an app.
+        val densityBuckets = intArrayOf(
+            DisplayMetrics.DENSITY_LOW,
+            DisplayMetrics.DENSITY_MEDIUM,
+            DisplayMetrics.DENSITY_TV,
+            DisplayMetrics.DENSITY_HIGH,
+            DisplayMetrics.DENSITY_XHIGH,
+            DisplayMetrics.DENSITY_XXHIGH,
+            DisplayMetrics.DENSITY_XXXHIGH
+        )
+
+        var density = DisplayMetrics.DENSITY_XXXHIGH
+        for (i in densityBuckets.indices.reversed()) {
+            val expectedSize =
+                ICON_SIZE_DEFINED_IN_APP_DP * densityBuckets[i] / DisplayMetrics.DENSITY_DEFAULT
+            if (expectedSize >= requiredSize) {
+                density = densityBuckets[i]
+            }
+        }
+
+        return density
+    }
+
+    class GridOption(context: Context, attrs: AttributeSet) {
+        val name: String
+        val numColumns: Int
+
+        init {
+            val a = context.obtainStyledAttributes(
+                attrs, R.styleable.GridDisplayOption
+            )
+            name = a.getString(R.styleable.GridDisplayOption_name) ?: ""
+            numColumns = a.getInt(R.styleable.GridDisplayOption_numColumns, 0)
+
+            a.recycle()
+        }
+
+        companion object {
+            const val TAG_NAME = "grid-option"
         }
     }
 
-    fun updateInsets(insets: Rect) {
-        this.insets.set(insets)
-        updateWorkspacePadding()
-    }
+    private class DisplayOption {
+        val grid: GridOption?
+        private val name: String?
+        val minWidthDps: Float
+        val minHeightDps: Float
+        val canBeDefault: Boolean
 
-    /**
-     * Updates [.workspacePadding] as a result of any internal value change to reflect the
-     * new workspace padding
-     */
-    private fun updateWorkspacePadding() {
-        val padding = workspacePadding
-        if (isVerticalBarLayout) {
-            padding.top = 0
-            padding.bottom = edgeMarginPx
-            if (isSeascape) {
-                padding.left = 0
-                padding.right = verticalDragHandleSizePx
-            } else {
-                padding.left = verticalDragHandleSizePx
-                padding.right = 0
-            }
-        } else {
-            val paddingBottom =
-                (verticalDragHandleSizePx - verticalDragHandleOverlapWorkspace)
-            if (isTablet) {
-                // Pad the left and right of the workspace to ensure consistent spacing
-                // between all icons
-                // The amount of screen space available for left/right padding.
-                var availablePaddingX = max(
-                    0,
-                    (widthPx - (((inv.numColumns * cellWidthPx) + ((inv.numColumns - 1) * cellWidthPx))))
-                )
-                availablePaddingX = min(
-                    availablePaddingX.toFloat(),
-                    widthPx * MAX_HORIZONTAL_PADDING_PERCENT
-                ).toInt()
-                val availablePaddingY = max(
-                    0, (heightPx - edgeMarginPx - paddingBottom
-                            - (2 * cellHeightPx))
-                )
-                padding.set(
-                    availablePaddingX / 2, edgeMarginPx + availablePaddingY / 2,
-                    availablePaddingX / 2, paddingBottom + availablePaddingY / 2
-                )
-            } else {
-                // Pad the top and bottom of the workspace with search/hotseat bar sizes
-                padding.set(
-                    desiredWorkspaceLeftRightMarginPx,
-                    edgeMarginPx,
-                    desiredWorkspaceLeftRightMarginPx,
-                    paddingBottom
-                )
-            }
+        var iconImageSize = 0f
+        var iconTextSize = 0f
+        var shortcutImageSize = 0f
+
+        constructor() {
+            grid = null
+            name = ""
+            minWidthDps = 0f
+            minHeightDps = 0f
+            canBeDefault = false
         }
-    }
 
-    /**
-     * Updates orientation information and returns true if it has changed from the previous value.
-     */
-    fun updateIsSeascape(wm: WindowManager): Boolean {
-        if (isVerticalBarLayout) {
-            val isSeascape = wm.defaultDisplay.rotation == Surface.ROTATION_270
-            if (mIsSeascape != isSeascape) {
-                mIsSeascape = isSeascape
-                return true
-            }
+        constructor(grid: GridOption, context: Context, attrs: AttributeSet) {
+            this.grid = grid
+
+            val a = context.obtainStyledAttributes(attrs, R.styleable.ProfileDisplayOption)
+
+            name = a.getString(R.styleable.ProfileDisplayOption_name)
+            minWidthDps = a.getFloat(R.styleable.ProfileDisplayOption_minWidthDps, 0f)
+            minHeightDps = a.getFloat(R.styleable.ProfileDisplayOption_minHeightDps, 0f)
+            canBeDefault = a.getBoolean(
+                R.styleable.ProfileDisplayOption_canBeDefault, false
+            )
+
+            iconImageSize = a.getFloat(R.styleable.ProfileDisplayOption_iconImageSize, 0f)
+            iconTextSize = a.getFloat(R.styleable.ProfileDisplayOption_iconTextSize, 0f)
+            shortcutImageSize = a.getFloat(R.styleable.ProfileDisplayOption_shortcutImageSize, 0f)
+            a.recycle()
         }
-        return false
-    }
 
-    fun shouldFadeAdjacentWorkspaceScreens(): Boolean {
-        return isVerticalBarLayout || isLargeTablet
-    }
+        fun multiply(w: Float): DisplayOption {
+            iconImageSize *= w
+            iconTextSize *= w
+            shortcutImageSize *= w
+            return this
+        }
 
-//    fun getCellHeight(@ContainerType containerType: Int): Int {
-//        when (containerType) {
-//            CellLayout.WORKSPACE -> return cellHeightPx
-//            else ->
-//                // ??
-//                return 0
-//        }
-//    }
-
-    /**
-     * Callback when a component changes the DeviceProfile associated with it, as a result of
-     * configuration change
-     */
-    interface OnDeviceProfileChangeListener {
-
-        /**
-         * Called when the device profile is reassigned. Note that for layout and measurements, it
-         * is sufficient to listen for inset changes. Use this callback when you need to perform
-         * a one time operation.
-         */
-        fun onDeviceProfileChanged(dp: DeviceProfile)
+        fun add(p: DisplayOption): DisplayOption {
+            iconImageSize += p.iconImageSize
+            iconTextSize += p.iconTextSize
+            shortcutImageSize += p.shortcutImageSize
+            return this
+        }
     }
 
     companion object {
+        private const val ICON_SIZE_DEFINED_IN_APP_DP = 48f
+
+        // Constants that affects the interpolation curve between statically defined device profile
+        // buckets.
+        private const val K_NEAREST_NEIGHBOR = 3f
+        private const val WEIGHT_POWER = 5f
+
+        // used to offset float not being able to express extremely small weights in extreme cases.
+        private const val WEIGHT_EFFICIENT = 100000f
+
+        private val CONFIG_ICON_MASK_RES_ID = Resources.getSystem().getIdentifier(
+            "config_icon_mask", "string", "android"
+        )
 
         /**
-         * The maximum amount of left/right workspace padding as a percentage of the screen width.
-         * To be clear, this means that up to 7% of the screen width can be used as left padding, and
-         * 7% of the screen width can be used as right padding.
+         * Retrieve system defined or RRO overriden icon shape.
          */
-        private const val MAX_HORIZONTAL_PADDING_PERCENT = 0.14f
-        private const val TALL_DEVICE_ASPECT_RATIO_THRESHOLD = 2.0f
-
-        // To evenly space the icons, increase the left/right margins for tablets in portrait mode.
-        private const val PORTRAIT_TABLET_LEFT_RIGHT_PADDING_MULTIPLIER = 4
-
-        fun calculateCellWidth(width: Int, countX: Int): Int {
-            return width / countX
+        private fun getIconShapePath(context: Context): String {
+            if (CONFIG_ICON_MASK_RES_ID == 0) {
+                Timber.e("Icon mask res identifier failed to retrieve.")
+                return ""
+            }
+            return context.resources.getString(CONFIG_ICON_MASK_RES_ID)
         }
 
-        fun calculateCellHeight(height: Int, countY: Int): Int {
-            return height / countY
+        private fun getPredefinedDeviceProfiles(
+            context: Context, gridName: String?
+        ): ArrayList<DisplayOption> {
+            val profiles = ArrayList<DisplayOption>()
+            try {
+                context.resources.getXml(R.xml.device_profiles).use { parser ->
+                    val depth = parser.depth
+                    var type: Int = parser.next()
+                    while ((type != XmlPullParser.END_TAG || parser.depth > depth) &&
+                        type != XmlPullParser.END_DOCUMENT
+                    ) {
+                        if (type == XmlPullParser.START_TAG && GridOption.TAG_NAME == parser.name) {
+                            val gridOption = GridOption(context, Xml.asAttributeSet(parser))
+                            val displayDepth = parser.depth
+
+                            type = parser.next()
+                            while ((type != XmlPullParser.END_TAG || parser.depth > displayDepth) &&
+                                type != XmlPullParser.END_DOCUMENT
+                            ) {
+                                if (type == XmlPullParser.START_TAG &&
+                                    "display-option" == parser.name
+                                ) {
+                                    profiles.add(
+                                        DisplayOption(
+                                            gridOption, context, Xml.asAttributeSet(parser)
+                                        )
+                                    )
+                                }
+
+                                type = parser.next()
+                            }
+                        }
+
+                        type = parser.next()
+                    }
+                }
+            } catch (e: IOException) {
+                throw RuntimeException(e)
+            } catch (e: XmlPullParserException) {
+                throw RuntimeException(e)
+            }
+
+            val filteredProfiles = ArrayList<DisplayOption>()
+            if (!TextUtils.isEmpty(gridName)) {
+                for (option in profiles) {
+                    if (gridName == option.grid!!.name) {
+                        filteredProfiles.add(option)
+                    }
+                }
+            }
+            if (filteredProfiles.isEmpty()) {
+                // No grid found, use the default options
+                for (option in profiles) {
+                    if (option.canBeDefault) {
+                        filteredProfiles.add(option)
+                    }
+                }
+            }
+            if (filteredProfiles.isEmpty()) {
+                throw RuntimeException("No display option with canBeDefault=true")
+            }
+            return filteredProfiles
         }
 
-        private fun getContext(c: Context, orientation: Int): Context {
-            val context = Configuration(c.resources.configuration)
-            context.orientation = orientation
-            return c.createConfigurationContext(context)
+        private fun dist(x0: Float, y0: Float, x1: Float, y1: Float): Float {
+            return hypot((x1 - x0).toDouble(), (y1 - y0).toDouble()).toFloat()
+        }
+
+        private fun invDistWeightedInterpolate(
+            width: Float, height: Float,
+            points: ArrayList<DisplayOption>
+        ): DisplayOption {
+            var weights = 0f
+
+            var p = points[0]
+            if (dist(width, height, p.minWidthDps, p.minHeightDps) == 0f) {
+                return p
+            }
+
+            val out = DisplayOption()
+            var i = 0
+
+            while (i < points.size && i < K_NEAREST_NEIGHBOR) {
+                p = points[i]
+
+                val w = weight(width, height, p.minWidthDps, p.minHeightDps, WEIGHT_POWER)
+                weights += w
+                out.add(DisplayOption().add(p).multiply(w))
+                ++i
+            }
+
+            return out.multiply(1.0f / weights)
+        }
+
+        private fun weight(x0: Float, y0: Float, x1: Float, y1: Float, pow: Float): Float {
+            val d = dist(x0, y0, x1, y1)
+
+            return if (d.compareTo(0f) == 0) Float.POSITIVE_INFINITY
+            else (WEIGHT_EFFICIENT / d.toDouble().pow(pow.toDouble())).toFloat()
         }
     }
 }

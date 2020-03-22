@@ -4,15 +4,15 @@ import android.graphics.Bitmap
 import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
 import android.graphics.Paint
-import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
+import xyz.mcmxciv.halauncher.models.DeviceProfile
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ShadowGenerator @Inject constructor(
-    invariantDeviceProfile: InvariantDeviceProfile
+    deviceProfile: DeviceProfile
 ) {
-    private val iconSize = invariantDeviceProfile.iconBitmapSize
+    private val iconSize = deviceProfile.iconBitmapSize
     private val blurPaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
     private val drawPaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
     private val defaultBlurMaskFilter =

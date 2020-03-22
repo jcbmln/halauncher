@@ -20,7 +20,7 @@ import android.graphics.*
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
-import xyz.mcmxciv.halauncher.models.InvariantDeviceProfile
+import xyz.mcmxciv.halauncher.models.DeviceProfile
 import xyz.mcmxciv.halauncher.utils.GraphicsUtils
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import java.nio.ByteBuffer
@@ -34,9 +34,9 @@ import kotlin.math.sqrt
 @Singleton
 class IconNormalizer @Inject constructor(
     resourceProvider: ResourceProvider,
-    invariantDeviceProfile: InvariantDeviceProfile
+    deviceProfile: DeviceProfile
 ) {
-    private val maxSize: Int = invariantDeviceProfile.iconBitmapSize * 2
+    private val maxSize: Int = deviceProfile.iconBitmapSize * 2
     private val bitmap = Bitmap.createBitmap(maxSize, maxSize, Bitmap.Config.ALPHA_8)
     private val canvas = Canvas(bitmap)
     private val pixels = ByteArray(maxSize * maxSize)

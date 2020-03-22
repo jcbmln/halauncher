@@ -16,18 +16,16 @@
 -->
 
 <profiles xmlns:launcher="http://schemas.android.com/apk/res-auto" >
-
     <grid-option
-        launcher:name="3_by_3"
-        launcher:numRows="3"
+        launcher:name="3"
         launcher:numColumns="3" >
-
         <display-option
             launcher:name="Super Short Stubby"
             launcher:minWidthDps="255"
             launcher:minHeightDps="300"
             launcher:iconImageSize="48"
             launcher:iconTextSize="13.0"
+            launcher:shortcutImageSize="24"
             launcher:canBeDefault="true" />
 
         <display-option
@@ -36,21 +34,20 @@
             launcher:minHeightDps="400"
             launcher:iconImageSize="48"
             launcher:iconTextSize="13.0"
+            launcher:shortcutImageSize="24"
             launcher:canBeDefault="true" />
-
     </grid-option>
 
     <grid-option
-        launcher:name="4_by_4"
-        launcher:numRows="4"
+        launcher:name="4"
         launcher:numColumns="4" >
-
         <display-option
             launcher:name="Short Stubby"
             launcher:minWidthDps="275"
             launcher:minHeightDps="420"
             launcher:iconImageSize="48"
             launcher:iconTextSize="13.0"
+            launcher:shortcutImageSize="24"
             launcher:canBeDefault="true" />
 
         <display-option
@@ -59,6 +56,7 @@
             launcher:minHeightDps="450"
             launcher:iconImageSize="48"
             launcher:iconTextSize="13.0"
+            launcher:shortcutImageSize="24"
             launcher:canBeDefault="true" />
 
         <display-option
@@ -67,6 +65,7 @@
             launcher:minHeightDps="491.33"
             launcher:iconImageSize="48"
             launcher:iconTextSize="13.0"
+            launcher:shortcutImageSize="24"
             launcher:canBeDefault="true" />
 
         <display-option
@@ -75,6 +74,7 @@
             launcher:minHeightDps="567"
             launcher:iconImageSize="54"
             launcher:iconTextSize="13.0"
+            launcher:shortcutImageSize="27"
             launcher:canBeDefault="true" />
 
         <display-option
@@ -83,21 +83,20 @@
             launcher:minHeightDps="567"
             launcher:iconImageSize="54"
             launcher:iconTextSize="13.0"
+            launcher:shortcutImageSize="27"
             launcher:canBeDefault="true" />
-
     </grid-option>
 
     <grid-option
-        launcher:name="5_by_5"
-        launcher:numRows="5"
+        launcher:name="5"
         launcher:numColumns="5" >
-
         <display-option
             launcher:name="Large Phone"
             launcher:minWidthDps="406"
             launcher:minHeightDps="694"
             launcher:iconImageSize="56"
             launcher:iconTextSize="14.4"
+            launcher:shortcutImageSize="28"
             launcher:canBeDefault="true" />
 
         <display-option
@@ -106,21 +105,20 @@
             launcher:minHeightDps="400"
             launcher:iconImageSize="48"
             launcher:iconTextSize="13.0"
+            launcher:shortcutImageSize="24"
             launcher:canBeDefault="true" />
-
     </grid-option>
 
     <grid-option
-        launcher:name="6_by_6"
-        launcher:numRows="6"
+        launcher:name="6"
         launcher:numColumns="6" >
-
         <display-option
             launcher:name="Tablet"
             launcher:minWidthDps="820"
             launcher:minHeightDps="1200"
             launcher:iconImageSize="72"
             launcher:iconTextSize="16"
+            launcher:shortcutImageSize="36"
             launcher:canBeDefault="true" />
 
         <display-option
@@ -129,8 +127,7 @@
             launcher:minHeightDps="400"
             launcher:iconImageSize="48"
             launcher:iconTextSize="13.0"
+            launcher:shortcutImageSize="24"
             launcher:canBeDefault="true" />
-
     </grid-option>
-
 </profiles>

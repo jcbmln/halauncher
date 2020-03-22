@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.ListItemAppBinding
+import xyz.mcmxciv.halauncher.models.DeviceProfile
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutPopupWindow
 import xyz.mcmxciv.halauncher.utils.AppLauncher
@@ -16,6 +17,7 @@ import xyz.mcmxciv.halauncher.utils.Utilities
 import javax.inject.Inject
 
 class AppListAdapter @Inject constructor(
+    private val deviceProfile: DeviceProfile,
     private val resourceProvider: ResourceProvider,
     private val appLauncher: AppLauncher
 ) : RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
@@ -25,7 +27,8 @@ class AppListAdapter @Inject constructor(
     class AppListViewHolder(
         val binding: ListItemAppBinding,
         private val resourceProvider: ResourceProvider,
-        private val appLauncher: AppLauncher
+        private val appLauncher: AppLauncher,
+        private val iconTextSize: Float
     ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
         private var popup: ShortcutPopupWindow? = null
         private lateinit var appListItem: AppListItem
@@ -38,6 +41,7 @@ class AppListAdapter @Inject constructor(
         fun populate(item: AppListItem, textColor: Int) {
             appListItem = item
             val resources = LauncherApplication.instance.resources
+            binding.appItem.textSize = iconTextSize
             binding.appItem.topIcon = appListItem.icon.toDrawable(resources)
             binding.appItem.text = appListItem.displayName
             binding.appItem.tag = appListItem
@@ -68,14 +72,13 @@ class AppListAdapter @Inject constructor(
         }
     }
 
-    private var isDarkBackground: Boolean = false
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : AppListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return AppListViewHolder(
             ListItemAppBinding.inflate(inflater, parent, false),
             resourceProvider,
-            appLauncher
+            appLauncher,
+            deviceProfile.iconTextSize
         )
     }
 
