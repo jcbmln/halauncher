@@ -33,6 +33,8 @@ object BlurBuilder {
         intrinsicBlur.forEach(allocationOut)
         allocationOut.copyTo(outputBitmap)
 
+        renderScript.destroy()
+
         return outputBitmap
     }
 }

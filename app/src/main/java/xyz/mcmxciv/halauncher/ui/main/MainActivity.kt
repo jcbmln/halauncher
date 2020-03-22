@@ -71,7 +71,28 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
         observe(viewModel.theme) { theme ->
             themeColor = theme.primaryColor
             accentColor = theme.accentColor
-            binding.allAppsButton.backgroundTintList = ColorStateList.valueOf(accentColor)
+
+            val states = arrayOf(
+                intArrayOf(android.R.attr.state_focused),
+                intArrayOf(android.R.attr.state_hovered),
+                intArrayOf(android.R.attr.state_enabled),
+                intArrayOf()
+            )
+
+            val colors = intArrayOf(
+                theme.accentColor,
+                theme.accentColor,
+                theme.accentColor,
+                theme.primaryTextColor
+            )
+            val stateList = ColorStateList(states, colors)
+            binding.searchInputLayout.setBoxStrokeColorStateList(stateList)
+            binding.searchInputLayout.defaultHintTextColor = stateList
+            binding.searchInputLayout.hintTextColor = stateList
+            binding.moreButton.drawable.setTint(theme.primaryTextColor)
+            binding.closeButton.drawable.setTint(theme.primaryTextColor)
+            appListAdapter.setTextColor(theme.primaryTextColor)
+            binding.allAppsButton.backgroundTintList = ColorStateList.valueOf(theme.accentColor)
         }
 
         binding.allAppsButton.setOnClickListener {
@@ -133,37 +154,7 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
         viewModel.updateAppListItems()
     }
 
-    private fun generatePalette() {
-        val bitmap = BlurBuilder.blur(binding.appNavigationHostFragment)
-        Palette.from(bitmap).generate {
-            palette = it
-
-            it?.dominantSwatch?.let { swatch ->
-                val states = arrayOf(
-                    intArrayOf(android.R.attr.state_focused),
-                    intArrayOf(android.R.attr.state_hovered),
-                    intArrayOf(android.R.attr.state_enabled),
-                    intArrayOf()
-                )
-
-                val colors = intArrayOf(
-                    accentColor,
-                    accentColor,
-                    accentColor,
-                    swatch.bodyTextColor
-                )
-                val stateList = ColorStateList(states, colors)
-                binding.searchInputLayout.setBoxStrokeColorStateList(stateList)
-                binding.searchInputLayout.defaultHintTextColor = stateList
-                binding.moreButton.drawable.setTint(swatch.bodyTextColor)
-                binding.closeButton.drawable.setTint(swatch.bodyTextColor)
-                appListAdapter.setTextColor(swatch.bodyTextColor)
-            }
-        }
-    }
-
     private fun openAppList() {
-        generatePalette()
         if (!binding.appListContainer.isVisible) {
             val background = BlurBuilder.blur(binding.appNavigationHostFragment)
             binding.appListBackground.background = BitmapDrawable(

@@ -2,7 +2,6 @@ package xyz.mcmxciv.halauncher.data.dao
 
 import androidx.room.*
 import xyz.mcmxciv.halauncher.data.models.App
-import xyz.mcmxciv.halauncher.models.apps.AppInfo
 
 @Dao
 interface AppDao {

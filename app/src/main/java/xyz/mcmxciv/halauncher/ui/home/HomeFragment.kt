@@ -1,8 +1,6 @@
 package xyz.mcmxciv.halauncher.ui.home
 
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +10,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
-import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.LauncherApplication
@@ -100,16 +97,8 @@ class HomeFragment : LauncherFragment() {
 
                 @JavascriptInterface
                 fun themesUpdated(result: String) {
-                    val name = JSONObject(result).get("name") as String
-                    val styles = JSONObject(result).get("styles") as JSONObject
-                    val primaryColor = styles.get("primary-color") as String?
-                    val accentColor = styles.get("accent-color") as String?
-                    val theme = HassTheme(
-                        Color.parseColor(primaryColor),
-                        Color.parseColor(accentColor)
-                    )
+                    val theme = HassTheme.parse(result, context)
                     activityViewModel.updateTheme(theme)
-                    Timber.d(name)
                 }
 
                 @JavascriptInterface
