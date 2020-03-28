@@ -6,31 +6,41 @@ import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.LauncherApplication
-import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.ListItemAppBinding
 import xyz.mcmxciv.halauncher.models.DeviceProfile
+import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutPopupWindow
 import xyz.mcmxciv.halauncher.utils.AppLauncher
-import xyz.mcmxciv.halauncher.utils.ResourceProvider
-import xyz.mcmxciv.halauncher.utils.Utilities
 import javax.inject.Inject
 
 class AppListAdapter @Inject constructor(
     private val deviceProfile: DeviceProfile,
-    private val resourceProvider: ResourceProvider,
     private val appLauncher: AppLauncher
 ) : RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
-    private var appListItems = listOf<AppListItem>()
-    private var textColor: Int = 0
+    private var _appListItems = listOf<AppListItem>()
+    private var _theme: HassTheme? = null
+
+    var appListItems: List<AppListItem>
+        get() = _appListItems
+        set(value) {
+            _appListItems = value
+            notifyDataSetChanged()
+        }
+
+    var theme: HassTheme?
+        get() = _theme
+        set(value) {
+            _theme = value
+            notifyDataSetChanged()
+        }
 
     class AppListViewHolder(
         val binding: ListItemAppBinding,
-        private val resourceProvider: ResourceProvider,
         private val appLauncher: AppLauncher,
+        private val theme: HassTheme?,
         private val iconTextSize: Float
     ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
-        private var popup: ShortcutPopupWindow? = null
         private lateinit var appListItem: AppListItem
 
         init {
@@ -38,7 +48,7 @@ class AppListAdapter @Inject constructor(
             binding.appItem.setOnLongClickListener(this)
         }
 
-        fun populate(item: AppListItem, textColor: Int) {
+        fun populate(item: AppListItem) {
             appListItem = item
             val resources = LauncherApplication.instance.resources
             binding.appItem.textSize = iconTextSize
@@ -46,9 +56,9 @@ class AppListAdapter @Inject constructor(
             binding.appItem.text = appListItem.displayName
             binding.appItem.tag = appListItem
 
-            if (textColor != 0)
-                binding.appItem.setTextColor(textColor)
-
+            theme?.let {
+                binding.appItem.setTextColor(it.textPrimaryColor)
+            }
         }
 
         override fun onClick(view: View) {
@@ -57,17 +67,7 @@ class AppListAdapter @Inject constructor(
         }
 
         override fun onLongClick(view: View): Boolean {
-            if (popup == null) {
-                popup =
-                    ShortcutPopupWindow(
-                        view,
-                        resourceProvider,
-                        appListItem,
-                        appLauncher
-                    )
-            }
-
-            popup?.show()
+            ShortcutPopupWindow(view, appListItem, appLauncher, theme).show()
             return true
         }
     }
@@ -76,25 +76,15 @@ class AppListAdapter @Inject constructor(
         val inflater = LayoutInflater.from(parent.context)
         return AppListViewHolder(
             ListItemAppBinding.inflate(inflater, parent, false),
-            resourceProvider,
             appLauncher,
+            _theme,
             deviceProfile.iconTextSize
         )
     }
 
     override fun onBindViewHolder(holder: AppListViewHolder, position: Int) {
-        holder.populate(appListItems[position], textColor)
+        holder.populate(_appListItems[position])
     }
 
-    override fun getItemCount() = appListItems.size
-
-    fun update(items: List<AppListItem>) {
-        appListItems = items
-        notifyDataSetChanged()
-    }
-
-    fun setTextColor(color: Int) {
-        textColor = color
-        notifyDataSetChanged()
-    }
+    override fun getItemCount() = _appListItems.size
 }

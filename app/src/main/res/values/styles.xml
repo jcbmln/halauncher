@@ -1,14 +1,14 @@
 <resources>
     <!-- Base application theme. -->
     <style name="HaLauncherTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlHighlight">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="android:statusBarColor">@color/colorAccent</item>
-        <item name="android:textColor">@color/colorForeground</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/dark_primary_color</item>
+        <item name="colorAccent">@color/accent_color</item>
+        <item name="colorControlHighlight">@color/light_primary_color</item>
+        <item name="android:windowBackground">@color/primary_background_color</item>
+        <item name="android:statusBarColor">@color/dark_primary_color</item>
+        <item name="android:textColor">@color/primary_text_color</item>
+        <item name="android:navigationBarColor">@color/primary_color</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="preferenceTheme">@style/HaLauncherTheme.PreferenceThemeOverlay</item>
     </style>
@@ -27,20 +27,20 @@
 
     <style name="AppActionBar" parent="Widget.MaterialComponents.ActionBar.Primary">
         <item name="elevation">0dp</item>
-        <item name="background">@color/colorBackground</item>
-        <item name="android:textColor">@color/actionBarTextColor</item>
+        <item name="background">@color/primary_background_color</item>
+        <item name="android:textColor">@color/action_bar_text_color</item>
     </style>
 
     <style name="HaLauncher.Widget" parent="android:Widget" />
 
     <style name="HaLauncher.Widget.Button" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/buttonBackgroundTint</item>
-        <item name="android:textColor">@color/buttonTextColor</item>
+        <item name="backgroundTint">@color/button_background_tint</item>
+        <item name="android:textColor">@color/button_text_color</item>
         <item name="textAllCaps">false</item>
     </style>
 
     <style name="HaLauncher.Widget.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/textButtonTextColor</item>
+        <item name="android:textColor">@color/text_button_text_color</item>
         <item name="textAllCaps">false</item>
     </style>
 

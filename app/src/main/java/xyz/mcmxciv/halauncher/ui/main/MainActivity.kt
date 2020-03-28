@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
-import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.play.core.install.model.ActivityResult
 import xyz.mcmxciv.halauncher.LauncherApplication
@@ -19,21 +18,18 @@ import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.background.PackageReceiver
 import xyz.mcmxciv.halauncher.databinding.ActivityMainBinding
 import xyz.mcmxciv.halauncher.models.DeviceProfile
+import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.ui.main.applist.AppListAdapter
 import xyz.mcmxciv.halauncher.ui.observe
 import xyz.mcmxciv.halauncher.utils.BlurBuilder
-import xyz.mcmxciv.halauncher.utils.Utilities
 import javax.inject.Inject
-
 
 class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var packageReceiver: PackageReceiver
-    private var palette: Palette? = null
-    private var themeColor: Int = 0
-    private var accentColor: Int = 0
+    private lateinit var theme: HassTheme
 
     @Inject
     lateinit var idp: DeviceProfile
@@ -51,6 +47,33 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
             LauncherApplication.instance.component.mainActivityViewModel()
         }
 
+        theme = HassTheme.createDefaultTheme(this)
+
+        observe(viewModel.appListItems) { items ->
+            appListAdapter.appListItems = items
+        }
+
+        observe(viewModel.config) { config ->
+            config?.let { setThemeColor(Color.parseColor(it.themeColor)) }
+        }
+
+        observe(viewModel.theme) { newTheme ->
+            theme = newTheme
+
+            binding.searchInputLayout.setBoxStrokeColorStateList(newTheme.inputStateList)
+            binding.searchInputLayout.defaultHintTextColor = newTheme.inputStateList
+            binding.searchInputLayout.hintTextColor = newTheme.inputStateList
+            binding.moreButton.drawable.setTint(newTheme.primaryTextColor)
+            binding.closeButton.drawable.setTint(newTheme.primaryTextColor)
+            binding.allAppsButton.backgroundTintList = ColorStateList.valueOf(newTheme.accentColor)
+            val appListContainerBackground = ColorDrawable(newTheme.primaryBackgroundColor)
+            appListContainerBackground.alpha = 225
+            binding.appListContainer.background = appListContainerBackground
+            appListAdapter.theme = newTheme
+            window.statusBarColor = newTheme.primaryColor
+            window.navigationBarColor = newTheme.primaryColor
+        }
+
         binding.root.viewTreeObserver.addOnGlobalLayoutListener {
             val x = binding.allAppsButton.left + (binding.allAppsButton.width / 2)
             val y = binding.allAppsButton.top + (binding.allAppsButton.height / 2)
@@ -60,41 +83,6 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
         binding.appList.layoutManager = GridLayoutManager(this, idp.appDrawerColumns)
         binding.appList.adapter = appListAdapter
 
-        observe(viewModel.appListItems) { items ->
-            appListAdapter.update(items)
-        }
-
-        observe(viewModel.config) { config ->
-            config?.let { setThemeColor(Color.parseColor(it.themeColor)) }
-        }
-
-        observe(viewModel.theme) { theme ->
-            themeColor = theme.primaryColor
-            accentColor = theme.accentColor
-
-            val states = arrayOf(
-                intArrayOf(android.R.attr.state_focused),
-                intArrayOf(android.R.attr.state_hovered),
-                intArrayOf(android.R.attr.state_enabled),
-                intArrayOf()
-            )
-
-            val colors = intArrayOf(
-                theme.accentColor,
-                theme.accentColor,
-                theme.accentColor,
-                theme.primaryTextColor
-            )
-            val stateList = ColorStateList(states, colors)
-            binding.searchInputLayout.setBoxStrokeColorStateList(stateList)
-            binding.searchInputLayout.defaultHintTextColor = stateList
-            binding.searchInputLayout.hintTextColor = stateList
-            binding.moreButton.drawable.setTint(theme.primaryTextColor)
-            binding.closeButton.drawable.setTint(theme.primaryTextColor)
-            appListAdapter.setTextColor(theme.primaryTextColor)
-            binding.allAppsButton.backgroundTintList = ColorStateList.valueOf(theme.accentColor)
-        }
-
         binding.allAppsButton.setOnClickListener {
             openAppList()
         }
@@ -102,9 +90,6 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
         binding.closeButton.setOnClickListener {
             closeAppList()
         }
-
-        themeColor = getColor(R.color.colorAccent)
-        accentColor = getColor(R.color.colorAccent)
     }
 
     override fun onResume() {
@@ -162,9 +147,6 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
                 background
             )
             binding.appListBackground.visibility = View.VISIBLE
-            binding.appListContainer.background = ColorDrawable(
-                Utilities.createColorFromBitmap(background, themeColor, 0.75f)
-            )
             binding.appListContainer.animateOpen()
             binding.allAppsButton.animateClose()
         }
@@ -176,13 +158,10 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
             binding.appListContainer.animateClose()
             binding.allAppsButton.visibility = View.VISIBLE
             binding.allAppsButton.animateOpen()
-            window.statusBarColor = themeColor
-            window.navigationBarColor = themeColor
         }
     }
 
     private fun setThemeColor(color: Int) {
-        themeColor = color
         window.statusBarColor = color
         window.navigationBarColor = color
     }

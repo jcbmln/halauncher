@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:indeterminate="true"
-            android:indeterminateTint="@color/colorAccentLighter" />
+            android:indeterminateTint="@color/light_primary_color" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/service_list"

@@ -11,7 +11,7 @@ import xyz.mcmxciv.halauncher.data.interactors.AppsInteractor
 import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
 import xyz.mcmxciv.halauncher.data.models.Config
-import xyz.mcmxciv.halauncher.models.HassTheme
+import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import javax.inject.Inject
 
@@ -57,7 +57,7 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    fun updateTheme(theme: HassTheme) {
+    fun setTheme(theme: HassTheme) {
         themeData.postValue(theme)
     }
 }

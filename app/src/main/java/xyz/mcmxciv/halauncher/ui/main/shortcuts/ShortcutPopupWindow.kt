@@ -1,9 +1,9 @@
 package xyz.mcmxciv.halauncher.ui.main.shortcuts
 
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.core.view.isVisible
@@ -12,17 +12,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.PopupWindowShortcutsBinding
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
+import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.ui.ViewAnimator
 import xyz.mcmxciv.halauncher.utils.AppLauncher
-import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import xyz.mcmxciv.halauncher.utils.Utilities
-
 
 class ShortcutPopupWindow(
     private val parentView: View,
-    resourceProvider: ResourceProvider,
     private val appListItem: AppListItem,
-    private val appLauncher: AppLauncher
+    private val appLauncher: AppLauncher,
+    theme: HassTheme?
 ) : ShortcutListAdapter.ShorcutSelectedListener {
     private val binding: PopupWindowShortcutsBinding
     private val window: PopupWindow
@@ -32,11 +31,12 @@ class ShortcutPopupWindow(
     private val viewAnimator = ViewAnimator()
 
     init {
-        val dm = resourceProvider.displayMetrics
+        val resources = parentView.context.resources
+        val dm = resources.displayMetrics
         leftRightMargin = Utilities.pxFromDp(10f, dm)
         screenWidth = dm.widthPixels
         screenHeight = dm.heightPixels
-        binding = PopupWindowShortcutsBinding.inflate(resourceProvider.layoutInflater)
+        binding = PopupWindowShortcutsBinding.inflate(LayoutInflater.from(parentView.context))
 
         binding.appInfoText.setOnClickListener { view ->
             appLauncher.startAppDetailsActivity(appListItem.componentName, view)
@@ -47,7 +47,7 @@ class ShortcutPopupWindow(
             binding.uninstallText.isEnabled = false
             binding.uninstallText.setCompoundDrawablesWithIntrinsicBounds(
                 null,
-                resourceProvider.getDrawable(R.drawable.ic_remove_disabled),
+                parentView.context.getDrawable(R.drawable.ic_remove_disabled),
                 null,
                 null
             )
@@ -74,6 +74,13 @@ class ShortcutPopupWindow(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
+
+        theme?.let {
+            binding.topArrow.drawable.setTint(it.primaryColor)
+            binding.bottomArrow.drawable.setTint(it.primaryColor)
+            binding.systemShortcuts.background.setTint(it.primaryColor)
+            binding.shortcutList.background.setTint(it.primaryColor)
+        }
 
         window = PopupWindow(
             binding.root,

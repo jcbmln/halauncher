@@ -27,7 +27,6 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import androidx.annotation.RequiresApi
-import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.icons.IconShape
 import xyz.mcmxciv.halauncher.utils.Utilities
@@ -73,7 +72,7 @@ class AdaptiveIconView(
         foregroundPaint.shader = BitmapShader(foreground, CLAMP, CLAMP)
 
         textPaint.textSize = Utilities.pxFromSp(12f, context.resources.displayMetrics).toFloat()
-        textPaint.color = context.getColor(R.color.colorBackground)
+        textPaint.color = context.getColor(R.color.primary_background_color)
 //        textPaint.color = if (prefs.transparentBackground)
 //            context.getColor(R.color.colorBackground)
 //            else context.getColor(R.color.colorForeground)

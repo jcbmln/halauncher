@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/app_navigation_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -23,14 +22,12 @@
         android:id="@+id/app_list_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparentWhite"
+        android:background="@color/primary_background_color"
         android:orientation="vertical"
         android:visibility="invisible">
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/search_input_layout"
                 style="@style/HaLauncher.Widget.EditText.Outline"
@@ -77,7 +74,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_chevron_down" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -98,8 +94,7 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="visible"
-        app:backgroundTint="@color/colorAccent"
+        app:backgroundTint="@color/accent_color"
         app:srcCompat="@drawable/ic_apps"
-        app:tint="@color/white" />
-
+        app:tint="@color/text_primary_color" />
 </FrameLayout>

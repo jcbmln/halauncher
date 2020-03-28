@@ -16,7 +16,7 @@ import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
 import xyz.mcmxciv.halauncher.models.ErrorState
-import xyz.mcmxciv.halauncher.models.HassTheme
+import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.models.WebCallback
 import xyz.mcmxciv.halauncher.ui.*
 import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
@@ -97,8 +97,8 @@ class HomeFragment : LauncherFragment() {
 
                 @JavascriptInterface
                 fun themesUpdated(result: String) {
-                    val theme = HassTheme.parse(result, context)
-                    activityViewModel.updateTheme(theme)
+                    val theme = HassTheme.createFromString(result, context)
+                    activityViewModel.setTheme(theme)
                 }
 
                 @JavascriptInterface
@@ -119,15 +119,6 @@ class HomeFragment : LauncherFragment() {
                             "config_screen/show" -> navigate(
                                 HomeFragmentDirections.actionHomeFragmentToMainPreferencesFragment()
                             )
-                            "frontend/get_themes" -> {
-                                val keys: MutableList<String> = ArrayList()
-                                val themes = JSONObject(message).get("themes")
-                                val themesWrapper = JSONObject(themes.toString())
-
-                                for (key in themesWrapper.keys()) {
-                                    keys.add(key as String)
-                                }
-                            }
                         }
                     }
                 }
