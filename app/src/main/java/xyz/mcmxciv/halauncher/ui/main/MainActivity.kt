@@ -69,9 +69,9 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
             val appListContainerBackground = ColorDrawable(newTheme.primaryBackgroundColor)
             appListContainerBackground.alpha = 225
             binding.appListContainer.background = appListContainerBackground
-            appListAdapter.theme = newTheme
             window.statusBarColor = newTheme.primaryColor
             window.navigationBarColor = newTheme.primaryColor
+            appListAdapter.theme = theme
         }
 
         binding.root.viewTreeObserver.addOnGlobalLayoutListener {

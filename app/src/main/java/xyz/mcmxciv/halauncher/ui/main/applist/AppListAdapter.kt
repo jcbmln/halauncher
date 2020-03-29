@@ -38,17 +38,17 @@ class AppListAdapter @Inject constructor(
     class AppListViewHolder(
         val binding: ListItemAppBinding,
         private val appLauncher: AppLauncher,
-        private val theme: HassTheme?,
         private val iconTextSize: Float
     ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
         private lateinit var appListItem: AppListItem
+        private var theme: HassTheme? = null
 
         init {
             binding.appItem.setOnClickListener(this)
             binding.appItem.setOnLongClickListener(this)
         }
 
-        fun populate(item: AppListItem) {
+        fun populate(item: AppListItem, newTheme: HassTheme?) {
             appListItem = item
             val resources = LauncherApplication.instance.resources
             binding.appItem.textSize = iconTextSize
@@ -56,8 +56,9 @@ class AppListAdapter @Inject constructor(
             binding.appItem.text = appListItem.displayName
             binding.appItem.tag = appListItem
 
-            theme?.let {
-                binding.appItem.setTextColor(it.textPrimaryColor)
+            newTheme?.let {
+                theme = newTheme
+                binding.appItem.setTextColor(it.primaryTextColor)
             }
         }
 
@@ -77,13 +78,12 @@ class AppListAdapter @Inject constructor(
         return AppListViewHolder(
             ListItemAppBinding.inflate(inflater, parent, false),
             appLauncher,
-            _theme,
             deviceProfile.iconTextSize
         )
     }
 
     override fun onBindViewHolder(holder: AppListViewHolder, position: Int) {
-        holder.populate(_appListItems[position])
+        holder.populate(_appListItems[position], _theme)
     }
 
     override fun getItemCount() = _appListItems.size
