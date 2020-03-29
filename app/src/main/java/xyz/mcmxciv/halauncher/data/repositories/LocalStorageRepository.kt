@@ -85,6 +85,6 @@ class LocalStorageRepository @Inject constructor(
     }
 
     companion object {
-        const val PLACEHOLDER_URL = "http://localhost:8123/"
+        const val PLACEHOLDER_URL = "http://localhost:8123"
     }
 }

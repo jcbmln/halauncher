@@ -71,7 +71,7 @@ class ShortcutPopupWindow(
         theme?.let {
             binding.topArrow.drawable.setTint(it.primaryBackgroundColor)
             binding.bottomArrow.drawable.setTint(it.primaryBackgroundColor)
-            //binding.systemShortcuts.background.setTint(it.primaryBackgroundColor)
+            binding.systemShortcuts.background.setTint(it.primaryBackgroundColor)
             binding.shortcutList.background.setTint(it.primaryBackgroundColor)
             binding.appInfoText.apply {
                 topIcon?.setTint(it.primaryTextColor)
@@ -120,6 +120,49 @@ class ShortcutPopupWindow(
     }
 
     fun show() {
+        val baseXOffset = (parentView.left + (parentView.width / 2)) - (window.width / 2)
+        val horizontalLocation = when {
+            parentView.left == parentView.marginStart -> HorizontalLocation.LEFT
+            baseXOffset + window.width >= screenWidth -> HorizontalLocation.RIGHT
+            else -> HorizontalLocation.MIDDLE
+        }
+        val verticalLocation = when {
+            (parentView.bottom + window.height) > screenHeight -> VerticalLocation.TOP
+            else -> VerticalLocation.BOTTOM
+        }
+        val xOffset = when(horizontalLocation) {
+            HorizontalLocation.LEFT -> parentView.left + leftRightMargin
+            HorizontalLocation.RIGHT -> screenWidth - window.width - leftRightMargin
+            HorizontalLocation.MIDDLE -> baseXOffset
+        }
+
+        val parentViewLocation = IntArray(2)
+        parentView.getLocationOnScreen(parentViewLocation)
+
+        val yOffset = when(verticalLocation) {
+            VerticalLocation.TOP -> parentViewLocation[1] - window.height
+            VerticalLocation.BOTTOM -> parentViewLocation[1] + parentView.height
+        }
+        val pivotX = when (horizontalLocation) {
+            HorizontalLocation.LEFT ->
+                (xOffset + (parentView.width / 2)).toFloat() / screenWidth
+            HorizontalLocation.RIGHT ->
+                (xOffset + window.width - (parentView.width / 2)).toFloat() / screenWidth
+            HorizontalLocation.MIDDLE -> 0.5f
+        }
+        val pivotY = when(verticalLocation) {
+            VerticalLocation.TOP -> 1f
+            VerticalLocation.BOTTOM -> 0f
+        }
+
+        binding.topArrow.isVisible = verticalLocation == VerticalLocation.BOTTOM
+        binding.bottomArrow.isVisible = verticalLocation == VerticalLocation.TOP
+
+        val visibleArrow = when(verticalLocation) {
+            VerticalLocation.TOP -> binding.bottomArrow
+            VerticalLocation.BOTTOM -> binding.topArrow
+        }
+
         visibleArrow.translationX = when(horizontalLocation) {
             HorizontalLocation.LEFT ->
                 (parentView.width / 2) - visibleArrow.measuredWidth
@@ -154,76 +197,13 @@ class ShortcutPopupWindow(
         dismiss()
     }
 
-    private val baseXOffset: Int
-        get() = (parentView.left + (parentView.width / 2)) - (window.width / 2)
-
-    private val xOffset: Int
-        get() = when(horizontalLocation) {
-            HorizontalLocation.LEFT -> parentView.left + leftRightMargin
-            HorizontalLocation.RIGHT -> screenWidth - window.width - leftRightMargin
-            HorizontalLocation.MIDDLE -> baseXOffset
-        }
-
-    private val yOffset: Int
-        get() = when(verticalPosition) {
-            VerticalPosition.TOP -> parentViewLocation[1] - window.height
-            VerticalPosition.BOTTOM -> parentViewLocation[1] + parentView.height
-        }
-
-    private val pivotX: Float
-        get() = when (horizontalLocation) {
-            HorizontalLocation.LEFT ->
-                (xOffset + (parentView.width / 2)).toFloat() / screenWidth
-            HorizontalLocation.RIGHT ->
-                (xOffset + window.width - (parentView.width / 2)).toFloat() / screenWidth
-            HorizontalLocation.MIDDLE -> 0.5f
-        }
-
-    private val pivotY: Float
-        get() = when(verticalPosition) {
-            VerticalPosition.TOP -> 1f
-            VerticalPosition.BOTTOM -> 0f
-        }
-
-    private val horizontalLocation: HorizontalLocation
-        get() = when {
-            parentView.left == parentView.marginStart -> HorizontalLocation.LEFT
-            baseXOffset + window.width >= screenWidth -> HorizontalLocation.RIGHT
-            else -> HorizontalLocation.MIDDLE
-        }
-
-    private val verticalPosition: VerticalPosition
-        get() = when {
-            (parentView.bottom + window.height) > screenHeight -> VerticalPosition.TOP
-            else -> VerticalPosition.BOTTOM
-        }
-
-    private val visibleArrow: View
-        get() {
-            binding.topArrow.isVisible = verticalPosition == VerticalPosition.BOTTOM
-            binding.bottomArrow.isVisible = verticalPosition == VerticalPosition.TOP
-
-            return when(verticalPosition) {
-                VerticalPosition.TOP -> binding.bottomArrow
-                VerticalPosition.BOTTOM -> binding.topArrow
-            }
-        }
-
-    private val parentViewLocation: IntArray
-        get() {
-            val position = IntArray(2)
-            parentView.getLocationOnScreen(position)
-            return position
-        }
-
-
     private enum class HorizontalLocation {
         LEFT,
         MIDDLE,
         RIGHT
     }
 
-    private enum class VerticalPosition {
+    private enum class VerticalLocation {
         TOP,
         BOTTOM
     }

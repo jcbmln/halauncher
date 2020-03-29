@@ -1,5 +1,8 @@
 package xyz.mcmxciv.halauncher.ui.main
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -7,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -142,11 +146,30 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
     private fun openAppList() {
         if (!binding.appListContainer.isVisible) {
             val background = BlurBuilder.blur(binding.appNavigationHostFragment)
-            binding.appListBackground.background = BitmapDrawable(
+            binding.root.background = BitmapDrawable(
                 resources,
                 background
             )
-            binding.appListBackground.visibility = View.VISIBLE
+//            binding.appListBackground.background = BitmapDrawable(
+//                resources,
+//                background
+//            )
+//            binding.appListBackground.visibility = View.VISIBLE
+
+            val alphaAnimator = ObjectAnimator.ofFloat(
+                binding.appNavigationHostFragment,
+                "alpha",
+                1f, 0f
+            )
+            alphaAnimator.duration = 250
+            alphaAnimator.interpolator = AccelerateDecelerateInterpolator()
+            alphaAnimator.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    binding.appNavigationHostFragment.visibility = View.GONE
+                }
+            })
+            alphaAnimator.start()
+
             binding.appListContainer.animateOpen()
             binding.allAppsButton.animateClose()
         }
@@ -158,6 +181,16 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
             binding.appListContainer.animateClose()
             binding.allAppsButton.visibility = View.VISIBLE
             binding.allAppsButton.animateOpen()
+
+            binding.appNavigationHostFragment.visibility = View.VISIBLE
+            val alphaAnimator = ObjectAnimator.ofFloat(
+                binding.appNavigationHostFragment,
+                "alpha",
+                0f, 1f
+            )
+            alphaAnimator.duration = 250
+            alphaAnimator.interpolator = AccelerateDecelerateInterpolator()
+            alphaAnimator.start()
         }
     }
 

@@ -8,14 +8,15 @@
     android:clipChildren="false"
     android:clipToPadding="false"
     android:orientation="vertical"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp">
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/top_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/popup_arror_up"
         android:contentDescription="@string/dummy_content_description"
+        android:elevation="3dp"
         android:src="@drawable/popup_arror_up" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -88,6 +89,8 @@
         android:id="@+id/bottom_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/popup_arror_down"
         android:contentDescription="@string/dummy_content_description"
+        android:elevation="3dp"
         android:src="@drawable/popup_arror_down" />
 </LinearLayout>

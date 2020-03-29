@@ -31,32 +31,40 @@ class ShortcutListAdapter(
         LauncherApplication.instance.component.inject(this)
     }
 
-    class ShortcutListViewHolder(val binding: ShortcutItemBinding)
-        : RecyclerView.ViewHolder(binding.root)
+    class ShortcutListViewHolder(
+        val binding: ShortcutItemBinding,
+        private val appLauncher: AppLauncher,
+        private val listener: ShorcutSelectedListener
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun populate(shortcutItem: ShortcutItem, theme: HassTheme?) {
+            val resources = LauncherApplication.instance.resources
+            binding.shortcutNameText.leftIcon = shortcutItem.icon.toDrawable(resources)
+            binding.shortcutNameText.text = shortcutItem.displayName
+            binding.shortcutNameText.tag = shortcutItem
+
+            binding.shortcutNameText.setOnClickListener { view ->
+                val item = view.tag as ShortcutItem
+                appLauncher.startShortcut(item.packageName, item.shortcutId, view)
+                listener.onShortcutSelected()
+            }
+
+            theme?.let {
+                binding.shortcutNameText.setTextColor(it.primaryTextColor)
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShortcutListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return ShortcutListViewHolder(
-            ShortcutItemBinding.inflate(inflater, parent, false)
+            ShortcutItemBinding.inflate(inflater, parent, false),
+            appLauncher,
+            listener
         )
     }
 
     override fun onBindViewHolder(holder: ShortcutListViewHolder, position: Int) {
-        val shortcutItem = shortcutItems[position]
-        val resources = LauncherApplication.instance.resources
-        holder.binding.shortcutNameText.leftIcon = shortcutItem.icon.toDrawable(resources)
-        holder.binding.shortcutNameText.text = shortcutItem.displayName
-        holder.binding.shortcutNameText.tag = shortcutItem
-
-        holder.binding.shortcutNameText.setOnClickListener { view ->
-            val item = view.tag as ShortcutItem
-            appLauncher.startShortcut(item.packageName, item.shortcutId, view)
-            listener.onShortcutSelected()
-        }
-
-        theme?.let {
-            holder.binding.shortcutNameText.setTextColor(it.primaryTextColor)
-        }
+        holder.populate(shortcutItems[position], _theme)
     }
 
     override fun getItemCount(): Int = shortcutItems.size
