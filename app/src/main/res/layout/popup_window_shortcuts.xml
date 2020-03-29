@@ -5,7 +5,11 @@
     android:id="@+id/popup_container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
 
     <ImageView
         android:id="@+id/top_arrow"
@@ -18,9 +22,10 @@
         android:id="@+id/system_shortcuts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_background">
+        android:background="@drawable/rounded_background"
+        android:elevation="3dp">
 
-        <com.google.android.material.textview.MaterialTextView
+        <xyz.mcmxciv.halauncher.views.IconTextView
             android:id="@+id/app_info_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +40,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <xyz.mcmxciv.halauncher.views.IconTextView
             android:id="@+id/hide_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +57,7 @@
             app:layout_constraintStart_toEndOf="@+id/app_info_text"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <xyz.mcmxciv.halauncher.views.IconTextView
             android:id="@+id/uninstall_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,6 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:background="@drawable/rounded_background"
+        android:elevation="3dp"
         android:nestedScrollingEnabled="false"
         android:scrollbars="none" />
 

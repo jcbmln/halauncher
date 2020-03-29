@@ -14,21 +14,16 @@ class IconTextView(context: Context, attrs: AttributeSet?, defStyle: Int)
     var icon: Drawable? = null
 
     var topIcon: Drawable?
-        get() = icon
+        get() = icon ?: compoundDrawables[1]
         set(value) {
             icon = value
             setCompoundDrawablesWithIntrinsicBounds(null, value, null, null)
         }
 
     var leftIcon: Drawable?
-        get() = icon
+        get() = icon ?: compoundDrawables[0]
         set(value) {
             icon = value
-//            val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-//            val dm = DisplayMetrics()
-//            wm.defaultDisplay.getMetrics(dm)
-//            val size = Utilities.pxFromDp(24f, dm)
-//            value?.bounds = Rect(0, 0, size, size)
             setCompoundDrawablesWithIntrinsicBounds(value, null, null, null)
         }
 

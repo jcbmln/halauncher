@@ -9,7 +9,6 @@ import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import androidx.core.view.marginStart
 import androidx.recyclerview.widget.LinearLayoutManager
-import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.PopupWindowShortcutsBinding
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import xyz.mcmxciv.halauncher.ui.HassTheme
@@ -45,12 +44,6 @@ class ShortcutPopupWindow(
 
         if (appListItem.isSystemApp) {
             binding.uninstallText.isEnabled = false
-            binding.uninstallText.setCompoundDrawablesWithIntrinsicBounds(
-                null,
-                parentView.context.getDrawable(R.drawable.ic_remove_disabled),
-                null,
-                null
-            )
         } else {
             binding.uninstallText.setOnClickListener {
                 dismiss()
@@ -76,10 +69,33 @@ class ShortcutPopupWindow(
         )
 
         theme?.let {
-            binding.topArrow.drawable.setTint(it.primaryColor)
-            binding.bottomArrow.drawable.setTint(it.primaryColor)
-            binding.systemShortcuts.background.setTint(it.primaryColor)
-            binding.shortcutList.background.setTint(it.primaryColor)
+            binding.topArrow.drawable.setTint(it.primaryBackgroundColor)
+            binding.bottomArrow.drawable.setTint(it.primaryBackgroundColor)
+            //binding.systemShortcuts.background.setTint(it.primaryBackgroundColor)
+            binding.shortcutList.background.setTint(it.primaryBackgroundColor)
+            binding.appInfoText.apply {
+                topIcon?.setTint(it.primaryTextColor)
+                setTextColor(it.primaryTextColor)
+            }
+            binding.hideText.apply {
+                topIcon?.setTint(it.disabledTextColor)
+                setTextColor(it.disabledTextColor)
+            }
+            binding.uninstallText.apply {
+                if (!appListItem.isSystemApp) {
+                    topIcon?.setTint(it.primaryTextColor)
+                    setTextColor(it.primaryTextColor)
+                } else {
+                    topIcon?.setTint(it.disabledTextColor)
+                    setTextColor(it.disabledTextColor)
+                }
+            }
+
+            binding.shortcutList.adapter?.let { adapter ->
+                if (adapter is ShortcutListAdapter) {
+                    adapter.theme = it
+                }
+            }
         }
 
         window = PopupWindow(

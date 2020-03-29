@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.databinding.ShortcutItemBinding
 import xyz.mcmxciv.halauncher.models.apps.ShortcutItem
+import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.utils.AppLauncher
 import javax.inject.Inject
 
@@ -14,6 +15,15 @@ class ShortcutListAdapter(
     private val shortcutItems: List<ShortcutItem>,
     private val listener: ShorcutSelectedListener
 ) : RecyclerView.Adapter<ShortcutListAdapter.ShortcutListViewHolder>() {
+    private var _theme: HassTheme? = null
+
+    var theme: HassTheme?
+        get() = _theme
+        set(value) {
+            _theme = value
+            notifyDataSetChanged()
+        }
+
     @Inject
     lateinit var appLauncher: AppLauncher
 
@@ -42,6 +52,10 @@ class ShortcutListAdapter(
             val item = view.tag as ShortcutItem
             appLauncher.startShortcut(item.packageName, item.shortcutId, view)
             listener.onShortcutSelected()
+        }
+
+        theme?.let {
+            holder.binding.shortcutNameText.setTextColor(it.primaryTextColor)
         }
     }
 

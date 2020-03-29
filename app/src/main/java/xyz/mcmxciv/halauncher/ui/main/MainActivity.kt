@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
             binding.closeButton.drawable.setTint(newTheme.primaryTextColor)
             binding.allAppsButton.backgroundTintList = ColorStateList.valueOf(newTheme.accentColor)
             val appListContainerBackground = ColorDrawable(newTheme.primaryBackgroundColor)
-            appListContainerBackground.alpha = 225
+            appListContainerBackground.alpha = 150
             binding.appListContainer.background = appListContainerBackground
             window.statusBarColor = newTheme.primaryColor
             window.navigationBarColor = newTheme.primaryColor
