@@ -12,11 +12,11 @@ interface AppDao {
     suspend fun getApp(activityName: String): App?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(appInfo: App)
+    suspend fun insert(app: App)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun update(appInfo: App)
+    suspend fun update(app: App)
 
     @Delete
-    suspend fun delete(appInfo: App)
+    suspend fun delete(app: App)
 }

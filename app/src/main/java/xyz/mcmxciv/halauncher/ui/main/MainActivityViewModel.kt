@@ -60,4 +60,11 @@ class MainActivityViewModel @Inject constructor(
     fun setTheme(theme: HassTheme) {
         themeData.postValue(theme)
     }
+
+    fun hideActivity(activityName: String) {
+        viewModelScope.launch(exceptionHandler) {
+            appsInteractor.markActivityHidden(activityName)
+            appListItemData.postValue(appsInteractor.getAppListItems())
+        }
+    }
 }

@@ -28,7 +28,7 @@ class AppsInteractor @Inject constructor(
     suspend fun getAppListItems(): List<AppListItem> {
         val launcherActivityInfo = packageRepository.getLauncherActivityInfo()
         val cachedApps = appRepository.getApps()
-        val appListItems = cachedApps.mapNotNull { app ->
+        val appListItems = cachedApps.filterNot { app -> app.isHidden }.mapNotNull { app ->
             val launcherActivity = launcherActivityInfo.singleOrNull { info ->
                 info.name == app.activityName
             }
@@ -52,8 +52,11 @@ class AppsInteractor @Inject constructor(
             )
         }.toMutableList()
 
+        val cachedAppActivityNames = cachedApps.map { app -> app.activityName }
+
+
         val newAppListItems = launcherActivityInfo.filterNot { info ->
-            appListItems.map { a -> a.activityName }.contains(info.name)
+            cachedAppActivityNames.contains(info.name)
         }.map { info ->
             val packageInfo = packageRepository.getPackageInfo(info.applicationInfo.packageName)
             val app = App(
@@ -77,6 +80,13 @@ class AppsInteractor @Inject constructor(
         appListItems.sortBy { a -> a.displayName }
 
         return appListItems
+    }
+
+    suspend fun markActivityHidden(activityName: String) {
+        appRepository.getApp(activityName)?.let { app ->
+            app.isHidden = true
+            appRepository.updateApp(app)
+        }
     }
 
     private fun createShortcuts(

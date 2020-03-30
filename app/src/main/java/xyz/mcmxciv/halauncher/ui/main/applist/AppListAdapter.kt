@@ -12,11 +12,11 @@ import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutPopupWindow
 import xyz.mcmxciv.halauncher.utils.AppLauncher
-import javax.inject.Inject
 
-class AppListAdapter @Inject constructor(
+class AppListAdapter(
     private val deviceProfile: DeviceProfile,
-    private val appLauncher: AppLauncher
+    private val appLauncher: AppLauncher,
+    private val listener: ShortcutPopupWindow.ShortcutActionListener
 ) : RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
     private var _appListItems = listOf<AppListItem>()
     private var _theme: HassTheme? = null
@@ -38,8 +38,11 @@ class AppListAdapter @Inject constructor(
     class AppListViewHolder(
         val binding: ListItemAppBinding,
         private val appLauncher: AppLauncher,
-        private val iconTextSize: Float
-    ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
+        private val iconTextSize: Float,
+        private val listener: ShortcutPopupWindow.ShortcutActionListener
+    ) : RecyclerView.ViewHolder(binding.root),
+        View.OnClickListener,
+        View.OnLongClickListener {
         private lateinit var appListItem: AppListItem
         private var theme: HassTheme? = null
 
@@ -68,7 +71,7 @@ class AppListAdapter @Inject constructor(
         }
 
         override fun onLongClick(view: View): Boolean {
-            ShortcutPopupWindow(view, appListItem, appLauncher, theme).show()
+            ShortcutPopupWindow(view, appListItem, appLauncher, theme, listener).show()
             return true
         }
     }
@@ -78,7 +81,8 @@ class AppListAdapter @Inject constructor(
         return AppListViewHolder(
             ListItemAppBinding.inflate(inflater, parent, false),
             appLauncher,
-            deviceProfile.iconTextSize
+            deviceProfile.iconTextSize,
+            listener
         )
     }
 

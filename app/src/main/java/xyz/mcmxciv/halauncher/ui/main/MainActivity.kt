@@ -25,21 +25,28 @@ import xyz.mcmxciv.halauncher.models.DeviceProfile
 import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.ui.main.applist.AppListAdapter
+import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutPopupWindow
 import xyz.mcmxciv.halauncher.ui.observe
+import xyz.mcmxciv.halauncher.utils.AppLauncher
 import xyz.mcmxciv.halauncher.utils.BlurBuilder
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
+class MainActivity : AppCompatActivity(),
+    PackageReceiver.PackageListener,
+    ShortcutPopupWindow.ShortcutActionListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var packageReceiver: PackageReceiver
     private lateinit var theme: HassTheme
+    private lateinit var appListAdapter: AppListAdapter
 
     @Inject
-    lateinit var idp: DeviceProfile
+    lateinit var deviceProfile: DeviceProfile
 
     @Inject
-    lateinit var appListAdapter: AppListAdapter
+    lateinit var appLauncher: AppLauncher
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +59,7 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
         }
 
         theme = HassTheme.createDefaultTheme(this)
+        appListAdapter = AppListAdapter(deviceProfile, appLauncher, this)
 
         observe(viewModel.appListItems) { items ->
             appListAdapter.appListItems = items
@@ -84,7 +92,7 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
             binding.appListContainer.setAnimationStartPoint(x, y)
         }
 
-        binding.appList.layoutManager = GridLayoutManager(this, idp.appDrawerColumns)
+        binding.appList.layoutManager = GridLayoutManager(this, deviceProfile.appDrawerColumns)
         binding.appList.adapter = appListAdapter
 
         binding.allAppsButton.setOnClickListener {
@@ -143,6 +151,10 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
         viewModel.updateAppListItems()
     }
 
+    override fun onHideActivity(activityName: String) {
+        viewModel.hideActivity(activityName)
+    }
+
     private fun openAppList() {
         if (!binding.appListContainer.isVisible) {
             val background = BlurBuilder.blur(binding.appNavigationHostFragment)
@@ -150,11 +162,6 @@ class MainActivity : AppCompatActivity(), PackageReceiver.PackageListener {
                 resources,
                 background
             )
-//            binding.appListBackground.background = BitmapDrawable(
-//                resources,
-//                background
-//            )
-//            binding.appListBackground.visibility = View.VISIBLE
 
             val alphaAnimator = ObjectAnimator.ofFloat(
                 binding.appNavigationHostFragment,

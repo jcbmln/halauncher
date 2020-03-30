@@ -20,7 +20,8 @@ class ShortcutPopupWindow(
     private val parentView: View,
     private val appListItem: AppListItem,
     private val appLauncher: AppLauncher,
-    theme: HassTheme?
+    theme: HassTheme?,
+    private val listener: ShortcutActionListener
 ) : ShortcutListAdapter.ShorcutSelectedListener {
     private val binding: PopupWindowShortcutsBinding
     private val window: PopupWindow
@@ -39,6 +40,11 @@ class ShortcutPopupWindow(
 
         binding.appInfoText.setOnClickListener { view ->
             appLauncher.startAppDetailsActivity(appListItem.componentName, view)
+            dismiss()
+        }
+
+        binding.hideText.setOnClickListener {
+            listener.onHideActivity(appListItem.activityName)
             dismiss()
         }
 
@@ -206,5 +212,9 @@ class ShortcutPopupWindow(
     private enum class VerticalLocation {
         TOP,
         BOTTOM
+    }
+
+    interface ShortcutActionListener {
+        fun onHideActivity(activityName: String)
     }
 }

@@ -18,7 +18,7 @@ data class App(
     @ColumnInfo(name = "system_app")
     val isSystemApp: Boolean,
     @ColumnInfo(name = "is_hidden")
-    val isHidden: Boolean,
+    var isHidden: Boolean,
     @ColumnInfo(name = "icon", typeAffinity = ColumnInfo.BLOB)
     var icon: ByteArray
 ) {
