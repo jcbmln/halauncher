@@ -1,6 +1,5 @@
-package xyz.mcmxciv.halauncher.ui.setup
+package xyz.mcmxciv.halauncher.ui.setup.discovery
 
-import android.annotation.SuppressLint
 import android.net.nsd.NsdServiceInfo
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui.setup
+package xyz.mcmxciv.halauncher.ui.setup.discovery
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,8 +13,10 @@ import xyz.mcmxciv.halauncher.ui.LauncherFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.ui.navigate
 import xyz.mcmxciv.halauncher.ui.observe
+import xyz.mcmxciv.halauncher.ui.setup.SetupViewModel
 
-class DiscoveryFragment : LauncherFragment(), ServiceSelectedListener {
+class DiscoveryFragment : LauncherFragment(),
+    ServiceSelectedListener {
     private lateinit var binding: FragmentDiscoveryBinding
     private lateinit var viewModel: SetupViewModel
 
@@ -31,7 +33,8 @@ class DiscoveryFragment : LauncherFragment(), ServiceSelectedListener {
         viewModel = createViewModel { component.setupViewModel() }
 
         binding.serviceList.layoutManager = LinearLayoutManager(context)
-        val adapter = ServiceAdapter(this)
+        val adapter =
+            ServiceAdapter(this)
         binding.serviceList.adapter = adapter
         binding.serviceList.addItemDecoration(DividerItemDecoration(
             binding.serviceList.context, DividerItemDecoration.VERTICAL

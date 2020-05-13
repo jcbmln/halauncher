@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui.setup
+package xyz.mcmxciv.halauncher.ui.setup.discovery
 
 import android.net.nsd.NsdServiceInfo
 

@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui.setup
+package xyz.mcmxciv.halauncher.ui.setup.manual
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import xyz.mcmxciv.halauncher.databinding.FragmentManualSetupBinding
 import xyz.mcmxciv.halauncher.ui.LauncherFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
+import xyz.mcmxciv.halauncher.ui.setup.SetupViewModel
 import xyz.mcmxciv.halauncher.utils.textString
 
 class ManualSetupFragment : LauncherFragment() {
