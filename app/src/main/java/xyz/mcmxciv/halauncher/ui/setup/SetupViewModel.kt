@@ -5,12 +5,12 @@ import android.net.nsd.NsdServiceInfo
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
+import xyz.mcmxciv.halauncher.LocalStorage
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
-import xyz.mcmxciv.halauncher.utils.ResourceLiveData
 import javax.inject.Inject
 
 class SetupViewModel @Inject constructor(
-    private val localStorageRepository: LocalStorageRepository,
+    private val localStorage: LocalStorage,
     private val nsdManager: NsdManager
 ) : ViewModel() {
     private var services = mutableListOf<NsdServiceInfo>()
@@ -30,7 +30,12 @@ class SetupViewModel @Inject constructor(
     }
 
     fun setUrl(url: String) {
-        localStorageRepository.baseUrl = url
+        localStorage.baseUrl = url
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        nsdManager.stopServiceDiscovery(discoveryListener)
     }
 
     private val discoveryListener = object : NsdManager.DiscoveryListener {

@@ -15,8 +15,7 @@ import xyz.mcmxciv.halauncher.ui.navigate
 import xyz.mcmxciv.halauncher.ui.observe
 import xyz.mcmxciv.halauncher.ui.setup.SetupViewModel
 
-class DiscoveryFragment : LauncherFragment(),
-    ServiceSelectedListener {
+class DiscoveryFragment : LauncherFragment() {
     private lateinit var binding: FragmentDiscoveryBinding
     private lateinit var viewModel: SetupViewModel
 
@@ -33,8 +32,14 @@ class DiscoveryFragment : LauncherFragment(),
         viewModel = createViewModel { component.setupViewModel() }
 
         binding.serviceList.layoutManager = LinearLayoutManager(context)
-        val adapter =
-            ServiceAdapter(this)
+
+        val adapter = ServiceAdapter()
+        adapter.setOnServiceSelectedListener { url ->
+            viewModel.stopDiscovery()
+            viewModel.setUrl(url)
+            navigate(DiscoveryFragmentDirections.actionGlobalAuthenticationNavigationGraph())
+        }
+
         binding.serviceList.adapter = adapter
         binding.serviceList.addItemDecoration(DividerItemDecoration(
             binding.serviceList.context, DividerItemDecoration.VERTICAL
@@ -44,7 +49,7 @@ class DiscoveryFragment : LauncherFragment(),
 
         observe(viewModel.servicesData) { services ->
             updateViewVisibility(services.isEmpty())
-            adapter.setData(services)
+            adapter.data = services
         }
 
         binding.manualModeButton.setOnClickListener {
@@ -56,12 +61,6 @@ class DiscoveryFragment : LauncherFragment(),
     override fun onPause() {
         super.onPause()
         viewModel.stopDiscovery()
-    }
-
-    override fun onServiceSelected(url: String) {
-        viewModel.stopDiscovery()
-        viewModel.setUrl(url)
-        navigate(DiscoveryFragmentDirections.actionGlobalAuthenticationNavigationGraph())
     }
 
     private fun updateViewVisibility(serviceListIsEmpty: Boolean) {
