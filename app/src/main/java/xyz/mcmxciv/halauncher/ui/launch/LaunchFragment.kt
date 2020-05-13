@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 
 import xyz.mcmxciv.halauncher.databinding.FragmentLaunchBinding
-import xyz.mcmxciv.halauncher.models.SessionState
 import xyz.mcmxciv.halauncher.ui.LauncherFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.ui.navigate
@@ -28,18 +27,17 @@ class LaunchFragment : LauncherFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = createViewModel { component.launchViewModel() }
 
-        observe(viewModel.sessionState) { state ->
-            navigate {
-                return@navigate when (state) {
-                    SessionState.NEW_USER ->
-                        LaunchFragmentDirections.actionLaunchFragmentToSetupNavigationGraph()
-                    SessionState.UNAUTHENTICATED ->
-                        LaunchFragmentDirections
-                            .actionLaunchFragmentToAuthenticationNavigationGraph()
-                    SessionState.AUTHENTICATED ->
-                        LaunchFragmentDirections.actionLaunchFragmentToHomeFragment()
-                }
+        observe(viewModel.launchState) { state ->
+            val action = when (state) {
+                LaunchState.FIRST_LAUNCH ->
+                    LaunchFragmentDirections.actionLaunchFragmentToSetupNavigationGraph()
+                LaunchState.UNAUTHENTICATED ->
+                    LaunchFragmentDirections
+                        .actionLaunchFragmentToAuthenticationNavigationGraph()
+                LaunchState.AUTHENTICATED ->
+                    LaunchFragmentDirections.actionLaunchFragmentToHomeFragment()
             }
+            navigate(action)
         }
     }
 }

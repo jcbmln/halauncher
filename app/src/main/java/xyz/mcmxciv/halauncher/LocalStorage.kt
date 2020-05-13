@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.data.repositories
+package xyz.mcmxciv.halauncher
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,7 +6,6 @@ import android.os.Build
 import android.provider.Settings
 import androidx.annotation.StringRes
 import androidx.core.content.edit
-import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.data.models.Config
 import xyz.mcmxciv.halauncher.data.models.DeviceIntegration
 import xyz.mcmxciv.halauncher.data.models.DeviceRegistration
@@ -14,7 +13,7 @@ import xyz.mcmxciv.halauncher.data.models.toJson
 import xyz.mcmxciv.halauncher.domain.models.Session
 import javax.inject.Inject
 
-class LocalStorageRepository @Inject constructor(
+class LocalStorage @Inject constructor(
     private val context: Context,
     private val sharedPreferences: SharedPreferences
 ) {

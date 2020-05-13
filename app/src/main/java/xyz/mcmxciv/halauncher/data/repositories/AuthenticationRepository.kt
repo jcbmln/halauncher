@@ -1,6 +1,6 @@
 package xyz.mcmxciv.halauncher.data.repositories
 
-import xyz.mcmxciv.halauncher.data.AuthenticationException
+import xyz.mcmxciv.halauncher.data.authentication.AuthenticationException
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantApi
 import xyz.mcmxciv.halauncher.data.models.Token
 import javax.inject.Inject

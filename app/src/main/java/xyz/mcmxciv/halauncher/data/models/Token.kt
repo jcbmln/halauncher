@@ -13,6 +13,4 @@ data class Token(
     val refreshToken: String?,
     @Json(name = "token_type")
     val tokenType: String
-) : SerializableModel() {
-    companion object : SerializerObject<Token>()
-}
+)

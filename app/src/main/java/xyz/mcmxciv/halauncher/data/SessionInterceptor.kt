@@ -4,25 +4,25 @@ import com.squareup.moshi.Moshi
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.threeten.bp.Instant
-import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
+import xyz.mcmxciv.halauncher.LocalStorage
+import xyz.mcmxciv.halauncher.data.authentication.AuthenticationException
 import xyz.mcmxciv.halauncher.data.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
-import xyz.mcmxciv.halauncher.models.Session
+import xyz.mcmxciv.halauncher.domain.models.Session
 import xyz.mcmxciv.halauncher.data.models.Token
 
 class SessionInterceptor constructor(
-    private val urlInteractor: UrlInteractor,
-    private val localStorageRepository: LocalStorageRepository
+    private val localStorage: LocalStorage
 ) : Interceptor {
     private val authUrl: String
-        get() = urlInteractor.baseUrl.toHttpUrl()
+        get() = localStorage.baseUrl.toHttpUrl()
             .newBuilder()
             .addPathSegments("auth/token")
             .build()
             .toString()
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val session = localStorageRepository.session ?: throw AuthenticationException()
+        val session = localStorage.session ?: throw AuthenticationException()
         val originalRequest = chain.request()
 
         return if (!session.isExpired) {
@@ -42,12 +42,13 @@ class SessionInterceptor constructor(
             if (refreshResponse.isSuccessful) {
                 val adapter = Moshi.Builder().build().adapter(Token::class.java)
                 val token = adapter.fromJson(refreshResponse.body.toString())!!
-                localStorageRepository.session = Session(
-                    token.accessToken,
-                    Instant.now().epochSecond + token.expiresIn,
-                    session.refreshToken,
-                    token.tokenType
-                )
+                localStorage.session =
+                    Session(
+                        token.accessToken,
+                        Instant.now().epochSecond + token.expiresIn,
+                        session.refreshToken,
+                        token.tokenType
+                    )
                 val newCall = originalRequest
                     .newBuilder()
                     .addHeader("Authorization", "Bearer ${token.accessToken}")
@@ -63,8 +64,8 @@ class SessionInterceptor constructor(
         val response = proceed(request)
 
         return if (response.code == 401) {
-            localStorageRepository.session = null
-            localStorageRepository.baseUrl = LocalStorageRepository.PLACEHOLDER_URL
+            localStorage.session = null
+            localStorage.baseUrl = LocalStorageRepository.PLACEHOLDER_URL
             val requestBody = getRevokeTokenRequestBody(session)
             val revokeRequest = request.newBuilder()
                 .url(authUrl)

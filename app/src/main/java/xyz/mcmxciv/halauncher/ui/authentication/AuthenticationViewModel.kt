@@ -1,6 +1,5 @@
 package xyz.mcmxciv.halauncher.ui.authentication
 
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,40 +7,35 @@ import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
-import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
-import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
-import xyz.mcmxciv.halauncher.data.repositories.AuthenticationRepository
-import xyz.mcmxciv.halauncher.repositories.HomeAssistantRepository
+import xyz.mcmxciv.halauncher.LocalStorage
+import xyz.mcmxciv.halauncher.domain.authentication.AuthenticationUseCase
 import javax.inject.Inject
 
 class AuthenticationViewModel @Inject constructor(
-    private val sessionInteractor: SessionInteractor,
-    private val urlInteractor: UrlInteractor
+    private val authenticationUseCase: AuthenticationUseCase,
+    private val localStorage: LocalStorage
 ) : ViewModel() {
-    private val authenticationEvent by lazy {
-        val liveEvent = LiveEvent<AuthenticationState>()
-        liveEvent.postValue(AuthenticationState.LOADING)
-        return@lazy liveEvent
+    private val authenticationEvent = LiveEvent<AuthenticationState>().also { event ->
+        event.postValue(AuthenticationState.LOADING)
     }
     val authenticationState: LiveData<AuthenticationState> = authenticationEvent
 
     val authenticationUrl: String
-        get() = urlInteractor.authenticationUrl
+        get() = authenticationUseCase.authenticationUrl
 
     val isSetupDone: Boolean
-        get() = sessionInteractor.isDeviceRegistered
+        get() = localStorage.deviceIntegration != null
 
     fun authenticate(url: String): Boolean {
-        val code = Uri.parse(url).getQueryParameter(HomeAssistantRepository.RESPONSE_TYPE)
-        return if (url.contains(HomeAssistantRepository.REDIRECT_URI) && !code.isNullOrBlank()) {
+        val code = authenticationUseCase.getAuthenticationCode(url)
+        return if (authenticationUseCase.verifyUrl(url) && !code.isNullOrBlank()) {
             val exceptionHandler = CoroutineExceptionHandler { _, ex ->
                 Timber.e(ex)
                 authenticationEvent.postValue(AuthenticationState.ERROR)
             }
 
             viewModelScope.launch(exceptionHandler) {
-                sessionInteractor.createSession(code)
+                authenticationUseCase.authenticate(code)
                 authenticationEvent.postValue(AuthenticationState.AUTHENTICATED)
             }
 
