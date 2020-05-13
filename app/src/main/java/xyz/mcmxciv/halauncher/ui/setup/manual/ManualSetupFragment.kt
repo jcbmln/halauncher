@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import xyz.mcmxciv.halauncher.databinding.FragmentManualSetupBinding
 import xyz.mcmxciv.halauncher.ui.LauncherFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
+import xyz.mcmxciv.halauncher.ui.navigate
 import xyz.mcmxciv.halauncher.ui.setup.SetupViewModel
 import xyz.mcmxciv.halauncher.utils.textString
 
@@ -29,13 +30,13 @@ class ManualSetupFragment : LauncherFragment() {
         viewModel = createViewModel { component.setupViewModel() }
 
         binding.discoveryModeButton.setOnClickListener {
-            navigateToDiscoveryFragment()
+            navigate(ManualSetupFragmentDirections.actionManualSetupFragmentToDiscoveryFragment())
         }
 
         binding.openUrlButton.setOnClickListener { finishManualSetup() }
 
         binding.hostText.setOnEditorActionListener { _, actionId, _ ->
-            return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_GO) {
+            if (actionId == EditorInfo.IME_ACTION_GO) {
                 finishManualSetup()
                 true
             } else false
@@ -47,19 +48,7 @@ class ManualSetupFragment : LauncherFragment() {
 
         if (!text.isBlank()) {
             viewModel.setUrl(text)
-            navigateToAuthenticationGraph()
+            navigate(ManualSetupFragmentDirections.actionGlobalAuthenticationNavigationGraph())
         }
-    }
-
-    private fun navigateToDiscoveryFragment() {
-        val action =
-            ManualSetupFragmentDirections.actionManualSetupFragmentToDiscoveryFragment()
-        findNavController().navigate(action)
-    }
-
-    private fun navigateToAuthenticationGraph() {
-        val action =
-            ManualSetupFragmentDirections.actionGlobalAuthenticationNavigationGraph()
-        findNavController().navigate(action)
     }
 }
