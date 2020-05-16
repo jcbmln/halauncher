@@ -1,33 +1,51 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layoutDescription="@xml/app_drawer_scene"
     tools:context=".ui.main.MainActivity">
+
+    <Space
+        android:id="@+id/spacer"
+        android:layout_width="0dp"
+        android:layout_height="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/app_navigation_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/app_navigation" />
 
-    <View
-        android:id="@+id/app_list_background"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible" />
-
-    <xyz.mcmxciv.halauncher.views.AnimatedContainer
+    <LinearLayout
         android:id="@+id/app_list_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/primary_background_color"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/top_rounded_background"
+        android:elevation="5dp"
         android:orientation="vertical"
-        android:visibility="invisible">
+        android:paddingTop="16dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spacer">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/search_input_layout"
                 style="@style/HaLauncher.Widget.EditText.Outline"
@@ -82,19 +100,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="bottom|end"
             android:visibility="visible" />
-    </xyz.mcmxciv.halauncher.views.AnimatedContainer>
+    </LinearLayout>
 
-    <xyz.mcmxciv.halauncher.views.AnimatedFloatingActionButton
-        android:id="@+id/all_apps_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="visible"
-        app:backgroundTint="@color/accent_color"
-        app:srcCompat="@drawable/ic_apps"
-        app:tint="@color/text_primary_color" />
-</FrameLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

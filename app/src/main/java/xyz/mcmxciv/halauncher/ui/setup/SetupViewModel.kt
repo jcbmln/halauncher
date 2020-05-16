@@ -26,7 +26,10 @@ class SetupViewModel @Inject constructor(
     }
 
     fun stopDiscovery() {
-        if (discoveryStarted) nsdManager.stopServiceDiscovery(discoveryListener)
+        if (discoveryStarted) {
+            nsdManager.stopServiceDiscovery(discoveryListener)
+            discoveryStarted = false
+        }
     }
 
     fun setUrl(url: String) {
@@ -35,7 +38,7 @@ class SetupViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        nsdManager.stopServiceDiscovery(discoveryListener)
+        stopDiscovery()
     }
 
     private val discoveryListener = object : NsdManager.DiscoveryListener {

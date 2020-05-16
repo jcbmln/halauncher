@@ -70,36 +70,36 @@ class MainActivity : AppCompatActivity(),
         observe(viewModel.theme) { newTheme ->
             theme = newTheme
 
-            binding.searchInputLayout.setBoxStrokeColorStateList(newTheme.inputStateList)
-            binding.searchInputLayout.defaultHintTextColor = newTheme.inputStateList
-            binding.searchInputLayout.hintTextColor = newTheme.inputStateList
-            binding.moreButton.drawable.setTint(newTheme.primaryTextColor)
-            binding.closeButton.drawable.setTint(newTheme.primaryTextColor)
-            binding.allAppsButton.backgroundTintList = ColorStateList.valueOf(newTheme.accentColor)
-            val appListContainerBackground = ColorDrawable(newTheme.primaryBackgroundColor)
-            appListContainerBackground.alpha = 150
-            binding.appListContainer.background = appListContainerBackground
+//            binding.searchInputLayout.setBoxStrokeColorStateList(newTheme.inputStateList)
+//            binding.searchInputLayout.defaultHintTextColor = newTheme.inputStateList
+//            binding.searchInputLayout.hintTextColor = newTheme.inputStateList
+//            binding.moreButton.drawable.setTint(newTheme.primaryTextColor)
+//            binding.closeButton.drawable.setTint(newTheme.primaryTextColor)
+////            binding.allAppsButton.backgroundTintList = ColorStateList.valueOf(newTheme.accentColor)
+//            val appListContainerBackground = ColorDrawable(newTheme.primaryBackgroundColor)
+//            appListContainerBackground.alpha = 150
+//            binding.appListContainer.background = appListContainerBackground
             window.statusBarColor = newTheme.primaryColor
             window.navigationBarColor = newTheme.primaryColor
-            appListAdapter.theme = theme
+//            appListAdapter.theme = theme
         }
 
-        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
-            val x = binding.allAppsButton.left + (binding.allAppsButton.width / 2)
-            val y = binding.allAppsButton.top + (binding.allAppsButton.height / 2)
-            binding.appListContainer.setAnimationStartPoint(x, y)
-        }
+//        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
+//            val x = binding.allAppsButton.left + (binding.allAppsButton.width / 2)
+//            val y = binding.allAppsButton.top + (binding.allAppsButton.height / 2)
+//            binding.appListContainer.setAnimationStartPoint(x, y)
+//        }
 
         binding.appList.layoutManager = GridLayoutManager(this, deviceProfile.appDrawerColumns)
         binding.appList.adapter = appListAdapter
 
-        binding.allAppsButton.setOnClickListener {
-            openAppList()
-        }
+//        binding.allAppsButton.setOnClickListener {
+//            openAppList()
+//        }
 
-        binding.closeButton.setOnClickListener {
-            closeAppList()
-        }
+//        binding.closeButton.setOnClickListener {
+//            closeAppList()
+//        }
     }
 
     override fun onResume() {
@@ -127,13 +127,13 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun onBackPressed() {
-        if (binding.appListContainer.isVisible) {
-            closeAppList()
-        } else {
-            super.onBackPressed()
-        }
-    }
+//    override fun onBackPressed() {
+//        if (binding.appListContainer.isVisible) {
+////            closeAppList()
+//        } else {
+//            super.onBackPressed()
+//        }
+//    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.app_navigation_host_fragment)
@@ -153,51 +153,51 @@ class MainActivity : AppCompatActivity(),
         viewModel.hideActivity(activityName)
     }
 
-    private fun openAppList() {
-        if (!binding.appListContainer.isVisible) {
-            val background = BlurBuilder.blur(binding.appNavigationHostFragment)
-            binding.root.background = BitmapDrawable(
-                resources,
-                background
-            )
-
-            val alphaAnimator = ObjectAnimator.ofFloat(
-                binding.appNavigationHostFragment,
-                "alpha",
-                1f, 0f
-            )
-            alphaAnimator.duration = 250
-            alphaAnimator.interpolator = AccelerateDecelerateInterpolator()
-            alphaAnimator.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    binding.appNavigationHostFragment.visibility = View.GONE
-                }
-            })
-            alphaAnimator.start()
-
-            binding.appListContainer.animateOpen()
-            binding.allAppsButton.animateClose()
-        }
-    }
-
-    private fun closeAppList() {
-        if (binding.appListContainer.isVisible) {
-            binding.appListBackground.visibility = View.GONE
-            binding.appListContainer.animateClose()
-            binding.allAppsButton.visibility = View.VISIBLE
-            binding.allAppsButton.animateOpen()
-
-            binding.appNavigationHostFragment.visibility = View.VISIBLE
-            val alphaAnimator = ObjectAnimator.ofFloat(
-                binding.appNavigationHostFragment,
-                "alpha",
-                0f, 1f
-            )
-            alphaAnimator.duration = 250
-            alphaAnimator.interpolator = AccelerateDecelerateInterpolator()
-            alphaAnimator.start()
-        }
-    }
+//    private fun openAppList() {
+//        if (!binding.appListContainer.isVisible) {
+//            val background = BlurBuilder.blur(binding.appNavigationHostFragment)
+//            binding.root.background = BitmapDrawable(
+//                resources,
+//                background
+//            )
+//
+//            val alphaAnimator = ObjectAnimator.ofFloat(
+//                binding.appNavigationHostFragment,
+//                "alpha",
+//                1f, 0f
+//            )
+//            alphaAnimator.duration = 250
+//            alphaAnimator.interpolator = AccelerateDecelerateInterpolator()
+//            alphaAnimator.addListener(object : AnimatorListenerAdapter() {
+//                override fun onAnimationEnd(animation: Animator?) {
+//                    binding.appNavigationHostFragment.visibility = View.GONE
+//                }
+//            })
+//            alphaAnimator.start()
+//
+////            binding.appListContainer.animateOpen()
+////            binding.allAppsButton.animateClose()
+//        }
+//    }
+//
+//    private fun closeAppList() {
+//        if (binding.appListContainer.isVisible) {
+////            binding.appListBackground.visibility = View.GONE
+////            binding.appListContainer.animateClose()
+////            binding.allAppsButton.visibility = View.VISIBLE
+////            binding.allAppsButton.animateOpen()
+//
+//            binding.appNavigationHostFragment.visibility = View.VISIBLE
+//            val alphaAnimator = ObjectAnimator.ofFloat(
+//                binding.appNavigationHostFragment,
+//                "alpha",
+//                0f, 1f
+//            )
+//            alphaAnimator.duration = 250
+//            alphaAnimator.interpolator = AccelerateDecelerateInterpolator()
+//            alphaAnimator.start()
+//        }
+//    }
 
     private fun setThemeColor(color: Int) {
         window.statusBarColor = color
