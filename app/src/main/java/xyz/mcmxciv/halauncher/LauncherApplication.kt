@@ -20,5 +20,6 @@ class LauncherApplication : Application() {
 
     companion object {
         lateinit var instance: LauncherApplication
+            private set
     }
 }
