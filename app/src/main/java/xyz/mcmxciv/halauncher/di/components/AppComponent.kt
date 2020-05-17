@@ -5,6 +5,7 @@ import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.background.SensorUpdateWorker
 import xyz.mcmxciv.halauncher.di.modules.AppModule
 import xyz.mcmxciv.halauncher.di.modules.DataModule
+import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.ui.main.MainActivity
 import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
 import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutListAdapter
@@ -21,4 +22,5 @@ interface AppComponent {
     fun inject(activity: MainActivity)
     fun inject(sensorUpdateWorker: SensorUpdateWorker)
     fun inject(shortcutListAdapter: ShortcutListAdapter)
+    fun inject(hassTheme: HassTheme)
 }
