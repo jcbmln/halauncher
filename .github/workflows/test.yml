@@ -39,7 +39,13 @@ jobs:
         run: ./gradlew lintDebug
 
       - name: Run Unit Tests
-        run: ./gradlew testDebugUnitTest
+        run: ./gradlew testDebugUnitTest --stacktrace
+
+      - name: Upload Unit Test Logs
+        uses: actions/upload-artifact@v1
+        with:
+          name: unit-tests-logs
+          path: app/build/reports/tests/testDebugUnitTest/index.html
 
       - name: Assemble Debug APK
         run: ./gradlew assembleDebug
