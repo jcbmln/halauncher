@@ -57,7 +57,7 @@ class AboutPreferencesFragment : LauncherPreferenceFragment(), InstallStateUpdat
     }
 
     private fun popupSnackbarForCompleteUpdate() {
-        Snackbar.make(view!!,
+        Snackbar.make(requireView(),
             "An update has just been downloaded.",
             Snackbar.LENGTH_INDEFINITE
         ).apply {

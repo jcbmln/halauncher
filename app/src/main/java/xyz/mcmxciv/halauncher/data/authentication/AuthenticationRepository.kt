@@ -1,15 +1,10 @@
 package xyz.mcmxciv.halauncher.data.authentication
 
-import android.content.SharedPreferences
-import android.hardware.biometrics.BiometricPrompt
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.data.LocalCache
 import xyz.mcmxciv.halauncher.data.models.Token
-import xyz.mcmxciv.halauncher.data.models.TokenResult
-import xyz.mcmxciv.halauncher.domain.models.AuthenticationResult
+import xyz.mcmxciv.halauncher.domain.models.TokenResult
 import xyz.mcmxciv.halauncher.domain.models.Session
-import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 
 class AuthenticationRepository @Inject constructor(
@@ -32,20 +27,22 @@ class AuthenticationRepository @Inject constructor(
             .build()
             .toString()
 
-    suspend fun createSession(authenticationCode: String): AuthenticationResult {
+    suspend fun getToken(authenticationCode: String): TokenResult {
         val response = authenticationApi.getToken(GRANT_TYPE_CODE, authenticationCode, CLIENT_ID)
-
         return if (response.isSuccessful) {
             val token: Token = response.body() ?: throw AuthenticationException()
-            localCache.session = Session(token)
-            AuthenticationResult.SUCCESS
+            TokenResult.Success(token)
         } else {
             when (response.code()) {
-                400 -> AuthenticationResult.INVALID_REQUEST
-                403 -> AuthenticationResult.INACTIVE_USER
-                else -> AuthenticationResult.UNKNOWN_ERROR
+                400 -> TokenResult.InvalidRequest
+                403 -> TokenResult.InactiveUser
+                else -> TokenResult.UnknownError
             }
         }
+    }
+
+    fun createSession(token: Token) {
+        localCache.session = Session(token)
     }
 
     suspend fun refreshToken(refreshToken: String): TokenResult {
@@ -55,7 +52,7 @@ class AuthenticationRepository @Inject constructor(
         } else {
             when (response.code()) {
                 400 -> TokenResult.InvalidRequest
-                else -> TokenResult.Error(response.message())
+                else -> TokenResult.UnknownError
             }
         }
     }

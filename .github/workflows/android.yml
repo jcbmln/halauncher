@@ -1,9 +1,7 @@
-name: CI/CD
+name: Release Workflow
 
 on:
   push:
-    branches:
-      - development
     tags:
       - 'v*'
     paths-ignore:
