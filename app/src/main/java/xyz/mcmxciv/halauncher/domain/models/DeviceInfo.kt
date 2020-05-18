@@ -1,10 +1,12 @@
-package xyz.mcmxciv.halauncher.data.models
+package xyz.mcmxciv.halauncher.domain.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import xyz.mcmxciv.halauncher.data.models.SerializableModel
+import xyz.mcmxciv.halauncher.data.models.SerializerObject
 
 @JsonClass(generateAdapter = true)
-data class DeviceRegistration(
+data class DeviceInfo(
     @Json(name = "app_id")
     val appId: String? = null,
     @Json(name = "app_name")
@@ -29,5 +31,5 @@ data class DeviceRegistration(
     @Json(name = "device_id")
     val deviceId: String? = null
 ) : SerializableModel() {
-    companion object : SerializerObject<DeviceRegistration>()
+    companion object : SerializerObject<DeviceInfo>()
 }

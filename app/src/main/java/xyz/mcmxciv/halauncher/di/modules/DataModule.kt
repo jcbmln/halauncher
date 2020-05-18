@@ -9,7 +9,7 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import xyz.mcmxciv.halauncher.LocalStorage
+import xyz.mcmxciv.halauncher.data.LocalCache
 import xyz.mcmxciv.halauncher.data.*
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantApi
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantSecureApi
@@ -18,7 +18,8 @@ import xyz.mcmxciv.halauncher.data.dao.AppDao
 import xyz.mcmxciv.halauncher.di.qualifiers.Api
 import xyz.mcmxciv.halauncher.di.qualifiers.SecureApi
 import xyz.mcmxciv.halauncher.data.dao.ShortcutDao
-import xyz.mcmxciv.halauncher.di.scopes.ViewScope
+import xyz.mcmxciv.halauncher.data.integration.IntegrationApi
+import xyz.mcmxciv.halauncher.data.integration.SecureIntegrationApi
 import javax.inject.Singleton
 
 @Module
@@ -27,6 +28,16 @@ class DataModule {
     @Provides
     fun authenticationApi(@Api retrofit: Retrofit): AuthenticationApi =
         retrofit.create(AuthenticationApi::class.java)
+
+    @Singleton
+    @Provides
+    fun integrationApi(@Api retrofit: Retrofit): IntegrationApi =
+        retrofit.create(IntegrationApi::class.java)
+
+    @Singleton
+    @Provides
+    fun secureIntegrationApi(@SecureApi retrofit: Retrofit): SecureIntegrationApi =
+        retrofit.create(SecureIntegrationApi::class.java)
 
     @Singleton
     @Provides
@@ -49,12 +60,12 @@ class DataModule {
     @SecureApi
     fun secureRetrofit(
         moshi: Moshi,
-        localStorage: LocalStorage
+        localCache: LocalCache
     ): Retrofit {
-        val baseUrl = localStorage.baseUrl
+        val baseUrl = localCache.baseUrl
         val client = OkHttpClient.Builder()
             .addInterceptor(UrlInterceptor(baseUrl))
-            .addInterceptor(SessionInterceptor(localStorage))
+            .addInterceptor(SessionInterceptor(localCache))
             .build()
 
         return Retrofit.Builder()
@@ -67,13 +78,13 @@ class DataModule {
     @Singleton
     @Provides
     @Api
-    fun retrofit(moshi: Moshi, localStorage: LocalStorage): Retrofit {
+    fun retrofit(moshi: Moshi, localCache: LocalCache): Retrofit {
         val client = OkHttpClient.Builder()
-            .addInterceptor(UrlInterceptor(localStorage.baseUrl))
+            .addInterceptor(UrlInterceptor(localCache.baseUrl))
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(localStorage.baseUrl)
+            .baseUrl(localCache.baseUrl)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(client)
             .build()

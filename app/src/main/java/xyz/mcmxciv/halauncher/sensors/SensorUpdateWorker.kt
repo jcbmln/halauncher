@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.background
+package xyz.mcmxciv.halauncher.sensors
 
 import android.content.Context
 import androidx.work.*
@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
+import xyz.mcmxciv.halauncher.domain.integration.IntegrationUseCase
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -15,15 +16,29 @@ class SensorUpdateWorker(
 ) : CoroutineWorker(context, workerParameters) {
 
     @Inject
-    lateinit var integrationInteractor: IntegrationInteractor
+    lateinit var context: Context
+
+    @Inject
+    lateinit var integrationUseCase: IntegrationUseCase
 
     init {
         LauncherApplication.instance.component.inject(this)
     }
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        integrationInteractor.updateSensors()
+        updateSensors()
         return@withContext Result.success()
+    }
+
+    private suspend fun updateSensors() {
+        val sensorManagers = mutableListOf(BatterySensorManager(), NetworkSensorManager())
+        val sensors = sensorManagers.flatMap { m -> m.getSensors(context) }
+
+        if (!integrationUseCase.updateSensors(sensors)) {
+            sensorManagers.flatMap { m -> m.getSensorInfo(context) }.forEach { si ->
+                integrationUseCase.registerSensors(si)
+            }
+        }
     }
 
     companion object {

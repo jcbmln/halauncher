@@ -2,7 +2,7 @@ package xyz.mcmxciv.halauncher.di.components
 
 import dagger.Component
 import xyz.mcmxciv.halauncher.LauncherApplication
-import xyz.mcmxciv.halauncher.background.SensorUpdateWorker
+import xyz.mcmxciv.halauncher.sensors.SensorUpdateWorker
 import xyz.mcmxciv.halauncher.di.modules.AppModule
 import xyz.mcmxciv.halauncher.di.modules.DataModule
 import xyz.mcmxciv.halauncher.ui.HassTheme

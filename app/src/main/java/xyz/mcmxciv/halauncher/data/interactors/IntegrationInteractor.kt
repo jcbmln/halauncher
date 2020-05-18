@@ -3,15 +3,15 @@ package xyz.mcmxciv.halauncher.data.interactors
 import android.content.Context
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import timber.log.Timber
-import xyz.mcmxciv.halauncher.background.SensorUpdateWorker
+import xyz.mcmxciv.halauncher.sensors.SensorUpdateWorker
 import xyz.mcmxciv.halauncher.data.IntegrationException
-import xyz.mcmxciv.halauncher.data.models.Sensor
-import xyz.mcmxciv.halauncher.data.models.SensorRegistration
+import xyz.mcmxciv.halauncher.domain.models.Sensor
+import xyz.mcmxciv.halauncher.domain.models.SensorInfo
 import xyz.mcmxciv.halauncher.data.repositories.IntegrationRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
 import xyz.mcmxciv.halauncher.data.repositories.SensorRepository
 import xyz.mcmxciv.halauncher.data.models.Config
-import xyz.mcmxciv.halauncher.data.models.DeviceRegistration
+import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
 import java.lang.Exception
 import java.lang.IllegalStateException
 import javax.inject.Inject
@@ -22,8 +22,8 @@ class IntegrationInteractor @Inject constructor(
     private val integrationRepository: IntegrationRepository,
     private val sensorRepository: SensorRepository
 ) {
-    val deviceRegistration: DeviceRegistration
-        get() = localStorageRepository.deviceRegistration ?: throw IllegalStateException()
+    val deviceInfo: DeviceInfo
+        get() = localStorageRepository.deviceInfo ?: throw IllegalStateException()
 
     var sensorUpdateInterval: Long
         get() = localStorageRepository.sensorUpdateInterval.toLong()
@@ -32,10 +32,10 @@ class IntegrationInteractor @Inject constructor(
             SensorUpdateWorker.start(context, value)
         }
 
-    suspend fun registerDevice(deviceRegistration: DeviceRegistration) {
-        localStorageRepository.deviceRegistration = deviceRegistration
-        localStorageRepository.deviceIntegration =
-            integrationRepository.registerDevice(deviceRegistration)
+    suspend fun registerDevice(deviceInfo: DeviceInfo) {
+        localStorageRepository.deviceInfo = deviceInfo
+        localStorageRepository.webhookInfo =
+            integrationRepository.registerDevice(deviceInfo)
         SensorUpdateWorker.start(context)
     }
 
@@ -45,11 +45,11 @@ class IntegrationInteractor @Inject constructor(
         osVersion: String? = null,
         appData: Map<String, String>? = null
     ) {
-        val cachedDeviceRegistration = localStorageRepository.deviceRegistration
+        val cachedDeviceRegistration = localStorageRepository.deviceInfo
             ?: throw IntegrationException()
 
         val newDeviceRegistration =
-            DeviceRegistration(
+            DeviceInfo(
                 appVersion = appVersion ?: cachedDeviceRegistration.appVersion,
                 deviceName = deviceName ?: cachedDeviceRegistration.deviceName,
                 osVersion = osVersion ?: cachedDeviceRegistration.osName,
@@ -87,7 +87,7 @@ class IntegrationInteractor @Inject constructor(
 
     private suspend fun registerBatterySensor() {
         sensorRepository.getBatterySensor()?.let { sensor ->
-            val registration = SensorRegistration(
+            val registration = SensorInfo(
                 sensor,
                 "battery",
                 "Battery Level",
@@ -102,7 +102,7 @@ class IntegrationInteractor @Inject constructor(
     }
 
     private suspend fun registerNetworkSensor() {
-        val registration = SensorRegistration(
+        val registration = SensorInfo(
             sensorRepository.getNetworkSensor(),
             "WiFi Connection"
         )
@@ -114,7 +114,7 @@ class IntegrationInteractor @Inject constructor(
     }
 
     suspend fun getConfig(): Config? {
-        return localStorageRepository.deviceIntegration?.let {
+        return localStorageRepository.webhookInfo?.let {
             return@let tryUrls { url ->
                 val response = integrationRepository.getConfig(url)
                 return@tryUrls if (response.isSuccessful) {
@@ -125,7 +125,7 @@ class IntegrationInteractor @Inject constructor(
     }
 
     private suspend fun <T> tryUrls(block: suspend (url: String) -> T?): T {
-        val integration = localStorageRepository.deviceIntegration ?: throw IntegrationException()
+        val integration = localStorageRepository.webhookInfo ?: throw IntegrationException()
         val urls = ArrayList<String>()
 
         integration.cloudhookUrl?.let { urls.add(it) }

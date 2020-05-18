@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.preference.Preference
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.background.SensorUpdateWorker
+import xyz.mcmxciv.halauncher.sensors.SensorUpdateWorker
 import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
 import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
 

@@ -8,8 +8,8 @@ import androidx.annotation.StringRes
 import androidx.core.content.edit
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.data.models.Config
-import xyz.mcmxciv.halauncher.data.models.DeviceIntegration
-import xyz.mcmxciv.halauncher.data.models.DeviceRegistration
+import xyz.mcmxciv.halauncher.domain.models.WebhookInfo
+import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
 import xyz.mcmxciv.halauncher.data.models.toJson
 import xyz.mcmxciv.halauncher.domain.models.Session
 import javax.inject.Inject
@@ -26,13 +26,13 @@ class LocalStorageRepository @Inject constructor(
         get() = getString(R.string.pk_session)?.let { Session.fromJson(it) }
         set(value) = putString(R.string.pk_session, value?.toJson() )
 
-    var deviceRegistration: DeviceRegistration?
-        get() = getString(R.string.pk_device_registration)?.let { DeviceRegistration.fromJson(it) }
+    var deviceInfo: DeviceInfo?
+        get() = getString(R.string.pk_device_registration)?.let { DeviceInfo.fromJson(it) }
         set(value) = putString(R.string.pk_device_registration, value?.toJson())
 
-    var deviceIntegration: DeviceIntegration?
-        get() = getString(R.string.pk_device_integration)?.let { DeviceIntegration.fromJson(it) }
-        set(value) = putString(R.string.pk_device_integration, value?.toJson())
+    var webhookInfo: WebhookInfo?
+        get() = getString(R.string.pk_webhook_info)?.let { WebhookInfo.fromJson(it) }
+        set(value) = putString(R.string.pk_webhook_info, value?.toJson())
 
     var deviceName: String
         get() = getString(R.string.pk_device_name)

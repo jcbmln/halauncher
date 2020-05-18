@@ -13,7 +13,7 @@ class SessionInteractor @Inject constructor(
     private val localStorageRepository: LocalStorageRepository
 ) {
     val isDeviceRegistered: Boolean
-        get() = localStorageRepository.deviceIntegration != null
+        get() = localStorageRepository.webhookInfo != null
 
     val isAuthenticated: Boolean
         get() = localStorageRepository.session != null

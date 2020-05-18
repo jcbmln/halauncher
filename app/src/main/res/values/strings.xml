@@ -74,8 +74,9 @@
     <!-- Other Preference Keys -->
     <string name="pk_session">session</string>
     <string name="pk_device_registration">device_registration</string>
-    <string name="pk_device_integration">device_integration</string>
+    <string name="pk_webhook_info">webhook_info</string>
     <string name="pk_config">config</string>
+    <string name="pk_sensor_ids">sensor_ids</string>
 
     <string name="action_preference_image">action preference image</string>
     <string name="default_confirmation_message">Are you sure you want to perform this action?</string>

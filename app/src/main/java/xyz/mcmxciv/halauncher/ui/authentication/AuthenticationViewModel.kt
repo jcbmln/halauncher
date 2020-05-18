@@ -7,13 +7,13 @@ import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import xyz.mcmxciv.halauncher.LocalStorage
+import xyz.mcmxciv.halauncher.data.LocalCache
 import xyz.mcmxciv.halauncher.domain.authentication.AuthenticationUseCase
 import javax.inject.Inject
 
 class AuthenticationViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
-    private val localStorage: LocalStorage
+    private val localCache: LocalCache
 ) : ViewModel() {
     private val authenticationEvent = LiveEvent<AuthenticationState>().also { event ->
         event.postValue(AuthenticationState.LOADING)
@@ -24,7 +24,7 @@ class AuthenticationViewModel @Inject constructor(
         get() = authenticationUseCase.authenticationUrl
 
     val isSetupDone: Boolean
-        get() = localStorage.deviceIntegration != null
+        get() = localCache.webhookInfo != null
 
     fun authenticate(url: String): Boolean {
         val code = authenticationUseCase.getAuthenticationCode(url)

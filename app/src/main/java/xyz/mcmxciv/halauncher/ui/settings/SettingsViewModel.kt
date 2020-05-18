@@ -24,7 +24,7 @@ class SettingsViewModel @Inject constructor(
         set(value) { urlInteractor.baseUrl = value }
 
     var deviceName: String
-        get() = integrationInteractor.deviceRegistration.deviceName!!
+        get() = integrationInteractor.deviceInfo.deviceName!!
         set(value) {
             viewModelScope.launch {
                 integrationInteractor.updateRegistration(value)

@@ -1,20 +1,21 @@
-package xyz.mcmxciv.halauncher
+package xyz.mcmxciv.halauncher.data
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.StringRes
 import androidx.core.content.edit
+import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.data.models.Config
-import xyz.mcmxciv.halauncher.data.models.DeviceIntegration
-import xyz.mcmxciv.halauncher.data.models.DeviceRegistration
 import xyz.mcmxciv.halauncher.data.models.toJson
+import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
 import xyz.mcmxciv.halauncher.domain.models.Session
+import xyz.mcmxciv.halauncher.domain.models.WebhookInfo
+import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 
-class LocalStorage @Inject constructor(
-    private val context: Context,
+class LocalCache @Inject constructor(
+    private val resourceProvider: ResourceProvider,
     private val sharedPreferences: SharedPreferences
 ) {
     var baseUrl: String
@@ -25,23 +26,27 @@ class LocalStorage @Inject constructor(
         get() = getString(R.string.pk_session)?.let { Session.fromJson(it) }
         set(value) = putString(R.string.pk_session, value?.toJson() )
 
-    var deviceRegistration: DeviceRegistration?
-        get() = getString(R.string.pk_device_registration)?.let { DeviceRegistration.fromJson(it) }
+    var deviceInfo: DeviceInfo?
+        get() = getString(R.string.pk_device_registration)?.let { DeviceInfo.fromJson(it) }
         set(value) = putString(R.string.pk_device_registration, value?.toJson())
 
-    var deviceIntegration: DeviceIntegration?
-        get() = getString(R.string.pk_device_integration)?.let { DeviceIntegration.fromJson(it) }
-        set(value) = putString(R.string.pk_device_integration, value?.toJson())
+    var webhookInfo: WebhookInfo?
+        get() = getString(R.string.pk_webhook_info)?.let { WebhookInfo.fromJson(it) }
+        set(value) = putString(R.string.pk_webhook_info, value?.toJson())
 
     var deviceName: String
         get() = getString(R.string.pk_device_name)
-            ?: Settings.Secure.getString(context.contentResolver, "bluetooth_name")
+            ?: resourceProvider.getSettingsString("bluetooth_name")
             ?: Build.MODEL
         set(value) = putString(R.string.pk_device_name, value)
 
     var config: Config?
         get() = getString(R.string.pk_config)?.let { Config.fromJson(it) }
         set(value) = putString(R.string.pk_config, value?.toJson())
+
+    var sensorIds: Set<String>
+        get() = getStringSet(R.string.pk_sensor_ids)
+        set(value) = putStringSet(R.string.pk_sensor_ids, value)
 
     var sensorUpdateInterval: Int
         get() = getInt(R.string.pk_sensor_update_interval, 15)
@@ -54,32 +59,42 @@ class LocalStorage @Inject constructor(
         get() = session != null
 
     private fun getString(@StringRes resId: Int): String? {
-        val key = context.getString(resId)
+        val key = resourceProvider.getString(resId)
         return sharedPreferences.getString(key, null)
     }
 
     private fun putString(@StringRes resId: Int, value: String?) {
-        val key = context.getString(resId)
+        val key = resourceProvider.getString(resId)
         sharedPreferences.edit { putString(key, value) }
     }
 
+    private fun getStringSet(@StringRes resId: Int): Set<String> {
+        val key = resourceProvider.getString(resId)
+        return sharedPreferences.getStringSet(key, setOf())!!
+    }
+
+    private fun putStringSet(@StringRes resId: Int, value: Set<String>) {
+        val key = resourceProvider.getString(resId)
+        sharedPreferences.edit { putStringSet(key, value) }
+    }
+
     private fun getBoolean(@StringRes resId: Int): Boolean {
-        val key = context.getString(resId)
+        val key = resourceProvider.getString(resId)
         return sharedPreferences.getBoolean(key, false)
     }
 
     private fun putBoolean(@StringRes resId: Int, value: Boolean) {
-        val key = context.getString(resId)
+        val key = resourceProvider.getString(resId)
         return sharedPreferences.edit { putBoolean(key, value) }
     }
 
     private fun getInt(@StringRes resId: Int, defaultValue: Int): Int {
-        val key = context.getString(resId)
+        val key = resourceProvider.getString(resId)
         return sharedPreferences.getInt(key, defaultValue)
     }
 
     private fun putInt(@StringRes resId: Int, value: Int) {
-        val key = context.getString(resId)
+        val key = resourceProvider.getString(resId)
         sharedPreferences.edit { putInt(key, value) }
     }
 

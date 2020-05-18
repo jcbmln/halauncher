@@ -1,40 +1,46 @@
 package xyz.mcmxciv.halauncher.data.repositories
 
 import retrofit2.Response
+import xyz.mcmxciv.halauncher.data.LocalCache
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantApi
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantSecureApi
 import xyz.mcmxciv.halauncher.data.models.*
+import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
+import xyz.mcmxciv.halauncher.domain.models.Sensor
+import xyz.mcmxciv.halauncher.domain.models.SensorInfo
+import xyz.mcmxciv.halauncher.domain.models.WebhookInfo
 import xyz.mcmxciv.halauncher.models.*
 import javax.inject.Inject
 
 class IntegrationRepository @Inject constructor(
     private val homeAssistantApi: HomeAssistantApi,
-    private val homeAssistantSecureApi: HomeAssistantSecureApi
+    private val homeAssistantSecureApi: HomeAssistantSecureApi,
+    private val localCache: LocalCache
 ) {
     suspend fun getDiscvoveryInfo(): DiscoveryInfo =
         homeAssistantSecureApi.getDiscoveryInfo()
 
-    suspend fun registerDevice(deviceRegistration: DeviceRegistration): DeviceIntegration =
-        homeAssistantSecureApi.registerDevice(deviceRegistration)
+    suspend fun registerDevice(deviceInfo: DeviceInfo): WebhookInfo =
+        homeAssistantSecureApi.registerDevice(deviceInfo)
 
     suspend fun updateRegistration(
         url: String,
-        deviceRegistration: DeviceRegistration
+        deviceInfo: DeviceInfo
     ): Response<*> {
         val request = WebhookRequest(
             "update_registration",
-            deviceRegistration
+            deviceInfo
         )
         return homeAssistantApi.updateRegistration(url, request)
     }
 
     suspend fun registerSensor(
         url: String,
-        sensorRegistration: SensorRegistration
+        sensorInfo: SensorInfo
     ): Response<*> {
         val request = WebhookRequest(
             "register_sensor",
-            sensorRegistration
+            sensorInfo
         )
         return homeAssistantApi.registerSensor(url, request)
     }

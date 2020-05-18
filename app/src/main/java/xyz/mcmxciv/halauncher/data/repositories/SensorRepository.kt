@@ -6,7 +6,7 @@ import android.content.IntentFilter
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import timber.log.Timber
-import xyz.mcmxciv.halauncher.data.models.Sensor
+import xyz.mcmxciv.halauncher.domain.models.Sensor
 import javax.inject.Inject
 
 class SensorRepository @Inject constructor(private val context: Context) {

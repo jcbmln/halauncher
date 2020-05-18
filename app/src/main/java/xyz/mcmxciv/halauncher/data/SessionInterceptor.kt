@@ -4,7 +4,6 @@ import com.squareup.moshi.Moshi
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.threeten.bp.Instant
-import xyz.mcmxciv.halauncher.LocalStorage
 import xyz.mcmxciv.halauncher.data.authentication.AuthenticationException
 import xyz.mcmxciv.halauncher.data.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
@@ -12,17 +11,17 @@ import xyz.mcmxciv.halauncher.domain.models.Session
 import xyz.mcmxciv.halauncher.data.models.Token
 
 class SessionInterceptor constructor(
-    private val localStorage: LocalStorage
+    private val localCache: LocalCache
 ) : Interceptor {
     private val authUrl: String
-        get() = localStorage.baseUrl.toHttpUrl()
+        get() = localCache.baseUrl.toHttpUrl()
             .newBuilder()
             .addPathSegments("auth/token")
             .build()
             .toString()
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val session = localStorage.session ?: throw AuthenticationException()
+        val session = localCache.session ?: throw AuthenticationException()
         val originalRequest = chain.request()
 
         return if (!session.isExpired) {
@@ -42,7 +41,7 @@ class SessionInterceptor constructor(
             if (refreshResponse.isSuccessful) {
                 val adapter = Moshi.Builder().build().adapter(Token::class.java)
                 val token = adapter.fromJson(refreshResponse.body.toString())!!
-                localStorage.session =
+                localCache.session =
                     Session(
                         token.accessToken,
                         Instant.now().epochSecond + token.expiresIn,
@@ -64,8 +63,8 @@ class SessionInterceptor constructor(
         val response = proceed(request)
 
         return if (response.code == 401) {
-            localStorage.session = null
-            localStorage.baseUrl = LocalStorageRepository.PLACEHOLDER_URL
+            localCache.session = null
+            localCache.baseUrl = LocalStorageRepository.PLACEHOLDER_URL
             val requestBody = getRevokeTokenRequestBody(session)
             val revokeRequest = request.newBuilder()
                 .url(authUrl)

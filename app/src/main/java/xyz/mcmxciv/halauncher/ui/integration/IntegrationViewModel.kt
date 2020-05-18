@@ -13,7 +13,7 @@ import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
-import xyz.mcmxciv.halauncher.data.models.DeviceRegistration
+import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
 import xyz.mcmxciv.halauncher.models.IntegrationState
 import javax.inject.Inject
 
@@ -31,7 +31,7 @@ class IntegrationViewModel @Inject constructor(
         integrationEvent.postValue(IntegrationState.LOADING)
 
         val deviceRegistration =
-            DeviceRegistration(
+            DeviceInfo(
                 BuildConfig.APPLICATION_ID,
                 resourceProvider.getString(R.string.app_name),
                 BuildConfig.VERSION_NAME,
