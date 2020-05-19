@@ -39,7 +39,7 @@ jobs:
         run: ./gradlew lintDebug
 
       - name: Run Kotlin Linter
-        run: ./gradlew ktlinkDebugCheck
+        run: ./gradlew ktlintDebugCheck
 
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest --stacktrace
