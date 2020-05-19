@@ -2,8 +2,6 @@ package xyz.mcmxciv.halauncher.utils
 
 import android.content.Context
 import android.content.pm.LauncherApps
-import android.content.res.Resources
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.provider.Settings
 import android.util.DisplayMetrics

@@ -6,5 +6,5 @@ sealed class TokenResult {
     data class Success(val token: Token) : TokenResult()
     object InvalidRequest : TokenResult()
     object InactiveUser : TokenResult()
-    object UnknownError: TokenResult()
+    object UnknownError : TokenResult()
 }

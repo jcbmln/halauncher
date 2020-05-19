@@ -63,8 +63,16 @@ class HassTheme private constructor(
     companion object {
         private val hexPattern = Regex("^(#[a-fA-F0-9]{6}|#[a-fA-F0-9]{3})\$")
         private val hexAlphaPattern = Regex("^(#[a-fA-F0-9]{8}|#[a-fA-F0-9]{4})\$")
-        private val rgbPattern = Regex("rgb *\\( *([0-9]{1,3})%? *, *([0-9]{1,3})%? *, *([0-9]{1,3})%? *\\)")
-        private val rgbaPattern = Regex("rgba *\\( *([0-9]{1,3}%?) *, *([0-9]{1,3}%?) *, *([0-9]{1,3}%?) *, *([0-9]{1,3}%|0?\\.[0-9]+|[01]) *\\)")
+        private val rgbPattern = Regex(
+            "rgb *\\( *([0-9]{1,3})%? *, *([0-9]{1,3})%? *, *([0-9]{1,3})%? *\\)"
+        )
+        private val rgbaPattern = Regex(
+            """
+                rgba *\( *([0-9]{1,3}%?) *,
+                 *([0-9]{1,3}%?) *, *([0-9]{1,3}%?) *,
+                 *([0-9]{1,3}%|0?\.[0-9]+|[01]) *\)
+            """.trimIndent()
+        )
         private val varPattern = Regex("^var\\(--(\\S+)\\)\$")
 
         fun createDefaultTheme(context: Context): HassTheme =

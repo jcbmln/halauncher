@@ -35,7 +35,6 @@ class SettingsViewModel @Inject constructor(
         get() = integrationInteractor.sensorUpdateInterval
         set(value) { integrationInteractor.sensorUpdateInterval = value }
 
-
     fun revokeToken() {
         viewModelScope.launch(exceptionHandler) {
             sessionInteractor.revokeSession()

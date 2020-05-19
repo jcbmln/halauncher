@@ -1,4 +1,4 @@
-name: Test Workflow
+name: Test Build
 
 on:
   push:
@@ -35,8 +35,11 @@ jobs:
       - name: Make Gradle Runnable
         run: chmod +x ./gradlew
 
-      - name: Run Linter
+      - name: Run Android Linter
         run: ./gradlew lintDebug
+
+      - name: Run Kotlin Linter
+        run: ./gradlew ktlinkDebugCheck
 
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest --stacktrace

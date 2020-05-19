@@ -3,10 +3,10 @@ package xyz.mcmxciv.halauncher.data.api
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
+import xyz.mcmxciv.halauncher.domain.models.WebhookInfo
 import xyz.mcmxciv.halauncher.models.DiscoveryInfo
 import xyz.mcmxciv.halauncher.models.DomainServices
-import xyz.mcmxciv.halauncher.domain.models.WebhookInfo
-import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
 
 interface HomeAssistantSecureApi {
     @GET("/api/discovery_info")

@@ -24,8 +24,8 @@ class SensorRepository @Inject constructor(private val context: Context) {
                 return null
             }
 
-            val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
-                    || status == BatteryManager.BATTERY_STATUS_FULL
+            val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                    status == BatteryManager.BATTERY_STATUS_FULL
             val chargerType =
                 when (intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)) {
                     BatteryManager.BATTERY_PLUGGED_AC -> "AC"

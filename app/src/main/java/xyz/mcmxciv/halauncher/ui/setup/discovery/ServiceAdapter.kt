@@ -2,7 +2,6 @@ package xyz.mcmxciv.halauncher.ui.setup.discovery
 
 import android.net.nsd.NsdServiceInfo
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.databinding.ListItemServiceBinding
@@ -18,8 +17,8 @@ class ServiceAdapter : RecyclerView.Adapter<ServiceAdapter.ServiceListViewHolder
             notifyDataSetChanged()
         }
 
-    class ServiceListViewHolder(val binding: ListItemServiceBinding)
-        : RecyclerView.ViewHolder(binding.root)
+    class ServiceListViewHolder(val binding: ListItemServiceBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceListViewHolder {
         val inflater = LayoutInflater.from(parent.context)

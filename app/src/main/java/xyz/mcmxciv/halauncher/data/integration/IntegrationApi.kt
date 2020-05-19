@@ -18,5 +18,5 @@ interface IntegrationApi {
     suspend fun updateSensors(
         @Url url: String,
         @Body request: WebhookRequest
-    ) : Response<Map<String, Map<String, Any>>>
+    ): Response<Map<String, Map<String, Any>>>
 }

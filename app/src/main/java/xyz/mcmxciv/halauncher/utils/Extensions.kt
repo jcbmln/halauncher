@@ -5,10 +5,8 @@ import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.view.View
 import android.widget.TextView
-import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 
 fun Bitmap.toByteArray(): ByteArray =
     ByteArrayOutputStream().use { out ->

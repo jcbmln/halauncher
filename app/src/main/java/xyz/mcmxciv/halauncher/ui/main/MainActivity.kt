@@ -1,7 +1,6 @@
 package xyz.mcmxciv.halauncher.ui.main
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast

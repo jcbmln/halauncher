@@ -4,12 +4,14 @@ import retrofit2.Response
 import xyz.mcmxciv.halauncher.data.LocalCache
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantApi
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantSecureApi
-import xyz.mcmxciv.halauncher.data.models.*
+import xyz.mcmxciv.halauncher.data.models.Config
+import xyz.mcmxciv.halauncher.data.models.WebhookRequest
 import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
 import xyz.mcmxciv.halauncher.domain.models.Sensor
 import xyz.mcmxciv.halauncher.domain.models.SensorInfo
 import xyz.mcmxciv.halauncher.domain.models.WebhookInfo
-import xyz.mcmxciv.halauncher.models.*
+import xyz.mcmxciv.halauncher.models.DiscoveryInfo
+import xyz.mcmxciv.halauncher.models.DomainServices
 import javax.inject.Inject
 
 class IntegrationRepository @Inject constructor(
@@ -48,7 +50,7 @@ class IntegrationRepository @Inject constructor(
     suspend fun updateSensor(
         url: String,
         sensors: List<Sensor>
-    ) : Response<Map<String, Map<String, Any>>> {
+    ): Response<Map<String, Map<String, Any>>> {
         val request = WebhookRequest(
             "update_sensor_states",
             sensors
@@ -58,8 +60,6 @@ class IntegrationRepository @Inject constructor(
 
     suspend fun getServices(): List<DomainServices> =
         homeAssistantSecureApi.getServices()
-
-
 
     suspend fun getConfig(url: String): Response<Config> {
         val request =

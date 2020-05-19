@@ -8,10 +8,10 @@ import androidx.annotation.StringRes
 import androidx.core.content.edit
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.data.models.Config
-import xyz.mcmxciv.halauncher.domain.models.WebhookInfo
-import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
 import xyz.mcmxciv.halauncher.data.models.toJson
+import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
 import xyz.mcmxciv.halauncher.domain.models.Session
+import xyz.mcmxciv.halauncher.domain.models.WebhookInfo
 import javax.inject.Inject
 
 class LocalStorageRepository @Inject constructor(
@@ -24,7 +24,7 @@ class LocalStorageRepository @Inject constructor(
 
     var session: Session?
         get() = getString(R.string.pk_session)?.let { Session.fromJson(it) }
-        set(value) = putString(R.string.pk_session, value?.toJson() )
+        set(value) = putString(R.string.pk_session, value?.toJson())
 
     var deviceInfo: DeviceInfo?
         get() = getString(R.string.pk_device_registration)?.let { DeviceInfo.fromJson(it) }

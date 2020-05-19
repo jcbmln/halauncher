@@ -1,7 +1,11 @@
 package xyz.mcmxciv.halauncher.data.api
 
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.POST
+import retrofit2.http.Url
 import xyz.mcmxciv.halauncher.data.models.Config
 import xyz.mcmxciv.halauncher.data.models.Token
 import xyz.mcmxciv.halauncher.data.models.WebhookRequest
@@ -46,7 +50,7 @@ interface HomeAssistantApi {
     suspend fun updateSensors(
         @Url url: String,
         @Body request: WebhookRequest
-    ) : Response<Map<String, Map<String, Any>>>
+    ): Response<Map<String, Map<String, Any>>>
 
     @POST
     suspend fun getConfig(

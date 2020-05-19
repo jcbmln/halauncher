@@ -8,7 +8,6 @@ import xyz.mcmxciv.halauncher.data.models.WebhookRequest
 import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
 import xyz.mcmxciv.halauncher.domain.models.Sensor
 import xyz.mcmxciv.halauncher.domain.models.SensorInfo
-import java.lang.Exception
 import javax.inject.Inject
 
 class IntegrationRepository @Inject constructor(
@@ -73,7 +72,7 @@ class IntegrationRepository @Inject constructor(
 
     private fun buildUrl(url: String, id: String): String =
         url.toHttpUrl().newBuilder()
-            .addPathSegments("api/webhook/${id}")
+            .addPathSegments("api/webhook/$id")
             .build()
             .toString()
 }

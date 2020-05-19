@@ -1,6 +1,11 @@
 package xyz.mcmxciv.halauncher.ui
 
-import android.view.animation.*
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.Interpolator
+import android.view.animation.LinearInterpolator
+import android.view.animation.ScaleAnimation
 
 class ViewAnimator {
     val showViewAnimationSet = AnimationSet(true)

@@ -9,8 +9,8 @@ import android.view.ViewAnimationUtils
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.math.hypot
 
-class AnimatedFloatingActionButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
-    : FloatingActionButton(context, attrs, defStyleAttr) {
+class AnimatedFloatingActionButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
+    FloatingActionButton(context, attrs, defStyleAttr) {
     constructor(context: Context) : this(context, null, 0)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
@@ -22,7 +22,7 @@ class AnimatedFloatingActionButton(context: Context, attrs: AttributeSet?, defSt
         val animator = ViewAnimationUtils.createCircularReveal(
             this, animationStartX, animationStartY, 0f, animationOpenRadius
         )
-        animator.addListener(object: AnimatorListenerAdapter() {
+        animator.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
                 super.onAnimationEnd(animation)
                 animationListener?.invoke()
@@ -36,7 +36,7 @@ class AnimatedFloatingActionButton(context: Context, attrs: AttributeSet?, defSt
         val animator = ViewAnimationUtils.createCircularReveal(
             this, animationStartX, animationStartY, animationOpenRadius, 0f
         )
-        animator.addListener(object: AnimatorListenerAdapter() {
+        animator.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
                 super.onAnimationEnd(animation)
                 visibility = View.GONE

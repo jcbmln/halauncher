@@ -21,7 +21,13 @@ import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
 import android.content.pm.ShortcutInfo
 import android.content.res.Resources.NotFoundException
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PaintFlagsDrawFilter
+import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
@@ -71,7 +77,6 @@ class IconFactory @Inject constructor(
         )
     }
 
-
     private fun getDrawable(launcherActivityInfo: LauncherActivityInfo): Drawable? {
         val iconRes = launcherActivityInfo.applicationInfo.icon
         val density = deviceProfile.appIconDpi
@@ -116,8 +121,7 @@ class IconFactory @Inject constructor(
             val offset = max(ceil(BLUR_FACTOR * size), round(size * (1 - scale) / 2)).toInt()
             icon.setBounds(offset, offset, size - offset, size - offset)
             icon.draw(canvas)
-        }
-        else {
+        } else {
             if (icon is BitmapDrawable) {
                 val bmp = icon.bitmap
 
@@ -183,8 +187,7 @@ class IconFactory @Inject constructor(
                     .getScale(icon, outBounds, null, null)
                 (adaptiveIconDrawable.background as ColorDrawable).color = wrapperBackgroundColor
             }
-        }
-        else {
+        } else {
             scale = iconNormalizer.getScale(icon, outBounds, null, null)
         }
 

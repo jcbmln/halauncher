@@ -1,10 +1,8 @@
 package xyz.mcmxciv.halauncher.data.interactors
 
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import xyz.mcmxciv.halauncher.data.IntegrationException
 import xyz.mcmxciv.halauncher.data.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
-import java.lang.Exception
 import javax.inject.Inject
 
 class UrlInteractor @Inject constructor(

@@ -2,7 +2,6 @@ package xyz.mcmxciv.halauncher.data
 
 import android.content.SharedPreferences
 import android.os.Build
-import android.provider.Settings
 import androidx.annotation.StringRes
 import androidx.core.content.edit
 import xyz.mcmxciv.halauncher.R
@@ -24,7 +23,7 @@ class LocalCache @Inject constructor(
 
     var session: Session?
         get() = getString(R.string.pk_session)?.let { Session.fromJson(it) }
-        set(value) = putString(R.string.pk_session, value?.toJson() )
+        set(value) = putString(R.string.pk_session, value?.toJson())
 
     var deviceInfo: DeviceInfo?
         get() = getString(R.string.pk_device_registration)?.let { DeviceInfo.fromJson(it) }

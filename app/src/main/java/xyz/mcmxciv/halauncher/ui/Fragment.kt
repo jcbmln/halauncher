@@ -9,12 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 
-inline fun <reified T: ViewModel> Fragment.createViewModel(
+inline fun <reified T : ViewModel> Fragment.createViewModel(
     crossinline factory: () -> T
 ): T = T::class.java.let { viewModel ->
-    ViewModelProvider(this, object: ViewModelProvider.Factory {
+    ViewModelProvider(this, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if(modelClass == viewModel) {
+            if (modelClass == viewModel) {
                 @Suppress("UNCHECKED_CAST")
                 return factory() as T
             }
@@ -37,11 +37,11 @@ fun Fragment.navigate(action: NavDirections) {
     navController.navigate(action)
 }
 
-inline fun <reified T : LiveData<V>, reified V: Any> Fragment.observe(
-    obj: T, crossinline block: (V) -> Unit
+inline fun <reified T : LiveData<V>, reified V : Any> Fragment.observe(
+    obj: T,
+    crossinline block: (V) -> Unit
 ) {
     obj.observe(viewLifecycleOwner, Observer {
         block(it)
     })
 }
-

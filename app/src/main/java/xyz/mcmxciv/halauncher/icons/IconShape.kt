@@ -161,8 +161,7 @@ abstract class IconShape {
             fun toShapeType(enum: String): ShapeType {
                 return try {
                     valueOf(enum)
-                }
-                catch (ex: Exception) {
+                } catch (ex: Exception) {
                     Squircle
                 }
             }

@@ -212,7 +212,8 @@ class DeviceProfile @Inject constructor(context: Context) {
         }
 
         private fun getPredefinedDeviceProfiles(
-            context: Context, gridName: String?
+            context: Context,
+            gridName: String?
         ): ArrayList<DisplayOption> {
             val profiles = ArrayList<DisplayOption>()
             try {
@@ -280,7 +281,8 @@ class DeviceProfile @Inject constructor(context: Context) {
         }
 
         private fun invDistWeightedInterpolate(
-            width: Float, height: Float,
+            width: Float,
+            height: Float,
             points: ArrayList<DisplayOption>
         ): DisplayOption {
             var weights = 0f

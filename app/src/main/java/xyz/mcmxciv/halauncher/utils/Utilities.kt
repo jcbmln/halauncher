@@ -25,7 +25,6 @@ import androidx.palette.graphics.Palette
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
-
 /**
  * Various utilities shared amongst the Launcher's classes.
  */

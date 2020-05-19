@@ -1,7 +1,6 @@
 package xyz.mcmxciv.halauncher.utils
 
 import android.content.pm.LauncherApps
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.util.DisplayMetrics
 import android.view.LayoutInflater

@@ -2,9 +2,7 @@ package xyz.mcmxciv.halauncher.utils
 
 import android.app.ActivityOptions
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.pm.LauncherApps
 import android.net.Uri
 import android.os.Bundle
 import android.os.Process
@@ -45,7 +43,6 @@ class AppLauncher @Inject constructor(resourceProvider: ResourceProvider) {
             )
         }
     }
-
 
     fun uninstall(componentName: ComponentName) {
         val intent = Intent(Intent.ACTION_DELETE)

@@ -16,10 +16,14 @@ import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
 import xyz.mcmxciv.halauncher.models.ErrorState
-import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.models.WebCallback
-import xyz.mcmxciv.halauncher.ui.*
+import xyz.mcmxciv.halauncher.ui.HassTheme
+import xyz.mcmxciv.halauncher.ui.LauncherFragment
+import xyz.mcmxciv.halauncher.ui.createViewModel
+import xyz.mcmxciv.halauncher.ui.displayMessage
 import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
+import xyz.mcmxciv.halauncher.ui.navigate
+import xyz.mcmxciv.halauncher.ui.observe
 import java.io.BufferedReader
 
 class HomeFragment : LauncherFragment() {
@@ -28,7 +32,8 @@ class HomeFragment : LauncherFragment() {
     private val activityViewModel by activityViewModels<MainActivityViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater)
@@ -46,12 +51,11 @@ class HomeFragment : LauncherFragment() {
                 navigate(
                     HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
                 )
-            }
-            else {
+            } else {
                 displayMessage(getString(R.string.error_webview_message))
             }
         }
-        
+
         observe(viewModel.callback) { resource ->
             binding.homeWebView.evaluateJavascript(resource.callback, null)
 
@@ -128,12 +132,11 @@ class HomeFragment : LauncherFragment() {
         binding.homeWebView.loadUrl(viewModel.webviewUrl)
     }
 
-    private fun getThemeCallback() : String? {
+    private fun getThemeCallback(): String? {
         val callback = try {
             val input = LauncherApplication.instance.assets.open("websocketBridge.js")
             input.bufferedReader().use(BufferedReader::readText)
-        }
-        catch (ex: Exception) {
+        } catch (ex: Exception) {
             Timber.e(ex)
             null
         }

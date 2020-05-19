@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.navigation.fragment.findNavController
 import xyz.mcmxciv.halauncher.databinding.FragmentManualSetupBinding
 import xyz.mcmxciv.halauncher.ui.LauncherFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
@@ -18,7 +17,8 @@ class ManualSetupFragment : LauncherFragment() {
     private lateinit var viewModel: SetupViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentManualSetupBinding.inflate(inflater)

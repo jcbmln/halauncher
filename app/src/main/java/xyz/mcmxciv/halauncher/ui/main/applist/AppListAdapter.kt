@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.databinding.ListItemAppBinding
 import xyz.mcmxciv.halauncher.models.DeviceProfile
-import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
+import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutPopupWindow
 import xyz.mcmxciv.halauncher.utils.AppLauncher
 
@@ -76,7 +76,7 @@ class AppListAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : AppListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return AppListViewHolder(
             ListItemAppBinding.inflate(inflater, parent, false),

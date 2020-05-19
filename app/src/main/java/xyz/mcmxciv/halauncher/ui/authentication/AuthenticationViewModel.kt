@@ -40,7 +40,6 @@ class AuthenticationViewModel @Inject constructor(
             }
 
             true
-        }
-        else false
+        } else false
     }
 }

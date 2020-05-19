@@ -12,14 +12,19 @@ import android.webkit.WebViewClient
 import androidx.navigation.fragment.findNavController
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentAuthenticationBinding
-import xyz.mcmxciv.halauncher.ui.*
+import xyz.mcmxciv.halauncher.ui.LauncherFragment
+import xyz.mcmxciv.halauncher.ui.createViewModel
+import xyz.mcmxciv.halauncher.ui.displayMessage
+import xyz.mcmxciv.halauncher.ui.navigate
+import xyz.mcmxciv.halauncher.ui.observe
 
 class AuthenticationFragment : LauncherFragment() {
     private lateinit var binding: FragmentAuthenticationBinding
     private lateinit var viewModel: AuthenticationViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAuthenticationBinding.inflate(inflater)

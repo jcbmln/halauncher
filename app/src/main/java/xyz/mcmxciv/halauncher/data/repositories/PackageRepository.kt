@@ -1,14 +1,13 @@
 package xyz.mcmxciv.halauncher.data.repositories
 
 import android.content.ComponentName
-import android.content.Intent
-import android.content.pm.*
+import android.content.pm.LauncherActivityInfo
+import android.content.pm.LauncherApps
 import android.content.pm.LauncherApps.ShortcutQuery
-import android.os.Build
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.content.pm.ShortcutInfo
 import android.os.Process
-import androidx.annotation.RequiresApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class PackageRepository @Inject constructor(

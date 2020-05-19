@@ -16,7 +16,8 @@ class LaunchFragment : LauncherFragment() {
     private lateinit var viewModel: LaunchViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLaunchBinding.inflate(inflater)

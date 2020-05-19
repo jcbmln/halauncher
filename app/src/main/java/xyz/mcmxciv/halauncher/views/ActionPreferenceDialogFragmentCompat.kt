@@ -14,8 +14,8 @@ class ActionPreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
         if (preference is ActionPreference) {
             val pref = preference as ActionPreference
             val textView = view?.findViewById<TextView>(android.R.id.edit)
-            textView?.text = pref.confirmationMessage ?:
-                    getString(R.string.default_confirmation_message)
+            textView?.text = pref.confirmationMessage
+                    ?: getString(R.string.default_confirmation_message)
         }
     }
 

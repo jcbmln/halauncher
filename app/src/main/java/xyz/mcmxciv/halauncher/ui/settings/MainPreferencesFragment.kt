@@ -1,11 +1,8 @@
 package xyz.mcmxciv.halauncher.ui.settings
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.databinding.FragmentSettingsBinding
 import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 

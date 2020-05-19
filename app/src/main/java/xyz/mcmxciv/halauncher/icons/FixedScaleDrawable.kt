@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.DrawableWrapper
 import android.util.AttributeSet
-
 import org.xmlpull.v1.XmlPullParser
 
 /**

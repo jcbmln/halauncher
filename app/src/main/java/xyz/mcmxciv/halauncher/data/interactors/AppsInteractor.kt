@@ -54,7 +54,6 @@ class AppsInteractor @Inject constructor(
 
         val cachedAppActivityNames = cachedApps.map { app -> app.activityName }
 
-
         val newAppListItems = launcherActivityInfo.filterNot { info ->
             cachedAppActivityNames.contains(info.name)
         }.map { info ->

@@ -12,7 +12,7 @@ class AuthenticationUseCase @Inject constructor(
     val authenticationUrl: String
         get() = authenticationRepository.authenticationUrl
 
-    suspend fun authenticate(authenticationCode: String) : AuthenticationResult {
+    suspend fun authenticate(authenticationCode: String): AuthenticationResult {
         return when (val result = authenticationRepository.getToken(authenticationCode)) {
             is TokenResult.Success -> {
                 authenticationRepository.createSession(result.token)

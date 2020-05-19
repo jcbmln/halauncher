@@ -2,8 +2,8 @@ package xyz.mcmxciv.halauncher.domain.models
 
 import com.squareup.moshi.JsonClass
 import org.threeten.bp.Instant
-import xyz.mcmxciv.halauncher.data.models.SerializerObject
 import xyz.mcmxciv.halauncher.data.models.SerializableModel
+import xyz.mcmxciv.halauncher.data.models.SerializerObject
 import xyz.mcmxciv.halauncher.data.models.Token
 
 @JsonClass(generateAdapter = true)

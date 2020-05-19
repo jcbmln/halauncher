@@ -1,18 +1,16 @@
 package xyz.mcmxciv.halauncher.ui.home
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import xyz.mcmxciv.halauncher.data.interactors.AppsInteractor
-import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
 import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
-import xyz.mcmxciv.halauncher.data.models.Config
 import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.WebCallback
-import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
@@ -32,7 +30,7 @@ class HomeViewModel @Inject constructor(
         val exceptionHandler = CoroutineExceptionHandler { _, ex ->
             Timber.e(ex)
             val errorState = if (sessionInteractor.isAuthenticated) ErrorState.WEBVIEW
-                             else ErrorState.AUTHENTICATION
+                else ErrorState.AUTHENTICATION
             errorEvent.postValue(errorState)
             callbackEvent.postValue(WebCallback.AuthCallback("$callback(false);"))
         }

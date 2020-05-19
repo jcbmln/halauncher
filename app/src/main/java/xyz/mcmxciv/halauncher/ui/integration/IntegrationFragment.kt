@@ -9,8 +9,12 @@ import androidx.fragment.app.activityViewModels
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentIntegrationBinding
 import xyz.mcmxciv.halauncher.models.IntegrationState
-import xyz.mcmxciv.halauncher.ui.*
+import xyz.mcmxciv.halauncher.ui.LauncherFragment
+import xyz.mcmxciv.halauncher.ui.createViewModel
+import xyz.mcmxciv.halauncher.ui.displayMessage
 import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
+import xyz.mcmxciv.halauncher.ui.navigate
+import xyz.mcmxciv.halauncher.ui.observe
 
 class IntegrationFragment : LauncherFragment() {
     private lateinit var binding: FragmentIntegrationBinding
@@ -18,7 +22,8 @@ class IntegrationFragment : LauncherFragment() {
     private val activityViewModel: MainActivityViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentIntegrationBinding.inflate(inflater)

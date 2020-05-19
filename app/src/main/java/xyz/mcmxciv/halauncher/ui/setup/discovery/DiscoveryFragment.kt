@@ -20,7 +20,8 @@ class DiscoveryFragment : LauncherFragment() {
     private lateinit var viewModel: SetupViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDiscoveryBinding.inflate(inflater)
@@ -55,7 +56,6 @@ class DiscoveryFragment : LauncherFragment() {
         binding.manualModeButton.setOnClickListener {
             navigate(DiscoveryFragmentDirections.actionDiscoveryFragmentToManualSetupFragment())
         }
-
     }
 
     override fun onPause() {

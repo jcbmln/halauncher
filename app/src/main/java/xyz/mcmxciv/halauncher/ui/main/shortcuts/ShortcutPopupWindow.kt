@@ -114,8 +114,8 @@ class ShortcutPopupWindow(
         window.isFocusable = true
         window.setTouchInterceptor { view, event ->
             if (
-                event.x < 0 || event.x > view.width
-                || event.y < 0 || event.y > view.height
+                event.x < 0 || event.x > view.width ||
+                event.y < 0 || event.y > view.height
             ) {
                 dismiss()
                 true
@@ -136,7 +136,7 @@ class ShortcutPopupWindow(
             (parentView.bottom + window.height) > screenHeight -> VerticalLocation.TOP
             else -> VerticalLocation.BOTTOM
         }
-        val xOffset = when(horizontalLocation) {
+        val xOffset = when (horizontalLocation) {
             HorizontalLocation.LEFT -> parentView.left + leftRightMargin
             HorizontalLocation.RIGHT -> screenWidth - window.width - leftRightMargin
             HorizontalLocation.MIDDLE -> baseXOffset
@@ -145,7 +145,7 @@ class ShortcutPopupWindow(
         val parentViewLocation = IntArray(2)
         parentView.getLocationOnScreen(parentViewLocation)
 
-        val yOffset = when(verticalLocation) {
+        val yOffset = when (verticalLocation) {
             VerticalLocation.TOP -> parentViewLocation[1] - window.height
             VerticalLocation.BOTTOM -> parentViewLocation[1] + parentView.height
         }
@@ -156,7 +156,7 @@ class ShortcutPopupWindow(
                 (xOffset + window.width - (parentView.width / 2)).toFloat() / screenWidth
             HorizontalLocation.MIDDLE -> 0.5f
         }
-        val pivotY = when(verticalLocation) {
+        val pivotY = when (verticalLocation) {
             VerticalLocation.TOP -> 1f
             VerticalLocation.BOTTOM -> 0f
         }
@@ -164,12 +164,12 @@ class ShortcutPopupWindow(
         binding.topArrow.isVisible = verticalLocation == VerticalLocation.BOTTOM
         binding.bottomArrow.isVisible = verticalLocation == VerticalLocation.TOP
 
-        val visibleArrow = when(verticalLocation) {
+        val visibleArrow = when (verticalLocation) {
             VerticalLocation.TOP -> binding.bottomArrow
             VerticalLocation.BOTTOM -> binding.topArrow
         }
 
-        visibleArrow.translationX = when(horizontalLocation) {
+        visibleArrow.translationX = when (horizontalLocation) {
             HorizontalLocation.LEFT ->
                 (parentView.width / 2) - visibleArrow.measuredWidth
             HorizontalLocation.RIGHT ->

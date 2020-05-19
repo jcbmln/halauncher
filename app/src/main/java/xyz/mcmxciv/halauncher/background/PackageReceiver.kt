@@ -8,7 +8,7 @@ import android.content.IntentFilter
 class PackageReceiver private constructor(
     intentFiler: IntentFilter,
     private val listener: PackageListener
-): BroadcastReceiver() {
+) : BroadcastReceiver() {
     val filter = intentFiler
 
     override fun onReceive(context: Context, intent: Intent) {

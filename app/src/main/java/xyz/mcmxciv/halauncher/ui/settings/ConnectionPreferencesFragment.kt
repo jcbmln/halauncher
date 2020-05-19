@@ -9,7 +9,8 @@ import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.views.ActionPreference
 
-class ConnectionPreferencesFragment : LauncherPreferenceFragment(), Preference.OnPreferenceChangeListener {
+class ConnectionPreferencesFragment : LauncherPreferenceFragment(),
+    Preference.OnPreferenceChangeListener {
     private lateinit var viewModel: SettingsViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -9,17 +9,19 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import xyz.mcmxciv.halauncher.data.AppDatabase
 import xyz.mcmxciv.halauncher.data.LocalCache
-import xyz.mcmxciv.halauncher.data.*
+import xyz.mcmxciv.halauncher.data.SessionInterceptor
+import xyz.mcmxciv.halauncher.data.UrlInterceptor
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantApi
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantSecureApi
 import xyz.mcmxciv.halauncher.data.authentication.AuthenticationApi
 import xyz.mcmxciv.halauncher.data.dao.AppDao
-import xyz.mcmxciv.halauncher.di.qualifiers.Api
-import xyz.mcmxciv.halauncher.di.qualifiers.SecureApi
 import xyz.mcmxciv.halauncher.data.dao.ShortcutDao
 import xyz.mcmxciv.halauncher.data.integration.IntegrationApi
 import xyz.mcmxciv.halauncher.data.integration.SecureIntegrationApi
+import xyz.mcmxciv.halauncher.di.qualifiers.Api
+import xyz.mcmxciv.halauncher.di.qualifiers.SecureApi
 import javax.inject.Singleton
 
 @Module

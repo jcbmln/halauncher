@@ -15,7 +15,7 @@ class BatterySensorManager : SensorManager {
         context.registerReceiver(
             null,
             IntentFilter(Intent.ACTION_BATTERY_CHANGED)
-        )?.also {  intent ->
+        )?.also { intent ->
             getBatteryLevelSensor(intent)?.also { sensor ->
                 sensorInfo.add(
                     SensorInfo(
@@ -92,8 +92,8 @@ class BatterySensorManager : SensorManager {
             return null
         }
 
-        val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
-                || status == BatteryManager.BATTERY_STATUS_FULL
+        val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                status == BatteryManager.BATTERY_STATUS_FULL
         val chargerType =
             when (plugged) {
                 BatteryManager.BATTERY_PLUGGED_AC -> "ac"
@@ -131,7 +131,7 @@ class BatterySensorManager : SensorManager {
         isCharging: Boolean = false,
         chargerType: String? = null,
         chargingStatus: String? = null
-    ) : String {
+    ): String {
         var icon = "mdi:battery"
 
         if (chargingStatus == "unknown") {

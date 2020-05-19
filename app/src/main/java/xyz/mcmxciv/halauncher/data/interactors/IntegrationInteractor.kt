@@ -3,17 +3,15 @@ package xyz.mcmxciv.halauncher.data.interactors
 import android.content.Context
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import timber.log.Timber
-import xyz.mcmxciv.halauncher.sensors.SensorUpdateWorker
 import xyz.mcmxciv.halauncher.data.IntegrationException
-import xyz.mcmxciv.halauncher.domain.models.Sensor
-import xyz.mcmxciv.halauncher.domain.models.SensorInfo
+import xyz.mcmxciv.halauncher.data.models.Config
 import xyz.mcmxciv.halauncher.data.repositories.IntegrationRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
 import xyz.mcmxciv.halauncher.data.repositories.SensorRepository
-import xyz.mcmxciv.halauncher.data.models.Config
 import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
-import java.lang.Exception
-import java.lang.IllegalStateException
+import xyz.mcmxciv.halauncher.domain.models.Sensor
+import xyz.mcmxciv.halauncher.domain.models.SensorInfo
+import xyz.mcmxciv.halauncher.sensors.SensorUpdateWorker
 import javax.inject.Inject
 
 class IntegrationInteractor @Inject constructor(
@@ -148,7 +146,7 @@ class IntegrationInteractor @Inject constructor(
 
     private fun buildUrl(url: String, id: String): String =
         url.toHttpUrl().newBuilder()
-            .addPathSegments("api/webhook/${id}")
+            .addPathSegments("api/webhook/$id")
             .build()
             .toString()
 }

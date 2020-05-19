@@ -9,7 +9,8 @@ import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 
 @Suppress("unused")
-class IntegrationPreferencesFragment : LauncherPreferenceFragment(), Preference.OnPreferenceChangeListener {
+class IntegrationPreferencesFragment : LauncherPreferenceFragment(),
+    Preference.OnPreferenceChangeListener {
     private lateinit var viewModel: SettingsViewModel
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

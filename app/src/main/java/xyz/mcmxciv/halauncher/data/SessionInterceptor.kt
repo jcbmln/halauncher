@@ -1,14 +1,18 @@
 package xyz.mcmxciv.halauncher.data
 
 import com.squareup.moshi.Moshi
-import okhttp3.*
+import okhttp3.FormBody
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.Interceptor
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 import org.threeten.bp.Instant
 import xyz.mcmxciv.halauncher.data.authentication.AuthenticationException
+import xyz.mcmxciv.halauncher.data.models.Token
 import xyz.mcmxciv.halauncher.data.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
 import xyz.mcmxciv.halauncher.domain.models.Session
-import xyz.mcmxciv.halauncher.data.models.Token
 
 class SessionInterceptor constructor(
     private val localCache: LocalCache
@@ -58,7 +62,8 @@ class SessionInterceptor constructor(
     }
 
     private fun Interceptor.Chain.proceedRevokeSessionOnError(
-        request: Request, session: Session
+        request: Request,
+        session: Session
     ): Response {
         val response = proceed(request)
 

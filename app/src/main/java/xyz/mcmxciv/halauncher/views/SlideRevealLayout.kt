@@ -73,7 +73,7 @@ class SlideRevealLayout(context: Context, attrs: AttributeSet) : FrameLayout(con
             return false
         }
 
-        when(event.actionMasked) {
+        when (event.actionMasked) {
             // get the initial x coordinate and reset shouldDrag
             MotionEvent.ACTION_DOWN -> {
                 initialX = event.x.toInt()
@@ -83,7 +83,6 @@ class SlideRevealLayout(context: Context, attrs: AttributeSet) : FrameLayout(con
             // is greater than the touch slop, the view should be dragged
             MotionEvent.ACTION_MOVE -> {
                 val xDistance = calculateXDistance(event)
-                Log.i("x distance: ", xDistance.toString())
                 shouldDrag = xDistance > touchSlop
             }
         }

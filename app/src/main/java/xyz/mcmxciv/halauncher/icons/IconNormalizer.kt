@@ -16,7 +16,17 @@
 
 package xyz.mcmxciv.halauncher.icons
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.Region
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -91,8 +101,7 @@ class IconNormalizer @Inject constructor(
         if (width <= 0 || height <= 0) {
             width = if (width <= 0 || width > maxSize) maxSize else width
             height = if (height <= 0 || height > maxSize) maxSize else height
-        }
-        else if (width > maxSize || height > maxSize) {
+        } else if (width > maxSize || height > maxSize) {
             val max = max(width, height)
             width = maxSize * width / max
             height = maxSize * height / max
@@ -213,7 +222,6 @@ class IconNormalizer @Inject constructor(
 
         var index = bounds.top * maxSize
         val rowSizeDiff = maxSize - bounds.right
-
         var sum = 0
 
         for (y in bounds.top until bounds.bottom) {
@@ -228,7 +236,7 @@ class IconNormalizer @Inject constructor(
         }
 
         val percentageDiffPixels = sum.toFloat() / (bounds.width() * bounds.height())
-        return  percentageDiffPixels < PIXEL_DIFF_PERCENTAGE_THRESHOLD
+        return percentageDiffPixels < PIXEL_DIFF_PERCENTAGE_THRESHOLD
     }
 
     companion object {
@@ -253,8 +261,7 @@ class IconNormalizer @Inject constructor(
             val hullByRect = hullArea / boundingArea
             val scaleRequired = if (hullByRect < CIRCLE_AREA_BY_RECT) {
                 MAX_CIRCLE_AREA_FACTOR
-            }
-            else {
+            } else {
                 MAX_SQUARE_AREA_FACTOR + LINEAR_SCALE_SLOPE * (1 - hullByRect)
             }
 
@@ -298,12 +305,14 @@ class IconNormalizer @Inject constructor(
          * @param bottomY the last Y position (inclusive) with a valid value.
          */
         private fun convertToConvexArray(
-            xCoordinates: FloatArray, direction: Int,
-            topY: Int, bottomY: Int
+            xCoordinates: FloatArray,
+            direction: Int,
+            topY: Int,
+            bottomY: Int
         ) {
             val total = xCoordinates.size
             val angles = FloatArray(total - 1) // The tangent at each pixel.
-            var last = -1    // Last valid y coordinate which didn't have a missing value
+            var last = -1 // Last valid y coordinate which didn't have a missing value
             var lastAngle = Float.MAX_VALUE
 
             for (i in (topY + 1)..bottomY) {

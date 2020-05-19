@@ -1,7 +1,6 @@
 package xyz.mcmxciv.halauncher.di.components
 
 import dagger.Subcomponent
-import xyz.mcmxciv.halauncher.di.modules.DataModule
 import xyz.mcmxciv.halauncher.di.modules.DiscoveryModule
 import xyz.mcmxciv.halauncher.di.scopes.ViewScope
 import xyz.mcmxciv.halauncher.ui.authentication.AuthenticationViewModel
