@@ -2,14 +2,11 @@ package xyz.mcmxciv.halauncher.data
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import okhttp3.HttpUrl
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.Url
 
 class HomeAssistantMockWebServer<T>(private val c: Class<T>) {
     private val server = MockWebServer()

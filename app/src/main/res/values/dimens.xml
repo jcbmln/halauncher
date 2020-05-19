@@ -15,7 +15,8 @@
 -->
 
 <resources>
-    <dimen name="default_corner_radius">3dp</dimen>
+    <dimen name="default_corner_radius">3dp</dimen>\
+    <dimen name="app_drawer_handle_diameter">48dp</dimen>
 
     <!-- All Apps -->
     <dimen name="all_apps_search_bar_field_height">48dp</dimen>

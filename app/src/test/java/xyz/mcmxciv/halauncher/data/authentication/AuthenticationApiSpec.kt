@@ -3,7 +3,6 @@ package xyz.mcmxciv.halauncher.data.authentication
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.RecordedRequest
 import org.assertj.core.api.Assertions.assertThat
-import org.json.JSONObject
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import xyz.mcmxciv.halauncher.data.HomeAssistantMockWebServer

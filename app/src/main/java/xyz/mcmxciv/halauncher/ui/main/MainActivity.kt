@@ -1,7 +1,6 @@
 package xyz.mcmxciv.halauncher.ui.main
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -53,20 +52,16 @@ class MainActivity : AppCompatActivity(),
             appListAdapter.appListItems = items
         }
 
-        observe(viewModel.config) { config ->
-            config?.let { setThemeColor(Color.parseColor(it.themeColor)) }
-        }
-
         observe(viewModel.theme) { newTheme ->
             theme = newTheme
 
-            binding.appListContainer.background = newTheme.appListBackground
+            binding.appDrawerBackground.background = newTheme.appListBackground
             window.statusBarColor = newTheme.primaryColor
             window.navigationBarColor = newTheme.primaryColor
-//            appListAdapter.theme = theme
         }
 
-        binding.appList.layoutManager = GridLayoutManager(this, deviceProfile.appDrawerColumns)
+        binding.appList.layoutManager =
+            GridLayoutManager(this, deviceProfile.appDrawerColumns)
         binding.appList.adapter = appListAdapter
     }
 
@@ -121,10 +116,10 @@ class MainActivity : AppCompatActivity(),
         viewModel.hideActivity(activityName)
     }
 
-    private fun setThemeColor(color: Int) {
-        window.statusBarColor = color
-        window.navigationBarColor = color
-    }
+//    private fun setThemeColor(color: Int) {
+//        window.statusBarColor = color
+//        window.navigationBarColor = color
+//    }
 
     companion object {
         const val UPDATE_REQUEST_CODE = 1
