@@ -26,14 +26,6 @@ class MainActivity : AppCompatActivity(),
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var packageReceiver: PackageReceiver
-    private lateinit var theme: HassTheme
-    private lateinit var appListAdapter: AppListAdapter
-
-    @Inject
-    lateinit var deviceProfile: DeviceProfile
-
-    @Inject
-    lateinit var appLauncher: AppLauncher
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,25 +36,6 @@ class MainActivity : AppCompatActivity(),
         viewModel = createViewModel {
             LauncherApplication.instance.component.mainActivityViewModel()
         }
-
-        theme = HassTheme.createDefaultTheme(this)
-        appListAdapter = AppListAdapter(deviceProfile, appLauncher, this)
-
-        observe(viewModel.appListItems) { items ->
-            appListAdapter.appListItems = items
-        }
-
-        observe(viewModel.theme) { newTheme ->
-            theme = newTheme
-
-            binding.appDrawerBackground.background = newTheme.appListBackground
-            window.statusBarColor = newTheme.primaryColor
-            window.navigationBarColor = newTheme.primaryColor
-        }
-
-        binding.appList.layoutManager =
-            GridLayoutManager(this, deviceProfile.appDrawerColumns)
-        binding.appList.adapter = appListAdapter
     }
 
     override fun onResume() {
@@ -90,14 +63,6 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun onBackPressed() {
-        if (binding.mainLayout.currentState == R.id.end) {
-            binding.mainLayout.transitionToStart()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.app_navigation_host_fragment)
 
@@ -109,17 +74,12 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onPackageReceived() {
-        viewModel.updateAppListItems()
+//        viewModel.updateAppListItems()
     }
 
     override fun onHideActivity(activityName: String) {
-        viewModel.hideActivity(activityName)
+//        viewModel.hideActivity(activityName)
     }
-
-//    private fun setThemeColor(color: Int) {
-//        window.statusBarColor = color
-//        window.navigationBarColor = color
-//    }
 
     companion object {
         const val UPDATE_REQUEST_CODE = 1

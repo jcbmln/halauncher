@@ -75,24 +75,24 @@ class HassTheme private constructor(
         )
         private val varPattern = Regex("^var\\(--(\\S+)\\)\$")
 
-        fun createDefaultTheme(context: Context): HassTheme =
+        fun createDefaultTheme(resourceProvider: ResourceProvider): HassTheme =
             HassTheme(
-                context.getColor(R.color.primary_text_color),
-                context.getColor(R.color.secondary_text_color),
-                context.getColor(R.color.text_primary_color),
-                context.getColor(R.color.disabled_text_color),
-                context.getColor(R.color.primary_color),
-                context.getColor(R.color.dark_primary_color),
-                context.getColor(R.color.light_primary_color),
-                context.getColor(R.color.accent_color),
-                context.getColor(R.color.error_color),
-                context.getColor(R.color.card_background_color),
-                context.getColor(R.color.primary_background_color),
-                context.getColor(R.color.secondary_background_color)
+                resourceProvider.getColor(R.color.primary_text_color),
+                resourceProvider.getColor(R.color.secondary_text_color),
+                resourceProvider.getColor(R.color.text_primary_color),
+                resourceProvider.getColor(R.color.disabled_text_color),
+                resourceProvider.getColor(R.color.primary_color),
+                resourceProvider.getColor(R.color.dark_primary_color),
+                resourceProvider.getColor(R.color.light_primary_color),
+                resourceProvider.getColor(R.color.accent_color),
+                resourceProvider.getColor(R.color.error_color),
+                resourceProvider.getColor(R.color.card_background_color),
+                resourceProvider.getColor(R.color.primary_background_color),
+                resourceProvider.getColor(R.color.secondary_background_color)
             )
 
-        fun createFromString(theme: String, context: Context): HassTheme {
-            val default = createDefaultTheme(context)
+        fun createFromString(theme: String, resourceProvider: ResourceProvider): HassTheme {
+            val default = createDefaultTheme(resourceProvider)
             val json = try {
                 JSONObject(theme)
             } catch (ex: JSONException) {

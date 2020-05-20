@@ -10,11 +10,13 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import org.json.JSONObject
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
+import xyz.mcmxciv.halauncher.models.DeviceProfile
 import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.WebCallback
 import xyz.mcmxciv.halauncher.ui.HassTheme
@@ -22,14 +24,23 @@ import xyz.mcmxciv.halauncher.ui.LauncherFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.ui.displayMessage
 import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
+import xyz.mcmxciv.halauncher.ui.main.applist.AppListAdapter
 import xyz.mcmxciv.halauncher.ui.navigate
 import xyz.mcmxciv.halauncher.ui.observe
+import xyz.mcmxciv.halauncher.utils.AppLauncher
 import java.io.BufferedReader
+import javax.inject.Inject
 
 class HomeFragment : LauncherFragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
-    private val activityViewModel by activityViewModels<MainActivityViewModel>()
+    private lateinit var appListAdapter: AppListAdapter
+
+    @Inject
+    lateinit var deviceProfile: DeviceProfile
+
+    @Inject
+    lateinit var appLauncher: AppLauncher
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,6 +67,18 @@ class HomeFragment : LauncherFragment() {
             }
         }
 
+        appListAdapter = AppListAdapter(deviceProfile, appLauncher, viewModel)
+
+        observe(viewModel.appListItems) { items ->
+            appListAdapter.appListItems = items
+        }
+
+        observe(viewModel.theme) { theme ->
+            binding.appDrawerBackground.background = theme.appListBackground
+            requireActivity().window.statusBarColor = theme.primaryColor
+            requireActivity().window.navigationBarColor = theme.primaryColor
+        }
+
         observe(viewModel.callback) { resource ->
             binding.homeWebView.evaluateJavascript(resource.callback, null)
 
@@ -63,6 +86,10 @@ class HomeFragment : LauncherFragment() {
                 navigate(HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph())
             }
         }
+
+        binding.appList.layoutManager =
+            GridLayoutManager(context, deviceProfile.appDrawerColumns)
+        binding.appList.adapter = appListAdapter
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
             this.isEnabled = true
@@ -101,8 +128,7 @@ class HomeFragment : LauncherFragment() {
 
                 @JavascriptInterface
                 fun themesUpdated(result: String) {
-                    val theme = HassTheme.createFromString(result, context)
-                    activityViewModel.setTheme(theme)
+                    viewModel.setTheme(result)
                 }
 
                 @JavascriptInterface

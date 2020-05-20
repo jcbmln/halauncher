@@ -13,58 +13,18 @@ import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
 import xyz.mcmxciv.halauncher.data.models.Config
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import xyz.mcmxciv.halauncher.ui.HassTheme
+import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 
 class MainActivityViewModel @Inject constructor(
-    private val appsInteractor: AppsInteractor,
-    private val sessionInteractor: SessionInteractor,
-    private val integrationInteractor: IntegrationInteractor
+    private val sessionInteractor: SessionInteractor
 ) : ViewModel() {
-    private val exceptionHandler = CoroutineExceptionHandler { _, ex ->
-        Timber.e(ex)
-    }
-
-    private val appListItemData = MutableLiveData<List<AppListItem>>().also { data ->
-        viewModelScope.launch {
-            data.postValue(appsInteractor.getAppListItems())
-        }
-    }
-    val appListItems: LiveData<List<AppListItem>> = appListItemData
-
-    private val configData = MutableLiveData<Config?>().also { data ->
-        getConfig(data)
-    }
-    val config: LiveData<Config?> = configData
-
     private val themeData = MutableLiveData<HassTheme>()
     val theme: LiveData<HassTheme> = themeData
-
-    fun updateAppListItems() {
-        viewModelScope.launch {
-            appListItemData.postValue(appsInteractor.getAppListItems())
-        }
-    }
 
     fun revokeSession() {
         viewModelScope.launch {
             sessionInteractor.revokeSession()
-        }
-    }
-
-    fun getConfig(data: MutableLiveData<Config?> = configData) {
-        viewModelScope.launch(exceptionHandler) {
-            data.postValue(integrationInteractor.getConfig())
-        }
-    }
-
-    fun setTheme(theme: HassTheme) {
-        themeData.postValue(theme)
-    }
-
-    fun hideActivity(activityName: String) {
-        viewModelScope.launch(exceptionHandler) {
-            appsInteractor.markActivityHidden(activityName)
-            appListItemData.postValue(appsInteractor.getAppListItems())
         }
     }
 }

@@ -55,7 +55,7 @@ class IntegrationFragment : LauncherFragment() {
     }
 
     private fun finishIntegration() {
-        activityViewModel.getConfig()
+//        activityViewModel.getConfig()
         navigate(IntegrationFragmentDirections.actionGlobalHomeFragment())
     }
 

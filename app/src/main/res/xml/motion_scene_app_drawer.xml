@@ -41,7 +41,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp">
             <CustomAttribute
-                motion:attributeName="crossfade"
+                motion:attributeName="seek"
                 motion:customFloatValue="0" />
         </Constraint>
     </ConstraintSet>
@@ -68,11 +68,10 @@
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            android:rotation="180"
             android:layout_width="0dp"
             android:layout_height="wrap_content">
             <CustomAttribute
-                motion:attributeName="crossfade"
+                motion:attributeName="seek"
                 motion:customFloatValue="1" />
         </Constraint>
     </ConstraintSet>
