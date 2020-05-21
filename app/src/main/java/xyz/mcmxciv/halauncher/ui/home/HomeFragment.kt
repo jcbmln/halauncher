@@ -1,15 +1,29 @@
 package xyz.mcmxciv.halauncher.ui.home
 
 import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.Matrix
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
+import android.graphics.drawable.shapes.Shape
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.activity.addCallback
-import androidx.fragment.app.activityViewModels
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.view.ViewCompat
+import androidx.core.view.marginBottom
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
 import org.json.JSONObject
 import timber.log.Timber
@@ -19,12 +33,10 @@ import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
 import xyz.mcmxciv.halauncher.models.DeviceProfile
 import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.WebCallback
-import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.ui.LauncherFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.ui.displayMessage
-import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
-import xyz.mcmxciv.halauncher.ui.main.applist.AppListAdapter
+import xyz.mcmxciv.halauncher.ui.home.appdrawer.AppDrawerAdapter
 import xyz.mcmxciv.halauncher.ui.navigate
 import xyz.mcmxciv.halauncher.ui.observe
 import xyz.mcmxciv.halauncher.utils.AppLauncher
@@ -34,7 +46,7 @@ import javax.inject.Inject
 class HomeFragment : LauncherFragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
-    private lateinit var appListAdapter: AppListAdapter
+    private lateinit var appDrawerAdapter: AppDrawerAdapter
 
     @Inject
     lateinit var deviceProfile: DeviceProfile
@@ -67,16 +79,22 @@ class HomeFragment : LauncherFragment() {
             }
         }
 
-        appListAdapter = AppListAdapter(deviceProfile, appLauncher, viewModel)
+        appDrawerAdapter = AppDrawerAdapter(deviceProfile, appLauncher, viewModel)
 
         observe(viewModel.appListItems) { items ->
-            appListAdapter.appListItems = items
+            appDrawerAdapter.appListItems = items
         }
 
         observe(viewModel.theme) { theme ->
+            binding.webViewWrapper.background = ColorDrawable(theme.primaryBackgroundColor)
             binding.appDrawerBackground.background = theme.appListBackground
-            requireActivity().window.statusBarColor = theme.primaryColor
-            requireActivity().window.navigationBarColor = theme.primaryColor
+            binding.appDrawerHandle.drawable.setTint(theme.primaryTextColor)
+            val background = ShapeDrawable(OvalShape())
+            background.alpha = 127
+            background.paint.color = theme.cardBackgroundColor
+            binding.appDrawerHandle.background = background
+
+            appDrawerAdapter.notifyDataSetChanged()
         }
 
         observe(viewModel.callback) { resource ->
@@ -89,7 +107,7 @@ class HomeFragment : LauncherFragment() {
 
         binding.appList.layoutManager =
             GridLayoutManager(context, deviceProfile.appDrawerColumns)
-        binding.appList.adapter = appListAdapter
+        binding.appList.adapter = appDrawerAdapter
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
             this.isEnabled = true
@@ -97,6 +115,41 @@ class HomeFragment : LauncherFragment() {
             when {
                 binding.homeWebView.canGoBack() -> binding.homeWebView.goBack()
             }
+        }
+
+        activity?.apply {
+            window.decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            window.statusBarColor = Color.TRANSPARENT
+            window.navigationBarColor = Color.TRANSPARENT
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.homeWebView) { _, insets ->
+            binding.webViewWrapper.updatePadding(
+                top = insets.systemWindowInsetTop,
+                bottom = insets.systemWindowInsetBottom
+            )
+
+            binding.homeContainer.constraintSetIds.forEach { id ->
+                binding.homeContainer.getConstraintSet(id).apply {
+                    setMargin(
+                        binding.appDrawerHandle.id,
+                        ConstraintSet.TOP,
+                        insets.systemWindowInsetTop
+                    )
+                    setMargin(
+                        binding.appDrawerHandle.id,
+                        ConstraintSet.BOTTOM,
+                        insets.systemWindowInsetBottom
+                    )
+                }
+            }
+
+            binding.appList.updatePadding(bottom = insets.systemWindowInsetBottom)
+
+            insets
         }
 
         initializeWebView()

@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui.main.applist
+package xyz.mcmxciv.halauncher.ui.home.appdrawer
 
 import android.view.LayoutInflater
 import android.view.View
@@ -13,25 +13,17 @@ import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutPopupWindow
 import xyz.mcmxciv.halauncher.utils.AppLauncher
 
-class AppListAdapter(
+class AppDrawerAdapter(
     private val deviceProfile: DeviceProfile,
     private val appLauncher: AppLauncher,
     private val listener: ShortcutPopupWindow.ShortcutActionListener
-) : RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
+) : RecyclerView.Adapter<AppDrawerAdapter.AppListViewHolder>() {
     private var _appListItems = listOf<AppListItem>()
-    private var _theme: HassTheme? = null
 
     var appListItems: List<AppListItem>
         get() = _appListItems
         set(value) {
             _appListItems = value
-            notifyDataSetChanged()
-        }
-
-    var theme: HassTheme?
-        get() = _theme
-        set(value) {
-            _theme = value
             notifyDataSetChanged()
         }
 
@@ -43,26 +35,23 @@ class AppListAdapter(
     ) : RecyclerView.ViewHolder(binding.root),
         View.OnClickListener,
         View.OnLongClickListener {
-        private lateinit var appListItem: AppListItem
-        private var theme: HassTheme? = null
+        private lateinit var _appListItem: AppListItem
+        private val theme: HassTheme.AppDrawerTheme = HassTheme.instance.appDrawerTheme
 
         init {
             binding.appItem.setOnClickListener(this)
             binding.appItem.setOnLongClickListener(this)
         }
 
-        fun populate(item: AppListItem, newTheme: HassTheme?) {
-            appListItem = item
+        fun populate(appListItem: AppListItem) {
+            _appListItem = appListItem
+
             val resources = LauncherApplication.instance.resources
             binding.appItem.textSize = iconTextSize
-            binding.appItem.topIcon = appListItem.icon.toDrawable(resources)
-            binding.appItem.text = appListItem.displayName
-            binding.appItem.tag = appListItem
-
-            newTheme?.let {
-                theme = newTheme
-                binding.appItem.setTextColor(it.primaryTextColor)
-            }
+            binding.appItem.topIcon = _appListItem.icon.toDrawable(resources)
+            binding.appItem.text = _appListItem.displayName
+            binding.appItem.tag = _appListItem
+            binding.appItem.setTextColor(theme.labelTextColor)
         }
 
         override fun onClick(view: View) {
@@ -71,7 +60,7 @@ class AppListAdapter(
         }
 
         override fun onLongClick(view: View): Boolean {
-            ShortcutPopupWindow(view, appListItem, appLauncher, theme, listener).show()
+            ShortcutPopupWindow(view, _appListItem, appLauncher, listener).show()
             return true
         }
     }
@@ -87,7 +76,7 @@ class AppListAdapter(
     }
 
     override fun onBindViewHolder(holder: AppListViewHolder, position: Int) {
-        holder.populate(_appListItems[position], _theme)
+        holder.populate(_appListItems[position])
     }
 
     override fun getItemCount() = _appListItems.size

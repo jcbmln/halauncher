@@ -10,6 +10,7 @@ import xyz.mcmxciv.halauncher.data.models.toJson
 import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
 import xyz.mcmxciv.halauncher.domain.models.Session
 import xyz.mcmxciv.halauncher.domain.models.WebhookInfo
+import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 
@@ -56,6 +57,10 @@ class LocalCache @Inject constructor(
 
     val isAuthenticated: Boolean
         get() = session != null
+
+    var theme: HassTheme?
+        get() = getString(R.string.pk_theme)?.let { HassTheme.fromJson(it) }
+        set(value) = putString(R.string.pk_theme, value?.toJson())
 
     private fun getString(@StringRes resId: Int): String? {
         val key = resourceProvider.getString(resId)

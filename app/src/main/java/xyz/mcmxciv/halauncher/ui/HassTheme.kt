@@ -1,18 +1,19 @@
 package xyz.mcmxciv.halauncher.ui
 
-import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import androidx.core.graphics.ColorUtils
+import com.squareup.moshi.JsonClass
 import org.json.JSONException
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.data.models.SerializableModel
+import xyz.mcmxciv.halauncher.data.models.SerializerObject
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 
-class HassTheme private constructor(
+@JsonClass(generateAdapter = true)
+data class HassTheme(
     val primaryTextColor: Int,
     val secondaryTextColor: Int,
     val textPrimaryColor: Int,
@@ -25,42 +26,43 @@ class HassTheme private constructor(
     val cardBackgroundColor: Int,
     val primaryBackgroundColor: Int,
     val secondaryBackgroundColor: Int
-) {
+) : SerializableModel() {
     @Inject
+    @Transient
     lateinit var resourceProvider: ResourceProvider
 
-    private val inputStateList: ColorStateList
+    @Transient
+    val appDrawerTheme: AppDrawerTheme
 
     val appListBackground: Drawable
         get() {
-            val drawable = resourceProvider.getDrawable(R.drawable.top_rounded_background)?.mutate()
-            drawable?.setTint(secondaryBackgroundColor)
-            return drawable!!
+            val drawable = resourceProvider.getDrawable(R.drawable.top_rounded_background)!!
+                .mutate()
+            drawable.setTint(secondaryBackgroundColor)
+            return drawable
         }
 
     init {
         LauncherApplication.instance.component.inject(this)
-
-        val states = arrayOf(
-            intArrayOf(android.R.attr.state_pressed),
-            intArrayOf(android.R.attr.state_enabled),
-            intArrayOf(android.R.attr.state_focused, android.R.attr.state_pressed),
-            intArrayOf(-android.R.attr.state_enabled),
-            intArrayOf()
-        )
-
-        val colors = intArrayOf(
-            accentColor,
-            primaryTextColor,
-            accentColor,
-            ColorUtils.setAlphaComponent(primaryTextColor, 192),
-            primaryTextColor
-        )
-
-        inputStateList = ColorStateList(states, colors)
+        appDrawerTheme = AppDrawerTheme.create(this)
+        instance = this
     }
 
-    companion object {
+    class AppDrawerTheme private constructor(
+        val labelTextColor: Int
+    ) {
+        companion object {
+            fun create(hassTheme: HassTheme): AppDrawerTheme =
+                AppDrawerTheme(
+                    hassTheme.primaryTextColor
+                )
+        }
+    }
+
+    companion object : SerializerObject<HassTheme>() {
+        lateinit var instance: HassTheme
+            private set
+
         private val hexPattern = Regex("^(#[a-fA-F0-9]{6}|#[a-fA-F0-9]{3})\$")
         private val hexAlphaPattern = Regex("^(#[a-fA-F0-9]{8}|#[a-fA-F0-9]{4})\$")
         private val rgbPattern = Regex(

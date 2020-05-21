@@ -20,7 +20,6 @@ class ShortcutPopupWindow(
     private val parentView: View,
     private val appListItem: AppListItem,
     private val appLauncher: AppLauncher,
-    theme: HassTheme?,
     private val listener: ShortcutActionListener
 ) : ShortcutListAdapter.ShorcutSelectedListener {
     private val binding: PopupWindowShortcutsBinding
@@ -74,35 +73,35 @@ class ShortcutPopupWindow(
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
 
-        theme?.let {
-            binding.topArrow.drawable.setTint(it.primaryBackgroundColor)
-            binding.bottomArrow.drawable.setTint(it.primaryBackgroundColor)
-            binding.systemShortcuts.background.setTint(it.primaryBackgroundColor)
-            binding.shortcutList.background.setTint(it.primaryBackgroundColor)
-            binding.appInfoText.apply {
-                topIcon?.setTint(it.primaryTextColor)
-                setTextColor(it.primaryTextColor)
-            }
-            binding.hideText.apply {
-                topIcon?.setTint(it.disabledTextColor)
-                setTextColor(it.disabledTextColor)
-            }
-            binding.uninstallText.apply {
-                if (!appListItem.isSystemApp) {
-                    topIcon?.setTint(it.primaryTextColor)
-                    setTextColor(it.primaryTextColor)
-                } else {
-                    topIcon?.setTint(it.disabledTextColor)
-                    setTextColor(it.disabledTextColor)
-                }
-            }
-
-            binding.shortcutList.adapter?.let { adapter ->
-                if (adapter is ShortcutListAdapter) {
-                    adapter.theme = it
-                }
-            }
-        }
+//        theme?.let {
+//            binding.topArrow.drawable.setTint(it.primaryBackgroundColor)
+//            binding.bottomArrow.drawable.setTint(it.primaryBackgroundColor)
+//            binding.systemShortcuts.background.setTint(it.primaryBackgroundColor)
+//            binding.shortcutList.background.setTint(it.primaryBackgroundColor)
+//            binding.appInfoText.apply {
+//                topIcon?.setTint(it.primaryTextColor)
+//                setTextColor(it.primaryTextColor)
+//            }
+//            binding.hideText.apply {
+//                topIcon?.setTint(it.disabledTextColor)
+//                setTextColor(it.disabledTextColor)
+//            }
+//            binding.uninstallText.apply {
+//                if (!appListItem.isSystemApp) {
+//                    topIcon?.setTint(it.primaryTextColor)
+//                    setTextColor(it.primaryTextColor)
+//                } else {
+//                    topIcon?.setTint(it.disabledTextColor)
+//                    setTextColor(it.disabledTextColor)
+//                }
+//            }
+//
+//            binding.shortcutList.adapter?.let { adapter ->
+//                if (adapter is ShortcutListAdapter) {
+//                    adapter.theme = it
+//                }
+//            }
+//        }
 
         window = PopupWindow(
             binding.root,

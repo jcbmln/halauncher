@@ -7,19 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
+import xyz.mcmxciv.halauncher.data.LocalCache
 import xyz.mcmxciv.halauncher.data.interactors.AppsInteractor
 import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
 import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
-import xyz.mcmxciv.halauncher.models.DeviceProfile
 import xyz.mcmxciv.halauncher.models.ErrorState
 import xyz.mcmxciv.halauncher.models.WebCallback
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import xyz.mcmxciv.halauncher.ui.HassTheme
-import xyz.mcmxciv.halauncher.ui.main.applist.AppListAdapter
 import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutPopupWindow
-import xyz.mcmxciv.halauncher.utils.AppLauncher
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 
@@ -27,7 +24,8 @@ class HomeViewModel @Inject constructor(
     private val urlInteractor: UrlInteractor,
     private val sessionInteractor: SessionInteractor,
     private val resourceProvider: ResourceProvider,
-    private val appsInteractor: AppsInteractor
+    private val appsInteractor: AppsInteractor,
+    private val localCache: LocalCache
 ) : ViewModel(), ShortcutPopupWindow.ShortcutActionListener {
     val webviewUrl: String
         get() = urlInteractor.externalAuthUrl
@@ -49,7 +47,9 @@ class HomeViewModel @Inject constructor(
     val appListItems: LiveData<List<AppListItem>> = appListItemData
 
     init {
-        themeData.postValue(HassTheme.createDefaultTheme(resourceProvider))
+        val theme = localCache.theme ?: HassTheme.createDefaultTheme(resourceProvider)
+        themeData.postValue(theme)
+        localCache.theme = theme
     }
 
     fun getExternalAuth(callback: String) {
@@ -82,8 +82,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun setTheme(theme: String) {
-        themeData.postValue(HassTheme.createFromString(theme, resourceProvider))
+    fun setTheme(json: String) {
+        val theme = HassTheme.createFromString(json, resourceProvider)
+        themeData.postValue(theme)
+        localCache.theme = theme
     }
 
     override fun onHideActivity(activityName: String) {

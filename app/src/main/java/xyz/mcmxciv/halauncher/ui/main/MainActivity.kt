@@ -5,20 +5,13 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.play.core.install.model.ActivityResult
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.background.PackageReceiver
 import xyz.mcmxciv.halauncher.databinding.ActivityMainBinding
-import xyz.mcmxciv.halauncher.models.DeviceProfile
-import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.ui.createViewModel
-import xyz.mcmxciv.halauncher.ui.main.applist.AppListAdapter
 import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutPopupWindow
-import xyz.mcmxciv.halauncher.ui.observe
-import xyz.mcmxciv.halauncher.utils.AppLauncher
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(),
     PackageReceiver.PackageListener,
