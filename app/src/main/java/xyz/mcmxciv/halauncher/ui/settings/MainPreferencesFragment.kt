@@ -11,7 +11,7 @@ class MainPreferencesFragment : LauncherPreferenceFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = createViewModel { component.settingsViewModel() }
+        viewModel = createViewModel { component.settingsViewModelProvider().get() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

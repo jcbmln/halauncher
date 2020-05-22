@@ -4,28 +4,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.hadilq.liveevent.LiveEvent
 import xyz.mcmxciv.halauncher.LauncherApplication
 import xyz.mcmxciv.halauncher.databinding.ListItemAppBinding
 import xyz.mcmxciv.halauncher.models.DeviceProfile
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import xyz.mcmxciv.halauncher.ui.HassTheme
-import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutPopupWindow
+import xyz.mcmxciv.halauncher.ui.home.shortcuts.ShortcutPopupWindow
 import xyz.mcmxciv.halauncher.utils.AppLauncher
+import javax.inject.Inject
 
-class AppDrawerAdapter(
+class AppDrawerAdapter @Inject constructor(
     private val deviceProfile: DeviceProfile,
-    private val appLauncher: AppLauncher,
-    private val listener: ShortcutPopupWindow.ShortcutActionListener
-) : RecyclerView.Adapter<AppDrawerAdapter.AppListViewHolder>() {
+    private val appLauncher: AppLauncher
+) : RecyclerView.Adapter<AppDrawerAdapter.AppListViewHolder>(),
+    ShortcutPopupWindow.ShortcutActionListener {
     private var _appListItems = listOf<AppListItem>()
-
     var appListItems: List<AppListItem>
         get() = _appListItems
         set(value) {
             _appListItems = value
             notifyDataSetChanged()
         }
+
+    private val _appHiddenEvent = LiveEvent<String>()
+    val appHiddenEvent: LiveData<String> = _appHiddenEvent
 
     class AppListViewHolder(
         val binding: ListItemAppBinding,
@@ -71,7 +76,7 @@ class AppDrawerAdapter(
             ListItemAppBinding.inflate(inflater, parent, false),
             appLauncher,
             deviceProfile.iconTextSize,
-            listener
+            this
         )
     }
 
@@ -80,4 +85,8 @@ class AppDrawerAdapter(
     }
 
     override fun getItemCount() = _appListItems.size
+
+    override fun onHideActivity(activityName: String) {
+        _appHiddenEvent.postValue(activityName)
+    }
 }

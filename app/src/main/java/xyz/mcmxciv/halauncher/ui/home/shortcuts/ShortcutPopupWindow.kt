@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui.main.shortcuts
+package xyz.mcmxciv.halauncher.ui.home.shortcuts
 
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -28,6 +28,7 @@ class ShortcutPopupWindow(
     private val screenWidth: Int
     private val screenHeight: Int
     private val viewAnimator = ViewAnimator()
+    private val theme = HassTheme.instance
 
     init {
         val resources = parentView.context.resources
@@ -73,35 +74,27 @@ class ShortcutPopupWindow(
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
 
-//        theme?.let {
-//            binding.topArrow.drawable.setTint(it.primaryBackgroundColor)
-//            binding.bottomArrow.drawable.setTint(it.primaryBackgroundColor)
-//            binding.systemShortcuts.background.setTint(it.primaryBackgroundColor)
-//            binding.shortcutList.background.setTint(it.primaryBackgroundColor)
-//            binding.appInfoText.apply {
-//                topIcon?.setTint(it.primaryTextColor)
-//                setTextColor(it.primaryTextColor)
-//            }
-//            binding.hideText.apply {
-//                topIcon?.setTint(it.disabledTextColor)
-//                setTextColor(it.disabledTextColor)
-//            }
-//            binding.uninstallText.apply {
-//                if (!appListItem.isSystemApp) {
-//                    topIcon?.setTint(it.primaryTextColor)
-//                    setTextColor(it.primaryTextColor)
-//                } else {
-//                    topIcon?.setTint(it.disabledTextColor)
-//                    setTextColor(it.disabledTextColor)
-//                }
-//            }
-//
-//            binding.shortcutList.adapter?.let { adapter ->
-//                if (adapter is ShortcutListAdapter) {
-//                    adapter.theme = it
-//                }
-//            }
-//        }
+        binding.topArrow.drawable.setTint(theme.primaryBackgroundColor)
+        binding.bottomArrow.drawable.setTint(theme.primaryBackgroundColor)
+        binding.systemShortcuts.background.setTint(theme.primaryBackgroundColor)
+        binding.shortcutList.background.setTint(theme.primaryBackgroundColor)
+        binding.appInfoText.apply {
+            topIcon?.setTint(theme.accentColor)
+            setTextColor(theme.primaryTextColor)
+        }
+        binding.hideText.apply {
+            topIcon?.setTint(theme.accentColor)
+            setTextColor(theme.primaryTextColor)
+        }
+        binding.uninstallText.apply {
+            if (!appListItem.isSystemApp) {
+                topIcon?.setTint(theme.accentColor)
+                setTextColor(theme.primaryTextColor)
+            } else {
+                topIcon?.setTint(theme.disabledTextColor)
+                setTextColor(theme.disabledTextColor)
+            }
+        }
 
         window = PopupWindow(
             binding.root,

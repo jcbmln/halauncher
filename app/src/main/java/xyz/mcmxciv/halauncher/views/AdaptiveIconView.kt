@@ -44,10 +44,11 @@ import kotlin.math.roundToInt
  * renders masked versions using [BitmapShader]s.
  */
 @RequiresApi(Build.VERSION_CODES.O)
-class AdaptiveIconView(
+class AdaptiveIconView @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet?
-) : View(context, attrs, R.attr.adaptiveIconViewStyle) {
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = R.attr.adaptiveIconViewStyle
+) : View(context, attrs, defStyleAttr) {
 
     private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)

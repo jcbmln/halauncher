@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui.main.shortcuts
+package xyz.mcmxciv.halauncher.ui.home.shortcuts
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,15 +15,6 @@ class ShortcutListAdapter(
     private val shortcutItems: List<ShortcutItem>,
     private val listener: ShorcutSelectedListener
 ) : RecyclerView.Adapter<ShortcutListAdapter.ShortcutListViewHolder>() {
-    private var _theme: HassTheme? = null
-
-    var theme: HassTheme?
-        get() = _theme
-        set(value) {
-            _theme = value
-            notifyDataSetChanged()
-        }
-
     @Inject
     lateinit var appLauncher: AppLauncher
 
@@ -36,7 +27,9 @@ class ShortcutListAdapter(
         private val appLauncher: AppLauncher,
         private val listener: ShorcutSelectedListener
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun populate(shortcutItem: ShortcutItem, theme: HassTheme?) {
+        private val theme = HassTheme.instance
+
+        fun populate(shortcutItem: ShortcutItem) {
             val resources = LauncherApplication.instance.resources
             binding.shortcutNameText.leftIcon = shortcutItem.icon.toDrawable(resources)
             binding.shortcutNameText.text = shortcutItem.displayName
@@ -48,9 +41,7 @@ class ShortcutListAdapter(
                 listener.onShortcutSelected()
             }
 
-            theme?.let {
-                binding.shortcutNameText.setTextColor(it.primaryTextColor)
-            }
+            binding.shortcutNameText.setTextColor(theme.primaryTextColor)
         }
     }
 
@@ -64,7 +55,7 @@ class ShortcutListAdapter(
     }
 
     override fun onBindViewHolder(holder: ShortcutListViewHolder, position: Int) {
-        holder.populate(shortcutItems[position], _theme)
+        holder.populate(shortcutItems[position])
     }
 
     override fun getItemCount(): Int = shortcutItems.size

@@ -14,7 +14,7 @@ class IntegrationPreferencesFragment : LauncherPreferenceFragment(),
     private lateinit var viewModel: SettingsViewModel
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        viewModel = createViewModel { component.settingsViewModel() }
+        viewModel = createViewModel { component.settingsViewModelProvider().get() }
         setPreferencesFromResource(R.xml.integration_preferences, rootKey)
 
         val deviceNamePreference = findPreference<EditTextPreference>(DEVICE_NAME_KEY)

@@ -33,7 +33,7 @@ class AuthenticationFragment : LauncherFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = createViewModel { component.authenticationViewModel() }
+        viewModel = createViewModel { component.authenticationViewModelProvider().get() }
 
         binding.authenticationWebView.apply {
             @SuppressLint("SetJavaScriptEnabled")

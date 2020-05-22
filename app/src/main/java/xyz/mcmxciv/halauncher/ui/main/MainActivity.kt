@@ -11,7 +11,7 @@ import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.background.PackageReceiver
 import xyz.mcmxciv.halauncher.databinding.ActivityMainBinding
 import xyz.mcmxciv.halauncher.ui.createViewModel
-import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutPopupWindow
+import xyz.mcmxciv.halauncher.ui.home.shortcuts.ShortcutPopupWindow
 
 class MainActivity : AppCompatActivity(),
     PackageReceiver.PackageListener,
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(),
 
         LauncherApplication.instance.component.inject(this)
         viewModel = createViewModel {
-            LauncherApplication.instance.component.mainActivityViewModel()
+            LauncherApplication.instance.component.mainActivityViewModelProvider().get()
         }
     }
 

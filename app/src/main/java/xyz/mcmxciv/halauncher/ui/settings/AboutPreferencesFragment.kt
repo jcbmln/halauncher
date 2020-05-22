@@ -20,7 +20,7 @@ class AboutPreferencesFragment : LauncherPreferenceFragment(), InstallStateUpdat
     private lateinit var appUpdateManager: AppUpdateManager
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        viewModel = createViewModel { component.settingsViewModel() }
+        viewModel = createViewModel { component.settingsViewModelProvider().get() }
         addPreferencesFromResource(R.xml.about_preferences)
 
         addClickListener(

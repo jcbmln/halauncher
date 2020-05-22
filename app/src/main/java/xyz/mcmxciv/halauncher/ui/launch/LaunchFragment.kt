@@ -26,7 +26,7 @@ class LaunchFragment : LauncherFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = createViewModel { component.launchViewModel() }
+        viewModel = createViewModel { component.launchViewModelProvider().get() }
 
         observe(viewModel.launchState) { state ->
             val action = when (state) {

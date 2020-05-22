@@ -2,6 +2,7 @@ package xyz.mcmxciv.halauncher.ui
 
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.createViewModelLazy
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,18 @@ inline fun <reified T : ViewModel> Fragment.createViewModel(
         }
     }).get(viewModel)
 }
+
+@Suppress("UNCHECKED_CAST")
+inline fun <reified T : ViewModel> Fragment.fragmentViewModels(
+    crossinline creator: () -> T
+): Lazy<T> = createViewModelLazy(T::class, storeProducer = {
+    viewModelStore
+}, factoryProducer = {
+    object : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+            creator.invoke() as T
+    }
+})
 
 fun Fragment.displayMessage(message: String) {
     Toast.makeText(context, message, Toast.LENGTH_LONG).show()

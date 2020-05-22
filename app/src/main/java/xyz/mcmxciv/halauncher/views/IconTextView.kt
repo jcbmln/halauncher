@@ -5,8 +5,11 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import com.google.android.material.textview.MaterialTextView
 
-class IconTextView(context: Context, attrs: AttributeSet?, defStyle: Int) :
-    MaterialTextView(context, attrs, defStyle) {
+class IconTextView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : MaterialTextView(context, attrs, defStyleAttr) {
     var icon: Drawable? = null
 
     var topIcon: Drawable?
@@ -22,7 +25,4 @@ class IconTextView(context: Context, attrs: AttributeSet?, defStyle: Int) :
             icon = value
             setCompoundDrawablesWithIntrinsicBounds(value, null, null, null)
         }
-
-    constructor(context: Context) : this(context, null, 0)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 }

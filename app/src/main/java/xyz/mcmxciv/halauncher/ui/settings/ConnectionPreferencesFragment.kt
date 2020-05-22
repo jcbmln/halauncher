@@ -19,7 +19,7 @@ class ConnectionPreferencesFragment : LauncherPreferenceFragment(),
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        viewModel = createViewModel { component.settingsViewModel() }
+        viewModel = createViewModel { component.settingsViewModelProvider().get() }
         setPreferencesFromResource(R.xml.connection_preferences, rootKey)
 
         val connectionUrlPreference = findPreference<EditTextPreference>(CONNECTION_URL_KEY)

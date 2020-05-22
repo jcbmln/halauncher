@@ -27,7 +27,7 @@ class ManualSetupFragment : LauncherFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = createViewModel { component.setupViewModel() }
+        viewModel = createViewModel { component.setupViewModelProvider().get() }
 
         binding.discoveryModeButton.setOnClickListener {
             navigate(ManualSetupFragmentDirections.actionManualSetupFragmentToDiscoveryFragment())

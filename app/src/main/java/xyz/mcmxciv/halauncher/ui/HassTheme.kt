@@ -2,6 +2,8 @@ package xyz.mcmxciv.halauncher.ui
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
 import com.squareup.moshi.JsonClass
 import org.json.JSONException
 import org.json.JSONObject
@@ -42,6 +44,14 @@ data class HassTheme(
             return drawable
         }
 
+    val appDrawerHandleBackground: Drawable
+        get() {
+            val background = ShapeDrawable(OvalShape())
+            background.alpha = 127
+            background.paint.color = cardBackgroundColor
+            return background
+        }
+
     init {
         LauncherApplication.instance.component.inject(this)
         appDrawerTheme = AppDrawerTheme.create(this)
@@ -53,9 +63,8 @@ data class HassTheme(
     ) {
         companion object {
             fun create(hassTheme: HassTheme): AppDrawerTheme =
-                AppDrawerTheme(
-                    hassTheme.primaryTextColor
-                )
+                AppDrawerTheme(hassTheme.primaryTextColor)
+
         }
     }
 

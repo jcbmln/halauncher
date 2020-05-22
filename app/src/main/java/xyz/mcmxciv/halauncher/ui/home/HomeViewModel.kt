@@ -4,19 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDirections
 import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.data.LocalCache
 import xyz.mcmxciv.halauncher.data.interactors.AppsInteractor
 import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
 import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
-import xyz.mcmxciv.halauncher.models.ErrorState
-import xyz.mcmxciv.halauncher.models.WebCallback
+import xyz.mcmxciv.halauncher.models.DeviceProfile
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import xyz.mcmxciv.halauncher.ui.HassTheme
-import xyz.mcmxciv.halauncher.ui.main.shortcuts.ShortcutPopupWindow
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 
@@ -25,19 +25,26 @@ class HomeViewModel @Inject constructor(
     private val sessionInteractor: SessionInteractor,
     private val resourceProvider: ResourceProvider,
     private val appsInteractor: AppsInteractor,
-    private val localCache: LocalCache
-) : ViewModel(), ShortcutPopupWindow.ShortcutActionListener {
+    private val localCache: LocalCache,
+    private val deviceProfile: DeviceProfile
+) : ViewModel() {
     val webviewUrl: String
         get() = urlInteractor.externalAuthUrl
 
-    private val callbackEvent = LiveEvent<WebCallback>()
-    val callback: LiveData<WebCallback> = callbackEvent
+    val appDrawerColumns: Int
+        get() = deviceProfile.appDrawerColumns
 
-    private val errorEvent = LiveEvent<ErrorState>()
-    val error: LiveData<ErrorState> = errorEvent
+    private val _callbackEvent = LiveEvent<String>()
+    val callbackEvent: LiveData<String> = _callbackEvent
 
-    private val themeData = MutableLiveData<HassTheme>()
-    val theme: LiveData<HassTheme> = themeData
+    private val _errorEvent = LiveEvent<String>()
+    val errorEvent: LiveData<String> = _errorEvent
+
+    private val _navigationEvent = LiveEvent<NavDirections>()
+    val navigationEvent: LiveData<NavDirections> = _navigationEvent
+
+    private val _theme = MutableLiveData<HassTheme>()
+    val theme: LiveData<HassTheme> = _theme
 
     private val appListItemData = MutableLiveData<List<AppListItem>>().also { data ->
         viewModelScope.launch {
@@ -48,47 +55,53 @@ class HomeViewModel @Inject constructor(
 
     init {
         val theme = localCache.theme ?: HassTheme.createDefaultTheme(resourceProvider)
-        themeData.postValue(theme)
+        _theme.postValue(theme)
         localCache.theme = theme
     }
 
     fun getExternalAuth(callback: String) {
         val exceptionHandler = CoroutineExceptionHandler { _, ex ->
             Timber.e(ex)
-            val errorState = if (sessionInteractor.isAuthenticated) ErrorState.WEBVIEW
-                else ErrorState.AUTHENTICATION
-            errorEvent.postValue(errorState)
-            callbackEvent.postValue(WebCallback.AuthCallback("$callback(false);"))
+            val errorState = if (sessionInteractor.isAuthenticated) {
+                _navigationEvent.postValue(
+                    HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
+                )
+                resourceProvider.getString(R.string.error_no_session_message)
+            } else {
+                resourceProvider.getString(R.string.error_webview_message)
+            }
+            _errorEvent.postValue(errorState)
+            _callbackEvent.postValue("$callback(false);")
         }
 
         viewModelScope.launch(exceptionHandler) {
             val externalAuthentication = sessionInteractor.getExternalAuthentication()
-            val authCallback = WebCallback.AuthCallback(
-                "$callback(true, $externalAuthentication);"
-            )
-            callbackEvent.postValue(authCallback)
+            _callbackEvent.postValue("$callback(true, $externalAuthentication);")
         }
     }
 
     fun revokeExternalAuth(callback: String) {
         val exceptionHandler = CoroutineExceptionHandler { _, ex ->
             Timber.e(ex)
-            callbackEvent.postValue(WebCallback.RevokeAuthCallback("$callback(false);"))
+            _callbackEvent.postValue("$callback(false);")
         }
 
         viewModelScope.launch(exceptionHandler) {
             sessionInteractor.revokeSession()
-            callbackEvent.postValue(WebCallback.RevokeAuthCallback("$callback(true);"))
+            _callbackEvent.postValue("$callback(true);")
+            _navigationEvent.postValue(
+                HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
+            )
         }
     }
 
     fun setTheme(json: String) {
         val theme = HassTheme.createFromString(json, resourceProvider)
-        themeData.postValue(theme)
+        _theme.postValue(theme)
         localCache.theme = theme
     }
 
-    override fun onHideActivity(activityName: String) {
-        TODO("Not yet implemented")
+    fun hideApp(activityName: String) {
+
     }
 }

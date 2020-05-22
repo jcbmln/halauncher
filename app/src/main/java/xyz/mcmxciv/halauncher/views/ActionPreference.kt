@@ -8,29 +8,15 @@ import androidx.preference.DialogPreference
 import androidx.preference.PreferenceViewHolder
 import xyz.mcmxciv.halauncher.R
 
-class ActionPreference(
+class ActionPreference @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet?,
-    defAttrStyle: Int,
-    defAttrRes: Int
+    attrs: AttributeSet? = null,
+    defAttrStyle: Int = 0,
+    defAttrRes: Int = 0
 ) : DialogPreference(context, attrs, defAttrStyle, defAttrRes) {
     private var textColor: ColorStateList?
     var confirmationMessage: String?
     private val dialogLayoutResourceId = R.layout.dialog_confirmation
-
-    @Suppress("unused")
-    constructor(context: Context) : this(context, null)
-
-    constructor(
-        context: Context,
-        attrs: AttributeSet?
-    ) : this(context, attrs, R.attr.preferenceStyle)
-
-    constructor(
-        context: Context,
-        attrs: AttributeSet?,
-        defAttrStyle: Int
-    ) : this(context, attrs, defAttrStyle, defAttrStyle)
 
     init {
         context.theme.obtainStyledAttributes(

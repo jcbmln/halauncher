@@ -30,7 +30,7 @@ class DiscoveryFragment : LauncherFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = createViewModel { component.setupViewModel() }
+        viewModel = createViewModel { component.setupViewModelProvider().get() }
 
         binding.serviceList.layoutManager = LinearLayoutManager(context)
 

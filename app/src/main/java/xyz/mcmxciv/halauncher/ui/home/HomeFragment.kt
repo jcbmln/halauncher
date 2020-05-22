@@ -2,57 +2,38 @@ package xyz.mcmxciv.halauncher.ui.home
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.graphics.Matrix
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.OvalShape
-import android.graphics.drawable.shapes.Shape
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import androidx.activity.addCallback
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.ViewCompat
-import androidx.core.view.marginBottom
-import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
 import org.json.JSONObject
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.LauncherApplication
-import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
-import xyz.mcmxciv.halauncher.models.DeviceProfile
-import xyz.mcmxciv.halauncher.models.ErrorState
-import xyz.mcmxciv.halauncher.models.WebCallback
 import xyz.mcmxciv.halauncher.ui.LauncherFragment
-import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.ui.displayMessage
+import xyz.mcmxciv.halauncher.ui.fragmentViewModels
 import xyz.mcmxciv.halauncher.ui.home.appdrawer.AppDrawerAdapter
 import xyz.mcmxciv.halauncher.ui.navigate
 import xyz.mcmxciv.halauncher.ui.observe
-import xyz.mcmxciv.halauncher.utils.AppLauncher
 import java.io.BufferedReader
 import javax.inject.Inject
 
 class HomeFragment : LauncherFragment() {
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var viewModel: HomeViewModel
-    private lateinit var appDrawerAdapter: AppDrawerAdapter
+    private val viewModel by fragmentViewModels { component.homeViewModelProvider().get() }
 
     @Inject
-    lateinit var deviceProfile: DeviceProfile
-
-    @Inject
-    lateinit var appLauncher: AppLauncher
+    lateinit var appDrawerAdapter: AppDrawerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,20 +47,12 @@ class HomeFragment : LauncherFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         component.inject(this)
-        viewModel = createViewModel { component.homeViewModel() }
 
-        observe(viewModel.error) { error ->
-            if (error == ErrorState.AUTHENTICATION) {
-                displayMessage(getString(R.string.error_no_session_message))
-                navigate(
-                    HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph()
-                )
-            } else {
-                displayMessage(getString(R.string.error_webview_message))
-            }
+        observe(viewModel.navigationEvent) { action -> navigate(action) }
+        observe(viewModel.errorEvent) { error -> displayMessage(error) }
+        observe(viewModel.callbackEvent) { callback ->
+            binding.homeWebView.evaluateJavascript(callback, null)
         }
-
-        appDrawerAdapter = AppDrawerAdapter(deviceProfile, appLauncher, viewModel)
 
         observe(viewModel.appListItems) { items ->
             appDrawerAdapter.appListItems = items
@@ -89,33 +62,16 @@ class HomeFragment : LauncherFragment() {
             binding.webViewWrapper.background = ColorDrawable(theme.primaryBackgroundColor)
             binding.appDrawerBackground.background = theme.appListBackground
             binding.appDrawerHandle.drawable.setTint(theme.primaryTextColor)
-            val background = ShapeDrawable(OvalShape())
-            background.alpha = 127
-            background.paint.color = theme.cardBackgroundColor
-            binding.appDrawerHandle.background = background
+            binding.appDrawerHandle.background = theme.appDrawerHandleBackground
 
             appDrawerAdapter.notifyDataSetChanged()
         }
 
-        observe(viewModel.callback) { resource ->
-            binding.homeWebView.evaluateJavascript(resource.callback, null)
-
-            if (resource is WebCallback.RevokeAuthCallback) {
-                navigate(HomeFragmentDirections.actionHomeFragmentToAuthenticationNavigationGraph())
-            }
-        }
+        observe(appDrawerAdapter.appHiddenEvent) { viewModel.hideApp(it) }
 
         binding.appList.layoutManager =
-            GridLayoutManager(context, deviceProfile.appDrawerColumns)
+            GridLayoutManager(context, viewModel.appDrawerColumns)
         binding.appList.adapter = appDrawerAdapter
-
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner) {
-            this.isEnabled = true
-
-            when {
-                binding.homeWebView.canGoBack() -> binding.homeWebView.goBack()
-            }
-        }
 
         activity?.apply {
             window.decorView.systemUiVisibility =
@@ -124,8 +80,18 @@ class HomeFragment : LauncherFragment() {
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             window.statusBarColor = Color.TRANSPARENT
             window.navigationBarColor = Color.TRANSPARENT
+
+            onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+                this.isEnabled = true
+                if (binding.homeWebView.canGoBack()) binding.homeWebView.goBack()
+            }
         }
 
+        initializeWebView()
+        applyInsets()
+    }
+
+    private fun applyInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.homeWebView) { _, insets ->
             binding.webViewWrapper.updatePadding(
                 top = insets.systemWindowInsetTop,
@@ -147,12 +113,8 @@ class HomeFragment : LauncherFragment() {
                 }
             }
 
-            binding.appList.updatePadding(bottom = insets.systemWindowInsetBottom)
-
             insets
         }
-
-        initializeWebView()
     }
 
     private fun initializeWebView() {

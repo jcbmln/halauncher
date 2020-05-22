@@ -32,7 +32,7 @@ class IntegrationFragment : LauncherFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = createViewModel { component.integrationViewModel() }
+        viewModel = createViewModel { component.integrationViewModelProvider().get() }
 
         observe(viewModel.integrationState) { state ->
             when (state) {
