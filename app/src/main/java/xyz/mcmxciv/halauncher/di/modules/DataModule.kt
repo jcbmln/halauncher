@@ -9,14 +9,14 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import xyz.mcmxciv.halauncher.data.AppDatabase
-import xyz.mcmxciv.halauncher.data.LocalCache
-import xyz.mcmxciv.halauncher.data.SessionInterceptor
-import xyz.mcmxciv.halauncher.data.UrlInterceptor
+import xyz.mcmxciv.halauncher.data.apps.AppDatabase
+import xyz.mcmxciv.halauncher.data.cache.PreferencesLocalCache
+import xyz.mcmxciv.halauncher.data.http.SessionInterceptor
+import xyz.mcmxciv.halauncher.data.http.UrlInterceptor
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantApi
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantSecureApi
 import xyz.mcmxciv.halauncher.data.authentication.AuthenticationApi
-import xyz.mcmxciv.halauncher.data.dao.AppDao
+import xyz.mcmxciv.halauncher.data.apps.AppDao
 import xyz.mcmxciv.halauncher.data.dao.ShortcutDao
 import xyz.mcmxciv.halauncher.data.integration.IntegrationApi
 import xyz.mcmxciv.halauncher.data.integration.SecureIntegrationApi
@@ -62,12 +62,20 @@ class DataModule {
     @SecureApi
     fun secureRetrofit(
         moshi: Moshi,
-        localCache: LocalCache
+        localCache: PreferencesLocalCache
     ): Retrofit {
-        val baseUrl = localCache.baseUrl
+        val baseUrl = localCache.instanceUrl
         val client = OkHttpClient.Builder()
-            .addInterceptor(UrlInterceptor(baseUrl))
-            .addInterceptor(SessionInterceptor(localCache))
+            .addInterceptor(
+                UrlInterceptor(
+                    baseUrl
+                )
+            )
+            .addInterceptor(
+                SessionInterceptor(
+                    localCache
+                )
+            )
             .build()
 
         return Retrofit.Builder()
@@ -80,13 +88,17 @@ class DataModule {
     @Singleton
     @Provides
     @Api
-    fun retrofit(moshi: Moshi, localCache: LocalCache): Retrofit {
+    fun retrofit(moshi: Moshi, localCache: PreferencesLocalCache): Retrofit {
         val client = OkHttpClient.Builder()
-            .addInterceptor(UrlInterceptor(localCache.baseUrl))
+            .addInterceptor(
+                UrlInterceptor(
+                    localCache.instanceUrl
+                )
+            )
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(localCache.baseUrl)
+            .baseUrl(localCache.instanceUrl)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(client)
             .build()

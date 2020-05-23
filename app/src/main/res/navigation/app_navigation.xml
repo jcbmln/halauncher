@@ -35,7 +35,7 @@
         app:startDestination="@id/discoveryFragment" >
         <fragment
             android:id="@+id/discoveryFragment"
-            android:name="xyz.mcmxciv.halauncher.ui.setup.discovery.DiscoveryFragment"
+            android:name="xyz.mcmxciv.halauncher.ui.onboarding.discovery.DiscoveryFragment"
             android:label="discovery_fragment"
             tools:layout="@layout/fragment_discovery">
             <action
@@ -44,7 +44,7 @@
         </fragment>
         <fragment
             android:id="@+id/manualSetupFragment"
-            android:name="xyz.mcmxciv.halauncher.ui.setup.manual.ManualSetupFragment"
+            android:name="xyz.mcmxciv.halauncher.ui.onboarding.manual.ManualSetupFragment"
             android:label="manual_setup_fragment"
             tools:layout="@layout/fragment_manual_setup">
             <action

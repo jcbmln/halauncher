@@ -1,10 +1,10 @@
-package xyz.mcmxciv.halauncher.data.interactors
+package xyz.mcmxciv.halauncher.domain.apps
 
 import android.content.ComponentName
 import android.content.pm.ApplicationInfo
 import android.content.pm.ShortcutInfo
 import xyz.mcmxciv.halauncher.data.models.App
-import xyz.mcmxciv.halauncher.data.repositories.AppRepository
+import xyz.mcmxciv.halauncher.data.apps.AppRepository
 import xyz.mcmxciv.halauncher.data.repositories.PackageRepository
 import xyz.mcmxciv.halauncher.icons.IconFactory
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
@@ -12,7 +12,7 @@ import xyz.mcmxciv.halauncher.models.apps.ShortcutItem
 import xyz.mcmxciv.halauncher.utils.toByteArray
 import javax.inject.Inject
 
-class AppsInteractor @Inject constructor(
+class AppsUseCase @Inject constructor(
     private val packageRepository: PackageRepository,
     private val appRepository: AppRepository,
     private val iconFactory: IconFactory

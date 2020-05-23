@@ -9,7 +9,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import retrofit2.Response
-import xyz.mcmxciv.halauncher.data.LocalCache
+import xyz.mcmxciv.halauncher.data.cache.PreferencesLocalCache
 import xyz.mcmxciv.halauncher.data.models.Token
 import xyz.mcmxciv.halauncher.domain.models.Session
 import xyz.mcmxciv.halauncher.domain.models.TokenResult
@@ -19,7 +19,12 @@ object AuthenticationRepositorySpec : Spek({
     val authenticationApi by memoized { mockk<AuthenticationApi>() }
     val sharedPreferences by memoized { mockk<SharedPreferences>(relaxed = true) }
     val resourceProvider by memoized { mockk<ResourceProvider>(relaxed = true) }
-    val localCache by memoized { LocalCache(resourceProvider, sharedPreferences) }
+    val localCache by memoized {
+        PreferencesLocalCache(
+            resourceProvider,
+            sharedPreferences
+        )
+    }
     val authenticationRepository by memoized {
         AuthenticationRepository(authenticationApi, localCache)
     }

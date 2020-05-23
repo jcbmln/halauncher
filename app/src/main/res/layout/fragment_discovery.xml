@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.setup.discovery.DiscoveryFragment">
+    tools:context=".ui.onboarding.discovery.DiscoveryFragment">
 
     <TextView
         android:id="@+id/discovery_text"

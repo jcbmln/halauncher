@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui.setup.discovery
+package xyz.mcmxciv.halauncher.ui.onboarding.discovery
 
 import android.net.nsd.NsdServiceInfo
 import android.view.LayoutInflater

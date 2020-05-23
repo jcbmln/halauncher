@@ -1,7 +1,7 @@
 package xyz.mcmxciv.halauncher.data.authentication
 
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import xyz.mcmxciv.halauncher.data.LocalCache
+import xyz.mcmxciv.halauncher.data.cache.LocalCache
 import xyz.mcmxciv.halauncher.data.models.Token
 import xyz.mcmxciv.halauncher.domain.models.Session
 import xyz.mcmxciv.halauncher.domain.models.TokenResult
@@ -12,7 +12,7 @@ class AuthenticationRepository @Inject constructor(
     private val localCache: LocalCache
 ) {
     val authenticationUrl: String
-        get() = localCache.baseUrl.toHttpUrl()
+        get() = localCache.instanceUrl.toHttpUrl()
             .newBuilder()
             .addPathSegments("auth/authorize")
             .addEncodedQueryParameter("response_type",

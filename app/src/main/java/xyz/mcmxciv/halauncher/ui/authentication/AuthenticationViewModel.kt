@@ -7,13 +7,13 @@ import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import xyz.mcmxciv.halauncher.data.LocalCache
+import xyz.mcmxciv.halauncher.data.cache.PreferencesLocalCache
 import xyz.mcmxciv.halauncher.domain.authentication.AuthenticationUseCase
 import javax.inject.Inject
 
 class AuthenticationViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
-    private val localCache: LocalCache
+    private val localCache: PreferencesLocalCache
 ) : ViewModel() {
     private val authenticationEvent = LiveEvent<AuthenticationState>().also { event ->
         event.postValue(AuthenticationState.LOADING)

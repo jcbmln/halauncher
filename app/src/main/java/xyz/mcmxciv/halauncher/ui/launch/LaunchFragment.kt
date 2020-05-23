@@ -27,18 +27,6 @@ class LaunchFragment : LauncherFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = createViewModel { component.launchViewModelProvider().get() }
-
-        observe(viewModel.launchState) { state ->
-            val action = when (state) {
-                LaunchState.FIRST_LAUNCH ->
-                    LaunchFragmentDirections.actionLaunchFragmentToSetupNavigationGraph()
-                LaunchState.UNAUTHENTICATED ->
-                    LaunchFragmentDirections
-                        .actionLaunchFragmentToAuthenticationNavigationGraph()
-                LaunchState.AUTHENTICATED ->
-                    LaunchFragmentDirections.actionLaunchFragmentToHomeFragment()
-            }
-            navigate(action)
-        }
+        observe(viewModel.navigationEvent) { navigate(it) }
     }
 }

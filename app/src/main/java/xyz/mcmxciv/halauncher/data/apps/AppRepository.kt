@@ -1,6 +1,5 @@
-package xyz.mcmxciv.halauncher.data.repositories
+package xyz.mcmxciv.halauncher.data.apps
 
-import xyz.mcmxciv.halauncher.data.dao.AppDao
 import xyz.mcmxciv.halauncher.data.models.App
 import javax.inject.Inject
 

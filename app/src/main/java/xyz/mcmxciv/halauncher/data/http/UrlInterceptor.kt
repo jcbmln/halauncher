@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.data
+package xyz.mcmxciv.halauncher.data.http
 
 import okhttp3.Interceptor
 import okhttp3.Response

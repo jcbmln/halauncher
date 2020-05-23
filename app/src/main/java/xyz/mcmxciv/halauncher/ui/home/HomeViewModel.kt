@@ -10,10 +10,9 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.data.LocalCache
-import xyz.mcmxciv.halauncher.data.interactors.AppsInteractor
 import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
-import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
+import xyz.mcmxciv.halauncher.domain.apps.AppsUseCase
+import xyz.mcmxciv.halauncher.domain.settings.SettingsUseCase
 import xyz.mcmxciv.halauncher.models.DeviceProfile
 import xyz.mcmxciv.halauncher.models.apps.AppListItem
 import xyz.mcmxciv.halauncher.ui.HassTheme
@@ -21,15 +20,14 @@ import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
-    private val urlInteractor: UrlInteractor,
     private val sessionInteractor: SessionInteractor,
     private val resourceProvider: ResourceProvider,
-    private val appsInteractor: AppsInteractor,
-    private val localCache: LocalCache,
+    private val appsUseCase: AppsUseCase,
+    private val settingsUseCase: SettingsUseCase,
     private val deviceProfile: DeviceProfile
 ) : ViewModel() {
     val webviewUrl: String
-        get() = urlInteractor.externalAuthUrl
+        get() = settingsUseCase.webviewUrl
 
     val appDrawerColumns: Int
         get() = deviceProfile.appDrawerColumns
@@ -48,15 +46,15 @@ class HomeViewModel @Inject constructor(
 
     private val appListItemData = MutableLiveData<List<AppListItem>>().also { data ->
         viewModelScope.launch {
-            data.postValue(appsInteractor.getAppListItems())
+            data.postValue(appsUseCase.getAppListItems())
         }
     }
     val appListItems: LiveData<List<AppListItem>> = appListItemData
 
     init {
-        val theme = localCache.theme ?: HassTheme.createDefaultTheme(resourceProvider)
+        val theme = settingsUseCase.theme ?: HassTheme.createDefaultTheme(resourceProvider)
         _theme.postValue(theme)
-        localCache.theme = theme
+        settingsUseCase.theme = theme
     }
 
     fun getExternalAuth(callback: String) {
@@ -98,10 +96,9 @@ class HomeViewModel @Inject constructor(
     fun setTheme(json: String) {
         val theme = HassTheme.createFromString(json, resourceProvider)
         _theme.postValue(theme)
-        localCache.theme = theme
+        settingsUseCase.theme = theme
     }
 
     fun hideApp(activityName: String) {
-
     }
 }

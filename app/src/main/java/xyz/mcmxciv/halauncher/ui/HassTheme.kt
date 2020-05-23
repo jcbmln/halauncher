@@ -64,7 +64,6 @@ data class HassTheme(
         companion object {
             fun create(hassTheme: HassTheme): AppDrawerTheme =
                 AppDrawerTheme(hassTheme.primaryTextColor)
-
         }
     }
 

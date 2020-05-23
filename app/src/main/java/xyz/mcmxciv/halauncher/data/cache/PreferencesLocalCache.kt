@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.data
+package xyz.mcmxciv.halauncher.data.cache
 
 import android.content.SharedPreferences
 import android.os.Build
@@ -14,27 +14,27 @@ import xyz.mcmxciv.halauncher.ui.HassTheme
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 
-class LocalCache @Inject constructor(
+class PreferencesLocalCache @Inject constructor(
     private val resourceProvider: ResourceProvider,
     private val sharedPreferences: SharedPreferences
-) {
-    var baseUrl: String
+) : LocalCache {
+    override var instanceUrl: String
         get() = getString(R.string.pk_homeassistant_url) ?: PLACEHOLDER_URL
         set(value) = putString(R.string.pk_homeassistant_url, value)
 
-    var session: Session?
+    override var session: Session?
         get() = getString(R.string.pk_session)?.let { Session.fromJson(it) }
         set(value) = putString(R.string.pk_session, value?.toJson())
 
-    var deviceInfo: DeviceInfo?
+    override var deviceInfo: DeviceInfo?
         get() = getString(R.string.pk_device_registration)?.let { DeviceInfo.fromJson(it) }
         set(value) = putString(R.string.pk_device_registration, value?.toJson())
 
-    var webhookInfo: WebhookInfo?
+    override var webhookInfo: WebhookInfo?
         get() = getString(R.string.pk_webhook_info)?.let { WebhookInfo.fromJson(it) }
         set(value) = putString(R.string.pk_webhook_info, value?.toJson())
 
-    var deviceName: String
+    override var deviceName: String
         get() = getString(R.string.pk_device_name)
             ?: resourceProvider.getSettingsString("bluetooth_name")
             ?: Build.MODEL
@@ -44,21 +44,21 @@ class LocalCache @Inject constructor(
         get() = getString(R.string.pk_config)?.let { Config.fromJson(it) }
         set(value) = putString(R.string.pk_config, value?.toJson())
 
-    var sensorIds: Set<String>
+    override var sensorIds: Set<String>
         get() = getStringSet(R.string.pk_sensor_ids)
         set(value) = putStringSet(R.string.pk_sensor_ids, value)
 
-    var sensorUpdateInterval: Int
+    override var sensorUpdateInterval: Int
         get() = getInt(R.string.pk_sensor_update_interval, 15)
         set(value) = putInt(R.string.pk_sensor_update_interval, value)
 
-    val hasHomeAssistantInstance: Boolean
-        get() = baseUrl != PLACEHOLDER_URL
+    override val hasHomeAssistantInstance: Boolean
+        get() = instanceUrl != PLACEHOLDER_URL
 
-    val isAuthenticated: Boolean
+    override val isAuthenticated: Boolean
         get() = session != null
 
-    var theme: HassTheme?
+    override var theme: HassTheme?
         get() = getString(R.string.pk_theme)?.let { HassTheme.fromJson(it) }
         set(value) = putString(R.string.pk_theme, value?.toJson())
 

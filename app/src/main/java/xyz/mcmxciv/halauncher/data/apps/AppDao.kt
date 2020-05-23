@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.data.dao
+package xyz.mcmxciv.halauncher.data.apps
 
 import androidx.room.Dao
 import androidx.room.Delete

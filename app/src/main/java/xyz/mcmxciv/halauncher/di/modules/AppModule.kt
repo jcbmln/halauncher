@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
+import xyz.mcmxciv.halauncher.data.cache.LocalCache
+import xyz.mcmxciv.halauncher.data.cache.PreferencesLocalCache
 import xyz.mcmxciv.halauncher.di.components.ViewComponent
 import xyz.mcmxciv.halauncher.utils.LauncherResourceProvider
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
@@ -36,4 +38,8 @@ class AppModule(private val context: Context) {
     @Provides
     fun launcherApps(context: Context): LauncherApps =
         context.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+
+    @Singleton
+    @Provides
+    fun localCache(localCache: PreferencesLocalCache): LocalCache = localCache
 }

@@ -3,7 +3,7 @@ package xyz.mcmxciv.halauncher.data.integration
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.data.IntegrationException
-import xyz.mcmxciv.halauncher.data.LocalCache
+import xyz.mcmxciv.halauncher.data.cache.PreferencesLocalCache
 import xyz.mcmxciv.halauncher.data.models.WebhookRequest
 import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
 import xyz.mcmxciv.halauncher.domain.models.Sensor
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class IntegrationRepository @Inject constructor(
     private val integrationApi: IntegrationApi,
     private val secureIntegrationApi: SecureIntegrationApi,
-    private val localCache: LocalCache
+    private val localCache: PreferencesLocalCache
 ) {
     suspend fun registerDevice(deviceInfo: DeviceInfo) {
         localCache.webhookInfo = secureIntegrationApi.registerDevice(deviceInfo)
@@ -54,7 +54,7 @@ class IntegrationRepository @Inject constructor(
 
         webhookInfo.cloudhookUrl?.let { urls.add(it) }
         webhookInfo.remoteUiUrl?.let { urls.add(buildUrl(it, webhookInfo.webhookId)) }
-        urls.add(buildUrl(localCache.baseUrl, webhookInfo.webhookId))
+        urls.add(buildUrl(localCache.instanceUrl, webhookInfo.webhookId))
 
         var result: T? = null
 

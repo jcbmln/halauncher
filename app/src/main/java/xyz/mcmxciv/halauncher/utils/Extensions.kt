@@ -31,5 +31,5 @@ fun View.getSourceBounds(): Rect {
     )
 }
 
-val TextView.textString: String
+val TextView.value: String
     get() = text.toString()

@@ -1,7 +1,7 @@
 package xyz.mcmxciv.halauncher.data.repositories
 
 import retrofit2.Response
-import xyz.mcmxciv.halauncher.data.LocalCache
+import xyz.mcmxciv.halauncher.data.cache.PreferencesLocalCache
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantApi
 import xyz.mcmxciv.halauncher.data.api.HomeAssistantSecureApi
 import xyz.mcmxciv.halauncher.data.models.Config
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class IntegrationRepository @Inject constructor(
     private val homeAssistantApi: HomeAssistantApi,
     private val homeAssistantSecureApi: HomeAssistantSecureApi,
-    private val localCache: LocalCache
+    private val localCache: PreferencesLocalCache
 ) {
     suspend fun getDiscvoveryInfo(): DiscoveryInfo =
         homeAssistantSecureApi.getDiscoveryInfo()

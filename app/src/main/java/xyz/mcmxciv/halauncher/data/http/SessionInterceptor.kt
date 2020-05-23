@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.data
+package xyz.mcmxciv.halauncher.data.http
 
 import com.squareup.moshi.Moshi
 import okhttp3.FormBody
@@ -9,16 +9,17 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.threeten.bp.Instant
 import xyz.mcmxciv.halauncher.data.authentication.AuthenticationException
+import xyz.mcmxciv.halauncher.data.cache.PreferencesLocalCache
 import xyz.mcmxciv.halauncher.data.models.Token
 import xyz.mcmxciv.halauncher.data.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
 import xyz.mcmxciv.halauncher.domain.models.Session
 
 class SessionInterceptor constructor(
-    private val localCache: LocalCache
+    private val localCache: PreferencesLocalCache
 ) : Interceptor {
     private val authUrl: String
-        get() = localCache.baseUrl.toHttpUrl()
+        get() = localCache.instanceUrl.toHttpUrl()
             .newBuilder()
             .addPathSegments("auth/token")
             .build()
@@ -69,7 +70,7 @@ class SessionInterceptor constructor(
 
         return if (response.code == 401) {
             localCache.session = null
-            localCache.baseUrl = LocalStorageRepository.PLACEHOLDER_URL
+            localCache.instanceUrl = LocalStorageRepository.PLACEHOLDER_URL
             val requestBody = getRevokeTokenRequestBody(session)
             val revokeRequest = request.newBuilder()
                 .url(authUrl)

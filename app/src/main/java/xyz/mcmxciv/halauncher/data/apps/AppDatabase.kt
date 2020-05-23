@@ -1,8 +1,7 @@
-package xyz.mcmxciv.halauncher.data
+package xyz.mcmxciv.halauncher.data.apps
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import xyz.mcmxciv.halauncher.data.dao.AppDao
 import xyz.mcmxciv.halauncher.data.dao.ShortcutDao
 import xyz.mcmxciv.halauncher.data.models.App
 import xyz.mcmxciv.halauncher.data.models.Shortcut

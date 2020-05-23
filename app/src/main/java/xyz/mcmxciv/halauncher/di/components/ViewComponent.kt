@@ -9,17 +9,19 @@ import xyz.mcmxciv.halauncher.ui.home.HomeViewModel
 import xyz.mcmxciv.halauncher.ui.integration.IntegrationViewModel
 import xyz.mcmxciv.halauncher.ui.launch.LaunchViewModel
 import xyz.mcmxciv.halauncher.ui.settings.SettingsViewModel
-import xyz.mcmxciv.halauncher.ui.setup.SetupViewModel
+import xyz.mcmxciv.halauncher.ui.onboarding.manual.ManualSetupViewModel
+import xyz.mcmxciv.halauncher.ui.onboarding.discovery.DiscoveryViewModel
 import javax.inject.Provider
 
 @ViewScope
 @Subcomponent(modules = [DiscoveryModule::class])
 interface ViewComponent {
+    fun discoveryViewModelProvider(): Provider<DiscoveryViewModel>
     fun authenticationViewModelProvider(): Provider<AuthenticationViewModel>
     fun homeViewModelProvider(): Provider<HomeViewModel>
     fun integrationViewModelProvider(): Provider<IntegrationViewModel>
     fun launchViewModelProvider(): Provider<LaunchViewModel>
-    fun setupViewModelProvider(): Provider<SetupViewModel>
+    fun manualSetupViewModel(): Provider<ManualSetupViewModel>
     fun settingsViewModelProvider(): Provider<SettingsViewModel>
 
     fun inject(homeFragment: HomeFragment)
