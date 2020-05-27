@@ -1,4 +1,2 @@
 <resources>
-    <bool name="config_largeHeap">true</bool>
-    <bool name="is_large_tablet">true</bool>
 </resources>

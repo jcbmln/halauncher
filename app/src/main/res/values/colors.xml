@@ -1,35 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Named colors -->
-    <color name="red">#ef5350</color>
+    <color name="red">#db4437</color>
     <color name="transparent">#00ffffff</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
 
     <!-- Default Theme Colors -->
-    <color name="primary_text_color">#212121</color>
-    <color name="secondary_text_color">#727272</color>
-    <color name="text_primary_color">#ffffff</color>
-    <color name="disabled_text_color">#bdbdbd</color>
     <color name="primary_color">#03a9f4</color>
     <color name="dark_primary_color">#0076C1</color>
     <color name="light_primary_color">#b3e5fC</color>
     <color name="accent_color">#ff9800</color>
+    <color name="primary_text_color">#212121</color>
+    <color name="secondary_text_color">#727272</color>
+    <color name="text_primary_color">#ffffff</color>
+    <color name="disabled_text_color">#bdbdbd</color>
     <color name="error_color">#db4437</color>
     <color name="card_background_color">#ffffff</color>
     <color name="primary_background_color">#fafafa</color>
     <color name="secondary_background_color">#e5e5e5</color>
-
-    <!-- Action Bar -->
-    <color name="action_bar_text_color">@color/primary_text_color</color>
-
-    <!-- Buttons -->
-    <color name="button_background_tint">@color/primary_color</color>
-    <color name="button_text_color">@android:color/white</color>
-    <color name="text_button_text_color">@color/primary_color</color>
-
-    <!-- Edit Text -->
-    <color name="edit_text_background">@color/primary_background_color</color>
-    <color name="edit_text_background_focused">@color/secondary_background_color</color>
-    <color name="edit_text_border">@color/secondary_background_color</color>
 
     <!-- Other Colors -->
     <color name="legacy_icon_background">#ffffff</color>

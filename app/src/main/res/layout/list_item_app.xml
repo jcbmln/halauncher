@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xyz.mcmxciv.halauncher.views.IconTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/app_item"
-    style="@style/HaLauncher.Widget.AppIcon"
-    android:layout_gravity="center_horizontal"
-    android:layout_margin="10dp"
-    android:gravity="center_horizontal"
-    android:stateListAnimator="@animator/app_list_item"
-    android:textAlignment="center" />

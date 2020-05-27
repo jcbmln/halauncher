@@ -8,23 +8,22 @@
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
 
     <application
-        android:name=".LauncherApplication"
+        android:name=".HalauncherApplication"
         android:allowBackup="true"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/HaLauncherTheme"
+        android:theme="@style/HalauncherTheme"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".ui.main.MainActivity"
+        <activity android:name=".HalauncherActivity"
             android:clearTaskOnLaunch="true"
+            android:configChanges="orientation|screenSize"
             android:enabled="true"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:resumeWhilePausing="true"
-            android:stateNotNeeded="true"
-            android:configChanges="orientation|screenSize">
+            android:stateNotNeeded="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,5 +34,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
