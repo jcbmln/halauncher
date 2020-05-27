@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_webview_preference.*
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.ui.LauncherFragment
+import xyz.mcmxciv.halauncher.ui.BaseFragment
 
-class WebviewPreferenceFragment : LauncherFragment() {
+class WebviewPreferenceFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -1,18 +1,35 @@
-package xyz.mcmxciv.halauncher.data.authentication
+package xyz.mcmxciv.halauncher.authentication
 
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import xyz.mcmxciv.halauncher.Serializer
 import xyz.mcmxciv.halauncher.data.cache.LocalCache
 import xyz.mcmxciv.halauncher.data.models.Token
+import xyz.mcmxciv.halauncher.deserialize
 import xyz.mcmxciv.halauncher.domain.models.Session
 import xyz.mcmxciv.halauncher.domain.models.TokenResult
+import xyz.mcmxciv.halauncher.serialize
+import xyz.mcmxciv.halauncher.settings.SettingsKeys
 import javax.inject.Inject
 
 class AuthenticationRepository @Inject constructor(
     private val authenticationApi: AuthenticationApi,
-    private val localCache: LocalCache
+    private val sharedPreferences: SharedPreferences
 ) {
-    val authenticationUrl: String
-        get() = localCache.instanceUrl.toHttpUrl()
+    var session: Session?
+        get() {
+            val pref = sharedPreferences.getString(SettingsKeys.SESSION_KEY, null)
+            return pref?.let { Serializer.deserialize(it) }
+        }
+        set(value) {
+            sharedPreferences.edit {
+                putString(SettingsKeys.SESSION_KEY, Serializer.serialize(value))
+            }
+        }
+
+    fun getAuthenticationUrl(instanceUrl: String) =
+        instanceUrl.toHttpUrl()
             .newBuilder()
             .addPathSegments("auth/authorize")
             .addEncodedQueryParameter("response_type",
@@ -28,7 +45,10 @@ class AuthenticationRepository @Inject constructor(
             .toString()
 
     suspend fun getToken(authenticationCode: String): TokenResult {
-        val response = authenticationApi.getToken(GRANT_TYPE_CODE, authenticationCode, CLIENT_ID)
+        val response = authenticationApi.getToken(
+            GRANT_TYPE_CODE, authenticationCode,
+            CLIENT_ID
+        )
         return if (response.isSuccessful) {
             val token: Token = response.body() ?: throw AuthenticationException()
             TokenResult.Success(token)
@@ -41,24 +61,18 @@ class AuthenticationRepository @Inject constructor(
         }
     }
 
-    fun createSession(token: Token) {
-        localCache.session = Session(token)
-    }
-
-    suspend fun refreshToken(refreshToken: String): TokenResult {
-        val response = authenticationApi.refreshToken(GRANT_TYPE_REFRESH, refreshToken, CLIENT_ID)
-        return if (response.isSuccessful) {
-            TokenResult.Success(response.body()!!)
-        } else {
-            when (response.code()) {
-                400 -> TokenResult.InvalidRequest
-                else -> TokenResult.UnknownError
-            }
-        }
+    suspend fun refreshToken(refreshToken: String): Token {
+        val response = authenticationApi.refreshToken(
+            GRANT_TYPE_REFRESH, refreshToken,
+            CLIENT_ID
+        )
+        return response.body()!!
     }
 
     suspend fun revokeToken(refreshToken: String) {
-        authenticationApi.revokeToken(refreshToken, REVOKE_ACTION)
+        authenticationApi.revokeToken(refreshToken,
+            REVOKE_ACTION
+        )
     }
 
     companion object {
@@ -68,6 +82,5 @@ class AuthenticationRepository @Inject constructor(
         const val GRANT_TYPE_REFRESH = "refresh_token"
         const val REVOKE_ACTION = "revoke"
         const val REDIRECT_URI = "hass://auth"
-        const val PLACEHOLDER_URL = "http://localhost:8123"
     }
 }

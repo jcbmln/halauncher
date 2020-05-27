@@ -3,10 +3,10 @@ package xyz.mcmxciv.halauncher.di.components
 import dagger.Subcomponent
 import xyz.mcmxciv.halauncher.di.modules.DiscoveryModule
 import xyz.mcmxciv.halauncher.di.scopes.ViewScope
-import xyz.mcmxciv.halauncher.ui.authentication.AuthenticationViewModel
+import xyz.mcmxciv.halauncher.authentication.AuthenticationViewModel
 import xyz.mcmxciv.halauncher.ui.home.HomeFragment
 import xyz.mcmxciv.halauncher.ui.home.HomeViewModel
-import xyz.mcmxciv.halauncher.ui.integration.IntegrationViewModel
+import xyz.mcmxciv.halauncher.integration.IntegrationViewModel
 import xyz.mcmxciv.halauncher.ui.launch.LaunchViewModel
 import xyz.mcmxciv.halauncher.ui.settings.SettingsViewModel
 import xyz.mcmxciv.halauncher.ui.onboarding.manual.ManualSetupViewModel

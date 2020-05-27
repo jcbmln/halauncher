@@ -13,33 +13,13 @@ import xyz.mcmxciv.halauncher.databinding.ActivityMainBinding
 import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.ui.home.shortcuts.ShortcutPopupWindow
 
-class MainActivity : AppCompatActivity(),
-    PackageReceiver.PackageListener,
-    ShortcutPopupWindow.ShortcutActionListener {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MainActivityViewModel
-    private lateinit var packageReceiver: PackageReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        LauncherApplication.instance.component.inject(this)
-        viewModel = createViewModel {
-            LauncherApplication.instance.component.mainActivityViewModelProvider().get()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        packageReceiver = PackageReceiver.initialize(this)
-        registerReceiver(packageReceiver, packageReceiver.filter)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        unregisterReceiver(packageReceiver)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -64,14 +44,6 @@ class MainActivity : AppCompatActivity(),
         }
 
         return super.onSupportNavigateUp()
-    }
-
-    override fun onPackageReceived() {
-//        viewModel.updateAppListItems()
-    }
-
-    override fun onHideActivity(activityName: String) {
-//        viewModel.hideActivity(activityName)
     }
 
     companion object {

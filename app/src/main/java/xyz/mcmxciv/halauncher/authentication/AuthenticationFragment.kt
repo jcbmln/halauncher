@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.ui.authentication
+package xyz.mcmxciv.halauncher.authentication
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,17 +10,18 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.navigation.fragment.findNavController
-import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentAuthenticationBinding
-import xyz.mcmxciv.halauncher.ui.LauncherFragment
-import xyz.mcmxciv.halauncher.ui.createViewModel
+import xyz.mcmxciv.halauncher.ui.BaseFragment
 import xyz.mcmxciv.halauncher.ui.displayMessage
+import xyz.mcmxciv.halauncher.ui.fragmentViewModels
 import xyz.mcmxciv.halauncher.ui.navigate
 import xyz.mcmxciv.halauncher.ui.observe
 
-class AuthenticationFragment : LauncherFragment() {
+class AuthenticationFragment : BaseFragment() {
     private lateinit var binding: FragmentAuthenticationBinding
-    private lateinit var viewModel: AuthenticationViewModel
+    private val viewModel by fragmentViewModels {
+        component.authenticationViewModelProvider().get()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,9 +32,8 @@ class AuthenticationFragment : LauncherFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = createViewModel { component.authenticationViewModelProvider().get() }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.authenticationWebView.apply {
             @SuppressLint("SetJavaScriptEnabled")
@@ -50,33 +50,14 @@ class AuthenticationFragment : LauncherFragment() {
                     error: WebResourceError?
                 ) {
                     super.onReceivedError(view, request, error)
-                    returnToSetup(getString(R.string.error_connection_failed_message))
+                    viewModel.webviewError()
+                    findNavController().popBackStack()
                 }
             }
             loadUrl(viewModel.authenticationUrl)
         }
 
-        observe(viewModel.authenticationState) {
-            when (it) {
-                AuthenticationState.LOADING -> {}
-                AuthenticationState.AUTHENTICATED -> {
-                    navigate {
-                        return@navigate if (viewModel.isSetupDone)
-                            AuthenticationFragmentDirections.actionGlobalHomeFragment()
-                        else
-                            AuthenticationFragmentDirections
-                                .actionAuthenticationFragmentToIntegrationFragment()
-                    }
-                }
-                AuthenticationState.ERROR -> {
-                    returnToSetup(getString(R.string.error_authentication_failed_message))
-                }
-            }
-        }
-    }
-
-    private fun returnToSetup(message: String) {
-        displayMessage(message)
-        findNavController().popBackStack()
+        observe(viewModel.errorEvent) { displayMessage(it) }
+        observe(viewModel.navigationEvent) { navigate(it) }
     }
 }

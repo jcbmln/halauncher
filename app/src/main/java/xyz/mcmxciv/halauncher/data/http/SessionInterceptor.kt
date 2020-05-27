@@ -7,13 +7,13 @@ import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
-import org.threeten.bp.Instant
-import xyz.mcmxciv.halauncher.data.authentication.AuthenticationException
 import xyz.mcmxciv.halauncher.data.cache.PreferencesLocalCache
 import xyz.mcmxciv.halauncher.data.models.Token
 import xyz.mcmxciv.halauncher.data.repositories.AuthenticationRepository
 import xyz.mcmxciv.halauncher.data.repositories.LocalStorageRepository
+import xyz.mcmxciv.halauncher.authentication.AuthenticationException
 import xyz.mcmxciv.halauncher.domain.models.Session
+import java.time.Instant
 
 class SessionInterceptor constructor(
     private val localCache: PreferencesLocalCache

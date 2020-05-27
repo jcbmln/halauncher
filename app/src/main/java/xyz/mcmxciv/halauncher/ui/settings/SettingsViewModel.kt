@@ -8,20 +8,21 @@ import timber.log.Timber
 import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import xyz.mcmxciv.halauncher.data.interactors.SessionInteractor
 import xyz.mcmxciv.halauncher.data.interactors.UrlInteractor
+import xyz.mcmxciv.halauncher.domain.settings.SettingsUseCase
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
-    private val urlInteractor: UrlInteractor,
     private val sessionInteractor: SessionInteractor,
-    private val integrationInteractor: IntegrationInteractor
+    private val integrationInteractor: IntegrationInteractor,
+    private val settingsUseCase: SettingsUseCase
 ) : ViewModel() {
     private val exceptionHandler = CoroutineExceptionHandler { _, ex ->
         Timber.e(ex.message.toString())
     }
 
-    var homeAssistantUrl: String
-        get() = urlInteractor.baseUrl
-        set(value) { urlInteractor.baseUrl = value }
+    var instanceUrl: String
+        get() = settingsUseCase.instanceUrl
+        set(value) { settingsUseCase.instanceUrl = value }
 
     var deviceName: String
         get() = integrationInteractor.deviceInfo.deviceName!!

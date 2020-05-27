@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.data.authentication
+package xyz.mcmxciv.halauncher.authentication
 
 import retrofit2.Response
 import retrofit2.http.Field

@@ -8,12 +8,12 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import xyz.mcmxciv.halauncher.databinding.FragmentDiscoveryBinding
-import xyz.mcmxciv.halauncher.ui.LauncherFragment
+import xyz.mcmxciv.halauncher.ui.BaseFragment
 import xyz.mcmxciv.halauncher.ui.fragmentViewModels
 import xyz.mcmxciv.halauncher.ui.navigate
 import xyz.mcmxciv.halauncher.ui.observe
 
-class DiscoveryFragment : LauncherFragment() {
+class DiscoveryFragment : BaseFragment() {
     private lateinit var binding: FragmentDiscoveryBinding
     private val viewModel by fragmentViewModels { component.discoveryViewModelProvider().get() }
     private val serviceAdapter = ServiceAdapter()
@@ -41,7 +41,9 @@ class DiscoveryFragment : LauncherFragment() {
         observe(viewModel.services) { services -> serviceAdapter.data = services }
         observe(viewModel.showProgress) { binding.serviceListProgressBar.isVisible = it }
         observe(viewModel.showServices) { binding.serviceList.isVisible = it }
-        observe(viewModel.headerText) { binding.discoveryText.text = it }
+        observe(viewModel.headerText) {
+            binding.discoveryText.text = requireContext().getString(it)
+        }
 
         binding.manualModeButton.setOnClickListener { viewModel.manualSetupModeButtonClicked() }
     }

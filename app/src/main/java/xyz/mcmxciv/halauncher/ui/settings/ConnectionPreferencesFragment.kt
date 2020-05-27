@@ -5,11 +5,11 @@ import android.view.View
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
+import xyz.mcmxciv.halauncher.ui.BasePreferenceFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.views.ActionPreference
 
-class ConnectionPreferencesFragment : LauncherPreferenceFragment(),
+class ConnectionPreferencesFragment : BasePreferenceFragment(),
     Preference.OnPreferenceChangeListener {
     private lateinit var viewModel: SettingsViewModel
 
@@ -23,8 +23,8 @@ class ConnectionPreferencesFragment : LauncherPreferenceFragment(),
         setPreferencesFromResource(R.xml.connection_preferences, rootKey)
 
         val connectionUrlPreference = findPreference<EditTextPreference>(CONNECTION_URL_KEY)
-        connectionUrlPreference?.summary = viewModel.homeAssistantUrl
-        connectionUrlPreference?.setDefaultValue(viewModel.homeAssistantUrl)
+        connectionUrlPreference?.summary = viewModel.instanceUrl
+        connectionUrlPreference?.setDefaultValue(viewModel.instanceUrl)
         connectionUrlPreference?.onPreferenceChangeListener = this
 
         val revokeTokenPreference = findPreference<ActionPreference>(REVOKE_TOKEN_KEY)
@@ -35,7 +35,7 @@ class ConnectionPreferencesFragment : LauncherPreferenceFragment(),
     override fun onPreferenceChange(preference: Preference, newValue: Any?): Boolean {
         when (preference.key) {
             CONNECTION_URL_KEY -> {
-                viewModel.homeAssistantUrl = newValue.toString()
+                viewModel.instanceUrl = newValue.toString()
                 viewModel.revokeToken()
                 preference.summary = newValue.toString()
             }

@@ -9,6 +9,7 @@ import org.spekframework.spek2.style.specification.describe
 import retrofit2.Response
 import xyz.mcmxciv.halauncher.data.HomeAssistantMockWebServer
 import xyz.mcmxciv.halauncher.data.models.WebhookRequest
+import xyz.mcmxciv.halauncher.integration.IntegrationApi
 
 object IntegrationApiSpec : Spek({
     val mockWebServer by memoized { HomeAssistantMockWebServer(IntegrationApi::class.java) }

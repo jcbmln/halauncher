@@ -8,6 +8,13 @@ import javax.inject.Inject
 class SettingsUseCase @Inject constructor(
     private val localCache: LocalCache
 ) {
+    val instanceUrlSet: Boolean
+        get() = localCache.instanceUrlSet
+
+    var instanceUrl: String
+        get() = localCache.instanceUrl
+        set(value) { localCache.instanceUrl = value }
+
     val webviewUrl: String
         get() = localCache.instanceUrl.toHttpUrl()
             .newBuilder()

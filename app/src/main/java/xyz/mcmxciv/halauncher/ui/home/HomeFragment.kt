@@ -17,9 +17,11 @@ import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
 import org.json.JSONObject
 import timber.log.Timber
+import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.LauncherApplication
+import xyz.mcmxciv.halauncher.background.PackageReceiver
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
-import xyz.mcmxciv.halauncher.ui.LauncherFragment
+import xyz.mcmxciv.halauncher.ui.BaseFragment
 import xyz.mcmxciv.halauncher.ui.displayMessage
 import xyz.mcmxciv.halauncher.ui.fragmentViewModels
 import xyz.mcmxciv.halauncher.ui.home.appdrawer.AppDrawerAdapter
@@ -28,8 +30,9 @@ import xyz.mcmxciv.halauncher.ui.observe
 import java.io.BufferedReader
 import javax.inject.Inject
 
-class HomeFragment : LauncherFragment() {
+class HomeFragment : BaseFragment(), PackageReceiver.PackageListener {
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var packageReceiver: PackageReceiver
     private val viewModel by fragmentViewModels { component.homeViewModelProvider().get() }
 
     @Inject
@@ -91,6 +94,21 @@ class HomeFragment : LauncherFragment() {
         applyInsets()
     }
 
+    override fun onResume() {
+        super.onResume()
+        packageReceiver = PackageReceiver.initialize(this)
+        requireContext().registerReceiver(packageReceiver, packageReceiver.filter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireContext().unregisterReceiver(packageReceiver)
+    }
+
+    override fun onPackageReceived() {
+        viewModel.updateAppList()
+    }
+
     private fun applyInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.homeWebView) { _, insets ->
             binding.webViewWrapper.updatePadding(
@@ -118,7 +136,8 @@ class HomeFragment : LauncherFragment() {
     }
 
     private fun initializeWebView() {
-        WebView.setWebContentsDebuggingEnabled(true)
+        if (BuildConfig.DEBUG) WebView.setWebContentsDebuggingEnabled(true)
+
         binding.homeWebView.apply {
             @SuppressLint("SetJavaScriptEnabled")
             settings.javaScriptEnabled = true

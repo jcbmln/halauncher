@@ -12,10 +12,10 @@ import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.data.models.SerializableModel
 import xyz.mcmxciv.halauncher.data.models.SerializerObject
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
-import javax.inject.Inject
 
 @JsonClass(generateAdapter = true)
 data class HassTheme(
+    @Transient var resourceProvider: ResourceProvider? = null,
     val primaryTextColor: Int,
     val secondaryTextColor: Int,
     val textPrimaryColor: Int,
@@ -28,17 +28,13 @@ data class HassTheme(
     val cardBackgroundColor: Int,
     val primaryBackgroundColor: Int,
     val secondaryBackgroundColor: Int
-) : SerializableModel() {
-    @Inject
-    @Transient
-    lateinit var resourceProvider: ResourceProvider
-
+) {
     @Transient
     val appDrawerTheme: AppDrawerTheme
 
     val appListBackground: Drawable
         get() {
-            val drawable = resourceProvider.getDrawable(R.drawable.top_rounded_background)!!
+            val drawable = resourceProvider?.getDrawable(R.drawable.top_rounded_background)!!
                 .mutate()
             drawable.setTint(secondaryBackgroundColor)
             return drawable
@@ -67,7 +63,7 @@ data class HassTheme(
         }
     }
 
-    companion object : SerializerObject<HassTheme>() {
+    companion object {
         lateinit var instance: HassTheme
             private set
 
@@ -87,6 +83,7 @@ data class HassTheme(
 
         fun createDefaultTheme(resourceProvider: ResourceProvider): HassTheme =
             HassTheme(
+                resourceProvider,
                 resourceProvider.getColor(R.color.primary_text_color),
                 resourceProvider.getColor(R.color.secondary_text_color),
                 resourceProvider.getColor(R.color.text_primary_color),
@@ -114,6 +111,7 @@ data class HassTheme(
                 else JSONObject()
 
             return HassTheme(
+                resourceProvider,
                 styles.getColor("primary-text-color", default.primaryTextColor),
                 styles.getColor("secondary-text-color", default.secondaryTextColor),
                 styles.getColor("text-primary-color", default.textPrimaryColor),

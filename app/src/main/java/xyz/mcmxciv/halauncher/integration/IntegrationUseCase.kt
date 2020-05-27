@@ -1,6 +1,5 @@
-package xyz.mcmxciv.halauncher.domain.integration
+package xyz.mcmxciv.halauncher.integration
 
-import xyz.mcmxciv.halauncher.data.integration.IntegrationRepository
 import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
 import xyz.mcmxciv.halauncher.domain.models.Sensor
 import xyz.mcmxciv.halauncher.domain.models.SensorInfo

@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.data.integration
+package xyz.mcmxciv.halauncher.integration
 
 import retrofit2.http.Body
 import retrofit2.http.POST

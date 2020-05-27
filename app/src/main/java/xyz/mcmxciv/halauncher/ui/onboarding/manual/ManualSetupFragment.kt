@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import xyz.mcmxciv.halauncher.databinding.FragmentManualSetupBinding
-import xyz.mcmxciv.halauncher.ui.LauncherFragment
+import xyz.mcmxciv.halauncher.ui.BaseFragment
 import xyz.mcmxciv.halauncher.ui.fragmentViewModels
 import xyz.mcmxciv.halauncher.ui.navigate
 import xyz.mcmxciv.halauncher.ui.observe
 import xyz.mcmxciv.halauncher.utils.value
 
-class ManualSetupFragment : LauncherFragment() {
+class ManualSetupFragment : BaseFragment() {
     private lateinit var binding: FragmentManualSetupBinding
     private val viewModel by fragmentViewModels { component.manualSetupViewModel().get() }
 

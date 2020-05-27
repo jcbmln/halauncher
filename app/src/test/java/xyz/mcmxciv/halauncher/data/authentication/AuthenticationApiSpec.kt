@@ -5,6 +5,8 @@ import okhttp3.mockwebserver.RecordedRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import xyz.mcmxciv.halauncher.authentication.AuthenticationApi
+import xyz.mcmxciv.halauncher.authentication.AuthenticationRepository
 import xyz.mcmxciv.halauncher.data.HomeAssistantMockWebServer
 import xyz.mcmxciv.halauncher.data.models.Token
 

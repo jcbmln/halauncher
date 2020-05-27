@@ -16,7 +16,7 @@ import xyz.mcmxciv.halauncher.di.components.ViewComponent
 import xyz.mcmxciv.halauncher.views.ActionPreference
 import xyz.mcmxciv.halauncher.views.ActionPreferenceDialogFragmentCompat
 
-abstract class LauncherPreferenceFragment : PreferenceFragmentCompat() {
+abstract class BasePreferenceFragment : PreferenceFragmentCompat() {
     protected lateinit var toolbar: Toolbar
     protected val component: ViewComponent = LauncherApplication.instance.component
         .viewComponentBuilder().build()

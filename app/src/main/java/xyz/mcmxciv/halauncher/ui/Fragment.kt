@@ -1,6 +1,7 @@
 package xyz.mcmxciv.halauncher.ui
 
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.createViewModelLazy
 import androidx.lifecycle.LiveData
@@ -36,13 +37,9 @@ inline fun <reified T : ViewModel> Fragment.fragmentViewModels(
     }
 })
 
-fun Fragment.displayMessage(message: String) {
+fun Fragment.displayMessage(@StringRes resId: Int) {
+    val message = requireContext().getString(resId)
     Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-}
-
-fun Fragment.navigate(block: () -> NavDirections) {
-    val navController = findNavController()
-    navController.navigate(block())
 }
 
 fun Fragment.navigate(action: NavDirections) {

@@ -2,8 +2,6 @@ package xyz.mcmxciv.halauncher.domain.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import xyz.mcmxciv.halauncher.data.models.SerializableModel
-import xyz.mcmxciv.halauncher.data.models.SerializerObject
 
 @JsonClass(generateAdapter = true)
 data class SensorInfo(
@@ -23,7 +21,7 @@ data class SensorInfo(
     val deviceClass: String? = null,
     @Json(name = "unit_of_measurement")
     val unitOfMeasurement: String? = null
-) : SerializableModel() {
+) {
     constructor(
         sensor: Sensor,
         name: String,
@@ -39,6 +37,4 @@ data class SensorInfo(
         deviceClass,
         unitOfMeasurement
     )
-
-    companion object : SerializerObject<Sensor>()
 }

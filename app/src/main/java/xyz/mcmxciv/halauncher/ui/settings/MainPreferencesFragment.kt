@@ -3,10 +3,10 @@ package xyz.mcmxciv.halauncher.ui.settings
 import android.os.Bundle
 import android.view.View
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
+import xyz.mcmxciv.halauncher.ui.BasePreferenceFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 
-class MainPreferencesFragment : LauncherPreferenceFragment() {
+class MainPreferencesFragment : BasePreferenceFragment() {
     private lateinit var viewModel: SettingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

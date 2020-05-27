@@ -5,11 +5,11 @@ import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
+import xyz.mcmxciv.halauncher.ui.BasePreferenceFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 
 @Suppress("unused")
-class IntegrationPreferencesFragment : LauncherPreferenceFragment(),
+class IntegrationPreferencesFragment : BasePreferenceFragment(),
     Preference.OnPreferenceChangeListener {
     private lateinit var viewModel: SettingsViewModel
 

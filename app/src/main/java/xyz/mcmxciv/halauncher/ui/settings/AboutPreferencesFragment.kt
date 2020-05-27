@@ -11,11 +11,11 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
+import xyz.mcmxciv.halauncher.ui.BasePreferenceFragment
 import xyz.mcmxciv.halauncher.ui.createViewModel
 import xyz.mcmxciv.halauncher.ui.main.MainActivity
 
-class AboutPreferencesFragment : LauncherPreferenceFragment(), InstallStateUpdatedListener {
+class AboutPreferencesFragment : BasePreferenceFragment(), InstallStateUpdatedListener {
     private lateinit var viewModel: SettingsViewModel
     private lateinit var appUpdateManager: AppUpdateManager
 

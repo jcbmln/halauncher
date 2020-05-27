@@ -2,8 +2,6 @@ package xyz.mcmxciv.halauncher.domain.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import xyz.mcmxciv.halauncher.data.models.SerializableModel
-import xyz.mcmxciv.halauncher.data.models.SerializerObject
 
 @JsonClass(generateAdapter = true)
 data class DeviceInfo(
@@ -30,6 +28,4 @@ data class DeviceInfo(
     // Added in HA 0.104.0
     @Json(name = "device_id")
     val deviceId: String? = null
-) : SerializableModel() {
-    companion object : SerializerObject<DeviceInfo>()
-}
+)

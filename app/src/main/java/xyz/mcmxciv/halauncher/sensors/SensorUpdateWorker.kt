@@ -10,7 +10,7 @@ import androidx.work.WorkerParameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import xyz.mcmxciv.halauncher.LauncherApplication
-import xyz.mcmxciv.halauncher.domain.integration.IntegrationUseCase
+import xyz.mcmxciv.halauncher.integration.IntegrationUseCase
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

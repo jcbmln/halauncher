@@ -1,10 +1,8 @@
 package xyz.mcmxciv.halauncher.domain.models
 
 import com.squareup.moshi.JsonClass
-import org.threeten.bp.Instant
-import xyz.mcmxciv.halauncher.data.models.SerializableModel
-import xyz.mcmxciv.halauncher.data.models.SerializerObject
 import xyz.mcmxciv.halauncher.data.models.Token
+import java.time.Instant
 
 @JsonClass(generateAdapter = true)
 data class Session(
@@ -12,7 +10,7 @@ data class Session(
     val expirationTimestamp: Long,
     val refreshToken: String,
     val tokenType: String
-) : SerializableModel() {
+) {
     constructor(token: Token) : this(
         token.accessToken,
         Instant.now().epochSecond + token.expiresIn,
@@ -25,6 +23,4 @@ data class Session(
 
     val expiresIn: Long
         get() = expirationTimestamp - Instant.now().epochSecond
-
-    companion object : SerializerObject<Session>()
 }

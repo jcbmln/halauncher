@@ -6,11 +6,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.preference.Preference
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.sensors.SensorUpdateWorker
-import xyz.mcmxciv.halauncher.ui.LauncherPreferenceFragment
-import xyz.mcmxciv.halauncher.ui.main.MainActivityViewModel
+import xyz.mcmxciv.halauncher.ui.BasePreferenceFragment
 
 class HomeAssistantPreferencesFragment :
-    LauncherPreferenceFragment(), Preference.OnPreferenceChangeListener {
+    BasePreferenceFragment(), Preference.OnPreferenceChangeListener {
     private val viewModel: MainActivityViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,7 +26,7 @@ class HomeAssistantPreferencesFragment :
 
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
         when (preference.key) {
-            getString(R.string.pk_homeassistant_url) -> viewModel.revokeSession()
+//            getString(R.string.pk_homeassistant_url) -> viewModel.revokeSession()
             getString(R.string.pk_sensor_update_interval) ->
                 context?.let { SensorUpdateWorker.start(it, newValue as Long) }
         }

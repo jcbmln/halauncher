@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.data.integration
+package xyz.mcmxciv.halauncher.integration
 
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import timber.log.Timber

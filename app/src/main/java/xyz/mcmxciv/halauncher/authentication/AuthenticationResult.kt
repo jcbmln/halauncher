@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.domain.models
+package xyz.mcmxciv.halauncher.authentication
 
 enum class AuthenticationResult {
     SUCCESS,

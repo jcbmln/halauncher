@@ -1,35 +1,47 @@
-package xyz.mcmxciv.halauncher.ui.integration
+package xyz.mcmxciv.halauncher.integration
 
 import android.os.Build
 import android.provider.Settings
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDirections
 import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.data.interactors.IntegrationInteractor
 import xyz.mcmxciv.halauncher.domain.models.DeviceInfo
-import xyz.mcmxciv.halauncher.models.IntegrationState
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 
 class IntegrationViewModel @Inject constructor(
-    private val integrationInteractor: IntegrationInteractor,
+    private val integrationUseCase: IntegrationUseCase,
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
-    private val integrationEvent = LiveEvent<IntegrationState>()
-    val integrationState: LiveData<IntegrationState> by lazy {
+    private val _navigationEvent = LiveEvent<NavDirections>()
+    val navigationEvent: LiveData<NavDirections> = _navigationEvent
+
+    private val _errorEvent = LiveEvent<Int>()
+    val errorEvent: LiveData<Int> = _errorEvent
+
+    private val _buttonVisibility = MutableLiveData<Boolean>().also {
+        it.postValue(false)
+    }
+    val buttonVisibility: LiveData<Boolean> = _buttonVisibility
+
+    private val _progressVisibility = MutableLiveData<Boolean>().also {
+        it.postValue(true)
+    }
+    val progressVisibility: LiveData<Boolean> = _progressVisibility
+
+    init {
         registerDevice()
-        return@lazy integrationEvent
     }
 
     fun registerDevice() {
-        integrationEvent.postValue(IntegrationState.LOADING)
-
         val deviceRegistration =
             DeviceInfo(
                 BuildConfig.APPLICATION_ID,
@@ -47,12 +59,18 @@ class IntegrationViewModel @Inject constructor(
 
         val exceptionHandler = CoroutineExceptionHandler { _, ex ->
             Timber.e(ex)
-            integrationEvent.postValue(IntegrationState.ERROR)
+            _errorEvent.postValue(R.string.integration_status_failed)
+            _buttonVisibility.postValue(true)
+            _progressVisibility.postValue(false)
         }
 
         viewModelScope.launch(exceptionHandler) {
-            integrationInteractor.registerDevice(deviceRegistration)
-            integrationEvent.postValue(IntegrationState.SUCCESS)
+            integrationUseCase.registerDevice(deviceRegistration)
+            _navigationEvent.postValue(IntegrationFragmentDirections.actionGlobalHomeFragment())
         }
+    }
+
+    fun skipIntegration() {
+        _navigationEvent.postValue(IntegrationFragmentDirections.actionGlobalHomeFragment())
     }
 }

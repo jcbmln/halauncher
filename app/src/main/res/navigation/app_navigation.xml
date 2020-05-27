@@ -11,7 +11,7 @@
         app:startDestination="@id/authenticationFragment" >
         <fragment
             android:id="@+id/authenticationFragment"
-            android:name="xyz.mcmxciv.halauncher.ui.authentication.AuthenticationFragment"
+            android:name="xyz.mcmxciv.halauncher.authentication.AuthenticationFragment"
             android:label="authentication_fragment"
             tools:layout="@layout/fragment_authentication">
             <action
@@ -26,7 +26,7 @@
             app:popUpToInclusive="false" />
         <fragment
             android:id="@+id/integrationFragment"
-            android:name="xyz.mcmxciv.halauncher.ui.integration.IntegrationFragment"
+            android:name="xyz.mcmxciv.halauncher.integration.IntegrationFragment"
             android:label="integration_fragment"
             tools:layout="@layout/fragment_integration" />
     </navigation>

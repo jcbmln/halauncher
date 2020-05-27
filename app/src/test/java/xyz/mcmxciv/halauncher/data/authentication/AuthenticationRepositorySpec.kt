@@ -1,6 +1,7 @@
 package xyz.mcmxciv.halauncher.data.authentication
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
@@ -9,24 +10,21 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import retrofit2.Response
-import xyz.mcmxciv.halauncher.data.cache.PreferencesLocalCache
+import xyz.mcmxciv.halauncher.authentication.AuthenticationApi
+import xyz.mcmxciv.halauncher.authentication.AuthenticationRepository
 import xyz.mcmxciv.halauncher.data.models.Token
 import xyz.mcmxciv.halauncher.domain.models.Session
 import xyz.mcmxciv.halauncher.domain.models.TokenResult
-import xyz.mcmxciv.halauncher.utils.ResourceProvider
+import java.time.Instant
 
 object AuthenticationRepositorySpec : Spek({
     val authenticationApi by memoized { mockk<AuthenticationApi>() }
     val sharedPreferences by memoized { mockk<SharedPreferences>(relaxed = true) }
-    val resourceProvider by memoized { mockk<ResourceProvider>(relaxed = true) }
-    val localCache by memoized {
-        PreferencesLocalCache(
-            resourceProvider,
+    val authenticationRepository by memoized {
+        AuthenticationRepository(
+            authenticationApi,
             sharedPreferences
         )
-    }
-    val authenticationRepository by memoized {
-        AuthenticationRepository(authenticationApi, localCache)
     }
 
     describe("authentication repository") {
@@ -58,20 +56,24 @@ object AuthenticationRepositorySpec : Spek({
             }
 
             describe("create session") {
-                val token = Token(
+                val session = Session(
                     "ABCDEFGH",
-                    1800,
+                    Instant.now().epochSecond + 1800,
                     "IJKLMNOPQRST",
                     "Bearer"
                 )
                 beforeEachTest {
                     runBlocking {
-                        authenticationRepository.createSession(token)
+                        authenticationRepository.session = session
                     }
                 }
 
                 it("should create and save a session") {
-                    verify { localCache.session = Session(token) }
+                    verify {
+                        sharedPreferences.edit {
+                            putString(String(), String())
+                        }
+                    }
                 }
             }
         }

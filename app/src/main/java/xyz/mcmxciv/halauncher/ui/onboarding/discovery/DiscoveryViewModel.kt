@@ -10,12 +10,10 @@ import com.hadilq.liveevent.LiveEvent
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.domain.settings.SettingsUseCase
-import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 
 class DiscoveryViewModel @Inject constructor(
     private val nsdManager: NsdManager,
-    private val resourceProvider: ResourceProvider,
     private val settingsUseCase: SettingsUseCase
 ) : ViewModel() {
     private val _servicesList = mutableListOf<NsdServiceInfo>()
@@ -33,8 +31,8 @@ class DiscoveryViewModel @Inject constructor(
     private val _showServices = MutableLiveData<Boolean>()
     val showServices: LiveData<Boolean> = _showServices
 
-    private val _headerText = MutableLiveData<String>()
-    val headerText: LiveData<String> = _headerText
+    private val _headerText = MutableLiveData<Int>()
+    val headerText: LiveData<Int> = _headerText
 
     init {
         setHeaderText(true)
@@ -70,8 +68,8 @@ class DiscoveryViewModel @Inject constructor(
     }
 
     private fun setHeaderText(emptyList: Boolean) {
-        val text = if (emptyList) resourceProvider.getString(R.string.setup_discovery_text)
-            else resourceProvider.getString(R.string.setup_selection_text)
+        val text = if (emptyList) R.string.setup_discovery_text
+            else R.string.setup_selection_text
         _headerText.postValue(text)
     }
 
