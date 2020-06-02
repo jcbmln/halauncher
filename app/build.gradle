@@ -4,8 +4,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'de.mannodermaus.android-junit5'
 apply plugin: 'org.jlleitschuh.gradle.ktlint'
 
@@ -23,8 +21,8 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
 
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding = true
     }
 
     compileOptions {
@@ -64,7 +62,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -95,22 +93,23 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72'
-    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.0'
     implementation 'androidx.work:work-runtime-ktx:2.3.4'
 
     implementation 'androidx.room:room-runtime:2.2.5'
     implementation 'androidx.room:room-ktx:2.2.5'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     kapt 'androidx.room:room-compiler:2.2.5'
 
-    implementation 'com.google.dagger:dagger:2.27'
-    kapt 'com.google.dagger:dagger-compiler:2.27'
+    implementation 'com.google.dagger:dagger:2.28'
+    kapt 'com.google.dagger:dagger-compiler:2.28'
 
     implementation 'com.squareup.moshi:moshi-kotlin:1.9.2'
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2'
 
-    implementation 'com.squareup.okhttp3:okhttp:4.7.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.8.2'
-    implementation 'com.squareup.retrofit2:converter-moshi:2.8.2'
+    implementation 'com.squareup.okhttp3:okhttp:4.7.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
@@ -118,7 +117,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.4.2'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.2.0-alpha06'
+    implementation 'com.google.android.material:material:1.2.0-beta01'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta6'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -133,14 +132,15 @@ dependencies {
 
     testImplementation 'junit:junit:4.13'
     testImplementation 'io.mockk:mockk:1.10.0'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:4.7.1'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.7.2'
     testImplementation 'org.spekframework.spek2:spek-dsl-jvm:2.0.8'
     testImplementation 'org.spekframework.spek2:spek-runner-junit5:2.0.8'
     testImplementation 'org.jetbrains.kotlin:kotlin-reflect:1.3.72'
+    testImplementation 'org.assertj:assertj-core:3.16.1'
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'org.assertj:assertj-core:3.16.1'
+
 
 
 }

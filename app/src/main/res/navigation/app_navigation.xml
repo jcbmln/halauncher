@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/launchFragment">
+    <fragment
+        android:id="@+id/launchFragment"
+        android:name="xyz.mcmxciv.halauncher.ui.launch.LaunchFragment"
+        android:label="fragment_launch"
+        tools:layout="@layout/fragment_launch" >
+        <action
+            android:id="@+id/action_launchFragment_to_discoveryFragment"
+            app:destination="@id/discoveryFragment"
+            app:popUpTo="@id/discoveryFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/discoveryFragment"
+        android:name="xyz.mcmxciv.halauncher.ui.discovery.DiscoveryFragment"
+        android:label="fragment_discovery"
+        tools:layout="@layout/fragment_discovery" >
+        <action
+            android:id="@+id/action_discoveryFragment_to_manualSetupFragment"
+            app:destination="@id/manualSetupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/manualSetupFragment"
+        android:name="xyz.mcmxciv.halauncher.ui.manual.ManualSetupFragment"
+        android:label="fragment_manual_setup"
+        tools:layout="@layout/fragment_manual_setup" >
+        <action
+            android:id="@+id/action_manualSetupFragment_to_discoveryFragment"
+            app:destination="@id/discoveryFragment" />
+    </fragment>
+</navigation>
