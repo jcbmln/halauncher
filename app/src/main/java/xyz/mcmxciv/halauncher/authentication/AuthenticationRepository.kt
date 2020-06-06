@@ -2,6 +2,8 @@ package xyz.mcmxciv.halauncher.authentication
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import xyz.mcmxciv.halauncher.authentication.models.Session
+import xyz.mcmxciv.halauncher.authentication.models.Token
 import xyz.mcmxciv.halauncher.utils.Serializer
 import xyz.mcmxciv.halauncher.utils.deserialize
 import xyz.mcmxciv.halauncher.utils.serialize

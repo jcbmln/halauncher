@@ -6,6 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import xyz.mcmxciv.halauncher.HalauncherMockWebServer
+import xyz.mcmxciv.halauncher.authentication.models.Token
 
 object AuthenticationApiSpec : Spek({
     val webServer by memoized { HalauncherMockWebServer(AuthenticationApi::class.java) }

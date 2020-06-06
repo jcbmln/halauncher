@@ -14,6 +14,7 @@ class HalauncherApplication : Application() {
         component = DaggerAppComponent.builder()
             .appModule(AppModule(applicationContext))
             .build()
+        component.inject(this)
 
     }
 

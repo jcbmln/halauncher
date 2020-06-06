@@ -19,6 +19,8 @@ class SettingsRepository @Inject constructor(
             }
         }
 
+
+
     companion object {
         const val INSTANCE_URL_KEY = "instance_url"
         const val PLACEHOLDER_URL = "http://localhost:8123"

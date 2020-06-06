@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/HalauncherTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.HalauncherActivity"
+        <activity android:name=".HalauncherActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="orientation|screenSize"
             android:enabled="true"

@@ -1,7 +1,7 @@
-package xyz.mcmxciv.halauncher.ui.launch
+package xyz.mcmxciv.halauncher.launch
 
+import xyz.mcmxciv.halauncher.BaseViewModel
 import xyz.mcmxciv.halauncher.settings.SettingsUseCase
-import xyz.mcmxciv.halauncher.ui.BaseViewModel
 import javax.inject.Inject
 
 class LaunchViewModel @Inject constructor(

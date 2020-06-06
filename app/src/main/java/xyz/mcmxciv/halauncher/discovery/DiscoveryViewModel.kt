@@ -1,14 +1,12 @@
-package xyz.mcmxciv.halauncher.ui.discovery
+package xyz.mcmxciv.halauncher.discovery
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import xyz.mcmxciv.halauncher.discovery.DiscoveryManager
-import xyz.mcmxciv.halauncher.discovery.HomeAssistantInstance
+import xyz.mcmxciv.halauncher.BaseViewModel
 import xyz.mcmxciv.halauncher.settings.SettingsUseCase
-import xyz.mcmxciv.halauncher.ui.BaseViewModel
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -28,9 +26,12 @@ class DiscoveryViewModel @Inject constructor(
         discoveryManager.startDiscovery()
     }
 
-    fun onInstanceSelected(instance: HomeAssistantInstance) {
+    fun instanceSelected(instance: HomeAssistantInstance) {
         discoveryManager.stopDiscovery()
         settingsUseCase.saveInstanceUrl(instance.hostName)
+        navigationEvent.postValue(
+            DiscoveryFragmentDirections.actionDiscoveryFragmentToAuthenticationFragment()
+        )
     }
 
     override fun onCleared() {

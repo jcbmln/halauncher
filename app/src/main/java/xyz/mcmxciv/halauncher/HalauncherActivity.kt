@@ -1,8 +1,7 @@
-package xyz.mcmxciv.halauncher.ui
+package xyz.mcmxciv.halauncher
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import xyz.mcmxciv.halauncher.R
+import androidx.appcompat.app.AppCompatActivity
 
 class HalauncherActivity : AppCompatActivity() {
 

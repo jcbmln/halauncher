@@ -4,6 +4,7 @@ import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
+import xyz.mcmxciv.halauncher.authentication.models.Token
 
 interface AuthenticationApi {
     @FormUrlEncoded

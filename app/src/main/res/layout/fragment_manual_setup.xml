@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.manual.ManualSetupFragment">
+    tools:context=".manualsetup.ManualSetupFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/host_text_layout"

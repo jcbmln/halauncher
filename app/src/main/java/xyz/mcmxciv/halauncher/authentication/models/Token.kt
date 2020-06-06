@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.authentication
+package xyz.mcmxciv.halauncher.authentication.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

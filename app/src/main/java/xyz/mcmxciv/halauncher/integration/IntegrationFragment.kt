@@ -1,0 +1,37 @@
+package xyz.mcmxciv.halauncher.integration
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.isVisible
+import xyz.mcmxciv.halauncher.BaseFragment
+import xyz.mcmxciv.halauncher.databinding.FragmentIntegrationBinding
+import xyz.mcmxciv.halauncher.fragmentViewModels
+
+class IntegrationFragment : BaseFragment() {
+    private lateinit var binding: FragmentIntegrationBinding
+    private val viewModel by fragmentViewModels { component.integrationViewModel() }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentIntegrationBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observe(viewModel.error) { displayMessage(it) }
+        observe(viewModel.progressVisibility) { binding.registrationProgressBar.isVisible = it }
+        observe(viewModel.buttonVisibility) { isVisible ->
+            binding.retryButton.isVisible = isVisible
+            binding.skipButton.isVisible = isVisible
+        }
+
+        binding.retryButton.setOnClickListener { viewModel.retry() }
+        binding.skipButton.setOnClickListener { viewModel.skip() }
+    }
+}

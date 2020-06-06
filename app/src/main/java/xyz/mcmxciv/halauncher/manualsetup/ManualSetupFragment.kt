@@ -1,17 +1,17 @@
-package xyz.mcmxciv.halauncher.ui.manual
+package xyz.mcmxciv.halauncher.manualsetup
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.databinding.FragmentManualSetupBinding
-import xyz.mcmxciv.halauncher.ui.BaseFragment
-import xyz.mcmxciv.halauncher.ui.fragmentViewModels
+import xyz.mcmxciv.halauncher.fragmentViewModels
 import xyz.mcmxciv.halauncher.utils.value
 
 class ManualSetupFragment : BaseFragment() {
     private lateinit var binding: FragmentManualSetupBinding
-    private val viewModel by fragmentViewModels { component.manualSetupViewModelProvider().get() }
+    private val viewModel by fragmentViewModels { component.manualSetupViewModel() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

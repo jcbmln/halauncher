@@ -10,8 +10,8 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import xyz.mcmxciv.halauncher.authentication.AuthenticationException
 import xyz.mcmxciv.halauncher.authentication.AuthenticationRepository
-import xyz.mcmxciv.halauncher.authentication.Session
-import xyz.mcmxciv.halauncher.authentication.Token
+import xyz.mcmxciv.halauncher.authentication.models.Session
+import xyz.mcmxciv.halauncher.authentication.models.Token
 import xyz.mcmxciv.halauncher.settings.SettingsRepository
 import xyz.mcmxciv.halauncher.utils.Serializer
 import xyz.mcmxciv.halauncher.utils.deserialize
@@ -53,12 +53,13 @@ class SessionInterceptor(
 
             if (refreshResponse.isSuccessful) {
                 val token = Serializer.deserialize<Token>(refreshResponse.body.toString())!!
-                val refreshedSession = Session(
-                    token.accessToken,
-                    Instant.now().epochSecond + token.expiresIn,
-                    session.refreshToken,
-                    token.tokenType
-                )
+                val refreshedSession =
+                    Session(
+                        token.accessToken,
+                        Instant.now().epochSecond + token.expiresIn,
+                        session.refreshToken,
+                        token.tokenType
+                    )
 
                 sharedPreferences.edit {
                     putString(
