@@ -2,8 +2,11 @@ package xyz.mcmxciv.halauncher.authentication
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import xyz.mcmxciv.halauncher.authentication.models.Session
 import xyz.mcmxciv.halauncher.authentication.models.Token
+import xyz.mcmxciv.halauncher.utils.Resource
 import xyz.mcmxciv.halauncher.utils.Serializer
 import xyz.mcmxciv.halauncher.utils.deserialize
 import xyz.mcmxciv.halauncher.utils.serialize
@@ -23,6 +26,22 @@ class AuthenticationRepository @Inject constructor(
         return authenticationApi.getToken(GRANT_TYPE_CODE, authenticationCode, CLIENT_ID)
     }
 
+    suspend fun refreshToken(refreshToken: String): Resource<Token> {
+        val response = authenticationApi.refreshToken(GRANT_TYPE_REFRESH, refreshToken, CLIENT_ID)
+
+        val invalidGrant = withContext(Dispatchers.IO) {
+            response.errorBody()?.string()?.contains(INVALID_GRANT) ?: false
+        }
+
+        return if (response.isSuccessful) Resource.success(response.body()!!)
+            else if (response.code() == 400 && invalidGrant) Resource.error(INVALID_GRANT)
+            else Resource.error()
+    }
+
+    suspend fun revokeToken(refreshToken: String) {
+        authenticationApi.revokeToken(refreshToken, REVOKE_ACTION)
+    }
+
     fun saveSession(session: Session) {
         sharedPreferences.edit { putString(SESSION_KEY, Serializer.serialize(session)) }
     }
@@ -35,5 +54,6 @@ class AuthenticationRepository @Inject constructor(
         const val GRANT_TYPE_REFRESH = "refresh_token"
         const val REVOKE_ACTION = "revoke"
         const val REDIRECT_URI = "hass://auth"
+        const val INVALID_GRANT = "invalid_grant"
     }
 }

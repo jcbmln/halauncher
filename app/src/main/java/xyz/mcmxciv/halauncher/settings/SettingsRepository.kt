@@ -9,17 +9,8 @@ class SettingsRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) {
     var instanceUrl: String
-        get() {
-            val result = sharedPreferences.getString(INSTANCE_URL_KEY, PLACEHOLDER_URL)
-            return result ?: PLACEHOLDER_URL
-        }
-        set(value) {
-            sharedPreferences.edit {
-                putString(INSTANCE_URL_KEY, value)
-            }
-        }
-
-
+        get() = sharedPreferences.getString(INSTANCE_URL_KEY, null) ?: PLACEHOLDER_URL
+        set(value) = sharedPreferences.edit { putString(INSTANCE_URL_KEY, value) }
 
     companion object {
         const val INSTANCE_URL_KEY = "instance_url"

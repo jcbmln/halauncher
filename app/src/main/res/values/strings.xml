@@ -21,6 +21,8 @@
     <!-- Integration Screen -->
     <string name="registering_device">Registering device…</string>
     <string name="device_registration_error">An error occurred registering this device. Please check your configuration and try again.</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="skip_message">By skipping integration, some features will be unavailable. You can enable integration in settings later. Do you want to continue?</string>
 
     <!-- Misc. -->
     <string name="cancel">Cancel</string>

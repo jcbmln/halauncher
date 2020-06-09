@@ -8,8 +8,8 @@ import javax.inject.Inject
 class SettingsUseCase @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) {
-    val hasHassInstance: Boolean
-        get() = settingsRepository.instanceUrl != SettingsRepository.PLACEHOLDER_URL
+    fun validateInstance(): Boolean =
+        settingsRepository.instanceUrl != SettingsRepository.PLACEHOLDER_URL
 
     fun saveInstanceUrl(url: String) {
         val instanceUrl = try {

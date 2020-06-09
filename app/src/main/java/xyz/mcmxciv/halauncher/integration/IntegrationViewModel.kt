@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.BaseViewModel
+import xyz.mcmxciv.halauncher.HalauncherApplication
 import xyz.mcmxciv.halauncher.R
 import javax.inject.Inject
 
@@ -38,6 +39,7 @@ class IntegrationViewModel @Inject constructor(
 
         viewModelScope.launch(exceptionHandler) {
             integrationUseCase.registerDevice(deviceManager.deviceInfo)
+            HalauncherApplication.instance.startWorkers()
             navigationEvent.postValue(
                 IntegrationFragmentDirections.actionIntegrationFragmentToHomeFragment()
             )
@@ -51,6 +53,7 @@ class IntegrationViewModel @Inject constructor(
     }
 
     fun skip() {
+        integrationUseCase.optOut()
         navigationEvent.postValue(
             IntegrationFragmentDirections.actionIntegrationFragmentToHomeFragment()
         )

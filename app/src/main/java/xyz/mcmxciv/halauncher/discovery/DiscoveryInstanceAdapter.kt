@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.databinding.ListItemInstanceBinding
+import xyz.mcmxciv.halauncher.settings.HomeAssistantInstance
 
 class DiscoveryInstanceAdapter
     : RecyclerView.Adapter<DiscoveryInstanceAdapter.DiscoveryInstanceViewHolder>() {
@@ -36,7 +37,8 @@ class DiscoveryInstanceAdapter
 
     override fun onBindViewHolder(holder: DiscoveryInstanceViewHolder, position: Int) {
         holder.binding.instanceName.text = _instances[position].name
-        holder.binding.instanceUrl.text = _instances[position].hostName
+        holder.binding.instanceUrl.text = _instances[position].baseUrl
+        holder.binding.instanceVersion.text = _instances[position].version
         holder.binding.root.setOnClickListener {
             _onInstanceSelectedListener(_instances[position])
         }

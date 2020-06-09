@@ -34,8 +34,10 @@ class AuthenticationViewModel @Inject constructor(
                     authenticationUseCase.authenticate(code)
 
                     val action = if (integrationUseCase.isDeviceIntegrated)
-                        AuthenticationFragmentDirections.actionAuthenticationFragmentToHomeFragment()
-                    else AuthenticationFragmentDirections.actionAuthenticationFragmentToIntegrationFragment()
+                        AuthenticationFragmentDirections
+                            .actionAuthenticationFragmentToHomeFragment()
+                    else AuthenticationFragmentDirections
+                        .actionAuthenticationFragmentToIntegrationFragment()
 
                     navigationEvent.postValue(action)
                 }

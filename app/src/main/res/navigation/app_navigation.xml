@@ -24,6 +24,11 @@
             app:destination="@id/integrationFragment"
             app:popUpTo="@id/integrationFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_launchFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/discoveryFragment"

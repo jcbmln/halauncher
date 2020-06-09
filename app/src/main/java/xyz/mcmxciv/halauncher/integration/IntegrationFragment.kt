@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import xyz.mcmxciv.halauncher.BaseFragment
+import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentIntegrationBinding
 import xyz.mcmxciv.halauncher.fragmentViewModels
 
@@ -24,6 +26,7 @@ class IntegrationFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        observe(viewModel.navigation) { navigate(it) }
         observe(viewModel.error) { displayMessage(it) }
         observe(viewModel.progressVisibility) { binding.registrationProgressBar.isVisible = it }
         observe(viewModel.buttonVisibility) { isVisible ->
@@ -32,6 +35,13 @@ class IntegrationFragment : BaseFragment() {
         }
 
         binding.retryButton.setOnClickListener { viewModel.retry() }
-        binding.skipButton.setOnClickListener { viewModel.skip() }
+        binding.skipButton.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.are_you_sure)
+                .setMessage(R.string.skip_message)
+                .setPositiveButton(R.string.skip) { _, _ -> viewModel.skip() }
+                .setNegativeButton(R.string.cancel) { d, _ -> d.dismiss() }
+                .show()
+        }
     }
 }

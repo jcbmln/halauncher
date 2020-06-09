@@ -1,8 +1,10 @@
 package xyz.mcmxciv.halauncher.authentication
 
+import androidx.core.net.toUri
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import xyz.mcmxciv.halauncher.authentication.models.Session
 import xyz.mcmxciv.halauncher.settings.SettingsRepository
+import xyz.mcmxciv.halauncher.utils.Resource
 import javax.inject.Inject
 
 class AuthenticationUseCase @Inject constructor(
@@ -33,8 +35,21 @@ class AuthenticationUseCase @Inject constructor(
         )
     }
 
+    suspend fun validateAuthentication(): Boolean {
+        val session = authenticationRepository.session ?: return false
+
+        return if (session.isExpired) {
+            val resource = authenticationRepository.refreshToken(session.refreshToken)
+
+            if (resource.status == Resource.Status.SUCCESS) return true
+            else authenticationRepository.revokeToken(session.refreshToken)
+
+            false
+        } else true
+    }
+
     fun getAuthenticationCode(responseUrl: String): String? =
-        responseUrl.toHttpUrl().queryParameter(AuthenticationRepository.RESPONSE_TYPE)
+        responseUrl.toUri().getQueryParameter(AuthenticationRepository.RESPONSE_TYPE)
 
     fun isValidResponseUrl(responseUrl: String): Boolean =
         responseUrl.contains(AuthenticationRepository.REDIRECT_URI)

@@ -14,6 +14,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import xyz.mcmxciv.halauncher.http.SessionInterceptor
 import xyz.mcmxciv.halauncher.http.UrlInterceptor
 import xyz.mcmxciv.halauncher.settings.SettingsRepository
+import xyz.mcmxciv.halauncher.utils.HalauncherResourceProvider
+import xyz.mcmxciv.halauncher.utils.ResourceProvider
 
 @Module
 class AppModule(private val context: Context) {
@@ -34,6 +36,11 @@ class AppModule(private val context: Context) {
     @Provides
     fun launcherApps(context: Context): LauncherApps =
         context.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+
+    @AppScope
+    @Provides
+    fun resourceProvider(context: Context): ResourceProvider =
+        HalauncherResourceProvider(context)
 
     @AppScope
     @SecureApi

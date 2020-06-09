@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import xyz.mcmxciv.halauncher.BaseViewModel
+import xyz.mcmxciv.halauncher.settings.HomeAssistantInstance
 import xyz.mcmxciv.halauncher.settings.SettingsUseCase
 import javax.inject.Inject
 
@@ -28,7 +29,7 @@ class DiscoveryViewModel @Inject constructor(
 
     fun instanceSelected(instance: HomeAssistantInstance) {
         discoveryManager.stopDiscovery()
-        settingsUseCase.saveInstanceUrl(instance.hostName)
+        settingsUseCase.saveInstanceUrl(instance.baseUrl)
         navigationEvent.postValue(
             DiscoveryFragmentDirections.actionDiscoveryFragmentToAuthenticationFragment()
         )
