@@ -10,7 +10,7 @@ import xyz.mcmxciv.halauncher.launch.LaunchViewModel
 import xyz.mcmxciv.halauncher.manualsetup.ManualSetupViewModel
 
 @ViewScope
-@Subcomponent(modules = [DataModule::class])
+@Subcomponent
 interface ViewComponent {
     fun authenticationViewModel(): AuthenticationViewModel
     @ExperimentalCoroutinesApi

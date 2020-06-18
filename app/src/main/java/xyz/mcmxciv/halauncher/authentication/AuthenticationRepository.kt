@@ -46,6 +46,10 @@ class AuthenticationRepository @Inject constructor(
         sharedPreferences.edit { putString(SESSION_KEY, Serializer.serialize(session)) }
     }
 
+    fun clearSession() {
+        sharedPreferences.edit { putString(SESSION_KEY, null) }
+    }
+
     companion object {
         const val SESSION_KEY = "session"
         const val CLIENT_ID = "https://halauncher.app"

@@ -18,11 +18,14 @@ class SensorCoroutineWorker(
     private val context: Context,
     workerParameters: WorkerParameters
 ) : CoroutineWorker(context, workerParameters) {
+    private val component = HalauncherApplication.instance.component.serviceComponentBuilder()
+        .build()
+
     @Inject
     lateinit var integrationUseCase: IntegrationUseCase
 
     init {
-        HalauncherApplication.instance.component.inject(this)
+        component.inject(this)
     }
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {

@@ -2,6 +2,7 @@ package xyz.mcmxciv.halauncher.authentication
 
 import androidx.core.net.toUri
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import org.json.JSONObject
 import xyz.mcmxciv.halauncher.authentication.models.Session
 import xyz.mcmxciv.halauncher.settings.SettingsRepository
 import xyz.mcmxciv.halauncher.utils.Resource
@@ -46,6 +47,26 @@ class AuthenticationUseCase @Inject constructor(
 
             false
         } else true
+    }
+
+    suspend fun getExternalAuthentication(): String? {
+        return if (validateAuthentication()) {
+            val session = authenticationRepository.session ?: throw AuthenticationException()
+            JSONObject(
+                mapOf(
+                    "access_token" to session.accessToken,
+                    "expires_in" to session.expiresIn
+                )
+            ).toString()
+        } else null
+    }
+
+    suspend fun revokeAuthentication() {
+        authenticationRepository.session?.also { session ->
+            val token = session.accessToken
+            authenticationRepository.revokeToken(token)
+            authenticationRepository.clearSession()
+        }
     }
 
     fun getAuthenticationCode(responseUrl: String): String? =

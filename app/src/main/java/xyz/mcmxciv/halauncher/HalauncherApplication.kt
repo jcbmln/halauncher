@@ -4,6 +4,7 @@ import android.app.Application
 import xyz.mcmxciv.halauncher.di.AppComponent
 import xyz.mcmxciv.halauncher.di.AppModule
 import xyz.mcmxciv.halauncher.di.DaggerAppComponent
+import xyz.mcmxciv.halauncher.di.DataModule
 import xyz.mcmxciv.halauncher.sensors.SensorCoroutineWorker
 
 class HalauncherApplication : Application() {
@@ -14,6 +15,7 @@ class HalauncherApplication : Application() {
         instance = this
         component = DaggerAppComponent.builder()
             .appModule(AppModule(applicationContext))
+            .dataModule(DataModule())
             .build()
         component.inject(this)
         startWorkers()

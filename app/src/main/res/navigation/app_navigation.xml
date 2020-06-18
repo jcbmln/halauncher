@@ -87,5 +87,11 @@
         android:id="@+id/homeFragment"
         android:name="xyz.mcmxciv.halauncher.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_authenticationFragment"
+            app:destination="@id/authenticationFragment"
+            app:popUpTo="@id/authenticationFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
 </navigation>
