@@ -1,0 +1,42 @@
+baseURL = "https://halauncher.app/"
+languageCode = "en-us"
+title = "Halauncher"
+theme = "compose"
+
+#  menu items
+[[menu.main]]
+    name = "Docs"
+    weight = 2
+    url = "docs/"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = false
+    hl_Lines = ""
+    lineNoStart = 1
+    lineNos = true
+    lineNumbersInTable = true
+    noClasses = false
+    style = "monokai"
+    tabWidth = 2
+
+# Everything below this are Site Params
+
+[params]
+  author = "Jacob Malone"
+  searchPlaceholder = "Search..."
+  repo = "https://github.com/jcbmln/halauncher"
+
+  time_format_blog = "Monday, January 02, 2006"
+  time_format_default = "January 2, 2006"
+
+  logo = "logo.svg"
+
+  [params.source]
+    name = "GitHub"
+    icon = "github.svg"
+    url = "https://github.com/onweru/compose/"

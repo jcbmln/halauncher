@@ -1,0 +1,36 @@
+// #161d21; // #1F2A2F; // #132433; // #24292e;
+html 
+  --light: #fff
+  --dark: rgb(28,28,30)
+  --haze: #f2f5f2
+  --bubble: rgb(32,32,34)
+  --accent: var(--gray)
+  --bg: var(--light)
+  --overlay: var(--light)
+  --text: var(--dark)
+  --theme: #20c997
+  --font: 'Metropolis', sans-serif
+  --border-color: #eee
+  &::after
+    content: ""
+    height: 15vh
+    position: fixed
+    bottom: 0
+    width: 100vw
+    z-index: 9999
+    background: linear-gradient(to top, var(--bg), transparent)
+
+  @media (prefers-color-scheme: dark)
+    --bg: var(--dark)
+    --text: var(--light)
+    --accent: var(--bubble)
+    --overlay: var(--bubble)
+    --border-color: transparent
+    *
+      box-shadow: none !important 
+    &::after
+      background: linear-gradient(to top, var(--bg), transparent)
+
+%narrow 
+  max-width: 750px
+  margin: 0 auto
