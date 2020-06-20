@@ -22,8 +22,20 @@ data class HassTheme(
     val primaryBackgroundColor: Int,
     val secondaryBackgroundColor: Int
 ) {
+    @Transient
+    val appDrawerTheme = AppDrawerTheme.create(this)
+
     init {
         instance = this
+    }
+
+    class AppDrawerTheme private constructor(
+        val labelTextColor: Int
+    ) {
+        companion object {
+            fun create(hassTheme: HassTheme): AppDrawerTheme =
+                AppDrawerTheme(hassTheme.primaryTextColor)
+        }
     }
 
     companion object {

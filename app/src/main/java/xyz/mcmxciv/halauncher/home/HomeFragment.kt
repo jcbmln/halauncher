@@ -13,22 +13,29 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.GridLayout
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.json.JSONObject
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.apps.AppDrawerAdapter
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
 import xyz.mcmxciv.halauncher.fragmentViewModels
+import javax.inject.Inject
 
 class HomeFragment : BaseFragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel by fragmentViewModels { component.homeViewModel() }
+
+    @Inject
+    lateinit var appDrawerAdapter: AppDrawerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +68,7 @@ class HomeFragment : BaseFragment() {
         adjustSystemUi()
         applyInsets()
         setOnBackPressedDispatcher()
+        initializeAppDrawer()
         initializeWebView()
     }
 
@@ -106,6 +114,11 @@ class HomeFragment : BaseFragment() {
             isEnabled = true
             if (binding.homeWebView.canGoBack()) binding.homeWebView.goBack()
         }
+    }
+
+    private fun initializeAppDrawer() {
+        binding.appList.layoutManager = GridLayoutManager(context, viewModel.appDrawerColumns)
+        binding.appList.adapter = appDrawerAdapter
     }
 
     private fun initializeWebView() {

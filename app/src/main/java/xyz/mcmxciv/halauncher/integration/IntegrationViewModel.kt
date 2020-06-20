@@ -9,6 +9,7 @@ import timber.log.Timber
 import xyz.mcmxciv.halauncher.BaseViewModel
 import xyz.mcmxciv.halauncher.HalauncherApplication
 import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.device.DeviceManager
 import javax.inject.Inject
 
 class IntegrationViewModel @Inject constructor(

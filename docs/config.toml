@@ -34,7 +34,7 @@ theme = "compose"
   time_format_blog = "Monday, January 02, 2006"
   time_format_default = "January 2, 2006"
 
-  logo = "logo.svg"
+  logoFile = "logo.svg"
 
   [params.source]
     name = "GitHub"

@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.integration
+package xyz.mcmxciv.halauncher.device
 
 import android.os.Build
 import android.provider.Settings

@@ -12,6 +12,8 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
+    <style name="HalauncherTheme.Widget" />
+
     <style name="HalauncherTheme.Widget.TextView.Title" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="android:textAlignment">gravity</item>
     </style>
@@ -22,8 +24,21 @@
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="HaLauncher.Widget.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="HalauncherTheme.Widget.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/primary_color</item>
         <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="HalauncherTheme.Widget.AppIcon">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Caption</item>
+        <item name="selectableItemBackground">?android:attr/selectableItemBackground</item>
     </style>
 </resources>

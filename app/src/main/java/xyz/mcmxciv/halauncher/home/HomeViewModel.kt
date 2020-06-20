@@ -13,6 +13,7 @@ import xyz.mcmxciv.halauncher.HalauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.authentication.AuthenticationException
 import xyz.mcmxciv.halauncher.authentication.AuthenticationUseCase
+import xyz.mcmxciv.halauncher.device.DeviceProfile
 import xyz.mcmxciv.halauncher.settings.SettingsUseCase
 import xyz.mcmxciv.halauncher.utils.HassTheme
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
@@ -23,8 +24,12 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
     private val settingsUseCase: SettingsUseCase,
-    private val resourceProvider: ResourceProvider
+    private val resourceProvider: ResourceProvider,
+    private val deviceProfile: DeviceProfile
 ) : BaseViewModel() {
+    val appDrawerColumns: Int
+        get() = deviceProfile.appDrawerColumns
+
     private val _authenticationUrl = MutableLiveData<String>().also {
         it.postValue(authenticationUseCase.authenticationUrl)
     }
