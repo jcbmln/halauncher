@@ -3,6 +3,7 @@ package xyz.mcmxciv.halauncher.di
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.LauncherApps
+import android.content.pm.PackageManager
 import androidx.preference.PreferenceManager
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -32,7 +33,9 @@ class AppModule(private val context: Context) {
     fun sharedPreferences(context: Context): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
 
-    @AppScope
+    @Provides
+    fun packageManager(context: Context): PackageManager = context.packageManager
+
     @Provides
     fun launcherApps(context: Context): LauncherApps =
         context.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
