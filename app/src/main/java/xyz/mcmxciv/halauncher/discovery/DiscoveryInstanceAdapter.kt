@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.databinding.ListItemInstanceBinding
 import xyz.mcmxciv.halauncher.settings.HomeAssistantInstance
 
-class DiscoveryInstanceAdapter
-    : RecyclerView.Adapter<DiscoveryInstanceAdapter.DiscoveryInstanceViewHolder>() {
+class DiscoveryInstanceAdapter :
+    RecyclerView.Adapter<DiscoveryInstanceAdapter.DiscoveryInstanceViewHolder>() {
     private var _instances = listOf<HomeAssistantInstance>()
     private var _onInstanceSelectedListener: (instance: HomeAssistantInstance) -> Unit = {}
 

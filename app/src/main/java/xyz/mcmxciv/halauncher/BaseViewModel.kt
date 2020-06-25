@@ -12,4 +12,3 @@ open class BaseViewModel : ViewModel() {
     protected val errorEvent = LiveEvent<Int>()
     val error: LiveData<Int> = errorEvent
 }
-

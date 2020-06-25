@@ -17,7 +17,7 @@ open class BaseFragment : Fragment() {
         .viewComponentBuilder()
         .build()
 
-    fun <T: LiveData<V>, V: Any> observe(obj: T, block: (V) -> Unit) {
+    fun <T : LiveData<V>, V : Any> observe(obj: T, block: (V) -> Unit) {
         obj.observe(viewLifecycleOwner, Observer { block(it) })
     }
 

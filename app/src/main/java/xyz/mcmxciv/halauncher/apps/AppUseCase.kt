@@ -1,12 +1,15 @@
 package xyz.mcmxciv.halauncher.apps
 
 import android.content.ComponentName
+import android.content.pm.ApplicationInfo
 import android.content.pm.ShortcutInfo
-import android.graphics.Bitmap
+import xyz.mcmxciv.halauncher.icons.IconFactory
+import xyz.mcmxciv.halauncher.utils.toByteArray
 import javax.inject.Inject
 
 class AppUseCase @Inject constructor(
-    private val appRepository: AppRepository
+    private val appRepository: AppRepository,
+    private val iconFactory: IconFactory
 ) {
     private val shortcutComparator = Comparator<ShortcutInfo> { a, b ->
         when {
@@ -32,7 +35,7 @@ class AppUseCase @Inject constructor(
             val packageInfo = appRepository.getPackageInfo(app.packageName)
             if (packageInfo.lastUpdateTime > app.lastUpdate) {
                 app.lastUpdate = packageInfo.lastUpdateTime
-                app.icon = ByteArray(0)
+                app.icon = iconFactory.getIcon(launcherActivity).toByteArray()
                 appRepository.updateApp(app)
             }
 
@@ -41,8 +44,34 @@ class AppUseCase @Inject constructor(
                 launcherActivity.componentName,
                 createShortcuts(app.packageName, launcherActivity.componentName)
             )
+        }.toMutableList()
+
+        val cacheAppActivityNames = cachedApps.map { app -> app.activityName }
+        val newAppDrawerItems = launcherActivityInfo.filterNot { info ->
+            cacheAppActivityNames.contains(info.name)
+        }.map { info ->
+            val packageInfo = appRepository.getPackageInfo(info.applicationInfo.packageName)
+            val app = App(
+                info.name,
+                packageInfo.packageName,
+                appRepository.getDisplayName(info),
+                packageInfo.lastUpdateTime,
+                (info.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 1,
+                false,
+                iconFactory.getIcon(info).toByteArray()
+            )
+            appRepository.addApp(app)
+            AppDrawerItem(
+                app,
+                info.componentName,
+                createShortcuts(app.packageName, info.componentName)
+            )
         }
-        return listOf()
+
+        appDrawerItems.addAll(newAppDrawerItems)
+        appDrawerItems.sortBy { a -> a.app.displayName }
+
+        return appDrawerItems
     }
 
     suspend fun markActivityHidden(activityName: String) {
@@ -58,8 +87,15 @@ class AppUseCase @Inject constructor(
                 .queryShortcuts(packageName, componentName)
                 .sortedWith(shortcutComparator)
                 .take(4)
-                .map { s ->
-                    Shortcut(s.id, packageName, s.shortLabel!!.toString(), Bitmap.createBitmap(0, 0, Bitmap.Config.ARGB_8888))
+                .mapNotNull { s ->
+                    iconFactory.getShortcutIcon(s)?.let {
+                        Shortcut(
+                            s.id,
+                            packageName,
+                            s.shortLabel!!.toString(),
+                            it
+                        )
+                    }
                 }
         } else listOf()
     }

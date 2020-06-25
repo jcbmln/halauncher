@@ -2,7 +2,6 @@ package xyz.mcmxciv.halauncher.sensors.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import xyz.mcmxciv.halauncher.sensors.models.Sensor
 
 @JsonClass(generateAdapter = true)
 data class SensorInfo(

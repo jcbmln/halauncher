@@ -1,6 +1,7 @@
 package xyz.mcmxciv.halauncher.device
 
 import android.content.Context
+import android.content.res.Resources
 import android.content.res.XmlResourceParser
 import android.graphics.Point
 import android.text.TextUtils
@@ -10,6 +11,7 @@ import android.util.Xml
 import android.view.WindowManager
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
+import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.di.AppScope
 import xyz.mcmxciv.halauncher.utils.Utilities
@@ -27,6 +29,7 @@ class DeviceProfile @Inject constructor(context: Context) {
     var iconBitmapSize = 0
     var shortcutIconBitmapSize = 0
     var appIconDpi = 0
+    var shortcutIconDpi = 0
 
     private var iconShapePath = ""
     private val isTablet = context.resources.getBoolean(R.bool.is_tablet)
@@ -57,8 +60,16 @@ class DeviceProfile @Inject constructor(context: Context) {
             getInterpolatedDisplayOption(minWidthDps, minHeightDps, profiles)
         val gridOption = profiles[0].gridOption
 
-        appDrawerColumns = gridOption?.numColumns ?:
-                context.resources.getInteger(R.integer.default_app_drawer_columns)
+        appDrawerColumns = gridOption?.numColumns
+            ?: context.resources.getInteger(R.integer.default_app_drawer_columns)
+
+        iconShapePath = getIconShapePath(context)
+        iconBitmapSize = Utilities.pxFromDpi(interpolatedDisplayOption.iconImageSize, dm)
+        shortcutIconBitmapSize = Utilities
+            .pxFromDpi(interpolatedDisplayOption.shortcutImageSize, dm)
+        iconTextSize = interpolatedDisplayOption.iconTextSize
+        appIconDpi = getLauncherIconDensity(iconBitmapSize)
+        shortcutIconBitmapSize = getLauncherIconDensity(shortcutIconBitmapSize)
     }
 
     private fun getPredefinedDeviceProfiles(
@@ -113,7 +124,7 @@ class DeviceProfile @Inject constructor(context: Context) {
     ): DisplayOption {
         var totalWeight = 0f
 
-        if(dist(width, height, points[0].minWidthDps, points[0].minHeightDps) == 0f) {
+        if (dist(width, height, points[0].minWidthDps, points[0].minHeightDps) == 0f) {
             return points[0]
         }
 
@@ -129,6 +140,37 @@ class DeviceProfile @Inject constructor(context: Context) {
         return out.multiply(1.0f / totalWeight)
     }
 
+    private fun getIconShapePath(context: Context): String {
+        if (CONFIG_ICON_MASK_RES_ID == 0) {
+            Timber.e("Icon mask res identifier failed to retrieve.")
+            return ""
+        }
+        return context.resources.getString(CONFIG_ICON_MASK_RES_ID)
+    }
+
+    private fun getLauncherIconDensity(requiredSize: Int): Int {
+        // Densities typically defined by an app.
+        val densityBuckets = intArrayOf(
+            DisplayMetrics.DENSITY_LOW,
+            DisplayMetrics.DENSITY_MEDIUM,
+            DisplayMetrics.DENSITY_TV,
+            DisplayMetrics.DENSITY_HIGH,
+            DisplayMetrics.DENSITY_XHIGH,
+            DisplayMetrics.DENSITY_XXHIGH,
+            DisplayMetrics.DENSITY_XXXHIGH
+        )
+
+        var density = DisplayMetrics.DENSITY_XXXHIGH
+        for (i in densityBuckets.indices.reversed()) {
+            val expectedSize =
+                ICON_SIZE_DEFINED_IN_APP_DP * densityBuckets[i] / DisplayMetrics.DENSITY_DEFAULT
+            if (expectedSize >= requiredSize) {
+                density = densityBuckets[i]
+            }
+        }
+
+        return density
+    }
 
     private fun parseProfiles(
         parser: XmlResourceParser,
@@ -197,7 +239,7 @@ class DeviceProfile @Inject constructor(context: Context) {
             context.obtainStyledAttributes(attrs, R.styleable.ProfileDisplayOption).apply {
                 name = getString(R.styleable.ProfileDisplayOption_name)
                 minWidthDps = getFloat(R.styleable.ProfileDisplayOption_minWidthDps, 0f)
-                minHeightDps = getFloat(R.styleable.ProfileDisplayOption_minHeightDps,0f)
+                minHeightDps = getFloat(R.styleable.ProfileDisplayOption_minHeightDps, 0f)
                 canBeDefault = getBoolean(
                     R.styleable.ProfileDisplayOption_canBeDefault,
                     false
@@ -237,5 +279,12 @@ class DeviceProfile @Inject constructor(context: Context) {
         private const val NEAREST_NEIGHBOR = 3f
         private const val WEIGHT_EFFICIENT = 100000f
         private const val WEIGHT_POWER = 5.0
+        private const val ICON_SIZE_DEFINED_IN_APP_DP = 48f
+
+        private val CONFIG_ICON_MASK_RES_ID = Resources.getSystem().getIdentifier(
+            "config_icon_mask",
+            "string",
+            "android"
+        )
     }
 }

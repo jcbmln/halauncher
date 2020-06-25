@@ -47,7 +47,6 @@ class AppRepository @Inject constructor(
         query.setActivity(componentName)
 
         return launcherApps.getShortcuts(query, Process.myUserHandle()) ?: listOf()
-
     }
 
     fun getPackageInfo(packageName: String): PackageInfo =

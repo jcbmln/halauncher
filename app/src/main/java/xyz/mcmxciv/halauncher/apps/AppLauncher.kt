@@ -76,6 +76,5 @@ class AppLauncher @Inject constructor(context: Context) {
         }
 
         return ActivityOptions.makeClipRevealAnimation(view, left, top, width, height).toBundle()
-
     }
 }

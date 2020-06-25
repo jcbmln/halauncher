@@ -13,7 +13,6 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.GridLayout
 import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.ViewCompat
@@ -21,7 +20,6 @@ import androidx.core.view.updatePadding
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.json.JSONObject
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
@@ -38,7 +36,8 @@ class HomeFragment : BaseFragment() {
     lateinit var appDrawerAdapter: AppDrawerAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)

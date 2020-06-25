@@ -35,8 +35,8 @@ class SessionInterceptor(
         val sessionString = sharedPreferences.getString(
             AuthenticationRepository.SESSION_KEY, null
         ) ?: throw IllegalStateException()
-        val session = Serializer.deserialize<Session>(sessionString) ?:
-            throw IllegalStateException()
+        val session = Serializer.deserialize<Session>(sessionString)
+            ?: throw IllegalStateException()
 
         val accessToken = if (!session.isExpired) {
             session.accessToken

@@ -9,7 +9,6 @@ import xyz.mcmxciv.halauncher.utils.deserialize
 import xyz.mcmxciv.halauncher.utils.serialize
 import javax.inject.Inject
 
-
 class SettingsRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val resourceProvider: ResourceProvider

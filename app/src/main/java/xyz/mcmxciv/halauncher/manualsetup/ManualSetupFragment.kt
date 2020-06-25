@@ -14,7 +14,8 @@ class ManualSetupFragment : BaseFragment() {
     private val viewModel by fragmentViewModels { component.manualSetupViewModel() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentManualSetupBinding.inflate(inflater, container, false)

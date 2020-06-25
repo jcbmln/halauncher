@@ -23,7 +23,8 @@ class AuthenticationFragment : BaseFragment() {
     private val viewModel by fragmentViewModels { component.authenticationViewModel() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAuthenticationBinding.inflate(inflater, container, false)

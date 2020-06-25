@@ -16,7 +16,8 @@ class IntegrationFragment : BaseFragment() {
     private val viewModel by fragmentViewModels { component.integrationViewModel() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentIntegrationBinding.inflate(inflater, container, false)

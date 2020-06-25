@@ -13,7 +13,8 @@ class LaunchFragment : BaseFragment() {
     private val viewModel by fragmentViewModels { component.launchViewModel() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLaunchBinding.inflate(inflater, container, false)
