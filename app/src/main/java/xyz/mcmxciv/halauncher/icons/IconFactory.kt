@@ -78,9 +78,9 @@ class IconFactory @Inject constructor(
         } else null
     }
 
-    private fun createIconBitmap(icon: Drawable): Bitmap {
+    private fun createIconBitmap(drawable: Drawable): Bitmap {
         val scale = FloatArray(1)
-        val normalizedIcon = getNormalizedAdaptiveIcon(icon, scale)
+        val icon = getNormalizedAdaptiveIcon(drawable, scale)
         val size = deviceProfile.iconBitmapSize
         val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
 
@@ -132,7 +132,7 @@ class IconFactory @Inject constructor(
     }
 
     private fun getNormalizedAdaptiveIcon(drawable: Drawable, outScale: FloatArray): Drawable {
-        var scale = 0f
+        var scale: Float
         val outBounds: RectF? = null
         var icon = drawable.mutate()
 
