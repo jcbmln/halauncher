@@ -17,20 +17,22 @@ import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.apps.AppDrawerAdapter
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
-import xyz.mcmxciv.halauncher.fragmentViewModels
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeFragment : BaseFragment() {
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel by fragmentViewModels { component.homeViewModel() }
+    private val viewModel: HomeViewModel by viewModels()
 
     @Inject
     lateinit var appDrawerAdapter: AppDrawerAdapter

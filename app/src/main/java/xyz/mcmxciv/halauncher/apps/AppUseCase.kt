@@ -2,6 +2,7 @@ package xyz.mcmxciv.halauncher.apps
 
 import android.content.ComponentName
 import android.content.pm.ApplicationInfo
+import android.content.pm.LauncherActivityInfo
 import android.content.pm.ShortcutInfo
 import xyz.mcmxciv.halauncher.icons.IconFactory
 import xyz.mcmxciv.halauncher.utils.toByteArray
@@ -23,50 +24,13 @@ class AppUseCase @Inject constructor(
         val launcherActivityInfo = appRepository.getLauncherActivityInfo()
         val cachedApps = appRepository.getApps()
         val appDrawerItems = cachedApps.filterNot { app -> app.isHidden }.mapNotNull { app ->
-            val launcherActivity = launcherActivityInfo.singleOrNull { info ->
-                info.name == app.activityName
-            }
-
-            if (launcherActivity == null) {
-                appRepository.removeApp(app)
-                return@mapNotNull null
-            }
-
-            val packageInfo = appRepository.getPackageInfo(app.packageName)
-            if (packageInfo.lastUpdateTime > app.lastUpdate) {
-                app.lastUpdate = packageInfo.lastUpdateTime
-                app.icon = iconFactory.getIcon(launcherActivity).toByteArray()
-                appRepository.updateApp(app)
-            }
-
-            AppDrawerItem(
-                app,
-                launcherActivity.componentName,
-                createShortcuts(app.packageName, launcherActivity.componentName)
-            )
+            createCachedAppDrawerItem(launcherActivityInfo, app)
         }.toMutableList()
 
         val cacheAppActivityNames = cachedApps.map { app -> app.activityName }
         val newAppDrawerItems = launcherActivityInfo.filterNot { info ->
             cacheAppActivityNames.contains(info.name)
-        }.map { info ->
-            val packageInfo = appRepository.getPackageInfo(info.applicationInfo.packageName)
-            val app = App(
-                info.name,
-                packageInfo.packageName,
-                appRepository.getDisplayName(info),
-                packageInfo.lastUpdateTime,
-                (info.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 1,
-                false,
-                iconFactory.getIcon(info).toByteArray()
-            )
-            appRepository.addApp(app)
-            AppDrawerItem(
-                app,
-                info.componentName,
-                createShortcuts(app.packageName, info.componentName)
-            )
-        }
+        }.map { info -> createNewAppDrawerItem(info) }
 
         appDrawerItems.addAll(newAppDrawerItems)
         appDrawerItems.sortBy { a -> a.app.displayName }
@@ -79,6 +43,59 @@ class AppUseCase @Inject constructor(
             app.isHidden = true
             appRepository.updateApp(app)
         }
+    }
+
+    private suspend fun createCachedAppDrawerItem(
+        launcherActivityInfo: List<LauncherActivityInfo>,
+        app: App
+    ): AppDrawerItem? {
+        val launcherActivity = launcherActivityInfo.singleOrNull { info ->
+            info.name == app.activityName
+        }
+
+        if (launcherActivity == null) {
+            appRepository.removeApp(app)
+            return null
+        }
+
+        val packageInfo = appRepository.getPackageInfo(app.packageName)
+        if (packageInfo.lastUpdateTime > app.lastUpdate) {
+            app.lastUpdate = packageInfo.lastUpdateTime
+            app.icon = iconFactory.getIcon(launcherActivity).toByteArray()
+            appRepository.updateApp(app)
+        }
+
+        return AppDrawerItem(
+            app,
+            launcherActivity.componentName,
+            createShortcuts(app.packageName, launcherActivity.componentName)
+        )
+    }
+
+    private suspend fun createNewAppDrawerItem(
+        launcherActivityInfo: LauncherActivityInfo
+    ): AppDrawerItem {
+        val packageInfo = appRepository
+            .getPackageInfo(launcherActivityInfo.applicationInfo.packageName)
+        val isSystemApp = (launcherActivityInfo.applicationInfo.flags
+                and ApplicationInfo.FLAG_SYSTEM) == 1
+        val app = App(
+            launcherActivityInfo.name,
+            packageInfo.packageName,
+            appRepository.getDisplayName(launcherActivityInfo),
+            packageInfo.lastUpdateTime,
+            isSystemApp,
+            false,
+            iconFactory.getIcon(launcherActivityInfo).toByteArray()
+        )
+
+        appRepository.addApp(app)
+
+        return AppDrawerItem(
+            app,
+            launcherActivityInfo.componentName,
+            createShortcuts(app.packageName, launcherActivityInfo.componentName)
+        )
     }
 
     private fun createShortcuts(packageName: String, componentName: ComponentName): List<Shortcut> {

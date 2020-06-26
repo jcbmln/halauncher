@@ -13,16 +13,16 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
-import xyz.mcmxciv.halauncher.di.AppScope
 import xyz.mcmxciv.halauncher.utils.Utilities
 import java.io.IOException
 import java.lang.RuntimeException
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.math.pow
 
-@AppScope
+@Singleton
 class DeviceProfile @Inject constructor(context: Context) {
     val appDrawerColumns: Int
     var iconTextSize = 0f

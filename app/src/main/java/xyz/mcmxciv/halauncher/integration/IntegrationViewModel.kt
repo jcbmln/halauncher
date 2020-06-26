@@ -1,5 +1,6 @@
 package xyz.mcmxciv.halauncher.integration
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -10,9 +11,8 @@ import xyz.mcmxciv.halauncher.BaseViewModel
 import xyz.mcmxciv.halauncher.HalauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.device.DeviceManager
-import javax.inject.Inject
 
-class IntegrationViewModel @Inject constructor(
+class IntegrationViewModel @ViewModelInject constructor(
     private val deviceManager: DeviceManager,
     private val integrationUseCase: IntegrationUseCase
 ) : BaseViewModel() {

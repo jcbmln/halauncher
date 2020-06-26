@@ -1,5 +1,6 @@
 package xyz.mcmxciv.halauncher.home
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -18,10 +19,8 @@ import xyz.mcmxciv.halauncher.settings.SettingsUseCase
 import xyz.mcmxciv.halauncher.utils.HassTheme
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import java.io.BufferedReader
-import java.lang.Exception
-import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(
+class HomeViewModel @ViewModelInject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
     private val settingsUseCase: SettingsUseCase,
     private val resourceProvider: ResourceProvider,

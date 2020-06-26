@@ -1,5 +1,6 @@
 package xyz.mcmxciv.halauncher.discovery
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -11,7 +12,7 @@ import xyz.mcmxciv.halauncher.settings.SettingsUseCase
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class DiscoveryViewModel @Inject constructor(
+class DiscoveryViewModel @ViewModelInject constructor(
     private val discoveryManager: DiscoveryManager,
     private val settingsUseCase: SettingsUseCase
 ) : BaseViewModel() {

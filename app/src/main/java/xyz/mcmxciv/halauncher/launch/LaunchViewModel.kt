@@ -1,14 +1,14 @@
 package xyz.mcmxciv.halauncher.launch
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import xyz.mcmxciv.halauncher.BaseViewModel
 import xyz.mcmxciv.halauncher.authentication.AuthenticationUseCase
 import xyz.mcmxciv.halauncher.integration.IntegrationUseCase
 import xyz.mcmxciv.halauncher.settings.SettingsUseCase
-import javax.inject.Inject
 
-class LaunchViewModel @Inject constructor(
+class LaunchViewModel @ViewModelInject constructor(
     settingsUseCase: SettingsUseCase,
     authenticationUseCase: AuthenticationUseCase,
     integrationUseCase: IntegrationUseCase

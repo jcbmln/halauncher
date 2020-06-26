@@ -13,17 +13,17 @@ import android.graphics.RectF
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
 import xyz.mcmxciv.halauncher.device.DeviceProfile
-import xyz.mcmxciv.halauncher.di.AppScope
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import java.nio.ByteBuffer
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
 
-@AppScope
+@Singleton
 class IconNormalizer @Inject constructor(
     resourceProvider: ResourceProvider,
     deviceProfile: DeviceProfile

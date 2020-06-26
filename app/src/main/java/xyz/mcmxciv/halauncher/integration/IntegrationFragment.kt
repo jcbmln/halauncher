@@ -5,15 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentIntegrationBinding
-import xyz.mcmxciv.halauncher.fragmentViewModels
 
+@AndroidEntryPoint
 class IntegrationFragment : BaseFragment() {
     private lateinit var binding: FragmentIntegrationBinding
-    private val viewModel by fragmentViewModels { component.integrationViewModel() }
+    private val viewModel: IntegrationViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

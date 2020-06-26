@@ -11,16 +11,18 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentAuthenticationBinding
-import xyz.mcmxciv.halauncher.fragmentViewModels
 
+@AndroidEntryPoint
 class AuthenticationFragment : BaseFragment() {
     private lateinit var binding: FragmentAuthenticationBinding
-    private val viewModel by fragmentViewModels { component.authenticationViewModel() }
+    private val viewModel: AuthenticationViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

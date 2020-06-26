@@ -5,18 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.databinding.FragmentDiscoveryBinding
-import xyz.mcmxciv.halauncher.fragmentViewModels
 
+@AndroidEntryPoint
 class DiscoveryFragment : BaseFragment() {
     private lateinit var binding: FragmentDiscoveryBinding
     @ExperimentalCoroutinesApi
-    private val viewModel by fragmentViewModels { component.discoveryViewModel() }
+    private val viewModel: DiscoveryViewModel by viewModels()
     private val discoveryInstanceAdapter = DiscoveryInstanceAdapter()
 
     override fun onCreateView(

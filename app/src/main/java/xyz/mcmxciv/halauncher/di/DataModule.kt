@@ -4,12 +4,15 @@ import android.content.Context
 import android.net.nsd.NsdManager
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import retrofit2.Retrofit
 import xyz.mcmxciv.halauncher.authentication.AuthenticationApi
 import xyz.mcmxciv.halauncher.integration.IntegrationApi
 import xyz.mcmxciv.halauncher.integration.SecureIntegrationApi
 
 @Module
+@InstallIn(ApplicationComponent::class)
 class DataModule {
     @Provides
     fun authenticationApi(@Api retrofit: Retrofit): AuthenticationApi =

@@ -1,11 +1,11 @@
 package xyz.mcmxciv.halauncher.manualsetup
 
 import android.view.inputmethod.EditorInfo
+import androidx.hilt.lifecycle.ViewModelInject
 import xyz.mcmxciv.halauncher.BaseViewModel
 import xyz.mcmxciv.halauncher.settings.SettingsUseCase
-import javax.inject.Inject
 
-class ManualSetupViewModel @Inject constructor(
+class ManualSetupViewModel @ViewModelInject constructor(
     private val settingsUseCase: SettingsUseCase
 ) : BaseViewModel() {
 

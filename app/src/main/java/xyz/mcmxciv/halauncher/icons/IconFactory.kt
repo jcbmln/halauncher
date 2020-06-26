@@ -19,15 +19,15 @@ import androidx.core.graphics.drawable.toBitmap
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.device.DeviceProfile
-import xyz.mcmxciv.halauncher.di.AppScope
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import xyz.mcmxciv.halauncher.views.FixedScaleDrawable
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.round
 
-@AppScope
+@Singleton
 class IconFactory @Inject constructor(
     private val resourceProvider: ResourceProvider,
     private val packageManager: PackageManager,

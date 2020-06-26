@@ -4,13 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.databinding.FragmentLaunchBinding
-import xyz.mcmxciv.halauncher.fragmentViewModels
 
+@AndroidEntryPoint
 class LaunchFragment : BaseFragment() {
     private lateinit var binding: FragmentLaunchBinding
-    private val viewModel by fragmentViewModels { component.launchViewModel() }
+    private val viewModel: LaunchViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

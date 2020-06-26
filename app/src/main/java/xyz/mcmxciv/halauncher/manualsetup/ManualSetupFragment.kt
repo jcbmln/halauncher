@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.databinding.FragmentManualSetupBinding
-import xyz.mcmxciv.halauncher.fragmentViewModels
 import xyz.mcmxciv.halauncher.utils.value
 
+@AndroidEntryPoint
 class ManualSetupFragment : BaseFragment() {
     private lateinit var binding: FragmentManualSetupBinding
-    private val viewModel by fragmentViewModels { component.manualSetupViewModel() }
+    private val viewModel: ManualSetupViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
