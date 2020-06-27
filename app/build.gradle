@@ -111,6 +111,9 @@ dependencies {
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01'
     kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha01'
 
+    implementation 'androidx.hilt:hilt-work:1.0.0-alpha01'
+    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha01'
+
     implementation 'com.squareup.moshi:moshi-kotlin:1.9.3'
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.3'
 
@@ -131,8 +134,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
     implementation 'com.github.hadilq.liveevent:liveevent:1.2.0'
     implementation 'androidx.palette:palette-ktx:1.0.0'
     implementation 'com.github.alexjlockwood:kyrie:0.2.1'

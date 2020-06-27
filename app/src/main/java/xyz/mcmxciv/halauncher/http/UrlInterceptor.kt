@@ -5,8 +5,11 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import xyz.mcmxciv.halauncher.settings.SettingsRepository
 import java.lang.IllegalStateException
+import javax.inject.Inject
 
-class UrlInterceptor(private val sharedPreferences: SharedPreferences) : Interceptor {
+class UrlInterceptor @Inject constructor(
+    private val sharedPreferences: SharedPreferences
+) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val instanceUrl = sharedPreferences.getString(
             SettingsRepository.INSTANCE_URL_KEY,

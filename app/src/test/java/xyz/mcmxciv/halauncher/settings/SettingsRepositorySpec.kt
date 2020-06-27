@@ -6,10 +6,12 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import xyz.mcmxciv.halauncher.utils.ResourceProvider
 
 object SettingsRepositorySpec : Spek({
     val sharedPreferences by memoized { mockk<SharedPreferences>(relaxed = true) }
-    val settingsRepository by memoized { SettingsRepository(sharedPreferences) }
+    val resourceProvider by memoized { mockk<ResourceProvider>(relaxed = true) }
+    val settingsRepository by memoized { SettingsRepository(sharedPreferences, resourceProvider) }
 
     describe("instance url") {
         context("set url") {

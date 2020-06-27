@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.Xml
 import android.view.WindowManager
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import timber.log.Timber
@@ -23,7 +24,7 @@ import kotlin.math.min
 import kotlin.math.pow
 
 @Singleton
-class DeviceProfile @Inject constructor(context: Context) {
+class DeviceProfile @Inject constructor(@ApplicationContext context: Context) {
     val appDrawerColumns: Int
     var iconTextSize = 0f
     var iconBitmapSize = 0

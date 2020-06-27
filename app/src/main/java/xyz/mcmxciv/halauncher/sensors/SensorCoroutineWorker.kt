@@ -1,6 +1,8 @@
 package xyz.mcmxciv.halauncher.sensors
 
 import android.content.Context
+import androidx.hilt.Assisted
+import androidx.hilt.work.WorkerInject
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.NetworkType
@@ -9,24 +11,17 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import xyz.mcmxciv.halauncher.HalauncherApplication
 import xyz.mcmxciv.halauncher.integration.IntegrationUseCase
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class SensorCoroutineWorker(
-    private val context: Context,
-    workerParameters: WorkerParameters
+class SensorCoroutineWorker @WorkerInject constructor(
+    @Assisted private val context: Context,
+    @Assisted workerParameters: WorkerParameters
 ) : CoroutineWorker(context, workerParameters) {
-    private val component = HalauncherApplication.instance.component.serviceComponentBuilder()
-        .build()
 
     @Inject
     lateinit var integrationUseCase: IntegrationUseCase
-
-    init {
-        component.inject(this)
-    }
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         if (integrationUseCase.isDeviceIntegrated) updateSensors()

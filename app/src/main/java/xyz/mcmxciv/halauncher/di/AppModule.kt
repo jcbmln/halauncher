@@ -11,6 +11,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -23,37 +24,38 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
-class AppModule(private val context: Context) {
+object AppModule {
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
         .build()
 
-    @Provides
-    fun appContext(): Context = context
-
     @Singleton
     @Provides
-    fun sharedPreferences(context: Context): SharedPreferences =
+    fun sharedPreferences(@ApplicationContext context: Context): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
 
     @Provides
-    fun packageManager(context: Context): PackageManager = context.packageManager
+    fun packageManager(@ApplicationContext context: Context): PackageManager =
+        context.packageManager
 
     @Provides
-    fun launcherApps(context: Context): LauncherApps =
+    fun launcherApps(@ApplicationContext context: Context): LauncherApps =
         context.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
 
     @Provides
-    fun resourceProvider(context: Context): ResourceProvider =
+    fun resourceProvider(@ApplicationContext context: Context): ResourceProvider =
         HalauncherResourceProvider(context)
 
     @Singleton
     @SecureApi
     @Provides
-    fun secureRetrofit(sharedPreferences: SharedPreferences): Retrofit {
+    fun secureRetrofit(
+        urlInterceptor: UrlInterceptor,
+        sessionInterceptor: SessionInterceptor
+    ): Retrofit {
         val client = OkHttpClient.Builder()
-            .addInterceptor(UrlInterceptor(sharedPreferences))
-            .addInterceptor(SessionInterceptor(sharedPreferences))
+            .addInterceptor(urlInterceptor)
+            .addInterceptor(sessionInterceptor)
             .build()
 
         return Retrofit.Builder()
@@ -66,9 +68,9 @@ class AppModule(private val context: Context) {
     @Singleton
     @Api
     @Provides
-    fun retrofit(sharedPreferences: SharedPreferences): Retrofit {
+    fun retrofit(urlInterceptor: UrlInterceptor): Retrofit {
         val client = OkHttpClient.Builder()
-            .addInterceptor(UrlInterceptor(sharedPreferences))
+            .addInterceptor(urlInterceptor)
             .build()
 
         return Retrofit.Builder()

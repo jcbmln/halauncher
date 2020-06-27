@@ -18,8 +18,9 @@ import xyz.mcmxciv.halauncher.utils.deserialize
 import xyz.mcmxciv.halauncher.utils.serialize
 import java.lang.IllegalStateException
 import java.time.Instant
+import javax.inject.Inject
 
-class SessionInterceptor(
+class SessionInterceptor @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {

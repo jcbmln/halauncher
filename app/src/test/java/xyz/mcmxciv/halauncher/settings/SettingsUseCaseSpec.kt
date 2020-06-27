@@ -7,15 +7,17 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import xyz.mcmxciv.halauncher.utils.ResourceProvider
 
 object SettingsUseCaseSpec : Spek({
     val sharedPreferences by memoized { mockk<SharedPreferences>(relaxed = true) }
-    val settingsRepository by memoized { SettingsRepository(sharedPreferences) }
+    val resourceProvider by memoized { mockk<ResourceProvider>(relaxed = true) }
+    val settingsRepository by memoized { SettingsRepository(sharedPreferences, resourceProvider) }
     val settingsUseCase by memoized { SettingsUseCase(settingsRepository) }
 
     describe("save instance url") {
         context("given valid url") {
-            val url = "http://home-assistant.halauncher.app"
+            val url = "http://home-assistant.halauncher.app/"
 
             beforeEachTest {
                 settingsUseCase.saveInstanceUrl(url)

@@ -9,7 +9,6 @@ import kotlinx.coroutines.FlowPreview
 import xyz.mcmxciv.halauncher.BaseViewModel
 import xyz.mcmxciv.halauncher.settings.HomeAssistantInstance
 import xyz.mcmxciv.halauncher.settings.SettingsUseCase
-import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 class DiscoveryViewModel @ViewModelInject constructor(

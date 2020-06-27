@@ -2,7 +2,6 @@ package xyz.mcmxciv.halauncher.apps
 
 import android.app.ActivityOptions
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.pm.LauncherApps
 import android.net.Uri
@@ -14,10 +13,9 @@ import xyz.mcmxciv.halauncher.utils.getSourceBounds
 import xyz.mcmxciv.halauncher.views.IconTextView
 import javax.inject.Inject
 
-class AppLauncher @Inject constructor(context: Context) {
-    private val launcherApps =
-        context.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-
+class AppLauncher @Inject constructor(
+    private val launcherApps: LauncherApps
+) {
     fun startMainActivity(componentName: ComponentName, view: View) {
         launcherApps.startMainActivity(
             componentName,
