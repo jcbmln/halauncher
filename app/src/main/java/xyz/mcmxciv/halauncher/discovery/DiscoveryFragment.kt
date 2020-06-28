@@ -45,6 +45,8 @@ class DiscoveryFragment : BaseFragment() {
             DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         )
 
+        binding.manualSetupButton.setOnClickListener { viewModel.onManualSetupButtonClicked() }
+
         observe(viewModel.navigation) { navigate(it) }
         observe(viewModel.instances) { instances ->
             discoveryInstanceAdapter.setInstances(instances)

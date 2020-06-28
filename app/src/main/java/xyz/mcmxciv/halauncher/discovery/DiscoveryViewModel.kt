@@ -27,6 +27,12 @@ class DiscoveryViewModel @ViewModelInject constructor(
         discoveryManager.startDiscovery()
     }
 
+    fun onManualSetupButtonClicked() {
+        navigationEvent.postValue(
+            DiscoveryFragmentDirections.actionDiscoveryFragmentToManualSetupFragment()
+        )
+    }
+
     fun instanceSelected(instance: HomeAssistantInstance) {
         discoveryManager.stopDiscovery()
         settingsUseCase.saveInstanceUrl(instance.baseUrl)

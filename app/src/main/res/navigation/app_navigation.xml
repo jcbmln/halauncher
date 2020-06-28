@@ -12,23 +12,24 @@
         <action
             android:id="@+id/action_launchFragment_to_discoveryFragment"
             app:destination="@id/discoveryFragment"
-            app:popUpTo="@id/discoveryFragment"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/launchFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_launchFragment_to_authenticationFragment"
             app:destination="@id/authenticationFragment"
-            app:popUpTo="@id/authenticationFragment"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/launchFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_launchFragment_to_integrationFragment"
             app:destination="@id/integrationFragment"
-            app:popUpTo="@id/integrationFragment"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/launchFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_launchFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="false" />
+            app:launchSingleTop="true"
+            app:popUpTo="@id/launchFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/discoveryFragment"
@@ -69,8 +70,9 @@
         <action
             android:id="@+id/action_authenticationFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="false" />
+            app:launchSingleTop="true"
+            app:popUpTo="@id/authenticationFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/integrationFragment"
@@ -80,8 +82,9 @@
         <action
             android:id="@+id/action_integrationFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="false" />
+            app:launchSingleTop="true"
+            app:popUpTo="@id/integrationFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -91,7 +94,7 @@
         <action
             android:id="@+id/action_homeFragment_to_authenticationFragment"
             app:destination="@id/authenticationFragment"
-            app:popUpTo="@id/authenticationFragment"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

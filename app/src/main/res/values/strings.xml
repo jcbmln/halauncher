@@ -5,12 +5,12 @@
     <!-- Discovery Screen -->
     <string name="searching_for_instances">Searching for Home Assistant instances…</string>
     <string name="select_an_instance">Select a Home Assistant instance.</string>
-    <string name="manual_mode">Manual Mode</string>
+    <string name="manual_setup">Manual Setup</string>
     
     <!-- Manual Setup Screen -->
     <string name="home_assistant_url">Home Assistant Url</string>
     <string name="home_assistant_url_example">https://example.com:8123</string>
-    <string name="discovery_mode">Discovery Mode</string>
+    <string name="discovery">Discovery</string>
 
     <!-- Authentication Screen -->
     <string name="unable_to_connect">Unable to connect to Home Assistant.</string>

@@ -38,19 +38,19 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="32dp"
         android:text="@string/go"
-        app:layout_constraintBottom_toTopOf="@+id/discovery_mode_button"
+        app:layout_constraintBottom_toTopOf="@+id/discovery_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/host_text_layout" />
 
     <Button
-        android:id="@+id/discovery_mode_button"
+        android:id="@+id/discovery_button"
         style="@style/HalauncherTheme.Widget.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="@string/discovery_mode"
+        android:text="@string/discovery"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

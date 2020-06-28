@@ -25,7 +25,7 @@ class HalauncherApplication : Application(), Configuration.Provider {
             .build()
 
     fun startWorkers() {
-        SensorCoroutineWorker.start(applicationContext)
+//        SensorCoroutineWorker.start(applicationContext)
     }
 
     companion object {

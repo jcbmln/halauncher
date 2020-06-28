@@ -29,7 +29,7 @@ class ManualSetupFragment : BaseFragment() {
 
         observe(viewModel.navigation) { navigate(it) }
 
-        binding.discoveryModeButton.setOnClickListener { viewModel.onDiscoveryModeButtonClicked() }
+        binding.discoveryButton.setOnClickListener { viewModel.onDiscoveryButtonClicked() }
         binding.openUrlButton.setOnClickListener {
             viewModel.onUrlSubmitted(binding.hostText.value)
         }

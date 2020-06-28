@@ -119,6 +119,12 @@ class HomeViewModel @ViewModelInject constructor(
         }
     }
 
+    fun onCancelLoad() {
+        navigationEvent.postValue(
+            HomeFragmentDirections.actionHomeFragmentToAuthenticationFragment()
+        )
+    }
+
     fun showWebError() {
         errorEvent.postValue(R.string.error_loading_homeassistant)
     }

@@ -27,7 +27,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/manual_mode_button"
+        app:layout_constraintBottom_toTopOf="@+id/manual_setup_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,12 +50,12 @@
     </FrameLayout>
 
     <Button
-        android:id="@+id/manual_mode_button"
+        android:id="@+id/manual_setup_button"
         style="@style/HalauncherTheme.Widget.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="@string/manual_mode"
+        android:text="@string/manual_setup"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

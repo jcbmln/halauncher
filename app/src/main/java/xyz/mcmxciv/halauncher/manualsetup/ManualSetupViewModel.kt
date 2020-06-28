@@ -9,7 +9,7 @@ class ManualSetupViewModel @ViewModelInject constructor(
     private val settingsUseCase: SettingsUseCase
 ) : BaseViewModel() {
 
-    fun onDiscoveryModeButtonClicked() {
+    fun onDiscoveryButtonClicked() {
         navigationEvent.postValue(
             ManualSetupFragmentDirections.actionManualSetupFragmentToDiscoveryFragment()
         )

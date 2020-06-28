@@ -49,11 +49,12 @@ class DeviceProfile @Inject constructor(@ApplicationContext context: Context) {
 
         val minWidthDps = Utilities.dpiFromPx(min(smallestSize.x, smallestSize.y), dm)
         val minHeightDps = Utilities.dpiFromPx(min(largestSize.x, largestSize.y), dm)
-        val profiles = getPredefinedDeviceProfiles(context, null)
-
-        profiles.sortedWith(Comparator { a, b ->
-            val firstDist = dist(minWidthDps, minHeightDps, a.minWidthDps, b.minHeightDps)
-            val secondDist = dist(minWidthDps, minHeightDps, b.minWidthDps, a.minHeightDps)
+        val profiles = getPredefinedDeviceProfiles(
+            context,
+            null
+        ).sortedWith(Comparator { a, b ->
+            val firstDist = dist(minWidthDps, minHeightDps, a.minWidthDps, a.minHeightDps)
+            val secondDist = dist(minWidthDps, minHeightDps, b.minWidthDps, b.minHeightDps)
             firstDist.compareTo(secondDist)
         })
 
@@ -179,12 +180,13 @@ class DeviceProfile @Inject constructor(@ApplicationContext context: Context) {
         block: () -> Unit
     ) {
         val depth = parser.depth
-        val type = parser.next()
+        var type = parser.next()
         while ((type != XmlPullParser.END_TAG || parser.depth > depth) &&
             type != XmlPullParser.END_DOCUMENT) {
             if (type == XmlPullParser.START_TAG && parser.name == tagName) {
                 block()
             }
+            type = parser.next()
         }
     }
 

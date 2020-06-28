@@ -17,6 +17,7 @@ import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -24,6 +25,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.BuildConfig
+import xyz.mcmxciv.halauncher.HalauncherActivity
+import xyz.mcmxciv.halauncher.HalauncherViewModel
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.apps.AppDrawerAdapter
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
@@ -33,6 +36,7 @@ import javax.inject.Inject
 class HomeFragment : BaseFragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
+    private val activityViewModel: HalauncherViewModel by activityViewModels()
 
     @Inject
     lateinit var appDrawerAdapter: AppDrawerAdapter
@@ -58,13 +62,15 @@ class HomeFragment : BaseFragment() {
                     binding.homeWebView.reload()
                 }
                 .setNegativeButton(R.string.cancel) { _, _ ->
-                    findNavController().popBackStack()
+                    viewModel.onCancelLoad()
                 }
+                .show()
         }
         observe(viewModel.authenticationUrl) { binding.homeWebView.loadUrl(it) }
         observe(viewModel.callbackEvent) {
             binding.homeWebView.evaluateJavascript(it, null)
         }
+        observe(activityViewModel.appDrawerItems) { appDrawerAdapter.submitList(it) }
 
         adjustSystemUi()
         applyInsets()
