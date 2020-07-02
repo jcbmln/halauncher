@@ -12,6 +12,15 @@ class IconTextView @JvmOverloads constructor(
 ) : MaterialTextView(context, attrs, defStyleAttr) {
     var icon: Drawable? = null
 
+
+
+    var leftIcon: Drawable?
+        get() = icon ?: compoundDrawables[0]
+        set(value) {
+            icon = value
+            setCompoundDrawablesWithIntrinsicBounds(value, null, null, null)
+        }
+
     var topIcon: Drawable?
         get() = icon ?: compoundDrawables[1]
         set(value) {
@@ -19,10 +28,17 @@ class IconTextView @JvmOverloads constructor(
             setCompoundDrawablesWithIntrinsicBounds(null, value, null, null)
         }
 
-    var leftIcon: Drawable?
-        get() = icon ?: compoundDrawables[0]
+    var rightIcon: Drawable?
+        get() = icon ?: compoundDrawables[2]
         set(value) {
             icon = value
-            setCompoundDrawablesWithIntrinsicBounds(value, null, null, null)
+            setCompoundDrawablesWithIntrinsicBounds(null, null, value, null)
+        }
+
+    var bottomIcon: Drawable?
+        get() = icon ?: compoundDrawables[3]
+        set(value) {
+            icon = value
+            setCompoundDrawablesWithIntrinsicBounds(null, null, null, value)
         }
 }

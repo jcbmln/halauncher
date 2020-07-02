@@ -40,7 +40,7 @@ class IconNormalizer @Inject constructor(
     private val paintMaskShapeOutline = Paint()
     private var adaptiveIconScale = SCALE_NOT_INITIALIZED
     private val matrix = Matrix()
-    private val shapePath = IconShape.shapePath
+    private val shapePath = Path()
 
     init {
         paintMaskShape.apply {

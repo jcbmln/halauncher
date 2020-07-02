@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/popup_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/top_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:elevation="3dp"
+        app:srcCompat="@drawable/popup_arror_up" />
+
+    <LinearLayout
+        android:id="@+id/system_shortcuts_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_background"
+        android:elevation="3dp"
+        android:orientation="horizontal">
+
+        <xyz.mcmxciv.halauncher.views.IconTextView
+            android:id="@+id/app_info_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_info"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/app_info"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+
+        <xyz.mcmxciv.halauncher.views.IconTextView
+            android:id="@+id/hide_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_visibility_off"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/hide"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+
+        <xyz.mcmxciv.halauncher.views.IconTextView
+            android:id="@+id/uninstall_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_remove"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/uninstall"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+
+        <xyz.mcmxciv.halauncher.views.IconTextView
+            android:id="@+id/disable_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_block"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/disable"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/shortcut_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded_background"
+        android:elevation="3dp" />
+
+    <ImageView
+        android:id="@+id/bottom_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:elevation="3dp"
+        app:srcCompat="@drawable/popup_arror_down" />
+</LinearLayout>

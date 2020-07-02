@@ -20,9 +20,12 @@ class SettingsRepository @Inject constructor(
     var theme: HassTheme
         get() {
             val themeString = sharedPreferences.getString(THEME_KEY, null)
-            return themeString?.let {
+            val theme = themeString?.let {
                 Serializer.deserialize<HassTheme>(it)
             } ?: HassTheme.createDefaultTheme(resourceProvider)
+
+            if (theme.resourceProvider == null) theme.resourceProvider = resourceProvider
+            return theme
         }
         set(value) = sharedPreferences.edit { putString(THEME_KEY, Serializer.serialize(value)) }
 

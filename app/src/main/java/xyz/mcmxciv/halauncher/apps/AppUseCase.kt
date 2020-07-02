@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.LauncherActivityInfo
 import android.content.pm.ShortcutInfo
 import xyz.mcmxciv.halauncher.icons.IconFactory
+import xyz.mcmxciv.halauncher.shortcuts.Shortcut
 import xyz.mcmxciv.halauncher.utils.toByteArray
 import javax.inject.Inject
 
@@ -38,7 +39,7 @@ class AppUseCase @Inject constructor(
         return appDrawerItems
     }
 
-    suspend fun markActivityHidden(activityName: String) {
+    suspend fun hideApp(activityName: String) {
         appRepository.getApp(activityName)?.let { app ->
             app.isHidden = true
             appRepository.updateApp(app)

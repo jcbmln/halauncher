@@ -18,4 +18,10 @@ class HalauncherViewModel @ViewModelInject constructor(
     }
 
     val appDrawerItems: LiveData<List<AppDrawerItem>> = _appDrawerItems
+
+    fun onHideApp(activityName: String) {
+        viewModelScope.launch {
+            appUseCase.hideApp(activityName)
+        }
+    }
 }

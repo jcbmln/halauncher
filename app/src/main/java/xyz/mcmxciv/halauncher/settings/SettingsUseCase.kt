@@ -13,6 +13,13 @@ class SettingsUseCase @Inject constructor(
         get() = settingsRepository.theme
         set(value) { settingsRepository.theme = value }
 
+    val webviewUrl: String
+        get() = settingsRepository.instanceUrl.toHttpUrl()
+            .newBuilder()
+            .addEncodedQueryParameter("external_auth", "1")
+            .build()
+            .toString()
+
     fun validateInstance(): Boolean =
         settingsRepository.instanceUrl != SettingsRepository.PLACEHOLDER_URL
 
@@ -25,6 +32,7 @@ class SettingsUseCase @Inject constructor(
                 .port(httpUrl.port)
                 .build()
                 .toString()
+                .removeSuffix("/")
         } catch (ex: IllegalArgumentException) { throw ex }
 
         settingsRepository.instanceUrl = instanceUrl

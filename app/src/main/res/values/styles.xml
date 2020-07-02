@@ -12,6 +12,12 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
+    <style name="HalauncherTheme.ActionBar" parent="Widget.MaterialComponents.ActionBar.Primary">
+        <item name="elevation">0dp</item>
+        <item name="background">@color/primary_background_color</item>
+        <item name="android:textColor">@color/primary_text_color</item>
+    </style>
+
     <style name="HalauncherTheme.Widget" />
 
     <style name="HalauncherTheme.Widget.TextView.Title" parent="TextAppearance.MaterialComponents.Headline5">

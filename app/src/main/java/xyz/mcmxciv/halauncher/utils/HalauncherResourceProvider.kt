@@ -1,6 +1,7 @@
 package xyz.mcmxciv.halauncher.utils
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.provider.Settings
 import android.util.DisplayMetrics
@@ -8,6 +9,9 @@ import android.view.LayoutInflater
 import androidx.annotation.DrawableRes
 
 class HalauncherResourceProvider(private val context: Context) : ResourceProvider {
+    override val resources: Resources
+        get() = context.resources
+
     override val displayMetrics: DisplayMetrics
         get() = context.resources.displayMetrics
 

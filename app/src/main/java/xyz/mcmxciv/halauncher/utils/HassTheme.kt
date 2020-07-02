@@ -1,6 +1,10 @@
 package xyz.mcmxciv.halauncher.utils
 
 import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
+import androidx.core.graphics.ColorUtils
 import com.squareup.moshi.JsonClass
 import org.json.JSONException
 import org.json.JSONObject
@@ -24,6 +28,34 @@ data class HassTheme(
 ) {
     @Transient
     val appDrawerTheme = AppDrawerTheme.create(this)
+
+    val appDrawerBackground: Drawable
+        get() {
+            val drawable = resourceProvider?.getDrawable(R.drawable.top_rounded_background)!!
+                .mutate()
+            drawable.setTint(cardBackgroundColor)
+            return drawable
+        }
+
+    val appDrawerHandleBackground: Drawable
+        get() {
+            val background = ShapeDrawable(OvalShape())
+            background.alpha = 127
+            background.paint.color = cardBackgroundColor
+            return background
+        }
+
+    val darkCardBackground: Boolean
+        get() = ColorUtils.calculateLuminance(cardBackgroundColor) < 0.5
+
+    val darkPrimaryBackground: Boolean
+        get() = ColorUtils.calculateLuminance(primaryBackgroundColor) < 0.5
+
+    val primaryTextColorIsDark: Boolean
+        get() = ColorUtils.calculateLuminance(primaryTextColor) < 0.5
+
+    val textPrimaryColorIsDark: Boolean
+        get() = ColorUtils.calculateLuminance(textPrimaryColor) < 0.5
 
     init {
         instance = this

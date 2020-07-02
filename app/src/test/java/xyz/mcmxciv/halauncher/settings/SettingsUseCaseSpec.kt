@@ -17,7 +17,7 @@ object SettingsUseCaseSpec : Spek({
 
     describe("save instance url") {
         context("given valid url") {
-            val url = "http://home-assistant.halauncher.app/"
+            val url = "http://home-assistant.halauncher.app"
 
             beforeEachTest {
                 settingsUseCase.saveInstanceUrl(url)

@@ -161,16 +161,34 @@ abstract class IconShape {
 
         private const val RADIUS_RATIO = 0.15f
 
-        val shapePath: Path
-            get() {
-                if (path == null) {
-                    val p = Path()
-                    val s = shape ?: throw IllegalStateException("No shape is set.")
-                    s.addToPath(p, 0f, 0f)
-                    path = p
-                }
-
-                return path!!
+        fun getShapePath(radius: Float): Path {
+            if (path == null) {
+                val p = Path()
+                val s = shape ?: Squircle(radius)
+                s.addToPath(p, 0f, 0f)
+                path = p
             }
+
+            return path ?: createPath(radius)
+        }
+
+        private fun createPath(radius: Float): Path {
+            val p = Path()
+            val s = shape ?: Squircle(radius)
+            s.addToPath(p, 0f, 0f)
+            return p
+        }
+
+//        val shapePath: Path
+//            get() {
+//                if (path == null) {
+//                    val p = Path()
+//                    val s = shape ?: throw IllegalStateException("No shape is set.")
+//                    s.addToPath(p, 0f, 0f)
+//                    path = p
+//                }
+//
+//                return path!!
+//            }
     }
 }

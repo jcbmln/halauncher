@@ -71,7 +71,7 @@ class DeviceProfile @Inject constructor(@ApplicationContext context: Context) {
             .pxFromDpi(interpolatedDisplayOption.shortcutImageSize, dm)
         iconTextSize = interpolatedDisplayOption.iconTextSize
         appIconDpi = getLauncherIconDensity(iconBitmapSize)
-        shortcutIconBitmapSize = getLauncherIconDensity(shortcutIconBitmapSize)
+        shortcutIconDpi = getLauncherIconDensity(shortcutIconBitmapSize)
     }
 
     private fun getPredefinedDeviceProfiles(

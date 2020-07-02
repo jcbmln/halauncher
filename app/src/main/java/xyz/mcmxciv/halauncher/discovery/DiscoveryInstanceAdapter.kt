@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.databinding.ListItemInstanceBinding
 import xyz.mcmxciv.halauncher.settings.HomeAssistantInstance
+import xyz.mcmxciv.halauncher.shortcuts.OnHideAppListener
 
 class DiscoveryInstanceAdapter :
     RecyclerView.Adapter<DiscoveryInstanceAdapter.DiscoveryInstanceViewHolder>() {
     private var _instances = listOf<HomeAssistantInstance>()
-    private var _onInstanceSelectedListener: (instance: HomeAssistantInstance) -> Unit = {}
+    private var onInstanceSelectedListener: (instance: HomeAssistantInstance) -> Unit = {}
 
     class DiscoveryInstanceViewHolder(
         val binding: ListItemInstanceBinding
@@ -21,7 +22,7 @@ class DiscoveryInstanceAdapter :
     }
 
     fun setOnInstanceSelectedListener(listener: (instance: HomeAssistantInstance) -> Unit) {
-        _onInstanceSelectedListener = listener
+        onInstanceSelectedListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiscoveryInstanceViewHolder {
@@ -40,7 +41,7 @@ class DiscoveryInstanceAdapter :
         holder.binding.instanceUrl.text = _instances[position].baseUrl
         holder.binding.instanceVersion.text = _instances[position].version
         holder.binding.root.setOnClickListener {
-            _onInstanceSelectedListener(_instances[position])
+            onInstanceSelectedListener(_instances[position])
         }
     }
 

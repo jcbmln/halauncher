@@ -47,6 +47,7 @@ class AuthenticationFragment : BaseFragment() {
                 .setNegativeButton(R.string.cancel) { _, _ ->
                     findNavController().popBackStack()
                 }
+                .show()
         }
 
         binding.authenticationWebView.apply {

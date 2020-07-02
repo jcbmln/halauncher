@@ -52,7 +52,7 @@ class IconFactory @Inject constructor(
     fun getShortcutIcon(shortcutInfo: ShortcutInfo): Bitmap? {
         return launcherApps.getShortcutIconDrawable(
             shortcutInfo,
-            deviceProfile.shortcutIconBitmapSize
+            deviceProfile.shortcutIconDpi
         )?.toBitmap(
             deviceProfile.shortcutIconBitmapSize,
             deviceProfile.shortcutIconBitmapSize

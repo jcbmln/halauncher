@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
-import xyz.mcmxciv.halauncher.sensors.SensorCoroutineWorker
 import javax.inject.Inject
 
 @HiltAndroidApp

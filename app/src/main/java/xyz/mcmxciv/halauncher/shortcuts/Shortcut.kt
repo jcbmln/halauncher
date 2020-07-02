@@ -1,4 +1,4 @@
-package xyz.mcmxciv.halauncher.apps
+package xyz.mcmxciv.halauncher.shortcuts
 
 import android.graphics.Bitmap
 

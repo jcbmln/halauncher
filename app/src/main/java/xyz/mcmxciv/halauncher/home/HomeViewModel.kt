@@ -29,10 +29,10 @@ class HomeViewModel @ViewModelInject constructor(
     val appDrawerColumns: Int
         get() = deviceProfile.appDrawerColumns
 
-    private val _authenticationUrl = MutableLiveData<String>().also {
-        it.postValue(authenticationUseCase.authenticationUrl)
+    private val _webviewUrl = MutableLiveData<String>().also {
+        it.postValue(settingsUseCase.webviewUrl)
     }
-    val authenticationUrl: LiveData<String> = _authenticationUrl
+    val webviewUrl: LiveData<String> = _webviewUrl
 
     private val _callbackEvent = LiveEvent<String>()
     val callbackEvent: LiveData<String> = _callbackEvent

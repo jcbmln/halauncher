@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xyz.mcmxciv.halauncher.views.IconTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shortcut_icon"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:drawablePadding="5dp"
+    android:gravity="center_vertical"
+    android:padding="10dp"
+    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+    android:background="?android:attr/selectableItemBackground" />
