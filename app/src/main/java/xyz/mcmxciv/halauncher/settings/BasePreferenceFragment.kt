@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
 import androidx.preference.PreferenceFragmentCompat
 import xyz.mcmxciv.halauncher.databinding.PreferenceThemeOverlayBinding
 
 abstract class BasePreferenceFragment : PreferenceFragmentCompat() {
     protected lateinit var binding: PreferenceThemeOverlayBinding
+    protected val viewModel: SettingsViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

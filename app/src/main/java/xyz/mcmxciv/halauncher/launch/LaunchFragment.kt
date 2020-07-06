@@ -8,6 +8,8 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.databinding.FragmentLaunchBinding
+import xyz.mcmxciv.halauncher.navigate
+import xyz.mcmxciv.halauncher.observe
 
 @AndroidEntryPoint
 class LaunchFragment : BaseFragment() {

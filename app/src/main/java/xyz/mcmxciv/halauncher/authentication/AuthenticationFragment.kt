@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentAuthenticationBinding
+import xyz.mcmxciv.halauncher.observe
 
 @AndroidEntryPoint
 class AuthenticationFragment : BaseFragment() {

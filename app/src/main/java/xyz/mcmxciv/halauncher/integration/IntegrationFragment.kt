@@ -11,6 +11,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentIntegrationBinding
+import xyz.mcmxciv.halauncher.navigate
+import xyz.mcmxciv.halauncher.observe
 
 @AndroidEntryPoint
 class IntegrationFragment : BaseFragment() {

@@ -9,17 +9,17 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 
 open class BaseFragment : Fragment() {
-    fun <T : LiveData<V>, V : Any> observe(obj: T, block: (V) -> Unit) {
-        obj.observe(viewLifecycleOwner, Observer { block(it) })
-    }
-
-    fun navigate(action: NavDirections) {
-        val navController = findNavController()
-        navController.navigate(action)
-    }
-
     fun displayMessage(@StringRes resId: Int) {
         val message = requireContext().getString(resId)
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
+}
+
+fun <T : LiveData<V>, V : Any> Fragment.observe(obj: T, block: (V) -> Unit) {
+    obj.observe(viewLifecycleOwner, Observer { block(it) })
+}
+
+fun Fragment.navigate(action: NavDirections) {
+    val navController = findNavController()
+    navController.navigate(action)
 }

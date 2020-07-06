@@ -96,5 +96,20 @@
             app:destination="@id/authenticationFragment"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="xyz.mcmxciv.halauncher.settings.SettingsFragment"
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_connectionSettingsFragment"
+            app:destination="@id/connectionSettingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/connectionSettingsFragment"
+        android:name="xyz.mcmxciv.halauncher.settings.ConnectionSettingsFragment"
+        android:label="ConnectionSettingsFragment" />
 </navigation>

@@ -41,4 +41,19 @@
     <string name="hide">Hide</string>
     <string name="uninstall">Uninstall</string>
     <string name="disable">Disable</string>
+
+    <!-- Preferences -->
+    <string name="settings">Settings</string>
+
+    <string name="connection_settings_key" translatable="false">connection-settings</string>
+    <string name="connection_settings_title">Connections</string>
+    <string name="connection_settings_summary">Manage your connection to Home Assistant.</string>
+
+    <string name="integration_settings_key" translatable="false">integration-settings</string>
+    <string name="integration_settings_title">Integrations</string>
+    <string name="integration_settings_summary">Manage this device\'s integration with Home Assistant.</string>
+
+    <string name="about_settings_key" translatable="false">about-settings</string>
+    <string name="about_settings_title">About Halauncher</string>
+    <string name="about_settings_summary">Learn more about Halauncher.</string>
 </resources>

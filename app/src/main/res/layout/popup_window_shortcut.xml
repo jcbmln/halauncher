@@ -39,7 +39,7 @@
             android:id="@+id/hide_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_visibility_off"
+            android:drawableTop="@drawable/ic_hide"
             android:paddingHorizontal="10dp"
             android:paddingVertical="5dp"
             android:text="@string/hide"

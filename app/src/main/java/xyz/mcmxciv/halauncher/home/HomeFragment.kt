@@ -24,10 +24,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import xyz.mcmxciv.halauncher.BaseFragment
-import xyz.mcmxciv.halauncher.BuildConfig
-import xyz.mcmxciv.halauncher.HalauncherViewModel
-import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.*
 import xyz.mcmxciv.halauncher.apps.AppDrawerAdapter
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
 import xyz.mcmxciv.halauncher.utils.HassTheme

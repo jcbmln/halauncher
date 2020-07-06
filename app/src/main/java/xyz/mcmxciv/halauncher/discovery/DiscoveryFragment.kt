@@ -13,6 +13,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.databinding.FragmentDiscoveryBinding
+import xyz.mcmxciv.halauncher.navigate
+import xyz.mcmxciv.halauncher.observe
 
 @AndroidEntryPoint
 class DiscoveryFragment : BaseFragment() {

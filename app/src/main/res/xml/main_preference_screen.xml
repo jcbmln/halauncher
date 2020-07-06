@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <Preference
-        app:icon="@drawable/ic_home"
-        app:key="home_assistant_preference"
-        app:title="Home Assistant"
-        app:summary="Manage your Home Assistant settings" />
-</PreferenceScreen>
