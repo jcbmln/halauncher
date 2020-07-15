@@ -10,6 +10,11 @@
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="android:navigationBarColor">@color/primary_color</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="preferenceTheme">@style/HalauncherTheme.PreferenceThemeOverlay</item>
+    </style>
+
+    <style name="HalauncherTheme.PreferenceThemeOverlay" parent="PreferenceThemeOverlay">
+        <item name="layout">@layout/fragment_settings</item>
     </style>
 
     <style name="HalauncherTheme.ActionBar" parent="Widget.MaterialComponents.ActionBar.Primary">

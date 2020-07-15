@@ -65,8 +65,9 @@
         <action
             android:id="@+id/action_authenticationFragment_to_integrationFragment"
             app:destination="@id/integrationFragment"
-            app:popUpTo="@id/integrationFragment"
-            app:popUpToInclusive="false" />
+            app:launchSingleTop="true"
+            app:popUpTo="@id/authenticationFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_authenticationFragment_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -107,9 +108,16 @@
         <action
             android:id="@+id/action_settingsFragment_to_connectionSettingsFragment"
             app:destination="@id/connectionSettingsFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_aboutSettingsFragment"
+            app:destination="@id/aboutSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/connectionSettingsFragment"
         android:name="xyz.mcmxciv.halauncher.settings.ConnectionSettingsFragment"
         android:label="ConnectionSettingsFragment" />
+    <fragment
+        android:id="@+id/aboutSettingsFragment"
+        android:name="xyz.mcmxciv.halauncher.settings.AboutSettingsFragment"
+        android:label="AboutSettingsFragment" />
 </navigation>

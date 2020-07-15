@@ -6,7 +6,6 @@ import android.content.pm.LauncherActivityInfo
 import android.content.pm.ShortcutInfo
 import xyz.mcmxciv.halauncher.icons.IconFactory
 import xyz.mcmxciv.halauncher.shortcuts.Shortcut
-import xyz.mcmxciv.halauncher.utils.toByteArray
 import javax.inject.Inject
 
 class AppUseCase @Inject constructor(
@@ -24,17 +23,18 @@ class AppUseCase @Inject constructor(
     suspend fun getAppDrawerItems(): List<AppDrawerItem> {
         val launcherActivityInfo = appRepository.getLauncherActivityInfo()
         val cachedApps = appRepository.getApps()
-        val appDrawerItems = cachedApps.filterNot { app -> app.isHidden }.mapNotNull { app ->
-            createCachedAppDrawerItem(launcherActivityInfo, app)
-        }.toMutableList()
+        val appDrawerItems = cachedApps
+            .filterNot { app -> app.isHidden }
+            .mapNotNull { app -> createCachedAppDrawerItem(launcherActivityInfo, app) }
+            .toMutableList()
 
         val cacheAppActivityNames = cachedApps.map { app -> app.activityName }
-        val newAppDrawerItems = launcherActivityInfo.filterNot { info ->
-            cacheAppActivityNames.contains(info.name)
-        }.map { info -> createNewAppDrawerItem(info) }
+        val newAppDrawerItems = launcherActivityInfo
+            .filterNot { info -> cacheAppActivityNames.contains(info.name) }
+            .map { info -> createNewAppDrawerItem(info) }
 
         appDrawerItems.addAll(newAppDrawerItems)
-        appDrawerItems.sortBy { a -> a.app.displayName }
+        appDrawerItems.sortBy { info -> info.app.displayName }
 
         return appDrawerItems
     }
@@ -59,13 +59,6 @@ class AppUseCase @Inject constructor(
             return null
         }
 
-        val packageInfo = appRepository.getPackageInfo(app.packageName)
-        if (packageInfo.lastUpdateTime > app.lastUpdate) {
-            app.lastUpdate = packageInfo.lastUpdateTime
-            app.icon = iconFactory.getIcon(launcherActivity).toByteArray()
-            appRepository.updateApp(app)
-        }
-
         return AppDrawerItem(
             app,
             launcherActivity.componentName,
@@ -84,10 +77,9 @@ class AppUseCase @Inject constructor(
             launcherActivityInfo.name,
             packageInfo.packageName,
             appRepository.getDisplayName(launcherActivityInfo),
-            packageInfo.lastUpdateTime,
             isSystemApp,
             false,
-            iconFactory.getIcon(launcherActivityInfo).toByteArray()
+            iconFactory.getIcon(launcherActivityInfo)
         )
 
         appRepository.addApp(app)

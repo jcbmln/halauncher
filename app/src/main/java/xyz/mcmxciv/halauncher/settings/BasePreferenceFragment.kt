@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IntegerRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import xyz.mcmxciv.halauncher.databinding.PreferenceThemeOverlayBinding
 
@@ -32,4 +35,7 @@ abstract class BasePreferenceFragment : PreferenceFragmentCompat() {
             }
         }
     }
+
+    protected fun <T : Preference> findPreference(@StringRes resId: Int): T? =
+        findPreference(getString(resId))
 }

@@ -56,4 +56,9 @@
     <string name="about_settings_key" translatable="false">about-settings</string>
     <string name="about_settings_title">About Halauncher</string>
     <string name="about_settings_summary">Learn more about Halauncher.</string>
+
+    <string name="connection_url_title">Connection URL</string>
+
+    <string name="app_version_key" translatable="false">app-version</string>
+    <string name="app_version_title">App Version</string>
 </resources>

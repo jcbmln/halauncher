@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <EditTextPreference
-        android:defaultValue="Default value"
-        android:key="edit_text_preference_1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="Edit text preference" />
+        app:key="instance_url"
+        app:title="@string/connection_url_title"
+        app:useSimpleSummaryProvider="true" />
 </PreferenceScreen>

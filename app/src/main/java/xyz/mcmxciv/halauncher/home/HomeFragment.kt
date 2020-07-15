@@ -143,12 +143,14 @@ class HomeFragment : BaseFragment() {
                         ConstraintSet.TOP,
                         insets.systemWindowInsetTop
                     )
-                    setMargin(
-                        binding.appDrawerHandle.id,
-                        ConstraintSet.BOTTOM,
-                        insets.systemWindowInsetBottom
-                    )
                 }
+            }
+            binding.homeContainer.getConstraintSet(R.id.start)?.also {
+                it.setMargin(
+                    binding.appDrawerHandle.id,
+                    ConstraintSet.BOTTOM,
+                    insets.systemWindowInsetBottom
+                )
             }
 
             insets

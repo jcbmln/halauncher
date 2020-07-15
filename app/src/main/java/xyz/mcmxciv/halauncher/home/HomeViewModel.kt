@@ -115,7 +115,11 @@ class HomeViewModel @ViewModelInject constructor(
                 )});"
                 _callbackEvent.postValue(script)
             }
-            "config_screen/show" -> {}
+            "config_screen/show" -> {
+                navigationEvent.postValue(
+                    HomeFragmentDirections.actionHomeFragmentToSettingsFragment()
+                )
+            }
         }
     }
 

@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.FragmentAuthenticationBinding
+import xyz.mcmxciv.halauncher.navigate
 import xyz.mcmxciv.halauncher.observe
 
 @AndroidEntryPoint
@@ -38,6 +39,7 @@ class AuthenticationFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         observe(viewModel.authenticationUrl) { binding.authenticationWebView.loadUrl(it) }
+        observe(viewModel.navigation) { navigate(it) }
         observe(viewModel.error) { id ->
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.unable_to_connect)

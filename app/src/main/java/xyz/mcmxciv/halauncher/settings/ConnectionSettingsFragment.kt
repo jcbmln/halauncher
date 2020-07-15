@@ -13,6 +13,6 @@ class ConnectionSettingsFragment : BasePreferenceFragment() {
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        TODO("Not yet implemented")
+        addPreferencesFromResource(R.xml.preference_screen_connections)
     }
 }

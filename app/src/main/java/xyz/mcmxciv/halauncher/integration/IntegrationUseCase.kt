@@ -12,7 +12,7 @@ class IntegrationUseCase @Inject constructor(
         get() = integrationRepository.webhookInfo != null
 
     fun validateIntegration(): Boolean =
-        integrationRepository.webhookInfo != null || !integrationRepository.integrationOptOut
+        integrationRepository.webhookInfo != null || integrationRepository.integrationOptOut
 
     suspend fun registerDevice(deviceInfo: DeviceInfo) {
         val webhookInfo = integrationRepository.registerDevice(deviceInfo)

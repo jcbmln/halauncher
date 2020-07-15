@@ -167,13 +167,13 @@ class ShortcutPopupWindow(
         binding.bottomArrow.drawable.setTint(theme.primaryBackgroundColor)
         binding.systemShortcutsContainer.background.setTint(theme.primaryBackgroundColor)
         binding.shortcutList.background.setTint(theme.primaryBackgroundColor)
-        binding.appInfoIcon.topIcon?.setTint(theme.accentColor)
+        binding.appInfoIcon.icon?.setTint(theme.primaryTextColor)
         binding.appInfoIcon.setTextColor(theme.primaryTextColor)
-        binding.hideIcon.topIcon?.setTint(theme.accentColor)
+        binding.hideIcon.icon?.setTint(theme.primaryTextColor)
         binding.hideIcon.setTextColor(theme.primaryTextColor)
-        binding.uninstallIcon.topIcon?.setTint(theme.accentColor)
+        binding.uninstallIcon.icon?.setTint(theme.primaryTextColor)
         binding.uninstallIcon.setTextColor(theme.primaryTextColor)
-        binding.disableIcon.topIcon?.setTint(theme.accentColor)
+        binding.disableIcon.icon?.setTint(theme.primaryTextColor)
         binding.disableIcon.setTextColor(theme.primaryTextColor)
     }
 

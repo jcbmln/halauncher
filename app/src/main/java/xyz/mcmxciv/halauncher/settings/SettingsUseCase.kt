@@ -1,9 +1,11 @@
 package xyz.mcmxciv.halauncher.settings
 
+import android.util.Patterns
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import xyz.mcmxciv.halauncher.utils.HassTheme
 import java.lang.IllegalArgumentException
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 class SettingsUseCase @Inject constructor(
@@ -24,17 +26,20 @@ class SettingsUseCase @Inject constructor(
         settingsRepository.instanceUrl != SettingsRepository.PLACEHOLDER_URL
 
     fun saveInstanceUrl(url: String) {
-        val instanceUrl = try {
-            val httpUrl = url.toHttpUrl()
-            HttpUrl.Builder()
-                .scheme(httpUrl.scheme)
-                .host(httpUrl.host)
-                .port(httpUrl.port)
-                .build()
-                .toString()
-                .removeSuffix("/")
-        } catch (ex: IllegalArgumentException) { throw ex }
+        settingsRepository.instanceUrl = validateUrl(url)
+            .toHttpUrl()
+            .toString()
+            .removeSuffix("/")
+    }
 
-        settingsRepository.instanceUrl = instanceUrl
+    private fun validateUrl(url: String): String {
+        var formattedUrl = url
+        if (!(url.startsWith("http://") || url.startsWith("https://"))) {
+            formattedUrl = "https://$url"
+        }
+
+        if (!Pattern.matches(Patterns.WEB_URL.toString(), formattedUrl)) throw InvalidUrlException()
+
+        return formattedUrl
     }
 }
