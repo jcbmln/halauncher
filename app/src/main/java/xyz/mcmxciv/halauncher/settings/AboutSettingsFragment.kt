@@ -9,7 +9,7 @@ import xyz.mcmxciv.halauncher.R
 class AboutSettingsFragment : BasePreferenceFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.title = getString(R.string.about_settings_title)
+        toolbar.title = getString(R.string.about_settings_title)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

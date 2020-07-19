@@ -44,7 +44,7 @@ class AppDrawerAdapter @Inject constructor(
             val resources = HalauncherApplication.instance.resources
 
             binding.appItem.textSize = deviceProfile.iconTextSize
-            binding.appItem.topIcon = appDrawerItem.app.icon.toDrawable(resources)
+            binding.appItem.topIcon = appDrawerItem.icon.toDrawable(resources)
             binding.appItem.text = appDrawerItem.app.displayName
             binding.appItem.tag = appDrawerItem
             binding.appItem.setTextColor(theme.labelTextColor)

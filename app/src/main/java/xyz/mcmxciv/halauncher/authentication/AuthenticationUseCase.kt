@@ -6,6 +6,7 @@ import org.json.JSONObject
 import xyz.mcmxciv.halauncher.authentication.models.Session
 import xyz.mcmxciv.halauncher.settings.SettingsRepository
 import xyz.mcmxciv.halauncher.utils.Resource
+import java.time.Instant
 import javax.inject.Inject
 
 class AuthenticationUseCase @Inject constructor(
@@ -39,14 +40,23 @@ class AuthenticationUseCase @Inject constructor(
     suspend fun validateAuthentication(): Boolean {
         val session = authenticationRepository.session ?: return false
 
-        return if (session.isExpired) {
+        if (session.isExpired) {
             val resource = authenticationRepository.refreshToken(session.refreshToken)
+            return if (resource.status == Resource.Status.SUCCESS && resource.data != null) {
+                authenticationRepository.saveSession(Session(
+                    resource.data.accessToken,
+                    Instant.now().epochSecond + resource.data.expiresIn,
+                    session.refreshToken,
+                    resource.data.tokenType
+                ))
+                true
+            } else {
+                authenticationRepository.revokeToken(session.refreshToken)
+                false
+            }
+        }
 
-            if (resource.status == Resource.Status.SUCCESS) return true
-            else authenticationRepository.revokeToken(session.refreshToken)
-
-            false
-        } else true
+        return true
     }
 
     suspend fun getExternalAuthentication(): String? {

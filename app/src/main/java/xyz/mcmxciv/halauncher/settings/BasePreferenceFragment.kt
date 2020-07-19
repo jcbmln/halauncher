@@ -1,38 +1,28 @@
 package xyz.mcmxciv.halauncher.settings
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.activityViewModels
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import xyz.mcmxciv.halauncher.databinding.PreferenceThemeOverlayBinding
+import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.requireHalauncherActivity
 
 abstract class BasePreferenceFragment : PreferenceFragmentCompat() {
-    protected lateinit var binding: PreferenceThemeOverlayBinding
+    protected lateinit var toolbar: Toolbar
     protected val viewModel: SettingsViewModel by activityViewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = PreferenceThemeOverlayBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().also { a ->
-            if (a is AppCompatActivity) {
-                a.setSupportActionBar(binding.toolbar)
-                a.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            }
+        toolbar = view.findViewById(R.id.toolbar)
+        requireHalauncherActivity().also { a ->
+            a.setSupportActionBar(toolbar)
+            a.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            a.exitFullscreen()
+            a.setStatusBarTheme(false)
         }
     }
 

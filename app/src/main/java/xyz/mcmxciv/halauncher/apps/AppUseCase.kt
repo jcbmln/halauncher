@@ -61,6 +61,7 @@ class AppUseCase @Inject constructor(
 
         return AppDrawerItem(
             app,
+            iconFactory.getIcon(launcherActivity),
             launcherActivity.componentName,
             createShortcuts(app.packageName, launcherActivity.componentName)
         )
@@ -78,14 +79,14 @@ class AppUseCase @Inject constructor(
             packageInfo.packageName,
             appRepository.getDisplayName(launcherActivityInfo),
             isSystemApp,
-            false,
-            iconFactory.getIcon(launcherActivityInfo)
+            false
         )
 
         appRepository.addApp(app)
 
         return AppDrawerItem(
             app,
+            iconFactory.getIcon(launcherActivityInfo),
             launcherActivityInfo.componentName,
             createShortcuts(app.packageName, launcherActivityInfo.componentName)
         )

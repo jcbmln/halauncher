@@ -14,11 +14,12 @@
     </style>
 
     <style name="HalauncherTheme.PreferenceThemeOverlay" parent="PreferenceThemeOverlay">
-        <item name="layout">@layout/fragment_settings</item>
+        <item name="android:layout">@layout/fragment_settings</item>
     </style>
 
     <style name="HalauncherTheme.ActionBar" parent="Widget.MaterialComponents.ActionBar.Primary">
         <item name="elevation">0dp</item>
+        <item name="android:background">@color/primary_background_color</item>
         <item name="background">@color/primary_background_color</item>
         <item name="android:textColor">@color/primary_text_color</item>
     </style>

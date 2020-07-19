@@ -137,7 +137,7 @@ class ShortcutPopupWindow(
             appLauncher.startAppDetailsActivity(appDrawerItem.componentName, v)
             dismiss()
         }
-        binding.hideIcon.setOnClickListener { _ ->
+        binding.hideIcon.setOnClickListener {
             onHideAppListener(appDrawerItem.app.activityName)
             dismiss()
         }

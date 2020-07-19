@@ -1,7 +1,6 @@
 package xyz.mcmxciv.halauncher.home
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.http.SslError
 import android.os.Bundle
@@ -17,7 +16,6 @@ import android.webkit.WebViewClient
 import androidx.activity.addCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -71,7 +69,7 @@ class HomeFragment : BaseFragment() {
         observe(viewModel.theme) { applyTheme(it) }
         observe(activityViewModel.appDrawerItems) { appDrawerAdapter.submitList(it) }
 
-        adjustSystemUi()
+        requireHalauncherActivity().enterFullscreen()
         applyInsets()
         setTransitionListener()
         setOnBackPressedDispatcher()
@@ -85,7 +83,7 @@ class HomeFragment : BaseFragment() {
         binding.appDrawerHandle.drawable.setTint(theme.primaryTextColor)
         binding.appDrawerHandle.background = theme.appDrawerHandleBackground
 
-        setStatusBarTheme(theme.textPrimaryColorIsDark)
+        requireHalauncherActivity().setStatusBarTheme(theme.textPrimaryColorIsDark)
     }
 
     private fun setTransitionListener() {
@@ -94,9 +92,11 @@ class HomeFragment : BaseFragment() {
 
             override fun onTransitionChange(p0: MotionLayout, p1: Int, p2: Int, p3: Float) {
                 if (lastState == p1 && p3 >= 0.9f) {
-                    setStatusBarTheme(HassTheme.instance.primaryTextColorIsDark)
+                    requireHalauncherActivity()
+                        .setStatusBarTheme(HassTheme.instance.primaryTextColorIsDark)
                 } else if (lastState == p2 && p3 >= 0.1f) {
-                    setStatusBarTheme(HassTheme.instance.textPrimaryColorIsDark)
+                    requireHalauncherActivity()
+                        .setStatusBarTheme(HassTheme.instance.textPrimaryColorIsDark)
                 }
             }
 
@@ -108,45 +108,37 @@ class HomeFragment : BaseFragment() {
         })
     }
 
-    private fun adjustSystemUi() {
-        requireActivity().apply {
-            window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            window.statusBarColor = Color.TRANSPARENT
-            window.navigationBarColor = Color.TRANSPARENT
-        }
-    }
-
-    private fun setStatusBarTheme(isDark: Boolean) {
-        requireActivity().apply {
-            window.decorView.systemUiVisibility = if (isDark) {
-                window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            } else {
-                window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-            }
-        }
-    }
+//    private fun setStatusBarTheme(isDark: Boolean) {
+//        requireActivity().apply {
+//            window.decorView.systemUiVisibility = if (isDark) {
+//                window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+//            } else {
+//                window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+//            }
+//        }
+//    }
 
     private fun applyInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.homeWebView) { _, insets ->
-            binding.webviewWrapper.updatePadding(
+        binding.root.requestApplyInsets()
+        binding.webviewWrapper.setOnApplyWindowInsetsListener { v, insets ->
+            v.updatePadding(
                 top = insets.systemWindowInsetTop,
                 bottom = insets.systemWindowInsetBottom
             )
 
-            binding.homeContainer.constraintSetIds.forEach { id ->
-                binding.homeContainer.getConstraintSet(id).apply {
-                    setMargin(
+            insets
+        }
+        binding.homeContainer.setOnApplyWindowInsetsListener { v, insets ->
+            if (v is MotionLayout) {
+                v.constraintSetIds.forEach { id ->
+                    v.getConstraintSet(id).setMargin(
                         binding.appDrawerHandle.id,
                         ConstraintSet.TOP,
                         insets.systemWindowInsetTop
                     )
                 }
-            }
-            binding.homeContainer.getConstraintSet(R.id.start)?.also {
-                it.setMargin(
+
+                v.getConstraintSet(R.id.start).setMargin(
                     binding.appDrawerHandle.id,
                     ConstraintSet.BOTTOM,
                     insets.systemWindowInsetBottom

@@ -1,10 +1,8 @@
 package xyz.mcmxciv.halauncher.settings
 
 import android.util.Patterns
-import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import xyz.mcmxciv.halauncher.utils.HassTheme
-import java.lang.IllegalArgumentException
 import java.util.regex.Pattern
 import javax.inject.Inject
 

@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import java.lang.IllegalStateException
 
 open class BaseFragment : Fragment() {
     fun displayMessage(@StringRes resId: Int) {
@@ -24,4 +25,13 @@ fun <T : LiveData<V>, V : Any> Fragment.observe(obj: T, block: (V) -> Unit) {
 fun Fragment.navigate(action: NavDirections) {
     val navController = findNavController()
     navController.navigate(action)
+}
+
+fun Fragment.requireHalauncherActivity(): HalauncherActivity {
+    val activity = requireActivity()
+
+    if (activity !is HalauncherActivity)
+        throw IllegalStateException("Fragment $this is not attached to HalauncherActivity.")
+
+    return activity
 }
