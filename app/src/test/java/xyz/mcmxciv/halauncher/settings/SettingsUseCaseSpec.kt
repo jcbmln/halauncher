@@ -25,7 +25,7 @@ object SettingsUseCaseSpec : Spek({
 
             it("should store url") {
                 verify {
-                    settingsRepository.instanceUrl = url
+                    settingsRepository.connectionUrl = url
                 }
             }
         }

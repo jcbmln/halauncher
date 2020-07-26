@@ -11,8 +11,8 @@ class UrlInterceptor @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val instanceUrl = sharedPreferences.getString(
-            SettingsRepository.INSTANCE_URL_KEY,
+        val connectionUrl = sharedPreferences.getString(
+            SettingsRepository.CONNECTION_URL_KEY,
             null
         ) ?: throw IllegalStateException()
 
@@ -21,7 +21,7 @@ class UrlInterceptor @Inject constructor(
 
         return if (url.contains(placeholder)) {
             val newRequest = chain.request().newBuilder()
-                .url(url.replace(placeholder, instanceUrl))
+                .url(url.replace(placeholder, connectionUrl))
                 .build()
             chain.proceed(newRequest)
         } else {

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
-        app:icon="@drawable/ic_connection"
-        app:key="@string/connection_settings_key"
-        app:title="@string/connection_settings_title"
-        app:summary="@string/connection_settings_summary" />
+        app:icon="@drawable/ic_home"
+        app:key="@string/home_assistant_settings_key"
+        app:title="@string/home_assistant_settings_title"
+        app:summary="@string/home_assistant_settings_summary" />
     <Preference
-        app:icon="@drawable/ic_devices"
-        app:key="@string/integration_settings_key"
-        app:title="@string/integration_settings_title"
-        app:summary="@string/integration_settings_summary" />
+        app:icon="@drawable/ic_apps"
+        app:key="@string/app_drawer_settings_key"
+        app:title="@string/app_drawer_settings_title"
+        app:summary="@string/app_drawer_settings_summary" />
     <Preference
         app:icon="@drawable/ic_about"
         app:key="@string/about_settings_key"

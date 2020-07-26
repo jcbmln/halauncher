@@ -14,7 +14,7 @@ class AuthenticationUseCase @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) {
     val authenticationUrl: String
-        get() = settingsRepository.instanceUrl.toHttpUrl().newBuilder()
+        get() = settingsRepository.connectionUrl.toHttpUrl().newBuilder()
             .addPathSegments("auth/authorize")
             .addEncodedQueryParameter("response_type",
                 AuthenticationRepository.RESPONSE_TYPE

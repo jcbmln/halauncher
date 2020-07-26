@@ -43,19 +43,23 @@ class SensorCoroutineWorker @WorkerInject constructor(
     }
 
     companion object {
-        fun start(context: Context, updateInterval: Long = 15) {
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
-            val worker = PeriodicWorkRequestBuilder<SensorCoroutineWorker>(
-                updateInterval,
-                TimeUnit.MINUTES
-            ).setConstraints(constraints)
-                .addTag(TAG)
-                .build()
-
+        fun start(context: Context, updateInterval: Long) {
             WorkManager.getInstance(context).cancelAllWorkByTag(TAG)
-            WorkManager.getInstance(context).enqueue(worker)
+
+            if (updateInterval > 0) {
+                val constraints = Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+                val worker = PeriodicWorkRequestBuilder<SensorCoroutineWorker>(
+                    updateInterval,
+                    TimeUnit.MINUTES
+                ).setConstraints(constraints)
+                    .addTag(TAG)
+                    .build()
+
+
+                WorkManager.getInstance(context).enqueue(worker)
+            }
         }
 
         private const val TAG = "sensors"

@@ -151,7 +151,6 @@ class ShortcutPopupWindow(
                 appLauncher,
                 onShortcutSelectedListener
             ).also { it.submitList(appDrawerItem.shortcuts) }
-
         } else {
             binding.shortcutList.isVisible = false
         }

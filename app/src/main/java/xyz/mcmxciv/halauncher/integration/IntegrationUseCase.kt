@@ -11,8 +11,14 @@ class IntegrationUseCase @Inject constructor(
     val isDeviceIntegrated: Boolean
         get() = integrationRepository.webhookInfo != null
 
+    val sensorUpdateInterval: Long
+        get() = integrationRepository.sensorUpdateInterval
+
+    val integrationOptIn: Boolean
+        get() = integrationRepository.integrationOptIn
+
     fun validateIntegration(): Boolean =
-        integrationRepository.webhookInfo != null || integrationRepository.integrationOptOut
+        integrationRepository.webhookInfo != null || !integrationRepository.integrationOptIn
 
     suspend fun registerDevice(deviceInfo: DeviceInfo) {
         val webhookInfo = integrationRepository.registerDevice(deviceInfo)
@@ -33,7 +39,11 @@ class IntegrationUseCase @Inject constructor(
         }
     }
 
+    fun optIn() {
+        integrationRepository.integrationOptIn = true
+    }
+
     fun optOut() {
-        integrationRepository.integrationOptOut = true
+        integrationRepository.integrationOptIn = false
     }
 }

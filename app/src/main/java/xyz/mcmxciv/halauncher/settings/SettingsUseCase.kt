@@ -14,17 +14,17 @@ class SettingsUseCase @Inject constructor(
         set(value) { settingsRepository.theme = value }
 
     val webviewUrl: String
-        get() = settingsRepository.instanceUrl.toHttpUrl()
+        get() = settingsRepository.connectionUrl.toHttpUrl()
             .newBuilder()
             .addEncodedQueryParameter("external_auth", "1")
             .build()
             .toString()
 
     fun validateInstance(): Boolean =
-        settingsRepository.instanceUrl != SettingsRepository.PLACEHOLDER_URL
+        settingsRepository.connectionUrl != SettingsRepository.PLACEHOLDER_URL
 
     fun saveInstanceUrl(url: String) {
-        settingsRepository.instanceUrl = validateUrl(url)
+        settingsRepository.connectionUrl = validateUrl(url)
             .toHttpUrl()
             .toString()
             .removeSuffix("/")

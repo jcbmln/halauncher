@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/instance_url"
+        android:id="@+id/connection_url"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -40,7 +40,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="@+id/instance_name"
-        app:layout_constraintTop_toBottomOf="@+id/instance_url" />
+        app:layout_constraintTop_toBottomOf="@+id/connection_url" />
 
     <ImageView
         android:id="@+id/imageView"

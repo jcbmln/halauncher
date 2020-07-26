@@ -13,9 +13,9 @@ class SettingsRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val resourceProvider: ResourceProvider
 ) {
-    var instanceUrl: String
-        get() = sharedPreferences.getString(INSTANCE_URL_KEY, null) ?: PLACEHOLDER_URL
-        set(value) = sharedPreferences.edit { putString(INSTANCE_URL_KEY, value) }
+    var connectionUrl: String
+        get() = sharedPreferences.getString(CONNECTION_URL_KEY, null) ?: PLACEHOLDER_URL
+        set(value) = sharedPreferences.edit { putString(CONNECTION_URL_KEY, value) }
 
     var theme: HassTheme
         get() {
@@ -30,7 +30,7 @@ class SettingsRepository @Inject constructor(
         set(value) = sharedPreferences.edit { putString(THEME_KEY, Serializer.serialize(value)) }
 
     companion object {
-        const val INSTANCE_URL_KEY = "instance_url"
+        const val CONNECTION_URL_KEY = "connection_url"
         const val THEME_KEY = "theme"
         const val PLACEHOLDER_URL = "http://localhost:8123"
     }

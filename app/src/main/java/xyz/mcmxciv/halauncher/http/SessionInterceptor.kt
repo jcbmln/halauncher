@@ -24,11 +24,11 @@ class SessionInterceptor @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val instanceUrl = sharedPreferences.getString(
-            SettingsRepository.INSTANCE_URL_KEY,
+        val connectionUrl = sharedPreferences.getString(
+            SettingsRepository.CONNECTION_URL_KEY,
             null
         ) ?: throw IllegalStateException()
-        val authenticationUrl = instanceUrl.toHttpUrl()
+        val authenticationUrl = connectionUrl.toHttpUrl()
             .newBuilder()
             .addPathSegment("auth/token")
             .build()

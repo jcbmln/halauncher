@@ -26,9 +26,16 @@ class IntegrationRepository @Inject constructor(
             return pref?.let { Serializer.deserialize(it) }
         }
 
-    var integrationOptOut: Boolean
-        get() = sharedPreferences.getBoolean(INTEGRATION_OPT_OUT_KEY, false)
-        set(value) = sharedPreferences.edit { putBoolean(INTEGRATION_OPT_OUT_KEY, value) }
+    var integrationOptIn: Boolean
+        get() = sharedPreferences.getBoolean(INTEGRATION_OPT_IN_KEY, true)
+        set(value) = sharedPreferences.edit { putBoolean(INTEGRATION_OPT_IN_KEY, value) }
+
+    var sensorUpdateInterval: Long
+        get() = sharedPreferences.getLong(
+            SENSOR_UPDATE_INTERVAL_KEY,
+            DEFAULT_SENSOR_UPDATE_INTERVAL
+        )
+        set(value) = sharedPreferences.edit { putLong(SENSOR_UPDATE_INTERVAL_KEY, value) }
 
     suspend fun registerDevice(deviceInfo: DeviceInfo): WebhookInfo =
         secureIntegrationApi.registerDevice(deviceInfo)
@@ -69,14 +76,14 @@ class IntegrationRepository @Inject constructor(
     private suspend fun <T> tryUrls(block: suspend (url: String) -> T?): T {
         val webhookInfo = webhookInfo ?: throw IntegrationException()
         val urls = mutableListOf<String>()
-        val instanceUrl = sharedPreferences.getString(
-                SettingsRepository.INSTANCE_URL_KEY,
-                SettingsRepository.PLACEHOLDER_URL
-            )!!
+        val connectionUrl = sharedPreferences.getString(
+            SettingsRepository.CONNECTION_URL_KEY,
+            SettingsRepository.PLACEHOLDER_URL
+        )!!
 
         webhookInfo.cloudhookUrl?.let { urls.add(it) }
         webhookInfo.remoteUiUrl?.let { urls.add(buildUrl(it, webhookInfo.webhookId)) }
-        urls.add(buildUrl(instanceUrl, webhookInfo.webhookId))
+        urls.add(buildUrl(connectionUrl, webhookInfo.webhookId))
 
         var result: T? = null
 
@@ -100,7 +107,9 @@ class IntegrationRepository @Inject constructor(
 
     companion object {
         const val WEBHOOK_INFO_KEY = "webhook_info"
-        const val INTEGRATION_OPT_OUT_KEY = "integration_opt_out"
+        const val INTEGRATION_OPT_IN_KEY = "integration_opt_in"
+        const val SENSOR_UPDATE_INTERVAL_KEY = "sensor_update_interval"
         const val SENSOR_IDS_KEY = "sensor_ids"
+        const val DEFAULT_SENSOR_UPDATE_INTERVAL = 15L
     }
 }

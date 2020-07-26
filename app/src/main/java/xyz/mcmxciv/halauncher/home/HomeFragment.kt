@@ -22,9 +22,15 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import xyz.mcmxciv.halauncher.*
+import xyz.mcmxciv.halauncher.BaseFragment
+import xyz.mcmxciv.halauncher.BuildConfig
+import xyz.mcmxciv.halauncher.HalauncherViewModel
+import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.apps.AppDrawerAdapter
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
+import xyz.mcmxciv.halauncher.navigate
+import xyz.mcmxciv.halauncher.observe
+import xyz.mcmxciv.halauncher.requireHalauncherActivity
 import xyz.mcmxciv.halauncher.utils.HassTheme
 import javax.inject.Inject
 
@@ -107,16 +113,6 @@ class HomeFragment : BaseFragment() {
             override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {}
         })
     }
-
-//    private fun setStatusBarTheme(isDark: Boolean) {
-//        requireActivity().apply {
-//            window.decorView.systemUiVisibility = if (isDark) {
-//                window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-//            } else {
-//                window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-//            }
-//        }
-//    }
 
     private fun applyInsets() {
         binding.root.requestApplyInsets()

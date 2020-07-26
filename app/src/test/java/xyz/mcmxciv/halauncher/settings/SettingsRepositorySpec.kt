@@ -18,12 +18,12 @@ object SettingsRepositorySpec : Spek({
             val url = "http://home-assistant.halauncher.app"
 
             beforeEachTest {
-                settingsRepository.instanceUrl = url
+                settingsRepository.connectionUrl = url
             }
 
             it("should save the url to shared preferences") {
                 verify {
-                    sharedPreferences.edit { putString(SettingsRepository.INSTANCE_URL_KEY, url) }
+                    sharedPreferences.edit { putString(SettingsRepository.CONNECTION_URL_KEY, url) }
                 }
             }
         }
