@@ -1,13 +1,21 @@
 baseURL = "https://halauncher.app/"
 languageCode = "en-us"
 title = "Halauncher"
-theme = "compose"
+theme = "halauncher"
 
 #  menu items
 [[menu.main]]
+    name = "Home"
+    url = ""
+[[menu.main]]
     name = "Docs"
-    weight = 2
     url = "docs/"
+[[menu.main]]
+    name = "Changelogs"
+    url = "changelogs/"
+[[menu.main]]
+    name = "About"
+    url = "about/"
 
 [markup]
   [markup.goldmark]
@@ -39,4 +47,4 @@ theme = "compose"
   [params.source]
     name = "GitHub"
     icon = "github.svg"
-    url = "https://github.com/onweru/compose/"
+    url = "https://github.com/jcbmln/halauncher"

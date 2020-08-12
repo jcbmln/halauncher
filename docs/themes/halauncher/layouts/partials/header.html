@@ -1,4 +1,25 @@
-<header class="site__header">
+<header class="header">
     <img src='/images/{{ $.Site.Params.logoFile }}' alt='{{ .Site.Title }} Logo'>
-	<h1><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
+    <h1><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
+    
+    <nav class="navbar">
+        <ul class="navbar-list">
+            {{- $p := . }}
+            {{- range .Site.Menus.main }}
+            <li class="navbar-item">
+                {{- $active := or ($p.IsMenuCurrent "main" .) ($p.HasMenuCurrent "main" .) }}
+                {{- with .Page }}
+                {{- $active = or $active ($.IsDescendant .) }}
+                {{- end }}
+                {{- $url := urls.Parse .URL }}
+                {{- $baseurl := $.Site.BaseURL }}
+                <a class="navbar-link{{if $active }} active{{end}}" href="{{ with .Page }}{{ $baseurl }}{{ .Permalink }}{{ else }}{{ $baseurl }}{{ .URL }}{{ end }}">{{ .Name }}</a>
+            </li>
+            {{- end }}
+            {{ $repo := .Site.Params.source }}
+            <li class="navbar-item">
+                <a class="navbar-link" href="{{ $repo.url }}" target="_blank">/images/{{ $repo.icon }}</a>
+            </li>
+        </ul>
+    </nav>
 </header>
