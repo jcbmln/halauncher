@@ -45,7 +45,7 @@
     <!-- Preferences -->
     <string name="settings">Settings</string>
 
-    <string name="home_assistant_settings_key" translatable="false">home-assistant-settings</string>
+    <string name="home_assistant_settings_key" translatable="false">home_assistant_settings</string>
     <string name="home_assistant_settings_title">Home Assistant</string>
     <string name="home_assistant_settings_summary">Manage your connection to Home Assistant.</string>
 
@@ -54,19 +54,24 @@
 
     <string name="integration_opt_in_title">Enable Integration</string>
 
-    <string name="sensor_interval_settings_key">sensor-update-interval</string>
+    <string name="sensor_interval_settings_key">sensor_update_interval</string>
     <string name="sensor_interval_settings_title">Sensor Update Interval</string>
 
-    <string name="app_drawer_settings_key" translatable="false">app-drawer-settings</string>
+    <string name="app_drawer_settings_key" translatable="false">app_drawer_settings</string>
     <string name="app_drawer_settings_title">App Drawer</string>
     <string name="app_drawer_settings_summary">Manage your app drawer.</string>
 
-    <string name="about_settings_key" translatable="false">about-settings</string>
+    <string name="about_settings_key" translatable="false">about_settings</string>
     <string name="about_settings_title">About Halauncher</string>
     <string name="about_settings_summary">Learn more about Halauncher.</string>
 
     <string name="connection_url_title">Connection URL</string>
 
-    <string name="app_version_key" translatable="false">app-version</string>
+    <string name="privacy_policy_key" translatable="false">privacy_policy</string>
+    <string name="privacy_policy_title">Privacy Policy</string>
+
+    <string name="app_version_key" translatable="false">app_version</string>
     <string name="app_version_title">App Version</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

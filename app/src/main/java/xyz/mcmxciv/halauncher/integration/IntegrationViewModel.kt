@@ -54,7 +54,6 @@ class IntegrationViewModel @ViewModelInject constructor(
     }
 
     fun skip() {
-        integrationUseCase.optOut()
         navigationEvent.postValue(
             IntegrationFragmentDirections.actionIntegrationFragmentToHomeFragment()
         )

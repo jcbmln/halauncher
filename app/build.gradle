@@ -42,7 +42,7 @@ android {
         versionCode gitCommitCount
         versionName gitTag
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "PRIVACY_POLICY_URL", '"https://halauncher.app/privacy"')
+        buildConfigField("String", "PRIVACY_POLICY_URL", '"https://halauncher.app/privacy?embedded"')
 
         kapt {
             arguments {

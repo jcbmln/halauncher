@@ -6,7 +6,6 @@ import androidx.preference.SwitchPreference
 import dagger.hilt.android.AndroidEntryPoint
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.integration.IntegrationRepository
-import xyz.mcmxciv.halauncher.integration.IntegrationUseCase
 
 @AndroidEntryPoint
 class ConnectionSettingsFragment : BasePreferenceFragment() {
@@ -18,7 +17,7 @@ class ConnectionSettingsFragment : BasePreferenceFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preference_screen_connections)
 
-        findPreference<SwitchPreference>(IntegrationRepository.INTEGRATION_OPT_IN_KEY)?.also {
+        findPreference<SwitchPreference>(IntegrationRepository.INTEGRATION_ENABLED_KEY)?.also {
             it.isEnabled = !viewModel.integrationEnabled
             it.setOnPreferenceChangeListener { preference, _ ->
                 preference.isEnabled = false

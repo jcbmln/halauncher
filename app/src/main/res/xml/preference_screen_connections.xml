@@ -9,7 +9,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/integration_settings_title">
         <SwitchPreference
-            app:key="integration_opt_in"
+            app:key="integration_enabled"
             app:title="@string/integration_opt_in_title" />
         <DropDownPreference
             app:key="sensor_update_interval"

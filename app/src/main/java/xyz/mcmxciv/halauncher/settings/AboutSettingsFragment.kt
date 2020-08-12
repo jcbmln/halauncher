@@ -15,8 +15,13 @@ class AboutSettingsFragment : BasePreferenceFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preference_screen_about)
 
-        findPreference<Preference>(R.string.app_version_key)?.also {
-            it.summary = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        findPreference<Preference>(R.string.app_version_key)?.also { pref ->
+            pref.summary = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+        }
+        findPreference<Preference>(R.string.privacy_policy_key)?.also { pref ->
+            pref.setOnPreferenceClickListener {
+                true
+            }
         }
     }
 }

@@ -14,15 +14,16 @@ class IntegrationUseCase @Inject constructor(
     val sensorUpdateInterval: Long
         get() = integrationRepository.sensorUpdateInterval
 
-    val integrationOptIn: Boolean
-        get() = integrationRepository.integrationOptIn
+    val integrationEnabled: Boolean
+        get() = integrationRepository.integrationEnabled
 
     fun validateIntegration(): Boolean =
-        integrationRepository.webhookInfo != null || !integrationRepository.integrationOptIn
+        integrationRepository.webhookInfo != null || !integrationRepository.integrationEnabled
 
     suspend fun registerDevice(deviceInfo: DeviceInfo) {
         val webhookInfo = integrationRepository.registerDevice(deviceInfo)
         integrationRepository.saveWebhookInfo(webhookInfo)
+        integrationRepository.integrationEnabled = true
     }
 
     suspend fun registerSensor(sensorInfo: SensorInfo) {
@@ -37,13 +38,5 @@ class IntegrationUseCase @Inject constructor(
             integrationRepository.clearRegisteredSensors()
             false
         }
-    }
-
-    fun optIn() {
-        integrationRepository.integrationOptIn = true
-    }
-
-    fun optOut() {
-        integrationRepository.integrationOptIn = false
     }
 }

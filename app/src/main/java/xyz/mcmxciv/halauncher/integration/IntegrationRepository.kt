@@ -26,9 +26,9 @@ class IntegrationRepository @Inject constructor(
             return pref?.let { Serializer.deserialize(it) }
         }
 
-    var integrationOptIn: Boolean
-        get() = sharedPreferences.getBoolean(INTEGRATION_OPT_IN_KEY, true)
-        set(value) = sharedPreferences.edit { putBoolean(INTEGRATION_OPT_IN_KEY, value) }
+    var integrationEnabled: Boolean
+        get() = sharedPreferences.getBoolean(INTEGRATION_ENABLED_KEY, false)
+        set(value) = sharedPreferences.edit { putBoolean(INTEGRATION_ENABLED_KEY, value) }
 
     var sensorUpdateInterval: Long
         get() = sharedPreferences.getLong(
@@ -107,7 +107,7 @@ class IntegrationRepository @Inject constructor(
 
     companion object {
         const val WEBHOOK_INFO_KEY = "webhook_info"
-        const val INTEGRATION_OPT_IN_KEY = "integration_opt_in"
+        const val INTEGRATION_ENABLED_KEY = "integration_enabled"
         const val SENSOR_UPDATE_INTERVAL_KEY = "sensor_update_interval"
         const val SENSOR_IDS_KEY = "sensor_ids"
         const val DEFAULT_SENSOR_UPDATE_INTERVAL = 15L
