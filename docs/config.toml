@@ -3,19 +3,33 @@ languageCode = "en-us"
 title = "Halauncher"
 theme = "halauncher"
 
+[permalinks]
+  posts = "/:year/:month/:title/"
+
 #  menu items
-[[menu.main]]
-    name = "Home"
-    url = ""
-[[menu.main]]
-    name = "Docs"
-    url = "docs/"
-[[menu.main]]
-    name = "Changelogs"
-    url = "changelogs/"
-[[menu.main]]
-    name = "About"
-    url = "about/"
+[menu]
+  [[menu.main]]
+      name = "Home"
+      url = "/"
+      weight = 1
+  [[menu.main]]
+      name = "Docs"
+      url = "/docs"
+      weight = 2
+  [[menu.main]]
+      name = "Changelogs"
+      url = "/changelogs"
+      weight = 3
+  [[menu.main]]
+      name = "About"
+      url = "/about"
+      weight = 4
+  [[menu.social]]
+    name = "GitHub"
+    identifier = "github"
+    url = "https://github.com/jcbmln/halauncher"
+    weight = 1
+
 
 [markup]
   [markup.goldmark]
@@ -43,8 +57,3 @@ theme = "halauncher"
   time_format_default = "January 2, 2006"
 
   logoFile = "logo.svg"
-
-  [params.source]
-    name = "GitHub"
-    icon = "github.svg"
-    url = "https://github.com/jcbmln/halauncher"

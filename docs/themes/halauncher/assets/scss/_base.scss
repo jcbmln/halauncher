@@ -1,0 +1,38 @@
+html {
+    box-sizing: border-box;
+    font-size: $base-font-size;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    align-items: center;
+    background-color: $background-color;
+    color: $text-color;
+    display: flex;
+    flex-direction: column;
+    font-family: 'system';
+    font-size: 1.8rem;
+}
+
+a {
+    border-bottom: 1px solid transparent;
+    outline: none;
+    text-decoration: none;
+    transition: all 0.25s ease;
+
+    &:link {
+        color: $primary-color;
+    }
+
+    &:visited {
+        color: darken($primary-color, 10%);
+    }
+
+    &:hover, &:active {
+        color: lighten($primary-color, 10%);
+        border-bottom-color: lighten($primary-color, 10%);
+    }
+}
