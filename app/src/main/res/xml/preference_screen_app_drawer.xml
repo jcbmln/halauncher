@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="@string/icon_settings_title">
+        <DropDownPreference
+            app:key="icon_columns"
+            app:title="@string/icon_columns_title"
+            app:useSimpleSummaryProvider="true" />
+        <DropDownPreference
+            app:key="@string/icon_theme_key"
+            app:title="@string/icon_theme_title"
+            app:enabled="false" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/app_display_settings">
+        <Preference
+            app:key="@string/hidden_apps_key"
+            app:title="@string/hidden_apps_title"
+            app:summary="@string/hidden_apps_summary" />
+    </PreferenceCategory>
+</PreferenceScreen>

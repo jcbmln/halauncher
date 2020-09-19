@@ -4,6 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import xyz.mcmxciv.halauncher.BaseViewModel
+import xyz.mcmxciv.halauncher.HalauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.device.DeviceManager
 import xyz.mcmxciv.halauncher.integration.IntegrationUseCase
@@ -18,7 +19,6 @@ class SettingsViewModel @ViewModelInject constructor(
     val integrationEnabled: Boolean
         get() = integrationUseCase.integrationEnabled
 
-
     fun onCategorySelected(key: String) {
         val action = when (key) {
             resourceProvider.getString(R.string.home_assistant_settings_key) ->
@@ -31,9 +31,21 @@ class SettingsViewModel @ViewModelInject constructor(
         navigationEvent.postValue(action)
     }
 
-    fun enableIntegration() {
+    fun onPrivacyPolicySelected(): Boolean {
+        navigationEvent.postValue(
+            AboutSettingsFragmentDirections.actionAboutSettingsFragmentToPrivacyPolicyFragment()
+        )
+        return true
+    }
+
+    fun onIntegrationPreferenceChanged() {
         viewModelScope.launch {
             integrationUseCase.registerDevice(deviceManager.deviceInfo)
         }
+    }
+
+    fun onSensorUpdateIntervalPreferenceChanged(): Boolean {
+        HalauncherApplication.instance.startWorkers()
+        return true
     }
 }

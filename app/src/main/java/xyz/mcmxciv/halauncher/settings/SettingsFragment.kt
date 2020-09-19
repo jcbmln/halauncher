@@ -27,6 +27,8 @@ class SettingsFragment : BasePreferenceFragment() {
 
         findPreference<Preference>(R.string.home_assistant_settings_key)?.onPreferenceClickListener =
             navigationListener
+        findPreference<Preference>(R.string.app_drawer_settings_key)?.onPreferenceClickListener =
+            navigationListener
         findPreference<Preference>(R.string.about_settings_key)?.onPreferenceClickListener =
             navigationListener
     }

@@ -52,6 +52,7 @@
     <string name="connection_settings_title">Connections</string>
     <string name="integration_settings_title">Integration</string>
 
+    <string name="connection_url_title">Connection URL</string>
     <string name="integration_opt_in_title">Enable Integration</string>
 
     <string name="sensor_interval_settings_key">sensor_update_interval</string>
@@ -61,17 +62,23 @@
     <string name="app_drawer_settings_title">App Drawer</string>
     <string name="app_drawer_settings_summary">Manage your app drawer.</string>
 
+    <string name="icon_settings_title">Icons</string>
+    <string name="icon_columns_title">Columns</string>
+    <string name="icon_theme_key">icon_theme</string>
+    <string name="icon_theme_title">Icon Theme</string>
+
+    <string name="app_display_settings">App Organization</string>
+    <string name="hidden_apps_key">hidden_apps</string>
+    <string name="hidden_apps_title">Hidden Apps</string>
+    <string name="hidden_apps_summary">Manage hidden apps.</string>
+
     <string name="about_settings_key" translatable="false">about_settings</string>
     <string name="about_settings_title">About Halauncher</string>
     <string name="about_settings_summary">Learn more about Halauncher.</string>
-
-    <string name="connection_url_title">Connection URL</string>
 
     <string name="privacy_policy_key" translatable="false">privacy_policy</string>
     <string name="privacy_policy_title">Privacy Policy</string>
 
     <string name="app_version_key" translatable="false">app_version</string>
     <string name="app_version_title">App Version</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

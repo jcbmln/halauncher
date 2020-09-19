@@ -1,16 +1,16 @@
 <resources>
     <integer-array name="sensor_update_intervals">
+        <item>0</item>
         <item>5</item>
         <item>15</item>
         <item>30</item>
         <item>60</item>
-        <item>0</item>
     </integer-array>
     <string-array name="sensor_update_interval_values">
+        <item>Never</item>
         <item>5 minutes</item>
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
-        <item>Never</item>
     </string-array>
 </resources>

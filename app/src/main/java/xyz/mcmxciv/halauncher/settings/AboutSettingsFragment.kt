@@ -2,6 +2,7 @@ package xyz.mcmxciv.halauncher.settings
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.preference.Preference
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R
@@ -19,9 +20,7 @@ class AboutSettingsFragment : BasePreferenceFragment() {
             pref.summary = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
         }
         findPreference<Preference>(R.string.privacy_policy_key)?.also { pref ->
-            pref.setOnPreferenceClickListener {
-                true
-            }
+            pref.setOnPreferenceClickListener { viewModel.onPrivacyPolicySelected() }
         }
     }
 }
