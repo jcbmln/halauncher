@@ -57,7 +57,6 @@ class SensorCoroutineWorker @WorkerInject constructor(
                     .addTag(TAG)
                     .build()
 
-
                 WorkManager.getInstance(context).enqueue(worker)
             }
         }

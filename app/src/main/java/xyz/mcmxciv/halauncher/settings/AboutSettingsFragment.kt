@@ -2,7 +2,6 @@ package xyz.mcmxciv.halauncher.settings
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.activityViewModels
 import androidx.preference.Preference
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.R

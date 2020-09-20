@@ -25,8 +25,8 @@ class SettingsFragment : BasePreferenceFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preference_screen_main)
 
-        findPreference<Preference>(R.string.home_assistant_settings_key)?.onPreferenceClickListener =
-            navigationListener
+        findPreference<Preference>(R.string.home_assistant_settings_key)
+            ?.onPreferenceClickListener = navigationListener
         findPreference<Preference>(R.string.app_drawer_settings_key)?.onPreferenceClickListener =
             navigationListener
         findPreference<Preference>(R.string.about_settings_key)?.onPreferenceClickListener =

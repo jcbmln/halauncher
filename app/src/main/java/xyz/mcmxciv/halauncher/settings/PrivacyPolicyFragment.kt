@@ -16,7 +16,8 @@ class PrivacyPolicyFragment : BaseFragment() {
     private lateinit var binding: FragmentPrivacyPolicyBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPrivacyPolicyBinding.inflate(inflater, container, false)
