@@ -79,7 +79,8 @@ class AppUseCase @Inject constructor(
             packageInfo.packageName,
             appRepository.getDisplayName(launcherActivityInfo),
             isSystemApp,
-            false
+            false,
+            -1
         )
 
         appRepository.addApp(app)

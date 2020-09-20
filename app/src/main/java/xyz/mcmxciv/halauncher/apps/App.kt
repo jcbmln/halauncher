@@ -16,5 +16,7 @@ data class App(
     @ColumnInfo(name = "system_app")
     val isSystemApp: Boolean,
     @ColumnInfo(name = "is_hidden")
-    var isHidden: Boolean
+    var isHidden: Boolean,
+    @ColumnInfo(name = "order")
+    var order: Int
 )
