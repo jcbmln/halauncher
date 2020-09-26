@@ -21,10 +21,15 @@
         background-image: url({{ $promo_image_big.RelPermalink }}); 
     }
 }
+@media only screen and (min-width: 1921px) {
+  #{{ $blockID }} {
+      background-image: url({{ $promo_image.RelPermalink }}); 
+  }
+}
 </style>
 {{ end }}
-<section id="{{ $blockID }}" class="row cover cover-block--height-{{ $height }} js-cover overlay overlay--dark -bg-{{ $col_id }}">
-  <div class="container overlay-inner">
+<section id="{{ $blockID }}" class="cover cover-h-{{ $height }}">
+  <div class="container">
     <div class="row">
       <div class="col-12">
         <div class="text-center">

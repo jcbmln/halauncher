@@ -1,37 +1,5 @@
 // Common min-height modifiers used for boxes.
-@mixin box-height-modifiers($parent) {
-    #{$parent} {
-        &-h-min {
-            min-height: 300px;
-        }
 
-        &-h-med {
-            min-height: 400px;
-        }
-
-        &-h-max {
-            min-height: 500px;
-        }
-
-        &-h-full {
-            min-height: 100vh;
-        }
-
-        @include media-breakpoint-up(md) {
-            &-h-min {
-                min-height: 450px;
-            }
-
-            &-h-med {
-                min-height: 500px;
-            }
-
-            &-h-max {
-                min-height: 650px;
-            }
-        }
-    }
-}
 
 @include box-height-modifiers(".box");
 

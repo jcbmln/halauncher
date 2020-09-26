@@ -1,6 +1,6 @@
 {{ $links := .Site.Params.links }}
-<footer class="bg-dark py-5 row d-print-none">
-  <div class="container-fluid mx-sm-5">
+<footer class="bg-dark py-5 d-print-none">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-6 col-sm-4 text-xs-center order-sm-2">
         {{ with $links }}
@@ -23,7 +23,7 @@
 		{{ with .Site.GetPage "about" }}<p class="mt-2"><a href="{{ .RelPermalink }}">{{ .Title }}</a></p>{{ end }}
   {{ end }}
         <div>
-          <small class="text-white">Photo by <a href="https://unsplash.com/@steve4c?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Stephan Bechert</a> on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>
+          <small class="text-white">Photo by <a href="https://unsplash.com/@steve4c?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Stephan Bechert</a> on <a href="https://unsplash.com/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></small>
         </div>
       </div>
     </div>

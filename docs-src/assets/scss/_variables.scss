@@ -232,3 +232,5 @@ $grid-breakpoints: (
 ) !default;
 
 $border-radius: 3px;
+
+$cover-gradient: linear-gradient(to bottom, $primary 0%, transparent 100%);
