@@ -1,7 +1,6 @@
 baseURL = "https://halauncher.app/"
 title = "Halauncher"
 enableRobotsTXT = true
-theme = ["Docsy"]
 languageCode = "en-us"
 enableGitInfo = true
 
