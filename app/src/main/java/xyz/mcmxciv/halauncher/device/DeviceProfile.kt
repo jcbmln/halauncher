@@ -31,6 +31,7 @@ class DeviceProfile @Inject constructor(@ApplicationContext context: Context) {
     var shortcutIconBitmapSize = 0
     var appIconDpi = 0
     var shortcutIconDpi = 0
+    val profiles: List<DisplayOption>
 
     private var iconShapePath = ""
     private val isTablet = context.resources.getBoolean(R.bool.is_tablet)
@@ -49,7 +50,7 @@ class DeviceProfile @Inject constructor(@ApplicationContext context: Context) {
 
         val minWidthDps = Utilities.dpiFromPx(min(smallestSize.x, smallestSize.y), dm)
         val minHeightDps = Utilities.dpiFromPx(min(largestSize.x, largestSize.y), dm)
-        val profiles = getPredefinedDeviceProfiles(
+        profiles = getPredefinedDeviceProfiles(
             context,
             null
         ).sortedWith(Comparator { a, b ->
@@ -96,9 +97,9 @@ class DeviceProfile @Inject constructor(@ApplicationContext context: Context) {
         }
 
         val filteredProfiles = mutableListOf<DisplayOption>()
-        if (!TextUtils.isEmpty(gridName)) {
+        if (!gridName.isNullOrBlank()) {
             for (profile in profiles) {
-                if (gridName == profile.gridOption!!.name) {
+                if (profile.gridOption!!.name == gridName) {
                     filteredProfiles.add(profile)
                 }
             }
@@ -201,7 +202,7 @@ class DeviceProfile @Inject constructor(@ApplicationContext context: Context) {
         else (WEIGHT_EFFICIENT / d.toDouble().pow(WEIGHT_POWER)).toFloat()
     }
 
-    private class GridOption(context: Context, attrs: AttributeSet) {
+    class GridOption(context: Context, attrs: AttributeSet) {
         val name: String
         val numColumns: Int
 
@@ -218,7 +219,7 @@ class DeviceProfile @Inject constructor(@ApplicationContext context: Context) {
         }
     }
 
-    private class DisplayOption {
+    class DisplayOption {
         val gridOption: GridOption?
         private val name: String?
         val minWidthDps: Float
