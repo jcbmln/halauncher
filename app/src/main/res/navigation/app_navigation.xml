@@ -113,7 +113,7 @@
             app:destination="@id/aboutSettingsFragment" />
         <action
             android:id="@+id/action_settingsFragment_to_appDrawerFragment"
-            app:destination="@id/appDrawerFragment" />
+            app:destination="@id/appDrawerSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/connectionSettingsFragment"
@@ -133,7 +133,7 @@
         android:label="fragment_privacy_policy"
         tools:layout="@layout/fragment_privacy_policy" />
     <fragment
-        android:id="@+id/appDrawerFragment"
-        android:name="xyz.mcmxciv.halauncher.settings.AppDrawerFragment"
-        android:label="AppDrawerFragment" />
+        android:id="@+id/appDrawerSettingsFragment"
+        android:name="xyz.mcmxciv.halauncher.settings.AppDrawerSettingsFragment"
+        android:label="AppDrawerSettingsFragment" />
 </navigation>

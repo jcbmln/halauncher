@@ -28,9 +28,9 @@ class AppUseCase @Inject constructor(
             .mapNotNull { app -> createCachedAppDrawerItem(launcherActivityInfo, app) }
             .toMutableList()
 
-        val cacheAppActivityNames = cachedApps.map { app -> app.activityName }
+        val cachedAppActivityNames = cachedApps.map { app -> app.activityName }
         val newAppDrawerItems = launcherActivityInfo
-            .filterNot { info -> cacheAppActivityNames.contains(info.name) }
+            .filterNot { info -> cachedAppActivityNames.contains(info.name) }
             .map { info -> createNewAppDrawerItem(info) }
 
         appDrawerItems.addAll(newAppDrawerItems)

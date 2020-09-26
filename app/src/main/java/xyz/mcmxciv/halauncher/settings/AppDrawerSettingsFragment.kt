@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import xyz.mcmxciv.halauncher.R
 
-class AppDrawerFragment : BasePreferenceFragment() {
+class AppDrawerSettingsFragment : BasePreferenceFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar.title = getString(R.string.app_drawer_settings_title)
