@@ -53,6 +53,14 @@ class SettingsViewModel @ViewModelInject constructor(
         return true
     }
 
+    fun onHiddenAppsSettingsSelected(): Boolean {
+        navigationEvent.postValue(
+            AppDrawerSettingsFragmentDirections
+                .actionAppDrawerSettingsFragmentToHiddenAppsFragment()
+        )
+        return true
+    }
+
     fun onIntegrationPreferenceChanged() {
         viewModelScope.launch {
             integrationUseCase.registerDevice(deviceManager.deviceInfo)

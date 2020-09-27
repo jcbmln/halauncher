@@ -20,11 +20,10 @@ class AppUseCase @Inject constructor(
         }
     }
 
-    suspend fun getAppDrawerItems(): List<AppDrawerItem> {
+    suspend fun getAllAppListItems(): List<AppListItem> {
         val launcherActivityInfo = appRepository.getLauncherActivityInfo()
         val cachedApps = appRepository.getApps()
         val appDrawerItems = cachedApps
-            .filterNot { app -> app.isHidden }
             .mapNotNull { app -> createCachedAppDrawerItem(launcherActivityInfo, app) }
             .toMutableList()
 
@@ -46,10 +45,17 @@ class AppUseCase @Inject constructor(
         }
     }
 
+    suspend fun toggleAppVisibility(activityName: String) {
+        appRepository.getApp(activityName)?.let { app ->
+            app.isHidden = !app.isHidden
+            appRepository.updateApp(app)
+        }
+    }
+
     private suspend fun createCachedAppDrawerItem(
         launcherActivityInfo: List<LauncherActivityInfo>,
         app: App
-    ): AppDrawerItem? {
+    ): AppListItem? {
         val launcherActivity = launcherActivityInfo.singleOrNull { info ->
             info.name == app.activityName
         }
@@ -59,7 +65,7 @@ class AppUseCase @Inject constructor(
             return null
         }
 
-        return AppDrawerItem(
+        return AppListItem(
             app,
             iconFactory.getIcon(launcherActivity),
             launcherActivity.componentName,
@@ -69,7 +75,7 @@ class AppUseCase @Inject constructor(
 
     private suspend fun createNewAppDrawerItem(
         launcherActivityInfo: LauncherActivityInfo
-    ): AppDrawerItem {
+    ): AppListItem {
         val packageInfo = appRepository
             .getPackageInfo(launcherActivityInfo.applicationInfo.packageName)
         val isSystemApp = (launcherActivityInfo.applicationInfo.flags
@@ -85,7 +91,7 @@ class AppUseCase @Inject constructor(
 
         appRepository.addApp(app)
 
-        return AppDrawerItem(
+        return AppListItem(
             app,
             iconFactory.getIcon(launcherActivityInfo),
             launcherActivityInfo.componentName,

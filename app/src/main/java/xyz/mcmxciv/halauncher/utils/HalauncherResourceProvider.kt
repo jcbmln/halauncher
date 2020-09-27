@@ -7,6 +7,7 @@ import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 
 class HalauncherResourceProvider(private val context: Context) : ResourceProvider {
     override val resources: Resources
@@ -25,7 +26,7 @@ class HalauncherResourceProvider(private val context: Context) : ResourceProvide
         Settings.Secure.getString(context.contentResolver, name)
 
     override fun getDrawable(@DrawableRes resId: Int): Drawable? =
-        context.getDrawable(resId)
+        ContextCompat.getDrawable(context, resId)
 
     override fun getColor(resId: Int): Int =
         context.getColor(resId)

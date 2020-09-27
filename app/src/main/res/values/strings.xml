@@ -71,6 +71,7 @@
     <string name="hidden_apps_key">hidden_apps</string>
     <string name="hidden_apps_title">Hidden Apps</string>
     <string name="hidden_apps_summary">Manage hidden apps.</string>
+    <string name="toggle_hidden_app">Toggle hidden app.</string>
 
     <string name="about_settings_key" translatable="false">about_settings</string>
     <string name="about_settings_title">About Halauncher</string>

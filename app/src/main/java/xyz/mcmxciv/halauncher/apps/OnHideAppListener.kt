@@ -1,3 +1,3 @@
-package xyz.mcmxciv.halauncher.shortcuts
+package xyz.mcmxciv.halauncher.apps
 
 typealias OnHideAppListener = (activityName: String) -> Unit

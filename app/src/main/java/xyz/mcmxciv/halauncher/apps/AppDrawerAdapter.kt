@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.HalauncherApplication
 import xyz.mcmxciv.halauncher.databinding.ListItemAppBinding
 import xyz.mcmxciv.halauncher.device.DeviceProfile
-import xyz.mcmxciv.halauncher.shortcuts.OnHideAppListener
 import xyz.mcmxciv.halauncher.shortcuts.ShortcutPopupWindow
 import xyz.mcmxciv.halauncher.utils.HassTheme
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
@@ -20,7 +19,7 @@ class AppDrawerAdapter @Inject constructor(
     private val resourceProvider: ResourceProvider,
     private val deviceProfile: DeviceProfile,
     private val appLauncher: AppLauncher
-) : ListAdapter<AppDrawerItem, AppDrawerAdapter.AppDrawerViewHolder>(
+) : ListAdapter<AppListItem, AppDrawerAdapter.AppDrawerViewHolder>(
     itemCallback
 ) {
     private var onHideAppListener: OnHideAppListener = {}
@@ -30,35 +29,35 @@ class AppDrawerAdapter @Inject constructor(
     ) : RecyclerView.ViewHolder(binding.root),
         View.OnClickListener,
         View.OnLongClickListener {
-        private lateinit var _appDrawerItem: AppDrawerItem
+        private lateinit var _appListItem: AppListItem
 
         init {
             binding.appItem.setOnClickListener(this)
             binding.appItem.setOnLongClickListener(this)
         }
 
-        fun bind(appDrawerItem: AppDrawerItem) {
-            _appDrawerItem = appDrawerItem
+        fun bind(appListItem: AppListItem) {
+            _appListItem = appListItem
 
             val theme = HassTheme.instance.appDrawerTheme
             val resources = HalauncherApplication.instance.resources
 
             binding.appItem.textSize = deviceProfile.iconTextSize
-            binding.appItem.topIcon = appDrawerItem.icon.toDrawable(resources)
-            binding.appItem.text = appDrawerItem.app.displayName
-            binding.appItem.tag = appDrawerItem
+            binding.appItem.topIcon = appListItem.icon.toDrawable(resources)
+            binding.appItem.text = appListItem.app.displayName
+            binding.appItem.tag = appListItem
             binding.appItem.setTextColor(theme.labelTextColor)
         }
 
         override fun onClick(view: View) {
-            val item = view.tag as AppDrawerItem
+            val item = view.tag as AppListItem
             appLauncher.startMainActivity(item.componentName, view)
         }
 
         override fun onLongClick(view: View): Boolean {
             ShortcutPopupWindow(
                 view,
-                _appDrawerItem,
+                _appListItem,
                 resourceProvider,
                 appLauncher,
                 onHideAppListener
@@ -81,13 +80,13 @@ class AppDrawerAdapter @Inject constructor(
     }
 
     companion object {
-        val itemCallback = object : DiffUtil.ItemCallback<AppDrawerItem>() {
-            override fun areItemsTheSame(oldItem: AppDrawerItem, newItem: AppDrawerItem): Boolean =
+        val itemCallback = object : DiffUtil.ItemCallback<AppListItem>() {
+            override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean =
                 oldItem.app.activityName == oldItem.app.activityName
 
             override fun areContentsTheSame(
-                oldItem: AppDrawerItem,
-                newItem: AppDrawerItem
+                oldItem: AppListItem,
+                newItem: AppListItem
             ): Boolean = oldItem == newItem
         }
     }

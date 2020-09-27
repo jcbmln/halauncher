@@ -14,8 +14,9 @@ import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import androidx.core.view.marginStart
 import androidx.recyclerview.widget.LinearLayoutManager
-import xyz.mcmxciv.halauncher.apps.AppDrawerItem
+import xyz.mcmxciv.halauncher.apps.AppListItem
 import xyz.mcmxciv.halauncher.apps.AppLauncher
+import xyz.mcmxciv.halauncher.apps.OnHideAppListener
 import xyz.mcmxciv.halauncher.databinding.PopupWindowShortcutBinding
 import xyz.mcmxciv.halauncher.utils.HassTheme
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
@@ -23,7 +24,7 @@ import xyz.mcmxciv.halauncher.utils.Utilities
 
 class ShortcutPopupWindow(
     private val parentView: View,
-    private val appDrawerItem: AppDrawerItem,
+    private val appListItem: AppListItem,
     private val resourceProvider: ResourceProvider,
     private val appLauncher: AppLauncher,
     private val onHideAppListener: OnHideAppListener
@@ -134,15 +135,15 @@ class ShortcutPopupWindow(
 
     private fun initializeView() {
         binding.appInfoIcon.setOnClickListener { v ->
-            appLauncher.startAppDetailsActivity(appDrawerItem.componentName, v)
+            appLauncher.startAppDetailsActivity(appListItem.componentName, v)
             dismiss()
         }
         binding.hideIcon.setOnClickListener {
-            onHideAppListener(appDrawerItem.app.activityName)
+            onHideAppListener(appListItem.app.activityName)
             dismiss()
         }
 
-        if (!appDrawerItem.shortcuts.isNullOrEmpty()) {
+        if (!appListItem.shortcuts.isNullOrEmpty()) {
             binding.shortcutList.layoutManager = LinearLayoutManager(binding.shortcutList.context)
 
             val onShortcutSelectedListener = { dismiss() }
@@ -150,7 +151,7 @@ class ShortcutPopupWindow(
                 resourceProvider,
                 appLauncher,
                 onShortcutSelectedListener
-            ).also { it.submitList(appDrawerItem.shortcuts) }
+            ).also { it.submitList(appListItem.shortcuts) }
         } else {
             binding.shortcutList.isVisible = false
         }

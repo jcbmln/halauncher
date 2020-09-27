@@ -135,5 +135,13 @@
     <fragment
         android:id="@+id/appDrawerSettingsFragment"
         android:name="xyz.mcmxciv.halauncher.settings.AppDrawerSettingsFragment"
-        android:label="AppDrawerSettingsFragment" />
+        android:label="AppDrawerSettingsFragment" >
+        <action
+            android:id="@+id/action_appDrawerSettingsFragment_to_hiddenAppsFragment"
+            app:destination="@id/hiddenAppsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hiddenAppsFragment"
+        android:name="xyz.mcmxciv.halauncher.settings.HiddenAppsFragment"
+        android:label="HiddenAppsFragment" />
 </navigation>

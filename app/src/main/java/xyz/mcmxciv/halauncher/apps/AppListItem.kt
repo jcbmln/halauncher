@@ -4,7 +4,7 @@ import android.content.ComponentName
 import android.graphics.Bitmap
 import xyz.mcmxciv.halauncher.shortcuts.Shortcut
 
-data class AppDrawerItem(
+data class AppListItem(
     val app: App,
     val icon: Bitmap,
     val componentName: ComponentName,
