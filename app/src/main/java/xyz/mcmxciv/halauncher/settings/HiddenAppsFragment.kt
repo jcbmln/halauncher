@@ -7,9 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import xyz.mcmxciv.halauncher.*
+import xyz.mcmxciv.halauncher.BaseFragment
+import xyz.mcmxciv.halauncher.HalauncherViewModel
+import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.apps.HideShowAppsAdapter
 import xyz.mcmxciv.halauncher.databinding.FragmentHiddenAppsBinding
+import xyz.mcmxciv.halauncher.observe
+import xyz.mcmxciv.halauncher.requireHalauncherActivity
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -21,7 +25,8 @@ class HiddenAppsFragment : BaseFragment() {
     lateinit var hideShowAppsAdapter: HideShowAppsAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHiddenAppsBinding.inflate(inflater, container, false)
@@ -31,7 +36,7 @@ class HiddenAppsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observe(activityViewModel.appListItems) { hideShowAppsAdapter.submitList(it) }
+        observe(activityViewModel.allAppListItems) { hideShowAppsAdapter.submitList(it) }
 
         binding.toolbar.title = getString(R.string.hidden_apps_title)
         requireHalauncherActivity().apply {
@@ -44,6 +49,5 @@ class HiddenAppsFragment : BaseFragment() {
         }
         binding.appListView.layoutManager = LinearLayoutManager(context)
         binding.appListView.adapter = hideShowAppsAdapter
-
     }
 }

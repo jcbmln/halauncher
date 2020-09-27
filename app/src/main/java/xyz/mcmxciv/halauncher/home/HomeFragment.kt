@@ -73,7 +73,7 @@ class HomeFragment : BaseFragment() {
             binding.homeWebView.evaluateJavascript(it, null)
         }
         observe(viewModel.theme) { applyTheme(it) }
-        observe(activityViewModel.appListItems) { appDrawerAdapter.submitList(it) }
+        observe(activityViewModel.visibleAppListItems) { appDrawerAdapter.submitList(it) }
 
         requireHalauncherActivity().enterFullscreen()
         applyInsets()

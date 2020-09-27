@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import xyz.mcmxciv.halauncher.HalauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.databinding.ListItemHiddenAppBinding
-import xyz.mcmxciv.halauncher.utils.HassTheme
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import javax.inject.Inject
 
@@ -36,21 +35,19 @@ class HideShowAppsAdapter @Inject constructor(
 
             val hideDrawable = resourceProvider.getDrawable(R.drawable.ic_hide)
             val showDrawable = resourceProvider.getDrawable(R.drawable.ic_show)
-            hideDrawable?.setTint(HassTheme.instance.accentColor)
-            showDrawable?.setTint(HassTheme.instance.primaryTextColor)
 
             if (appListItem.app.isHidden) {
-                binding.appVisibilityToggle.setImageDrawable(showDrawable)
+                binding.appVisibilityToggle.setImageDrawable(hideDrawable)
             }
 
             binding.appVisibilityToggle.setOnClickListener {
                 if (appListItem.app.isHidden) {
-                    binding.appVisibilityToggle.setImageDrawable(hideDrawable)
-                } else {
                     binding.appVisibilityToggle.setImageDrawable(showDrawable)
+                } else {
+                    binding.appVisibilityToggle.setImageDrawable(hideDrawable)
                 }
 
-
+                onAppVisibilityToggledListener(appListItem.app.activityName)
             }
         }
     }

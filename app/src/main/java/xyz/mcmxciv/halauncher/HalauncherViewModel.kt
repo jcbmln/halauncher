@@ -11,8 +11,11 @@ import xyz.mcmxciv.halauncher.apps.AppUseCase
 class HalauncherViewModel @ViewModelInject constructor(
     private val appUseCase: AppUseCase
 ) : BaseViewModel() {
-    private val _appDrawerItems = MutableLiveData<List<AppListItem>>()
-    val appListItems: LiveData<List<AppListItem>> = _appDrawerItems
+    private val _allAppListItems = MutableLiveData<List<AppListItem>>()
+    val allAppListItems: LiveData<List<AppListItem>> = _allAppListItems
+
+    private val _visibleAppListItems = MutableLiveData<List<AppListItem>>()
+    val visibleAppListItems: LiveData<List<AppListItem>> = _visibleAppListItems
 
     init {
         populateAppList()
@@ -34,7 +37,9 @@ class HalauncherViewModel @ViewModelInject constructor(
 
     private fun populateAppList() {
         viewModelScope.launch {
-            _appDrawerItems.postValue(appUseCase.getAllAppListItems())
+            val appListItems = appUseCase.getAllAppListItems()
+            _allAppListItems.postValue(appListItems)
+            _visibleAppListItems.postValue(appListItems.filterNot { item -> item.app.isHidden })
         }
     }
 }
