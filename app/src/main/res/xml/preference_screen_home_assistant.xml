@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="@string/connection_settings_title">
+        <EditTextPreference
+            app:key="connection_url"
+            app:title="@string/connection_url_title"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/integration_settings_title">
+        <SwitchPreference
+            app:key="integration_enabled"
+            app:title="@string/integration_opt_in_title" />
+        <DropDownPreference
+            app:key="sensor_update_interval"
+            app:title="@string/sensor_interval_settings_title"
+            app:entries="@array/sensor_update_interval_values"
+            app:entryValues="@array/sensor_update_intervals"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+</PreferenceScreen>

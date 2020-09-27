@@ -1,35 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-/* Copyright 2008, The Android Open Source Project
-**
-** Licensed under the Apache License, Version 2.0 (the "License");
-** you may not use this file except in compliance with the License.
-** You may obtain a copy of the License at
-**
-**     http://www.apache.org/licenses/LICENSE-2.0
-**
-** Unless required by applicable law or agreed to in writing, software
-** distributed under the License is distributed on an "AS IS" BASIS,
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-** See the License for the specific language governing permissions and
-** limitations under the License.
-*/
--->
 
 <resources>
-    <!-- Attributes used for launcher theme -->
-    <attr name="popupColorPrimary" format="color" />
-    <attr name="popupColorSecondary" format="color" />
-    <attr name="popupColorTertiary" format="color" />
-    <attr name="isMainColorDark" format="boolean" />
-    <attr name="loadingIconColor" format="color" />
-    <attr name="adaptiveIconViewStyle" format="reference" />
-
-    <declare-styleable name="AdaptiveIconView">
-        <attr name="shadowColor" format="color" />
-        <attr name="shadowDy" format="dimension" />
-    </declare-styleable>
-
     <declare-styleable name="GridDisplayOption">
         <attr name="name" format="string" />
         <attr name="numRows" format="integer" />
@@ -43,15 +14,8 @@
         <attr name="minHeightDps" format="float" />
 
         <attr name="iconImageSize" format="float" />
-        <!-- landscapeIconSize defaults to iconSize, if not specified -->
-        <attr name="landscapeIconSize" format="float" />
         <attr name="iconTextSize" format="float" />
-        <!-- If true, this display option is used to determine the default grid -->
+        <attr name="shortcutImageSize" format="float" />
         <attr name="canBeDefault" format="boolean" />
-    </declare-styleable>
-
-    <declare-styleable name="ActionPreference">
-        <attr name="actionTextColor" format="color" />
-        <attr name="confirmationMessage" format="string" />
     </declare-styleable>
 </resources>

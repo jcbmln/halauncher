@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<xyz.mcmxciv.halauncher.views.IconTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/app_item"
-    style="@style/HaLauncher.Widget.AppIcon"
+    style="@style/HalauncherTheme.Widget.AppIcon"
     android:layout_gravity="center_horizontal"
+    android:layout_margin="10dp"
     android:gravity="center_horizontal"
-    android:padding="10dp"
-    android:stateListAnimator="@animator/app_list_item"
+    android:stateListAnimator="@animator/list_item_app"
     android:textAlignment="center" />

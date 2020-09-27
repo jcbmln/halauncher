@@ -68,3 +68,5 @@ gh-pages.pub
 secrets.tar.gz
 
 node_modules
+
+vendor/

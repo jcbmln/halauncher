@@ -1,28 +1,16 @@
 <resources>
-    <!-- Reply Preference -->
-    <string-array name="reply_entries">
-        <item>Reply</item>
-        <item>Reply to all</item>
-    </string-array>
-
-    <string-array name="reply_values">
-        <item>reply</item>
-        <item>reply_all</item>
-    </string-array>
-
-    <string-array name="sensor_update_interval_keys">
-        <item>5 Minutes</item>
-        <item>10 Minutes</item>
-        <item>15 Minutes</item>
-        <item>30 Minutes</item>
-        <item>60 Minutes</item>
-    </string-array>
-
-    <integer-array name="sensor_update_interval_values">
+    <string-array name="sensor_update_intervals">
+        <item>0</item>
         <item>5</item>
-        <item>10</item>
         <item>15</item>
         <item>30</item>
         <item>60</item>
-    </integer-array>
+    </string-array>
+    <string-array name="sensor_update_interval_values">
+        <item>Never</item>
+        <item>5 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+    </string-array>
 </resources>

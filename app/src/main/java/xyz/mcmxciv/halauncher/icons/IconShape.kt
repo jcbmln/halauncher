@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2018 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package xyz.mcmxciv.halauncher.icons
 
 import android.graphics.Canvas
@@ -21,25 +5,17 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.util.SparseArray
 import android.util.TypedValue
+import java.lang.Exception
 
-/**
- * Abstract representation of the shape of an icon shape
- */
 abstract class IconShape {
     abstract val shapeType: ShapeType
     private var attrs: SparseArray<TypedValue>? = null
 
     abstract fun drawShape(canvas: Canvas, offsetX: Float, offsetY: Float, paint: Paint)
-
     abstract fun addToPath(path: Path, offsetX: Float, offsetY: Float)
 
-    fun getAttrValue(attr: Int): TypedValue? {
-        return if (attrs == null) null else attrs!!.get(attr)
-    }
+    fun getAttrValue(attr: Int): TypedValue? = attrs?.get(attr)
 
-    /**
-     * Abstract shape which draws using [Path]
-     */
     abstract class PathShape : IconShape() {
         private val tempPath = Path()
 
@@ -50,13 +26,11 @@ abstract class IconShape {
         }
     }
 
-    private class Circle(private val radius: Float) : IconShape() {
+    class Circle(private val radius: Float) : IconShape() {
         override val shapeType: ShapeType = ShapeType.Circle
 
         override fun drawShape(canvas: Canvas, offsetX: Float, offsetY: Float, paint: Paint) {
-            canvas.drawCircle(
-                this.radius + offsetX, this.radius + offsetY,
-                this.radius, paint)
+            canvas.drawCircle(radius + offsetX, radius + offsetY, radius, paint)
         }
 
         override fun addToPath(path: Path, offsetX: Float, offsetY: Float) {
@@ -64,27 +38,31 @@ abstract class IconShape {
         }
     }
 
-    private class RoundedSquare(
-        /**
-         * Ratio of corner radius to half size.
-         */
-        private val radius: Float
-    ) : IconShape() {
+    class RoundedSquare(private val radius: Float) : IconShape() {
         override val shapeType: ShapeType = ShapeType.RoundedSquare
 
         override fun drawShape(canvas: Canvas, offsetX: Float, offsetY: Float, paint: Paint) {
-            val cx = radius + offsetX
-            val cy = radius + offsetY
-            val cr = radius * RADIUS_RATIO
-            canvas.drawRoundRect(cx - radius, cy - radius, cx + radius, cy + radius, cr, cr, paint)
+            val cornerRadius = radius * RADIUS_RATIO
+            canvas.drawRoundRect(
+                offsetX,
+                offsetY,
+                radius + offsetX,
+                radius + offsetY,
+                cornerRadius,
+                cornerRadius,
+                paint
+            )
         }
 
         override fun addToPath(path: Path, offsetX: Float, offsetY: Float) {
-            val cx = radius + offsetX
-            val cy = radius + offsetY
-            val cr = radius * RADIUS_RATIO
+            val cornerRadius = radius * RADIUS_RATIO
             path.addRoundRect(
-                cx - radius, cy - radius, cx + radius, cy + radius, cr, cr,
+                offsetX,
+                offsetY,
+                radius + offsetX,
+                radius + offsetY,
+                cornerRadius,
+                cornerRadius,
                 Path.Direction.CW
             )
         }
@@ -92,29 +70,32 @@ abstract class IconShape {
 
     class TearDrop(private val radius: Float) : PathShape() {
         override val shapeType: ShapeType = ShapeType.TearDrop
-        private val mTempRadii = FloatArray(8)
 
         override fun addToPath(path: Path, offsetX: Float, offsetY: Float) {
-            val r2 = radius * RADIUS_RATIO
-            val cx = radius + offsetX
-            val cy = radius + offsetY
-
             path.addRoundRect(
-                cx - radius, cy - radius, cx + radius, cy + radius,
-                getRadiiArray(radius, r2), Path.Direction.CW
+                offsetX,
+                offsetY,
+                radius + offsetX,
+                radius + offsetY,
+                getRadii(radius, radius * RADIUS_RATIO),
+                Path.Direction.CW
             )
         }
 
-        private fun getRadiiArray(r1: Float, r2: Float): FloatArray {
-            mTempRadii[7] = r1
-            mTempRadii[6] = mTempRadii[7]
-            mTempRadii[3] = mTempRadii[6]
-            mTempRadii[2] = mTempRadii[3]
-            mTempRadii[1] = mTempRadii[2]
-            mTempRadii[0] = mTempRadii[1]
-            mTempRadii[5] = r2
-            mTempRadii[4] = mTempRadii[5]
-            return mTempRadii
+        private fun getRadii(r1: Float, r2: Float): FloatArray {
+            val size = 8
+            var index = 0
+            val radii = FloatArray(size)
+
+            while (index < size) {
+                radii[index] = r1
+                index++
+            }
+
+            radii[4] = r2
+            radii[5] = r2
+
+            return radii
         }
     }
 
@@ -122,31 +103,37 @@ abstract class IconShape {
         override val shapeType: ShapeType = ShapeType.Squircle
 
         override fun addToPath(path: Path, offsetX: Float, offsetY: Float) {
-            val cx = radius + offsetX
-            val cy = radius + offsetY
-            val control = radius - radius * RADIUS_RATIO
+            val x = radius + offsetX
+            val y = radius + offsetX
+            val control = radius - (radius * RADIUS_RATIO)
 
-            path.moveTo(cx, cy - radius)
-            addLeftCurve(cx, cy, radius, control, path)
-            addRightCurve(cx, cy, radius, control, path)
-            addLeftCurve(cx, cy, -radius, -control, path)
-            addRightCurve(cx, cy, -radius, -control, path)
+            path.moveTo(x, y - radius)
+            addLeftCurve(x, y, radius, control, path)
+            addRightCurve(x, y, radius, control, path)
+            addLeftCurve(x, y, -radius, -control, path)
+            addRightCurve(x, y, -radius, -control, path)
             path.close()
         }
 
-        private fun addLeftCurve(cx: Float, cy: Float, r: Float, control: Float, path: Path) {
+        private fun addLeftCurve(x: Float, y: Float, r: Float, control: Float, path: Path) {
             path.cubicTo(
-                cx - control, cy - r,
-                cx - r, cy - control,
-                cx - r, cy
+                x - control,
+                y - r,
+                x - r,
+                y - control,
+                x - r,
+                y
             )
         }
 
-        private fun addRightCurve(cx: Float, cy: Float, r: Float, control: Float, path: Path) {
+        private fun addRightCurve(x: Float, y: Float, r: Float, control: Float, path: Path) {
             path.cubicTo(
-                cx - r, cy + control,
-                cx - control, cy + r,
-                cx, cy + r
+                x - r,
+                y + control,
+                x - control,
+                y + r,
+                x,
+                y + r
             )
         }
     }
@@ -161,8 +148,7 @@ abstract class IconShape {
             fun toShapeType(enum: String): ShapeType {
                 return try {
                     valueOf(enum)
-                }
-                catch (ex: Exception) {
+                } catch (ex: Exception) {
                     Squircle
                 }
             }
@@ -171,27 +157,38 @@ abstract class IconShape {
 
     companion object {
         private var shape: IconShape? = null
-        private var sShapePath: Path? = null
+        private var path: Path? = null
 
         private const val RADIUS_RATIO = 0.15f
 
-        val shapePath: Path
-            get() {
-                if (sShapePath == null) {
-                    val p = Path()
-                    shape?.addToPath(p, 0f, 0f)
-                    sShapePath = p
-                }
-                return sShapePath as Path
+        fun getShapePath(radius: Float): Path {
+            if (path == null) {
+                val p = Path()
+                val s = shape ?: Squircle(radius)
+                s.addToPath(p, 0f, 0f)
+                path = p
             }
 
-        fun setShape(type: ShapeType, radius: Float) {
-            shape = when (type) {
-                ShapeType.Circle -> Circle(radius)
-                ShapeType.RoundedSquare -> RoundedSquare(radius)
-                ShapeType.TearDrop -> TearDrop(radius)
-                ShapeType.Squircle -> Squircle(radius)
-            }
+            return path ?: createPath(radius)
         }
+
+        private fun createPath(radius: Float): Path {
+            val p = Path()
+            val s = shape ?: Squircle(radius)
+            s.addToPath(p, 0f, 0f)
+            return p
+        }
+
+//        val shapePath: Path
+//            get() {
+//                if (path == null) {
+//                    val p = Path()
+//                    val s = shape ?: throw IllegalStateException("No shape is set.")
+//                    s.addToPath(p, 0f, 0f)
+//                    path = p
+//                }
+//
+//                return path!!
+//            }
     }
 }

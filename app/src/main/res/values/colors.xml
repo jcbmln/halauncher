@@ -1,40 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Named colors -->
-    <color name="offWhite">#f3f5f7</color>
-    <color name="lightGray">#e0e0e0</color>
-    <color name="transparentWhite">#00ffffff</color>
-    <color name="red">#ef5350</color>
-
-    <color name="colorPrimary">#03a9f4</color>
-    <color name="colorPrimaryDark">#0076C1</color>
-    <color name="colorAccent">@color/colorPrimary</color>
-    <color name="colorAccentLighter">#7dd5fd</color>
-    <color name="colorAccentTransparent">#1503a9f4</color>
-
-    <color name="colorBackground">@android:color/white</color>
-    <color name="colorBackgroundTransparent">@color/transparentWhite</color>
-    <color name="colorWindowBackground">@color/offWhite</color>
-    <color name="colorForeground">#333333</color>
-
-    <!-- Action Bar -->
-    <color name="actionBarTextColor">@color/colorForeground</color>
-
-    <!-- Buttons -->
-    <color name="buttonBackgroundTint">@color/colorAccent</color>
-    <color name="buttonTextColor">@android:color/white</color>
-    <color name="textButtonTextColor">@color/colorAccent</color>
-
-    <!-- View Colors -->
-    <color name="legacy_icon_background">#FFFFFF</color>
-    <color name="edit_text_background">@color/colorBackground</color>
-    <color name="edit_text_background_focused">@color/lightGray</color>
-    <color name="edit_text_border">@color/lightGray</color>
-    <color name="button_text_color">@color/colorAccent</color>
-
-    <color name="icon_background">#1D2951</color>
-
+    <color name="red">#db4437</color>
     <color name="transparent">#00ffffff</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
 
-    <color name="disableTint">#7fffffff</color>
+    <!-- Default Theme Colors -->
+    <color name="primary_color">#03a9f4</color>
+    <color name="dark_primary_color">#0076C1</color>
+    <color name="light_primary_color">#b3e5fC</color>
+    <color name="accent_color">#ff9800</color>
+    <color name="primary_text_color">#212121</color>
+    <color name="secondary_text_color">#727272</color>
+    <color name="text_primary_color">#ffffff</color>
+    <color name="disabled_text_color">#bdbdbd</color>
+    <color name="error_color">#db4437</color>
+    <color name="card_background_color">#ffffff</color>
+    <color name="primary_background_color">#fafafa</color>
+    <color name="secondary_background_color">#e5e5e5</color>
+
+    <!-- Other Colors -->
+    <color name="legacy_icon_background">#ffffff</color>
 </resources>

@@ -1,9 +1,20 @@
 package xyz.mcmxciv.halauncher.utils
 
-sealed class Resource<out T : Any?>(open val data: T?, open val message: String?) {
-    object Loading : Resource<Nothing>(null, null)
-    data class Error<out T : Any?>(
-        override val data: T?, override val message: String
-    ) : Resource<T>(data, message)
-    data class Success<out T : Any>(override val data: T) : Resource<T>(data, null)
+data class Resource<out T>(
+    val status: Status,
+    val data: T? = null,
+    val message: String? = null
+) {
+    companion object {
+        fun <T> success(data: T): Resource<T> =
+            Resource(Status.SUCCESS, data)
+
+        fun <T> error(message: String? = null, data: T? = null) =
+            Resource(Status.ERRROR, data, message)
+    }
+
+    enum class Status {
+        SUCCESS,
+        ERRROR
+    }
 }
