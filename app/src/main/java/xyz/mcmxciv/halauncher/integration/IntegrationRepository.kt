@@ -31,11 +31,13 @@ class IntegrationRepository @Inject constructor(
         set(value) = sharedPreferences.edit { putBoolean(INTEGRATION_ENABLED_KEY, value) }
 
     var sensorUpdateInterval: Long
-        get() = sharedPreferences.getLong(
-            SENSOR_UPDATE_INTERVAL_KEY,
-            DEFAULT_SENSOR_UPDATE_INTERVAL
-        )
-        set(value) = sharedPreferences.edit { putLong(SENSOR_UPDATE_INTERVAL_KEY, value) }
+        get() {
+            val interval = sharedPreferences.getString(SENSOR_UPDATE_INTERVAL_KEY, null)
+            return interval?.toLongOrNull() ?: DEFAULT_SENSOR_UPDATE_INTERVAL
+        }
+        set(value) = sharedPreferences.edit {
+            putString(SENSOR_UPDATE_INTERVAL_KEY, value.toString())
+        }
 
     suspend fun registerDevice(deviceInfo: DeviceInfo): WebhookInfo =
         secureIntegrationApi.registerDevice(deviceInfo)

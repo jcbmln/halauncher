@@ -14,7 +14,6 @@ import xyz.mcmxciv.halauncher.HalauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.authentication.AuthenticationException
 import xyz.mcmxciv.halauncher.authentication.AuthenticationUseCase
-import xyz.mcmxciv.halauncher.device.DeviceProfile
 import xyz.mcmxciv.halauncher.settings.SettingsUseCase
 import xyz.mcmxciv.halauncher.utils.HassTheme
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
@@ -23,11 +22,10 @@ import java.io.BufferedReader
 class HomeViewModel @ViewModelInject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
     private val settingsUseCase: SettingsUseCase,
-    private val resourceProvider: ResourceProvider,
-    private val deviceProfile: DeviceProfile
+    private val resourceProvider: ResourceProvider
 ) : BaseViewModel() {
     val appDrawerColumns: Int
-        get() = deviceProfile.appDrawerColumns
+        get() = settingsUseCase.appDrawerColumns
 
     private val _webviewUrl = MutableLiveData<String>().also {
         it.postValue(settingsUseCase.webviewUrl)
@@ -129,11 +127,11 @@ class HomeViewModel @ViewModelInject constructor(
         )
     }
 
-    fun showWebError() {
+    fun onReceivedError() {
         errorEvent.postValue(R.string.error_loading_homeassistant)
     }
 
-    fun showSslError() {
+    fun onReceivedSslError() {
         errorEvent.postValue(R.string.ssl_error)
     }
 }

@@ -179,7 +179,7 @@ class HomeFragment : BaseFragment() {
                     error: WebResourceError?
                 ) {
                     super.onReceivedError(view, request, error)
-                    viewModel.showWebError()
+                    viewModel.onReceivedError()
                 }
 
                 override fun onReceivedSslError(
@@ -188,7 +188,7 @@ class HomeFragment : BaseFragment() {
                     error: SslError?
                 ) {
                     super.onReceivedSslError(view, handler, error)
-                    viewModel.showSslError()
+                    viewModel.onReceivedSslError()
                 }
             }
 

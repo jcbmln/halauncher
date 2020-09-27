@@ -1,11 +1,11 @@
 <resources>
-    <integer-array name="sensor_update_intervals">
+    <string-array name="sensor_update_intervals">
         <item>0</item>
         <item>5</item>
         <item>15</item>
         <item>30</item>
         <item>60</item>
-    </integer-array>
+    </string-array>
     <string-array name="sensor_update_interval_values">
         <item>Never</item>
         <item>5 minutes</item>

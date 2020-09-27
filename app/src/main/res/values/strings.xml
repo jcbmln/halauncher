@@ -63,7 +63,7 @@
     <string name="app_drawer_settings_summary">Manage your app drawer.</string>
 
     <string name="icon_settings_title">Icons</string>
-    <string name="icon_columns_title">Columns</string>
+    <string name="app_drawer_columns">Columns</string>
     <string name="icon_theme_key">icon_theme</string>
     <string name="icon_theme_title">Icon Theme</string>
 
