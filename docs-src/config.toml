@@ -1,0 +1,55 @@
+baseURL = "https://halauncher.app/"
+title = "Halauncher"
+enableRobotsTXT = true
+languageCode = "en-us"
+enableGitInfo = true
+
+pygmentsCodeFences = true
+pygmentsUseClasses = false
+pygmentsUseClassic = false
+pygmentsStyle = "tango"
+
+publishDir = "../docs"
+
+[permalinks]
+blog = "/:section/:year/:month/:day/:slug/"
+
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = "tango"
+
+[params]
+copyright = "Jacob Malone"
+privacy_policy = "https://halauncher.app/privacy"
+github_repo = "https://github.com/jcbmln/halauncher"
+
+[params.ui]
+sidebar_menu_compact = false
+breadcrumb_disable = false
+sidebar_search_disable = true
+navbar_logo = true
+footer_about_disable = false
+
+[params.ui.readingtime]
+enable = false
+
+[[params.links.user]]
+	name ="Twitter"
+	url = "https://twitter.com/halauncher"
+	icon = "fab fa-twitter"
+        desc = "Follow us on Twitter to get the latest news!"
+# Developer relevant links. These will show up on right side of footer and in the community page if you have one.
+[[params.links.developer]]
+	name = "GitHub"
+	url = "https://github.com/jcbmln/"
+	icon = "fab fa-github"
+        desc = "Development takes place here!"
+[[params.links.developer]]
+	name = "Twitter"
+	url = "https://twitter.com/mortimereustace"
+	icon = "fab fa-twitter"
+        desc = "My personal Twitter."
