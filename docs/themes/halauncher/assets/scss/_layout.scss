@@ -1,0 +1,30 @@
+.header {
+    align-items: flex-end;
+    background-color: $primary-color;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    // max-width: 1200px;
+    padding: 1.6rem 0;
+    width: 100%;
+
+    h1 {
+        margin: 0;
+    }
+}
+
+.navbar {
+    display: flex;
+    flex-direction: row;
+
+    .navbar-link {
+        display: inline-block;
+        margin: 0 1rem;
+        padding: 1rem;
+
+        &.active:link {
+            border-bottom-color: $primary-color;
+            color: $primary-color;
+        }
+    }
+}

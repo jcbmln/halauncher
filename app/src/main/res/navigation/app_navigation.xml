@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/launchFragment">
+    <fragment
+        android:id="@+id/launchFragment"
+        android:name="xyz.mcmxciv.halauncher.launch.LaunchFragment"
+        android:label="fragment_launch"
+        tools:layout="@layout/fragment_launch" >
+        <action
+            android:id="@+id/action_launchFragment_to_discoveryFragment"
+            app:destination="@id/discoveryFragment"
+            app:popUpTo="@id/launchFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_launchFragment_to_authenticationFragment"
+            app:destination="@id/authenticationFragment"
+            app:popUpTo="@id/launchFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_launchFragment_to_integrationFragment"
+            app:destination="@id/integrationFragment"
+            app:popUpTo="@id/launchFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_launchFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/launchFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/discoveryFragment"
+        android:name="xyz.mcmxciv.halauncher.discovery.DiscoveryFragment"
+        android:label="fragment_discovery"
+        tools:layout="@layout/fragment_discovery" >
+        <action
+            android:id="@+id/action_discoveryFragment_to_manualSetupFragment"
+            app:destination="@id/manualSetupFragment"
+            app:launchSingleTop="true" />
+        <action
+            android:id="@+id/action_discoveryFragment_to_authenticationFragment"
+            app:destination="@id/authenticationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/manualSetupFragment"
+        android:name="xyz.mcmxciv.halauncher.manualsetup.ManualSetupFragment"
+        android:label="fragment_manual_setup"
+        tools:layout="@layout/fragment_manual_setup" >
+        <action
+            android:id="@+id/action_manualSetupFragment_to_discoveryFragment"
+            app:destination="@id/discoveryFragment"
+            app:launchSingleTop="true" />
+        <action
+            android:id="@+id/action_manualSetupFragment_to_authenticationFragment"
+            app:destination="@id/authenticationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authenticationFragment"
+        android:name="xyz.mcmxciv.halauncher.authentication.AuthenticationFragment"
+        android:label="fragment_authentication"
+        tools:layout="@layout/fragment_authentication" >
+        <action
+            android:id="@+id/action_authenticationFragment_to_integrationFragment"
+            app:destination="@id/integrationFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/authenticationFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_authenticationFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/authenticationFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/integrationFragment"
+        android:name="xyz.mcmxciv.halauncher.integration.IntegrationFragment"
+        android:label="fragment_integration"
+        tools:layout="@layout/fragment_integration" >
+        <action
+            android:id="@+id/action_integrationFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/integrationFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="xyz.mcmxciv.halauncher.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_authenticationFragment"
+            app:destination="@id/authenticationFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="xyz.mcmxciv.halauncher.settings.SettingsFragment"
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_connectionSettingsFragment"
+            app:destination="@id/connectionSettingsFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_aboutSettingsFragment"
+            app:destination="@id/aboutSettingsFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_appDrawerFragment"
+            app:destination="@id/appDrawerSettingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/connectionSettingsFragment"
+        android:name="xyz.mcmxciv.halauncher.settings.HomeAssistantSettingsFragment"
+        android:label="ConnectionSettingsFragment" />
+    <fragment
+        android:id="@+id/aboutSettingsFragment"
+        android:name="xyz.mcmxciv.halauncher.settings.AboutSettingsFragment"
+        android:label="AboutSettingsFragment" >
+        <action
+            android:id="@+id/action_aboutSettingsFragment_to_privacyPolicyFragment"
+            app:destination="@id/privacyPolicyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/privacyPolicyFragment"
+        android:name="xyz.mcmxciv.halauncher.settings.PrivacyPolicyFragment"
+        android:label="fragment_privacy_policy"
+        tools:layout="@layout/fragment_privacy_policy" />
+    <fragment
+        android:id="@+id/appDrawerSettingsFragment"
+        android:name="xyz.mcmxciv.halauncher.settings.AppDrawerSettingsFragment"
+        android:label="AppDrawerSettingsFragment" >
+        <action
+            android:id="@+id/action_appDrawerSettingsFragment_to_hiddenAppsFragment"
+            app:destination="@id/hiddenAppsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hiddenAppsFragment"
+        android:name="xyz.mcmxciv.halauncher.settings.HiddenAppsFragment"
+        android:label="HiddenAppsFragment" />
+</navigation>

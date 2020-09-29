@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xyz.mcmxciv.halauncher.views.AdaptiveIconView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/app_image"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginVertical="5dp" />

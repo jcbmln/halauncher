@@ -1,85 +1,165 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package xyz.mcmxciv.halauncher.icons
 
-import android.annotation.TargetApi
-import android.content.Context
-import android.graphics.*
-import android.os.Build
-import android.graphics.Paint.DITHER_FLAG
-import android.graphics.Paint.FILTER_BITMAP_FLAG
-import android.graphics.drawable.*
-import android.util.TypedValue
-import androidx.annotation.RequiresApi
+import android.content.pm.LauncherActivityInfo
+import android.content.pm.LauncherApps
+import android.content.pm.PackageManager
+import android.content.pm.ShortcutInfo
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PaintFlagsDrawFilter
+import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.drawable.AdaptiveIconDrawable
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import androidx.core.graphics.drawable.toBitmap
+import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
-import kotlin.math.roundToInt
+import xyz.mcmxciv.halauncher.device.DeviceProfile
+import xyz.mcmxciv.halauncher.utils.ResourceProvider
+import xyz.mcmxciv.halauncher.views.FixedScaleDrawable
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlin.math.ceil
+import kotlin.math.max
+import kotlin.math.round
 
-class IconFactory(private val context: Context,
-                  private val iconBitmapSize: Int
-) : AutoCloseable {
-    private var colorExtractorDisabled = false
+@Singleton
+class IconFactory @Inject constructor(
+    private val resourceProvider: ResourceProvider,
+    private val packageManager: PackageManager,
+    private val deviceProfile: DeviceProfile,
+    private val launcherApps: LauncherApps,
+    private val iconNormalizer: IconNormalizer
+) {
     private var wrapperBackgroundColor = DEFAULT_WRAPPER_BACKGROUND
-
-    private var _normalizer: IconNormalizer? = null
-    private val normalizer: IconNormalizer
-        get() = _normalizer ?: IconNormalizer(context, iconBitmapSize)
+    private val canvas = Canvas()
+    private val oldBounds = Rect()
 
     init {
-        clear()
+        canvas.drawFilter = PaintFlagsDrawFilter(Paint.DITHER_FLAG, Paint.FILTER_BITMAP_FLAG)
     }
 
-    override fun close() {
-        clear()
+    fun getIcon(launcherActivityInfo: LauncherActivityInfo): Bitmap {
+        val drawable = getDrawable(launcherActivityInfo)
+                ?: launcherActivityInfo.getIcon(deviceProfile.appIconDpi)
+        return createIconBitmap(drawable)
     }
 
-    fun createIcon(icon: Drawable): Drawable {
-        return normalizeAndWrapToAdaptiveIcon(icon)
+    fun getShortcutIcon(shortcutInfo: ShortcutInfo): Bitmap? {
+        return launcherApps.getShortcutIconDrawable(
+            shortcutInfo,
+            deviceProfile.shortcutIconDpi
+        )?.toBitmap(
+            deviceProfile.shortcutIconBitmapSize,
+            deviceProfile.shortcutIconBitmapSize
+        )
     }
 
-    @TargetApi(Build.VERSION_CODES.O)
-    private fun normalizeAndWrapToAdaptiveIcon(icon: Drawable): Drawable {
-        var normalizedIcon = icon
+    private fun getDrawable(launcherActivityInfo: LauncherActivityInfo): Drawable? {
+        val iconRes = launcherActivityInfo.applicationInfo.icon
+        val density = deviceProfile.appIconDpi
 
-        if (icon !is AdaptiveIconDrawable) {
-            val wrapperIcon = context.getDrawable(R.drawable.adaptive_icon_drawable_wrapper)!!
-                .mutate()
+        return if (density != 0 && iconRes != 0) {
+            try {
+                packageManager
+                    .getResourcesForApplication(launcherActivityInfo.applicationInfo)
+                    .getDrawableForDensity(iconRes, density, null)
+            } catch (ex: PackageManager.NameNotFoundException) {
+                Timber.e(ex)
+                null
+            } catch (ex: Resources.NotFoundException) {
+                Timber.e(ex)
+                null
+            }
+        } else null
+    }
 
-            val dr = wrapperIcon as AdaptiveIconDrawable
-            dr.setBounds(0, 0, 1, 1)
+    private fun createIconBitmap(drawable: Drawable): Bitmap {
+        val scale = FloatArray(1)
+        val icon = getNormalizedAdaptiveIcon(drawable, scale)
+        val size = deviceProfile.iconBitmapSize
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
 
-            val scale = normalizer.getScale(icon)
-            val fsd = dr.foreground as FixedScaleDrawable
-            fsd.drawable = icon
-            fsd.setScale(scale)
-            normalizedIcon = dr
+        canvas.setBitmap(bitmap)
+        oldBounds.set(icon.bounds)
 
-            (dr.background as ColorDrawable).color = wrapperBackgroundColor
+        if (icon is AdaptiveIconDrawable) {
+            val offset = max(
+                ceil(BLUR_FACTOR * size),
+                round(size * (1 - scale[0]) / 2)
+            ).toInt()
+            icon.setBounds(offset, offset, size - offset, size - offset)
+            icon.draw(canvas)
+        } else {
+            if (icon is BitmapDrawable && icon.bitmap.density == Bitmap.DENSITY_NONE) {
+                icon.setTargetDensity(resourceProvider.displayMetrics)
+            }
+
+            var width = size
+            var height = size
+            val intrinsicWidth = icon.intrinsicWidth
+            val intrinsicHeight = icon.intrinsicHeight
+
+            if (intrinsicWidth > 0 && intrinsicHeight > 0) {
+                val ratio = intrinsicWidth.toFloat() / intrinsicHeight
+
+                if (intrinsicWidth > intrinsicHeight) {
+                    height = (width / ratio).toInt()
+                }
+
+                if (intrinsicHeight > intrinsicWidth) {
+                    width = (height / ratio).toInt()
+                }
+            }
+
+            val left = (size / width) / 2
+            val top = (size / height) / 2
+
+            icon.setBounds(left, top, left + width, top + height)
+            canvas.save()
+            canvas.scale(scale[0], scale[0], size.toFloat() / 2, size.toFloat() / 2)
+            icon.draw(canvas)
+            canvas.restore()
         }
 
-        return normalizedIcon
+        icon.bounds = oldBounds
+        canvas.setBitmap(null)
+        return bitmap
     }
 
-    private fun clear() {
-        wrapperBackgroundColor = DEFAULT_WRAPPER_BACKGROUND
-        colorExtractorDisabled = false
+    private fun getNormalizedAdaptiveIcon(drawable: Drawable, outScale: FloatArray): Drawable {
+        var scale: Float
+        val outBounds: RectF? = null
+        var icon = drawable.mutate()
+
+        val wrapperIcon = resourceProvider
+            .getDrawable(R.drawable.adaptive_icon_drawable_wrapper)?.mutate()
+        val adaptiveIconDrawable = wrapperIcon as AdaptiveIconDrawable
+        adaptiveIconDrawable.setBounds(0, 0, 1, 1)
+
+        val outShape = BooleanArray(1)
+        scale = iconNormalizer.getScale(icon, outBounds, adaptiveIconDrawable.iconMask, outShape)
+
+        if (icon !is AdaptiveIconDrawable && !outShape[0]) {
+            val fixedScaleDrawable = adaptiveIconDrawable.foreground as FixedScaleDrawable
+            fixedScaleDrawable.drawable = icon
+            fixedScaleDrawable.setScale(scale)
+            icon = adaptiveIconDrawable
+            scale = iconNormalizer
+                .getScale(icon, outBounds, null, null)
+            adaptiveIconDrawable.background.setTint(wrapperBackgroundColor)
+        }
+
+        outScale[0] = scale
+        return icon
     }
 
     companion object {
         private const val DEFAULT_WRAPPER_BACKGROUND = Color.WHITE
+        private const val BLUR_FACTOR = 0.5F / 48
     }
 }

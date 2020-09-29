@@ -1,1 +1,27 @@
-var handleThemeUpdate=function(a){a=a.data||a;var b=a.default_theme;"default"===b?window.externalApp.themesUpdated(JSON.stringify({name:b})):window.externalApp.themesUpdated(JSON.stringify({name:b,styles:a.themes[b]}))};window.hassConnection.then(function(a){a=a.conn;console.log(a);a.sendMessagePromise({type:"frontend/get_themes"}).then(handleThemeUpdate);a.subscribeEvents(handleThemeUpdate,"themes_updated")});
+var handleThemeUpdate = (event) => {
+    event = event.data || event;
+    var theme = event.default_theme;
+
+    window.externalApp.externalBus(JSON.stringify({
+        type: "frontend/get_themes", 
+        themes: event.themes
+    }));
+
+    if (theme === "default") {
+        window.externalApp.themesUpdated(JSON.stringify({
+            name: theme
+        }));
+    } else {
+        window.externalApp.themesUpdated(JSON.stringify({
+            name: theme,
+            styles: event.themes[theme]
+        }));
+    }
+};
+
+window.hassConnection.then(({conn}) => {
+    conn.sendMessagePromise({
+        type: "frontend/get_themes"
+    }).then(handleThemeUpdate);
+    conn.subscribeEvents(handleThemeUpdate, "themes_updated")
+});

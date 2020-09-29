@@ -1,34 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">HALauncher</string>
-    <string name="http_example_com">http://example.com</string>
-    <string name="main_button_go">Open Url</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="app_name">Halauncher</string>
 
-    <string name="pref_category_home_assistant">Home Assistant</string>
+    <!-- Discovery Screen -->
+    <string name="searching_for_instances">Searching for Home Assistant instances…</string>
+    <string name="select_an_instance">Select a Home Assistant instance.</string>
+    <string name="manual_setup">Manual Setup</string>
 
-    <string name="title_home_assistant_url">Home Assistant Url</string>
-    <string name="title_transparent_background">Transparent Background</string>
-    <string name="title_blur_background">Blur Background</string>
+    <!-- Manual Setup Screen -->
+    <string name="home_assistant_url">Home Assistant Url</string>
+    <string name="home_assistant_url_example">https://example.com:8123</string>
+    <string name="discovery">Discovery</string>
 
-    <string name="default_home_assistant_url">http://localhost:8123</string>
+    <!-- Authentication Screen -->
+    <string name="unable_to_connect">Unable to connect to Home Assistant.</string>
+    <string name="ssl_error">An SSL error occurred while loading Home Assistant. Please check your certificate and try again.</string>
+    <string name="error_on_authentication">An error occurred during authentication. Please check your configuration and try again.</string>
 
-    <string name="key_home_assistant_url">key_home_assistant_url</string>
-    <string name="key_transparent_background">key_transparent_background</string>
-    <string name="key_blur_background">key_blur_background</string>
-    <string name="drag_handle">drag handle</string>
-    <string name="settings_button">settings button</string>
+    <!-- Integration Screen -->
+    <string name="registering_device">Registering device…</string>
+    <string name="device_registration_error">An error occurred registering this device. Please check your configuration and try again.</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="skip_message">By skipping integration, some features will be unavailable. You can enable integration in settings later. Do you want to continue?</string>
 
-    <string name="setup_descovery_text">Searching for Home Assistant</string>
-    <string name="setup_selection_text">Choose your Home Assistant</string>
-    <string name="setup_logo_description">HALauncher Logo</string>
-    <string name="setup_mode_manual">Manual Mode</string>
-    <string name="setup_mode_discovery">Discovery Mode</string>
-    <string name="default_service_name">Service</string>
-    <string name="default_service_host">http:\/\/localhost:8123</string>
+    <!-- Home Screen -->
+    <string name="authentication_failed">Authentication failed. Please sign in again.</string>
 
-    <string name="integration_status_loading">Attempting to register device.</string>
-    <string name="integration_status_failed">Could not register device.</string>
-    <string name="integration_skip">Skip</string>
-    <string name="integration_retry">Retry</string>
+    <!-- Error Messages -->
+    <string name="error_loading_homeassistant">An error occurred while loading Home Assistant. Please check your connection and try again.</string>
+
+    <!-- Misc. -->
+    <string name="cancel">Cancel</string>
+    <string name="go">Go</string>
+    <string name="retry">Retry</string>
+    <string name="skip">Skip</string>
+    <string name="dummy_content_description" />
+
+    <!-- Shortcuts -->
+    <string name="app_info">App Info</string>
+    <string name="hide">Hide</string>
+    <string name="uninstall">Uninstall</string>
+    <string name="disable">Disable</string>
+
+    <!-- Preferences -->
+    <string name="settings">Settings</string>
+
+    <string name="home_assistant_settings_key" translatable="false">home_assistant_settings</string>
+    <string name="home_assistant_settings_title">Home Assistant</string>
+    <string name="home_assistant_settings_summary">Manage your connection to Home Assistant.</string>
+
+    <string name="connection_settings_title">Connections</string>
+    <string name="integration_settings_title">Integration</string>
+
+    <string name="connection_url_title">Connection URL</string>
+    <string name="integration_opt_in_title">Enable Integration</string>
+
+    <string name="sensor_interval_settings_key">sensor_update_interval</string>
+    <string name="sensor_interval_settings_title">Sensor Update Interval</string>
+
+    <string name="app_drawer_settings_key" translatable="false">app_drawer_settings</string>
+    <string name="app_drawer_settings_title">App Drawer</string>
+    <string name="app_drawer_settings_summary">Manage your app drawer.</string>
+
+    <string name="icon_settings_title">Icons</string>
+    <string name="app_drawer_columns">Columns</string>
+    <string name="icon_theme_key">icon_theme</string>
+    <string name="icon_theme_title">Icon Theme</string>
+
+    <string name="app_display_settings">App Organization</string>
+    <string name="hidden_apps_key">hidden_apps</string>
+    <string name="hidden_apps_title">Hidden Apps</string>
+    <string name="hidden_apps_summary">Manage hidden apps.</string>
+    <string name="toggle_hidden_app">Toggle hidden app.</string>
+
+    <string name="about_settings_key" translatable="false">about_settings</string>
+    <string name="about_settings_title">About Halauncher</string>
+    <string name="about_settings_summary">Learn more about Halauncher.</string>
+
+    <string name="privacy_policy_key" translatable="false">privacy_policy</string>
+    <string name="privacy_policy_title">Privacy Policy</string>
+
+    <string name="app_version_key" translatable="false">app_version</string>
+    <string name="app_version_title">App Version</string>
 </resources>
