@@ -9,8 +9,6 @@ pygmentsUseClasses = false
 pygmentsUseClassic = false
 pygmentsStyle = "tango"
 
-publishDir = "../docs"
-
 [permalinks]
 blog = "/:section/:year/:month/:day/:slug/"
 
