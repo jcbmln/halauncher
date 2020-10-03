@@ -5,8 +5,7 @@ on:
     tags:
       - 'v*'
     paths-ignore:
-      - '_docs/**'
-      - 'docs/**'
+      - '.github/**'
       - 'README.md'
       - 'LICENSE'
 

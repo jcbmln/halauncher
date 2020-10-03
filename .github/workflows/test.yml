@@ -2,11 +2,12 @@ name: Test Build
 
 on:
   push:
+    tags-ignore:
+      - '*'
     paths-ignore:
-      - _docs/**
-      - docs/**
-      - README.md
-      - LICENSE
+      - '.github/**'
+      - 'README.md'
+      - 'LICENSE'
 
 jobs:
   test:
