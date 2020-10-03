@@ -12,24 +12,16 @@ import javax.inject.Inject
 
 class SettingsRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences,
-    private val resourceProvider: ResourceProvider,
-    private val deviceProfile: DeviceProfile
+    private val resourceProvider: ResourceProvider
 ) {
     var connectionUrl: String
         get() = sharedPreferences.getString(CONNECTION_URL_KEY, null) ?: PLACEHOLDER_URL
         set(value) = sharedPreferences.edit { putString(CONNECTION_URL_KEY, value) }
 
-    val iconColumnOptions: List<Int>
-        get() {
-            return deviceProfile.profiles.map { profile ->
-                profile.gridOption!!.numColumns
-            }
-        }
-
-    var appDrawerColumns: Int
+    var storedAppDrawerColumns: Int?
         get() {
             val columns = sharedPreferences.getString(APP_DRAWER_COLUMNS_KEY, null)
-            return columns?.toIntOrNull() ?: deviceProfile.appDrawerColumns
+            return columns?.toIntOrNull()
         }
         set(value) = sharedPreferences.edit { putString(APP_DRAWER_COLUMNS_KEY, value.toString()) }
 

@@ -7,6 +7,7 @@ import xyz.mcmxciv.halauncher.BaseViewModel
 import xyz.mcmxciv.halauncher.HalauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.device.DeviceManager
+import xyz.mcmxciv.halauncher.device.DeviceProfile
 import xyz.mcmxciv.halauncher.integration.IntegrationUseCase
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import java.lang.IllegalStateException
@@ -14,6 +15,7 @@ import java.lang.IllegalStateException
 class SettingsViewModel @ViewModelInject constructor(
     private val settingsUseCase: SettingsUseCase,
     private val integrationUseCase: IntegrationUseCase,
+    private val deviceProfile: DeviceProfile,
     private val deviceManager: DeviceManager,
     private val resourceProvider: ResourceProvider
 ) : BaseViewModel() {
@@ -21,12 +23,12 @@ class SettingsViewModel @ViewModelInject constructor(
         get() = integrationUseCase.integrationEnabled
 
     val appDrawerColumns: Int
-        get() = settingsUseCase.appDrawerColumns
+        get() = settingsUseCase.storedAppDrawerColumns ?: deviceProfile.appDrawerColumns
 
     val appDrawerColumnOptions: Array<CharSequence>
-        get() = settingsUseCase.iconColumnOptions
+        get() = deviceProfile.profiles
+            .map { profile -> profile.gridOption!!.numColumns.toString() }
             .distinct()
-            .map { option -> option.toString() }
             .toTypedArray()
 
     val appDrawerColumnOptionEntries: Array<CharSequence>

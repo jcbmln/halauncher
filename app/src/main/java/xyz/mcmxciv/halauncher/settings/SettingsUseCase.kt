@@ -9,12 +9,9 @@ import javax.inject.Inject
 class SettingsUseCase @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) {
-    var appDrawerColumns: Int
-        get() = settingsRepository.appDrawerColumns
-        set(value) { settingsRepository.appDrawerColumns = value }
-
-    val iconColumnOptions: List<Int>
-        get() = settingsRepository.iconColumnOptions
+    var storedAppDrawerColumns: Int?
+        get() = settingsRepository.storedAppDrawerColumns
+        set(value) { settingsRepository.storedAppDrawerColumns = value }
 
     var theme: HassTheme
         get() = settingsRepository.theme

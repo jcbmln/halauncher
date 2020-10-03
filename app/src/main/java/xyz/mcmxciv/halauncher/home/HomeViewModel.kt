@@ -14,6 +14,7 @@ import xyz.mcmxciv.halauncher.HalauncherApplication
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.authentication.AuthenticationException
 import xyz.mcmxciv.halauncher.authentication.AuthenticationUseCase
+import xyz.mcmxciv.halauncher.device.DeviceProfile
 import xyz.mcmxciv.halauncher.settings.SettingsUseCase
 import xyz.mcmxciv.halauncher.utils.HassTheme
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
@@ -22,10 +23,11 @@ import java.io.BufferedReader
 class HomeViewModel @ViewModelInject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
     private val settingsUseCase: SettingsUseCase,
+    private val deviceProfile: DeviceProfile,
     private val resourceProvider: ResourceProvider
 ) : BaseViewModel() {
     val appDrawerColumns: Int
-        get() = settingsUseCase.appDrawerColumns
+        get() = settingsUseCase.storedAppDrawerColumns ?: deviceProfile.appDrawerColumns
 
     private val _webviewUrl = MutableLiveData<String>().also {
         it.postValue(settingsUseCase.webviewUrl)
