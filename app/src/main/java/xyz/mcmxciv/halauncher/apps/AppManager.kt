@@ -32,10 +32,7 @@ class AppManager @Inject constructor(
     private val shortcutQuery = LauncherApps.ShortcutQuery()
 
     private val appCacheScope = CoroutineScope(Dispatchers.IO)
-    private var _apps = mutableListOf<App>()
-    private val appChannel by lazy {
-        ConflatedBroadcastChannel<List<App>>().also { it.offer(_apps) }
-    }
+    private val appChannel = ConflatedBroadcastChannel<List<App>>()
 
     @FlowPreview
     val apps: Flow<List<App>>
@@ -54,8 +51,7 @@ class AppManager @Inject constructor(
             val allApps = newApps.toMutableList()
             allApps.addAll(cachedApps)
             allApps.sortBy { a -> a.appCacheInfo.order }
-
-            _apps = allApps
+            appChannel.offer(allApps)
         }
     }
 

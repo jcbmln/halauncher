@@ -6,8 +6,8 @@ import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import xyz.mcmxciv.halauncher.apps.AppCacheInfoDao
 import xyz.mcmxciv.halauncher.apps.AppCacheInfoDatabase
@@ -16,7 +16,7 @@ import xyz.mcmxciv.halauncher.integration.IntegrationApi
 import xyz.mcmxciv.halauncher.integration.SecureIntegrationApi
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object DataModule {
     @Provides
     fun authenticationApi(@Api retrofit: Retrofit): AuthenticationApi =
