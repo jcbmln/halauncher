@@ -3,17 +3,11 @@ package xyz.mcmxciv.halauncher.sensors
 import android.content.Context
 import androidx.hilt.Assisted
 import androidx.hilt.work.WorkerInject
-import androidx.work.Constraints
-import androidx.work.CoroutineWorker
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.WorkerParameters
+import androidx.work.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import xyz.mcmxciv.halauncher.integration.IntegrationUseCase
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 class SensorCoroutineWorker @WorkerInject constructor(
     @Assisted private val context: Context,

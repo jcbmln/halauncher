@@ -15,7 +15,6 @@ import timber.log.Timber
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.utils.Utilities
 import java.io.IOException
-import java.lang.RuntimeException
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.hypot

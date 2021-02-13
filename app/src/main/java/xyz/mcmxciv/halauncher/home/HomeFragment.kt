@@ -7,12 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.JavascriptInterface
-import android.webkit.SslErrorHandler
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import androidx.activity.addCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -23,15 +18,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import xyz.mcmxciv.halauncher.BaseFragment
-import xyz.mcmxciv.halauncher.BuildConfig
-import xyz.mcmxciv.halauncher.HalauncherViewModel
-import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.*
 import xyz.mcmxciv.halauncher.apps.AppDrawerAdapter
 import xyz.mcmxciv.halauncher.databinding.FragmentHomeBinding
-import xyz.mcmxciv.halauncher.navigate
-import xyz.mcmxciv.halauncher.observe
-import xyz.mcmxciv.halauncher.requireHalauncherActivity
 import xyz.mcmxciv.halauncher.utils.HassTheme
 import javax.inject.Inject
 

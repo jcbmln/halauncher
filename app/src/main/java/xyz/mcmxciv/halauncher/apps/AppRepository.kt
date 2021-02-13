@@ -1,11 +1,7 @@
 package xyz.mcmxciv.halauncher.apps
 
 import android.content.ComponentName
-import android.content.pm.LauncherActivityInfo
-import android.content.pm.LauncherApps
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.pm.ShortcutInfo
+import android.content.pm.*
 import android.os.Process
 import javax.inject.Inject
 

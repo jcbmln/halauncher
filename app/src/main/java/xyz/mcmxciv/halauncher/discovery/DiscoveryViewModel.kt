@@ -1,17 +1,19 @@
 package xyz.mcmxciv.halauncher.discovery
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import xyz.mcmxciv.halauncher.BaseViewModel
 import xyz.mcmxciv.halauncher.settings.HomeAssistantInstance
 import xyz.mcmxciv.halauncher.settings.SettingsUseCase
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class DiscoveryViewModel @ViewModelInject constructor(
+@HiltViewModel
+class DiscoveryViewModel @Inject constructor(
     private val discoveryManager: DiscoveryManager,
     private val settingsUseCase: SettingsUseCase
 ) : BaseViewModel() {

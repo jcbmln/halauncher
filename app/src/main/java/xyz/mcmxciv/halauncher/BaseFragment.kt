@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
-import java.lang.IllegalStateException
 
 open class BaseFragment : Fragment() {
     fun displayMessage(@StringRes resId: Int) {

@@ -1,17 +1,19 @@
 package xyz.mcmxciv.halauncher.authentication
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import xyz.mcmxciv.halauncher.BaseViewModel
 import xyz.mcmxciv.halauncher.R
 import xyz.mcmxciv.halauncher.integration.IntegrationUseCase
+import javax.inject.Inject
 
-class AuthenticationViewModel @ViewModelInject constructor(
+@HiltViewModel
+class AuthenticationViewModel @Inject constructor(
     private val authenticationUseCase: AuthenticationUseCase,
     private val integrationUseCase: IntegrationUseCase
 ) : BaseViewModel() {

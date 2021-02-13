@@ -2,12 +2,8 @@ package xyz.mcmxciv.halauncher.http
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import okhttp3.FormBody
+import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import okhttp3.Interceptor
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.Response
 import xyz.mcmxciv.halauncher.authentication.AuthenticationException
 import xyz.mcmxciv.halauncher.authentication.AuthenticationRepository
 import xyz.mcmxciv.halauncher.authentication.models.Session
@@ -16,7 +12,6 @@ import xyz.mcmxciv.halauncher.settings.SettingsRepository
 import xyz.mcmxciv.halauncher.utils.Serializer
 import xyz.mcmxciv.halauncher.utils.deserialize
 import xyz.mcmxciv.halauncher.utils.serialize
-import java.lang.IllegalStateException
 import java.time.Instant
 import javax.inject.Inject
 

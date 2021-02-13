@@ -2,12 +2,7 @@ package xyz.mcmxciv.halauncher.settings
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import xyz.mcmxciv.halauncher.device.DeviceProfile
-import xyz.mcmxciv.halauncher.utils.HassTheme
-import xyz.mcmxciv.halauncher.utils.ResourceProvider
-import xyz.mcmxciv.halauncher.utils.Serializer
-import xyz.mcmxciv.halauncher.utils.deserialize
-import xyz.mcmxciv.halauncher.utils.serialize
+import xyz.mcmxciv.halauncher.utils.*
 import javax.inject.Inject
 
 class SettingsRepository @Inject constructor(

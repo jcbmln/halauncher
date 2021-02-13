@@ -7,13 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import xyz.mcmxciv.halauncher.BaseFragment
-import xyz.mcmxciv.halauncher.HalauncherViewModel
-import xyz.mcmxciv.halauncher.R
+import xyz.mcmxciv.halauncher.*
 import xyz.mcmxciv.halauncher.apps.HideShowAppsAdapter
 import xyz.mcmxciv.halauncher.databinding.FragmentHiddenAppsBinding
-import xyz.mcmxciv.halauncher.observe
-import xyz.mcmxciv.halauncher.requireHalauncherActivity
 import javax.inject.Inject
 
 @AndroidEntryPoint

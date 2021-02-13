@@ -5,7 +5,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.util.SparseArray
 import android.util.TypedValue
-import java.lang.Exception
 
 abstract class IconShape {
     abstract val shapeType: ShapeType

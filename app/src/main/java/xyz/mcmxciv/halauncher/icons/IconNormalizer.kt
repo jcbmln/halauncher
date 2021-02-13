@@ -1,15 +1,6 @@
 package xyz.mcmxciv.halauncher.icons
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Matrix
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
-import android.graphics.Rect
-import android.graphics.RectF
+import android.graphics.*
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.Drawable
 import xyz.mcmxciv.halauncher.device.DeviceProfile
@@ -17,11 +8,7 @@ import xyz.mcmxciv.halauncher.utils.ResourceProvider
 import java.nio.ByteBuffer
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sqrt
+import kotlin.math.*
 
 @Singleton
 class IconNormalizer @Inject constructor(

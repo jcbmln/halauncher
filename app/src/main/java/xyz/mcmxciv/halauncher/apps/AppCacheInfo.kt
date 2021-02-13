@@ -1,8 +1,8 @@
 package xyz.mcmxciv.halauncher.apps
 
-import android.content.pm.LauncherActivityInfo
-import androidx.room.*
-import xyz.mcmxciv.halauncher.utils.Converters
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.Instant
 
 @Entity(tableName = "app_cache_info")

@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import okhttp3.Interceptor
 import okhttp3.Response
 import xyz.mcmxciv.halauncher.settings.SettingsRepository
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class UrlInterceptor @Inject constructor(

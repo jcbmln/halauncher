@@ -1,7 +1,7 @@
 package xyz.mcmxciv.halauncher.settings
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import xyz.mcmxciv.halauncher.BaseViewModel
 import xyz.mcmxciv.halauncher.HalauncherApplication
@@ -10,9 +10,10 @@ import xyz.mcmxciv.halauncher.device.DeviceManager
 import xyz.mcmxciv.halauncher.device.DeviceProfile
 import xyz.mcmxciv.halauncher.integration.IntegrationUseCase
 import xyz.mcmxciv.halauncher.utils.ResourceProvider
-import java.lang.IllegalStateException
+import javax.inject.Inject
 
-class SettingsViewModel @ViewModelInject constructor(
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
     private val settingsUseCase: SettingsUseCase,
     private val integrationUseCase: IntegrationUseCase,
     private val deviceProfile: DeviceProfile,

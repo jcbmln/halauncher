@@ -1,19 +1,18 @@
 package xyz.mcmxciv.halauncher
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import xyz.mcmxciv.halauncher.apps.App
 import xyz.mcmxciv.halauncher.apps.AppManager
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class HalauncherViewModel @ViewModelInject constructor(
+@HiltViewModel
+class HalauncherViewModel @Inject constructor(
     private val appManager: AppManager
 ) : BaseViewModel() {
     @FlowPreview
