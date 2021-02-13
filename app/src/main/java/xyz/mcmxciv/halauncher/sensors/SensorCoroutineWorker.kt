@@ -17,12 +17,9 @@ import javax.inject.Inject
 
 class SensorCoroutineWorker @WorkerInject constructor(
     @Assisted private val context: Context,
-    @Assisted workerParameters: WorkerParameters
+    @Assisted private val workerParameters: WorkerParameters,
+    private val integrationUseCase: IntegrationUseCase
 ) : CoroutineWorker(context, workerParameters) {
-
-    @Inject
-    lateinit var integrationUseCase: IntegrationUseCase
-
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         if (integrationUseCase.isDeviceIntegrated) updateSensors()
         Result.success()

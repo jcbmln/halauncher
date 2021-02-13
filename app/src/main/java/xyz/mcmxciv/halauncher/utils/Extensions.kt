@@ -23,13 +23,11 @@ fun View.getSourceBounds(): Rect {
 }
 
 fun Bitmap.toByteArray(): ByteArray =
-    ByteArrayOutputStream().use { out ->
+    ByteArrayOutputStream(this.width * this.height * 4).use { out ->
         compress(Bitmap.CompressFormat.PNG, 100, out)
         out.flush()
-        return@use out.toByteArray()
+        out.toByteArray()
     }
 
 fun ByteArray.toBitmap(): Bitmap =
-    ByteArrayInputStream(this).use { input ->
-        return@use BitmapFactory.decodeStream(input)
-    }
+    ByteArrayInputStream(this).use { input -> BitmapFactory.decodeStream(input) }

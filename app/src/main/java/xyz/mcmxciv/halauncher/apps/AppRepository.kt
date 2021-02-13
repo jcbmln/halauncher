@@ -10,29 +10,29 @@ import android.os.Process
 import javax.inject.Inject
 
 class AppRepository @Inject constructor(
-    private val appDao: AppDao,
+    private val appCacheInfoDao: AppCacheInfoDao,
     private val packageManager: PackageManager,
     private val launcherApps: LauncherApps
 ) {
     val hasShortcutHostPermission: Boolean
         get() = launcherApps.hasShortcutHostPermission()
 
-    suspend fun getApps(): List<App> =
-        appDao.getApps()
+    suspend fun getApps(): List<AppCacheInfo> =
+        appCacheInfoDao.getAppDrawerItems()
 
-    suspend fun getApp(activityName: String): App? =
-        appDao.getApp(activityName)
+    suspend fun getApp(activityName: String): AppCacheInfo? =
+        appCacheInfoDao.getAppDrawerItem(activityName)
 
-    suspend fun addApp(app: App) {
-        appDao.insert(app)
+    suspend fun addApp(appCacheInfo: AppCacheInfo) {
+        appCacheInfoDao.insert(appCacheInfo)
     }
 
-    suspend fun updateApp(app: App) {
-        appDao.update(app)
+    suspend fun updateApp(appCacheInfo: AppCacheInfo) {
+        appCacheInfoDao.update(appCacheInfo)
     }
 
-    suspend fun removeApp(app: App) {
-        appDao.delete(app)
+    suspend fun removeApp(appCacheInfo: AppCacheInfo) {
+        appCacheInfoDao.delete(appCacheInfo)
     }
 
     fun getLauncherActivityInfo(): List<LauncherActivityInfo> =

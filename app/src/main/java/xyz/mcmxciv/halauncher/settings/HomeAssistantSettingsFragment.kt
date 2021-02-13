@@ -29,9 +29,9 @@ class HomeAssistantSettingsFragment : BasePreferenceFragment() {
         }
 
         findPreference<DropDownPreference>(IntegrationRepository.SENSOR_UPDATE_INTERVAL_KEY)?.also {
-            it.setDefaultValue(IntegrationRepository.DEFAULT_SENSOR_UPDATE_INTERVAL)
-            it.setOnPreferenceChangeListener { _, _ ->
-                viewModel.onSensorUpdateIntervalPreferenceChanged()
+//            it.setDefaultValue(IntegrationRepository.DEFAULT_SENSOR_UPDATE_INTERVAL)
+            it.setOnPreferenceChangeListener { _, value ->
+                viewModel.onSensorUpdateIntervalPreferenceChanged(value as Long)
             }
         }
     }

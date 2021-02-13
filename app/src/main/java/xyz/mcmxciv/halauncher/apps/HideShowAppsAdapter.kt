@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 class HideShowAppsAdapter @Inject constructor(
     private val resourceProvider: ResourceProvider
-) : ListAdapter<AppListItem, HideShowAppsAdapter.HideShowAppsViewHolder>(
+) : ListAdapter<App, HideShowAppsAdapter.HideShowAppsViewHolder>(
     itemCallback
 ) {
     private var onAppVisibilityToggledListener: OnAppVisibilityToggledListener = {}
@@ -22,32 +22,32 @@ class HideShowAppsAdapter @Inject constructor(
     inner class HideShowAppsViewHolder(
         private val binding: ListItemHiddenAppBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        private lateinit var _appListItem: AppListItem
+        private lateinit var _app: App
 
-        fun bind(appListItem: AppListItem) {
-            _appListItem = appListItem
+        fun bind(app: App) {
+            _app = app
 
             val resources = HalauncherApplication.instance.resources
 
-            binding.appName.leftIcon = appListItem.icon.toDrawable(resources)
-            binding.appName.text = appListItem.app.displayName
-            binding.appName.tag = appListItem
+            binding.appName.leftIcon = app.icon.toDrawable(resources)
+            binding.appName.text = app.displayName
+            binding.appName.tag = app
 
             val hideDrawable = resourceProvider.getDrawable(R.drawable.ic_hide)
             val showDrawable = resourceProvider.getDrawable(R.drawable.ic_show)
 
-            if (appListItem.app.isHidden) {
+            if (app.appCacheInfo.isHidden) {
                 binding.appVisibilityToggle.setImageDrawable(hideDrawable)
             }
 
             binding.appVisibilityToggle.setOnClickListener {
-                if (appListItem.app.isHidden) {
+                if (app.appCacheInfo.isHidden) {
                     binding.appVisibilityToggle.setImageDrawable(showDrawable)
                 } else {
                     binding.appVisibilityToggle.setImageDrawable(hideDrawable)
                 }
 
-                onAppVisibilityToggledListener(appListItem.app.activityName)
+                onAppVisibilityToggledListener(app.appCacheInfo.activityName)
             }
         }
     }
@@ -68,13 +68,13 @@ class HideShowAppsAdapter @Inject constructor(
     }
 
     companion object {
-        val itemCallback = object : DiffUtil.ItemCallback<AppListItem>() {
-            override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean =
-                oldItem.app.activityName == oldItem.app.activityName
+        val itemCallback = object : DiffUtil.ItemCallback<App>() {
+            override fun areItemsTheSame(oldItem: App, newItem: App): Boolean =
+                oldItem.appCacheInfo.activityName == oldItem.appCacheInfo.activityName
 
             override fun areContentsTheSame(
-                oldItem: AppListItem,
-                newItem: AppListItem
+                oldItem: App,
+                newItem: App
             ): Boolean = oldItem == newItem
         }
     }

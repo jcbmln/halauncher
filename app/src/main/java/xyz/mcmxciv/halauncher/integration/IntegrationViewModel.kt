@@ -40,7 +40,9 @@ class IntegrationViewModel @ViewModelInject constructor(
 
         viewModelScope.launch(exceptionHandler) {
             integrationUseCase.registerDevice(deviceManager.deviceInfo)
-            HalauncherApplication.instance.startWorkers()
+            HalauncherApplication.instance.startWorkers(
+                IntegrationRepository.DEFAULT_SENSOR_UPDATE_INTERVAL
+            )
             navigationEvent.postValue(
                 IntegrationFragmentDirections.actionIntegrationFragmentToHomeFragment()
             )

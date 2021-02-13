@@ -22,6 +22,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import xyz.mcmxciv.halauncher.BaseFragment
 import xyz.mcmxciv.halauncher.BuildConfig
 import xyz.mcmxciv.halauncher.HalauncherViewModel
@@ -38,6 +39,7 @@ import javax.inject.Inject
 class HomeFragment : BaseFragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
+    @ExperimentalCoroutinesApi
     private val activityViewModel: HalauncherViewModel by activityViewModels()
 
     @Inject
@@ -47,11 +49,12 @@ class HomeFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -152,6 +155,7 @@ class HomeFragment : BaseFragment() {
         }
     }
 
+    @ExperimentalCoroutinesApi
     private fun initializeAppDrawer() {
         appDrawerAdapter.setOnHideAppListener {
             activityViewModel.onHideApp(it)

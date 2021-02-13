@@ -3,43 +3,36 @@ package xyz.mcmxciv.halauncher
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import xyz.mcmxciv.halauncher.apps.AppListItem
-import xyz.mcmxciv.halauncher.apps.AppUseCase
+import xyz.mcmxciv.halauncher.apps.App
+import xyz.mcmxciv.halauncher.apps.AppManager
 
+@ExperimentalCoroutinesApi
 class HalauncherViewModel @ViewModelInject constructor(
-    private val appUseCase: AppUseCase
+    private val appManager: AppManager
 ) : BaseViewModel() {
-    private val _allAppListItems = MutableLiveData<List<AppListItem>>()
-    val allAppListItems: LiveData<List<AppListItem>> = _allAppListItems
+    @FlowPreview
+    val allAppListItems: LiveData<List<App>> = appManager.apps.asLiveData()
 
-    private val _visibleAppListItems = MutableLiveData<List<AppListItem>>()
-    val visibleAppListItems: LiveData<List<AppListItem>> = _visibleAppListItems
-
-    init {
-        populateAppList()
-    }
+    private val _visibleAppListItems = MutableLiveData<List<App>>()
+    val visibleAppListItems: LiveData<List<App>> = _visibleAppListItems
 
     fun onHideApp(activityName: String) {
-        viewModelScope.launch {
-            appUseCase.hideApp(activityName)
-            populateAppList()
-        }
+//        viewModelScope.launch {
+//            appManager.hideApp(activityName)
+//            populateAppList()
+//        }
     }
 
     fun onToggleAppVisibility(activityName: String) {
-        viewModelScope.launch {
-            appUseCase.toggleAppVisibility(activityName)
-            populateAppList()
-        }
-    }
-
-    private fun populateAppList() {
-        viewModelScope.launch {
-            val appListItems = appUseCase.getAllAppListItems()
-            _allAppListItems.postValue(appListItems)
-            _visibleAppListItems.postValue(appListItems.filterNot { item -> item.app.isHidden })
-        }
+//        viewModelScope.launch {
+//            appManager.toggleAppVisibility(activityName)
+//            populateAppList()
+//        }
     }
 }

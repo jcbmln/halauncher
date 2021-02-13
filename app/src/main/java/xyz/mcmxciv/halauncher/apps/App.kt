@@ -1,22 +1,15 @@
 package xyz.mcmxciv.halauncher.apps
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import android.content.ComponentName
+import android.graphics.Bitmap
+import xyz.mcmxciv.halauncher.shortcuts.Shortcut
 
-@Entity(tableName = "apps")
 data class App(
-    @PrimaryKey
-    @ColumnInfo(name = "activity_name")
-    val activityName: String,
-    @ColumnInfo(name = "package_name")
+    val appCacheInfo: AppCacheInfo,
     val packageName: String,
-    @ColumnInfo(name = "display_name")
     val displayName: String,
-    @ColumnInfo(name = "system_app")
+    val icon: Bitmap,
+    val componentName: ComponentName,
     val isSystemApp: Boolean,
-    @ColumnInfo(name = "is_hidden")
-    var isHidden: Boolean,
-    @ColumnInfo(name = "order")
-    var order: Int
+    val shortcuts: List<Shortcut>
 )

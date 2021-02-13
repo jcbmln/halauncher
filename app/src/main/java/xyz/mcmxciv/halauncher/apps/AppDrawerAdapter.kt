@@ -19,7 +19,7 @@ class AppDrawerAdapter @Inject constructor(
     private val resourceProvider: ResourceProvider,
     private val deviceProfile: DeviceProfile,
     private val appLauncher: AppLauncher
-) : ListAdapter<AppListItem, AppDrawerAdapter.AppDrawerViewHolder>(
+) : ListAdapter<App, AppDrawerAdapter.AppDrawerViewHolder>(
     itemCallback
 ) {
     private var onHideAppListener: OnHideAppListener = {}
@@ -29,35 +29,35 @@ class AppDrawerAdapter @Inject constructor(
     ) : RecyclerView.ViewHolder(binding.root),
         View.OnClickListener,
         View.OnLongClickListener {
-        private lateinit var _appListItem: AppListItem
+        private lateinit var _app: App
 
         init {
             binding.appItem.setOnClickListener(this)
             binding.appItem.setOnLongClickListener(this)
         }
 
-        fun bind(appListItem: AppListItem) {
-            _appListItem = appListItem
+        fun bind(app: App) {
+            _app = app
 
             val theme = HassTheme.instance.appDrawerTheme
             val resources = HalauncherApplication.instance.resources
 
             binding.appItem.textSize = deviceProfile.iconTextSize
-            binding.appItem.topIcon = appListItem.icon.toDrawable(resources)
-            binding.appItem.text = appListItem.app.displayName
-            binding.appItem.tag = appListItem
+            binding.appItem.topIcon = app.icon.toDrawable(resources)
+            binding.appItem.text = app.displayName
+            binding.appItem.tag = app
             binding.appItem.setTextColor(theme.labelTextColor)
         }
 
         override fun onClick(view: View) {
-            val item = view.tag as AppListItem
+            val item = view.tag as App
             appLauncher.startMainActivity(item.componentName, view)
         }
 
         override fun onLongClick(view: View): Boolean {
             ShortcutPopupWindow(
                 view,
-                _appListItem,
+                _app,
                 resourceProvider,
                 appLauncher,
                 onHideAppListener
@@ -80,13 +80,13 @@ class AppDrawerAdapter @Inject constructor(
     }
 
     companion object {
-        val itemCallback = object : DiffUtil.ItemCallback<AppListItem>() {
-            override fun areItemsTheSame(oldItem: AppListItem, newItem: AppListItem): Boolean =
-                oldItem.app.activityName == oldItem.app.activityName
+        val itemCallback = object : DiffUtil.ItemCallback<App>() {
+            override fun areItemsTheSame(oldItem: App, newItem: App): Boolean =
+                oldItem.appCacheInfo.activityName == oldItem.appCacheInfo.activityName
 
             override fun areContentsTheSame(
-                oldItem: AppListItem,
-                newItem: AppListItem
+                oldItem: App,
+                newItem: App
             ): Boolean = oldItem == newItem
         }
     }

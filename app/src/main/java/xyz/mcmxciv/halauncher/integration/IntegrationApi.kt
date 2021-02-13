@@ -9,14 +9,15 @@ import xyz.mcmxciv.halauncher.integration.models.WebhookRequest
 
 interface IntegrationApi {
     @POST
-    suspend fun <T> webhookRequest(
+    @JvmSuppressWildcards
+    suspend fun webhookRequest(
         @Url url: String,
-        @Body request: WebhookRequest<T>
+        @Body request: WebhookRequest
     ): Response<ResponseBody>
 
     @POST
-    suspend fun <T> updateSensors(
+    suspend fun updateSensors(
         @Url url: String,
-        @Body request: WebhookRequest<T>
+        @Body request: WebhookRequest
     ): Response<Map<String, Map<String, Any>>>
 }

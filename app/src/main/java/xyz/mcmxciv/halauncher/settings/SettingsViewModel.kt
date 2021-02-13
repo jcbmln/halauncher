@@ -69,8 +69,8 @@ class SettingsViewModel @ViewModelInject constructor(
         }
     }
 
-    fun onSensorUpdateIntervalPreferenceChanged(): Boolean {
-        HalauncherApplication.instance.startWorkers()
+    fun onSensorUpdateIntervalPreferenceChanged(sensorUpdateInterval: Long): Boolean {
+        HalauncherApplication.instance.startWorkers(sensorUpdateInterval)
         return true
     }
 }

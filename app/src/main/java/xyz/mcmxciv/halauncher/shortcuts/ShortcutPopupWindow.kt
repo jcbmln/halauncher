@@ -14,7 +14,7 @@ import android.widget.PopupWindow
 import androidx.core.view.isVisible
 import androidx.core.view.marginStart
 import androidx.recyclerview.widget.LinearLayoutManager
-import xyz.mcmxciv.halauncher.apps.AppListItem
+import xyz.mcmxciv.halauncher.apps.App
 import xyz.mcmxciv.halauncher.apps.AppLauncher
 import xyz.mcmxciv.halauncher.apps.OnHideAppListener
 import xyz.mcmxciv.halauncher.databinding.PopupWindowShortcutBinding
@@ -24,13 +24,13 @@ import xyz.mcmxciv.halauncher.utils.Utilities
 
 class ShortcutPopupWindow(
     private val parentView: View,
-    private val appListItem: AppListItem,
+    private val app: App,
     private val resourceProvider: ResourceProvider,
     private val appLauncher: AppLauncher,
     private val onHideAppListener: OnHideAppListener
 ) {
     private val window: PopupWindow
-    private val leftRightMargin: Int
+    private val horizontalMargin: Int
     private val screenWidth: Int
     private val screenHeight: Int
 
@@ -42,7 +42,7 @@ class ShortcutPopupWindow(
 
     init {
         val displayMetrics = resourceProvider.displayMetrics
-        leftRightMargin = Utilities.pxFromDpi(10f, displayMetrics)
+        horizontalMargin = Utilities.pxFromDpi(10f, displayMetrics)
         screenWidth = displayMetrics.widthPixels
         screenHeight = displayMetrics.heightPixels
 
@@ -89,12 +89,12 @@ class ShortcutPopupWindow(
         val parentViewMiddle = parentView.width.toFloat() / 2
         when (horizontalPosition) {
             HorizontalPosition.LEFT -> {
-                offsetX = parentView.left + leftRightMargin
+                offsetX = parentView.left + horizontalMargin
                 pivotX = (offsetX + parentViewMiddle) / screenWidth
                 visibleArrow.translationX = parentViewMiddle - visibleArrow.measuredWidth
             }
             HorizontalPosition.RIGHT -> {
-                offsetX = screenWidth - window.width - leftRightMargin
+                offsetX = screenWidth - window.width - horizontalMargin
                 pivotX = (offsetX + window.width - parentViewMiddle) / screenWidth
                 visibleArrow.translationX =
                     window.width - parentViewMiddle - (visibleArrow.measuredWidth / 2)
@@ -135,15 +135,15 @@ class ShortcutPopupWindow(
 
     private fun initializeView() {
         binding.appInfoIcon.setOnClickListener { v ->
-            appLauncher.startAppDetailsActivity(appListItem.componentName, v)
+            appLauncher.startAppDetailsActivity(app.componentName, v)
             dismiss()
         }
         binding.hideIcon.setOnClickListener {
-            onHideAppListener(appListItem.app.activityName)
+            onHideAppListener(app.appCacheInfo.activityName)
             dismiss()
         }
 
-        if (!appListItem.shortcuts.isNullOrEmpty()) {
+        if (!app.shortcuts.isNullOrEmpty()) {
             binding.shortcutList.layoutManager = LinearLayoutManager(binding.shortcutList.context)
 
             val onShortcutSelectedListener = { dismiss() }
@@ -151,7 +151,7 @@ class ShortcutPopupWindow(
                 resourceProvider,
                 appLauncher,
                 onShortcutSelectedListener
-            ).also { it.submitList(appListItem.shortcuts) }
+            ).also { it.submitList(app.shortcuts) }
         } else {
             binding.shortcutList.isVisible = false
         }

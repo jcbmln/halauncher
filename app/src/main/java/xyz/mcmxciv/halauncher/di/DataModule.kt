@@ -9,8 +9,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.Retrofit
-import xyz.mcmxciv.halauncher.apps.AppDao
-import xyz.mcmxciv.halauncher.apps.AppDatabase
+import xyz.mcmxciv.halauncher.apps.AppCacheInfoDao
+import xyz.mcmxciv.halauncher.apps.AppCacheInfoDatabase
 import xyz.mcmxciv.halauncher.authentication.AuthenticationApi
 import xyz.mcmxciv.halauncher.integration.IntegrationApi
 import xyz.mcmxciv.halauncher.integration.SecureIntegrationApi
@@ -35,14 +35,14 @@ object DataModule {
         context.getSystemService(NsdManager::class.java) as NsdManager
 
     @Provides
-    fun appDatabase(@ApplicationContext context: Context): AppDatabase =
+    fun appDatabase(@ApplicationContext context: Context): AppCacheInfoDatabase =
         Room.databaseBuilder(
             context.applicationContext,
-            AppDatabase::class.java,
+            AppCacheInfoDatabase::class.java,
             "app_database"
         ).fallbackToDestructiveMigration()
             .build()
 
     @Provides
-    fun appDao(database: AppDatabase): AppDao = database.appDao()
+    fun appDao(cacheInfoDatabase: AppCacheInfoDatabase): AppCacheInfoDao = cacheInfoDatabase.appDao()
 }

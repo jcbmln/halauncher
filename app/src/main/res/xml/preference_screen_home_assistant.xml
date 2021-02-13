@@ -16,6 +16,7 @@
             app:title="@string/sensor_interval_settings_title"
             app:entries="@array/sensor_update_interval_values"
             app:entryValues="@array/sensor_update_intervals"
+            app:defaultValue="15"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 </PreferenceScreen>

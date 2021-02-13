@@ -28,8 +28,11 @@ class HalauncherApplication : Application(), Configuration.Provider {
             .setWorkerFactory(workerFactory)
             .build()
 
-    fun startWorkers() {
-        SensorCoroutineWorker.start(applicationContext, integrationUseCase.sensorUpdateInterval)
+    fun startWorkers(sensorUpdateInterval: Long? = null) {
+        SensorCoroutineWorker.start(
+            applicationContext,
+            sensorUpdateInterval ?: integrationUseCase.sensorUpdateInterval
+        )
     }
 
     companion object {
