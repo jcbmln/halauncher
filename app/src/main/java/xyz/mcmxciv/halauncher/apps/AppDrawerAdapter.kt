@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -47,6 +48,7 @@ class AppDrawerAdapter @Inject constructor(
             binding.appItem.text = app.displayName
             binding.appItem.tag = app
             binding.appItem.setTextColor(theme.labelTextColor)
+            binding.appItem.isVisible = app.appCacheInfo.isVisible
         }
 
         override fun onClick(view: View) {

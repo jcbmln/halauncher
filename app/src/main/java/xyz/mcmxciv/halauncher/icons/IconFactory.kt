@@ -29,7 +29,7 @@ class IconFactory @Inject constructor(
     private val launcherApps: LauncherApps,
     private val iconNormalizer: IconNormalizer
 ) {
-    private var wrapperBackgroundColor = DEFAULT_WRAPPER_BACKGROUND
+    private val wrapperBackgroundColor = DEFAULT_WRAPPER_BACKGROUND
     private val canvas = Canvas()
     private val oldBounds = Rect()
 

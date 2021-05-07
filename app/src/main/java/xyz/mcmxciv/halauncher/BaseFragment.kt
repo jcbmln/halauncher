@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 
@@ -16,7 +15,7 @@ open class BaseFragment : Fragment() {
 }
 
 fun <T : LiveData<V>, V : Any> Fragment.observe(obj: T, block: (V) -> Unit) {
-    obj.observe(viewLifecycleOwner, Observer { block(it) })
+    obj.observe(viewLifecycleOwner, { block(it) })
 }
 
 fun Fragment.navigate(action: NavDirections) {

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import xyz.mcmxciv.halauncher.*
 import xyz.mcmxciv.halauncher.apps.HideShowAppsAdapter
 import xyz.mcmxciv.halauncher.databinding.FragmentHiddenAppsBinding
@@ -29,10 +30,11 @@ class HiddenAppsFragment : BaseFragment() {
         return binding.root
     }
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observe(activityViewModel.allAppListItems) { hideShowAppsAdapter.submitList(it) }
+        observe(activityViewModel.allApps) { hideShowAppsAdapter.submitList(it) }
 
         binding.toolbar.title = getString(R.string.hidden_apps_title)
         requireHalauncherActivity().apply {

@@ -5,10 +5,10 @@ import androidx.room.*
 @Dao
 interface AppCacheInfoDao {
     @Query("select * from app_cache_info")
-    suspend fun getAppDrawerItems(): List<AppCacheInfo>
+    suspend fun get(): List<AppCacheInfo>
 
     @Query("select * from app_cache_info where activity_name = :activityName")
-    suspend fun getAppDrawerItem(activityName: String): AppCacheInfo?
+    suspend fun get(activityName: String): AppCacheInfo?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(appCacheInfo: AppCacheInfo)

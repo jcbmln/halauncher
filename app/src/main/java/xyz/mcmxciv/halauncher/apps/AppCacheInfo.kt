@@ -12,8 +12,8 @@ data class AppCacheInfo(
     val activityName: String,
     @ColumnInfo(name = "last_update")
     var lastUpdate: Instant,
-    @ColumnInfo(name = "is_hidden")
-    var isHidden: Boolean,
+    @ColumnInfo(name = "is_visible")
+    var isVisible: Boolean,
     @ColumnInfo(name = "order")
     var order: Int
 )

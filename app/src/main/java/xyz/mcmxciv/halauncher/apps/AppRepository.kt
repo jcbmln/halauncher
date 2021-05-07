@@ -14,10 +14,10 @@ class AppRepository @Inject constructor(
         get() = launcherApps.hasShortcutHostPermission()
 
     suspend fun getApps(): List<AppCacheInfo> =
-        appCacheInfoDao.getAppDrawerItems()
+        appCacheInfoDao.get()
 
     suspend fun getApp(activityName: String): AppCacheInfo? =
-        appCacheInfoDao.getAppDrawerItem(activityName)
+        appCacheInfoDao.get(activityName)
 
     suspend fun addApp(appCacheInfo: AppCacheInfo) {
         appCacheInfoDao.insert(appCacheInfo)

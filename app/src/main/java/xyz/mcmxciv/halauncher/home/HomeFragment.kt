@@ -67,7 +67,7 @@ class HomeFragment : BaseFragment() {
             binding.homeWebView.evaluateJavascript(it, null)
         }
         observe(viewModel.theme) { applyTheme(it) }
-        observe(activityViewModel.visibleAppListItems) { appDrawerAdapter.submitList(it) }
+        observe(activityViewModel.visibleApps) { appDrawerAdapter.submitList(it) }
 
         requireHalauncherActivity().enterFullscreen()
         applyInsets()
@@ -149,7 +149,7 @@ class HomeFragment : BaseFragment() {
     @ExperimentalCoroutinesApi
     private fun initializeAppDrawer() {
         appDrawerAdapter.setOnHideAppListener {
-            activityViewModel.onHideApp(it)
+            activityViewModel.onToggleAppVisibility(it)
         }
 
         binding.appList.layoutManager = GridLayoutManager(context, viewModel.appDrawerColumns)

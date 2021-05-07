@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "20c6e3a5215e39deb72b2c1b2a3e8e87",
+    "identityHash": "4cfbd8a503898bdc41510ec5772492df",
     "entities": [
       {
         "tableName": "app_cache_info",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`activity_name` TEXT NOT NULL, `last_update` TEXT NOT NULL, `is_hidden` INTEGER NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY(`activity_name`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`activity_name` TEXT NOT NULL, `last_update` TEXT NOT NULL, `is_visible` INTEGER NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY(`activity_name`))",
         "fields": [
           {
             "fieldPath": "activityName",
@@ -21,8 +21,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "isHidden",
-            "columnName": "is_hidden",
+            "fieldPath": "isVisible",
+            "columnName": "is_visible",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -46,7 +46,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '20c6e3a5215e39deb72b2c1b2a3e8e87')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4cfbd8a503898bdc41510ec5772492df')"
     ]
   }
 }

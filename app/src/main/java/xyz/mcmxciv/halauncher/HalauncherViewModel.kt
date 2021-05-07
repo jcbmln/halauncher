@@ -16,22 +16,12 @@ class HalauncherViewModel @Inject constructor(
     private val appManager: AppManager
 ) : BaseViewModel() {
     @FlowPreview
-    val allAppListItems: LiveData<List<App>> = appManager.apps.asLiveData()
+    val allApps: LiveData<List<App>> = appManager.apps.asLiveData()
 
     @FlowPreview
-    val visibleAppListItems: LiveData<List<App>> = appManager.apps.asLiveData()
-
-    fun onHideApp(activityName: String) {
-//        viewModelScope.launch {
-//            appManager.hideApp(activityName)
-//            populateAppList()
-//        }
-    }
+    val visibleApps: LiveData<List<App>> = appManager.apps.asLiveData()
 
     fun onToggleAppVisibility(activityName: String) {
-//        viewModelScope.launch {
-//            appManager.toggleAppVisibility(activityName)
-//            populateAppList()
-//        }
+        appManager.toggleAppVisibility(activityName)
     }
 }

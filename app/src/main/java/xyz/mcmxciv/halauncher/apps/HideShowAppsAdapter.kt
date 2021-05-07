@@ -36,12 +36,12 @@ class HideShowAppsAdapter @Inject constructor(
             val hideDrawable = resourceProvider.getDrawable(R.drawable.ic_hide)
             val showDrawable = resourceProvider.getDrawable(R.drawable.ic_show)
 
-            if (app.appCacheInfo.isHidden) {
+            if (app.appCacheInfo.isVisible) {
                 binding.appVisibilityToggle.setImageDrawable(hideDrawable)
             }
 
             binding.appVisibilityToggle.setOnClickListener {
-                if (app.appCacheInfo.isHidden) {
+                if (app.appCacheInfo.isVisible) {
                     binding.appVisibilityToggle.setImageDrawable(showDrawable)
                 } else {
                     binding.appVisibilityToggle.setImageDrawable(hideDrawable)

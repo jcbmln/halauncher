@@ -33,31 +33,41 @@ class AppManager @Inject constructor(
 
     private val appCacheScope = CoroutineScope(Dispatchers.IO)
     private val appChannel = ConflatedBroadcastChannel<List<App>>()
+    private val visibleAppChannel = ConflatedBroadcastChannel<List<App>>()
+    private val _apps = mutableListOf<App>()
 
     @FlowPreview
     val apps: Flow<List<App>>
         get() = appChannel.asFlow()
 
+    @FlowPreview
+    val visibleApps: Flow<List<App>>
+        get() = visibleAppChannel.asFlow()
+
     init {
         shortcutQuery.setQueryFlags(SHORTCUT_QUERY_FLAGS)
         appCacheScope.launch {
             val activities = launcherApps.getActivityList(null, Process.myUserHandle())
-            val appCacheInfo = appCacheInfoDao.getAppDrawerItems()
+            val appCacheInfo = appCacheInfoDao.get()
 
             val newApps = activities.filter { a ->
                 appCacheInfo.none { aa -> aa.activityName == a.name }
             }.mapNotNull { a -> populateFromActivity(a) }
             val cachedApps = appCacheInfo.mapNotNull { a -> populateFromCache(activities, a) }
-            val allApps = newApps.toMutableList()
-            allApps.addAll(cachedApps)
-            allApps.sortBy { a -> a.appCacheInfo.order }
-            appChannel.offer(allApps)
+            _apps.addAll(newApps)
+            _apps.addAll(cachedApps)
+            _apps.sortBy { a -> a.displayName }
+            appChannel.offer(_apps)
+            visibleAppChannel.offer(_apps.filter { a -> a.appCacheInfo.isVisible })
         }
     }
 
-    fun updateCache()
-    {
-
+    fun toggleAppVisibility(activityName: String) {
+        appCacheScope.launch {
+            val appCacheInfo = appCacheInfoDao.get(activityName)
+            appCacheInfo?.apply { isVisible = !isVisible }
+            appCacheInfo?.also { appCacheInfoDao.update(it) }
+        }
     }
 
     private suspend fun populateFromCache(
@@ -84,7 +94,7 @@ class AppManager @Inject constructor(
         )
     }
 
-    private fun populateFromActivity(activity: LauncherActivityInfo): App {
+    private suspend fun populateFromActivity(activity: LauncherActivityInfo): App {
         val packageInfo = packageManager.getPackageInfo(
             activity.applicationInfo.packageName,
             0
@@ -93,9 +103,11 @@ class AppManager @Inject constructor(
         val appCacheInfo = AppCacheInfo(
             activity.name,
             Instant.now(),
-            false,
+            true,
             1
         )
+
+        appCacheInfoDao.insert(appCacheInfo)
 
         return App(
             appCacheInfo,
